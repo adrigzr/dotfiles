@@ -3,12 +3,10 @@
 .vim/viminfo
 .vim/swaps/*
 .vim/undo
+.vim/plugged
 
 # git credential file
 .gitconfig.local
-
-
-
 
 # Folder view configuration files
 .DS_Store
@@ -32,3 +30,6 @@ fish/fish_history
 
 # random
 shilocation
+
+# Tmux
+.tmux
