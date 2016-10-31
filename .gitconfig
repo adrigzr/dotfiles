@@ -1,33 +1,83 @@
+[push]
+	default = current
+
+[merge]
+	tool = meld
+  conflictstyle = diff3
+
+[mergetool]
+  prompt = false
+
 [alias]
-	c = commit -am
-	up = pull
-	p = push
-	s = status -s
-	sclone = clone --depth=1
 	co = checkout
-	df = diff --color --color-words --abbrev
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-
-	# Show the diff between the latest commit and the current state
-	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
-
-	reup = rebase-update # depot_tools specific
+	ec = config --global -e
+	up = pull --rebase --prune
+	cm = commit -a -m
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+	lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+	ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	le = log --oneline --decorate
+	fl = log -u
+	dl = "!git ll -1"
+	dlc = diff --cached HEAD^
+	undo = reset HEAD~1 --mixed
+	amend = commit -a --amend
+	dr  = "!f() { git diff "$1"^.."$1"; }; f"
+	lc  = "!f() { git ll "$1"^.."$1"; }; f"
+	diffr  = "!f() { git diff "$1"^.."$1"; }; f"
+	f = "!git ls-files | grep -i"
+	grep = grep -Ii
+	gra = "!f() { A=$(pwd) && TOPLEVEL=$(git rev-parse --show-toplevel) && cd $TOPLEVEL && git grep --full-name -In $1 | xargs -I{} echo $TOPLEVEL/{} && cd $A; }; f"
+	la = "!git config -l | grep alias | cut -c 7-"
+	lt = describe --tags --abbrev=0
+	cp = cherry-pick
+	st = status -s
+	cl = clone
+	ci = commit
+	br = branch
+	diff = diff --word-diff
+	dc = diff --cached
+	r = reset
+	r1 = reset HEAD^
+	r2 = reset HEAD^^
+	rh = reset --hard
+	rh1 = reset HEAD^ --hard
+	rh2 = reset HEAD^^ --hard
+	sl = stash list
+	sa = stash apply
+	ss = stash save
+	logtree = log --graph --oneline --decorate --all
+	pu = push -q
+	pure = pull --rebase
+	pupu = "!git pure && git pu"
+	back = checkout -
+	follow = log --follow --stat --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+	follow-merge = log --follow --stat --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short -m
+	lsm = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --no-merges
+  del = push origin --delete
+  ac = "!git add -A && git commit"
+  fame = "!git ls-tree -r -z --name-only HEAD -- **/* | xargs -0 -n1 git blame --line-porcelain HEAD |grep  \"^author \"|sort|uniq -c|sort -nr"
 
 [core]
+	editor = vim
 	excludesfile = ~/.gitignore
 	attributesfile = ~/.gitattributes
 
-[pager]
-	# insanely beautiful diffs ==> npm install -g diff-so-fancy
-	diff = diff-so-fancy | less --tabs=4 -RFX
-	show = diff-so-fancy | less --tabs=4 -RFX
+[credential]
+	helper = cache --timeout=3600
 
-# [interactive]
-#	diffFilter = "diff-so-fancy"
+[init]
+	templatedir = /home/adriangonzalez/.git_template
 
-# so much color
-[color]
-	ui = always
+[fetch]
+	prune = true
+
+# [pager]
+# 	diff = diff-so-fancy | less --tabs=4 -RFX
+# 	show = diff-so-fancy | less --tabs=4 -RFX
+
 [color "diff"]
 	meta = yellow bold
 	commit = green bold
@@ -35,51 +85,28 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = "red bold 52"
 	newNormal = "green bold"
 	newHighlight = "green bold 22"
+
 [color "branch"]
 	current = yellow reverse
 	local = yellow
-	remote = green
+	remote = cyan
+
 [color "status"]
-	added = yellow
-	changed = green
+	added = green
+	changed = yellow
 	untracked = cyan
 
-# git mergetool
-[merge]
-	tool = opendiff
-
-# rewrites of repo paths
-[url "git@github.com:"]
-	insteadOf = "gh:"
-	insteadOf = "git://github.com"
-	pushInsteadOf = "github:"
-	pushInsteadOf = "git://github.com/"
-    pushInsteadOf = "https://github.com/"
-[url "git@gist.github.com:"]
-	insteadOf = "gst:"
-	pushInsteadOf = "gist:"
-	pushInsteadOf = "git://gist.github.com/"
-	pushInsteadOf = "https://gist.github.com/"
-
-# correct typos
 [help]
 	autocorrect = 1
 
-# push easily. http://stackoverflow.com/a/23918418/89484
-[push]
-	default = current
-
-# use separate file for username / github token / etc
 [include]
-  path = ~/.gitconfig.local
-
-[init]
-	templatedir = ~/.git_template
+	path = ~/.gitconfig.local
 
 [filter "lfs"]
 	clean = git-lfs clean %f

@@ -12,9 +12,10 @@ alias mv='mv -v'
 alias rm='rm -i -v'
 alias cp='cp -v'
 
-alias cask='brew cask' # i <3 u cask
+# Top
+alias top='htop'
+
 alias where=which # sometimes i forget
-alias brwe=brew  #typos
 
 alias hosts='sudo $EDITOR /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
 
@@ -62,10 +63,7 @@ alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup 
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 # alias dig="dig +nocmd any +multiline +noall +answer"
 # wget sucks with certificates. Let's keep it simple.
-alias wget="curl -O"  
-
-# Recursively delete `.DS_Store` files
-alias cleanup_dsstore="find . -name '*.DS_Store' -type f -ls -delete"
+alias wget="curl -O"
 
 alias diskspace_report="df -P -kHl"
 alias free_diskspace_report="diskspace_report"
@@ -73,21 +71,16 @@ alias free_diskspace_report="diskspace_report"
 # Shortcuts
 alias g="git"
 alias v="vim"
-alias ungz="gunzip -k"
 
 # File size
 alias fs="stat -f \"%z bytes\""
 
-# Empty the Trash on all mounted volumes and the main HDD. then clear the useless sleepimage
-alias emptytrash=" \
-    sudo rm -rfv /Volumes/*/.Trashes; \
-    rm -rfv ~/.Trash/*; \
-    sudo rm -v /private/var/vm/sleepimage; \
-    rm -rv \"/Users/paulirish/Library/Application Support/stremio/Cache\";  \
-    rm -rv \"/Users/paulirish/Library/Application Support/stremio/stremio-cache\" \
-"
+shortstatFunc() {
+  git log --shortstat $1 | \
+  awk '/^ [0-9]/ { f += $1; i += $4; d += $6 } \
+  END { printf("%d files changed, %d insertions(+), %d deletions(-)", f, i, d) }'
+  echo ''
+}
 
-# Update installed Ruby gems, Homebrew, npm, and their installed packages
-alias brew_update="brew -v update; brew upgrade --force-bottle --cleanup; brew cleanup; brew cask cleanup; brew prune; brew doctor; npm-check -g -u"
-alias update_brew_npm_gem='brew_update; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update --no-rdoc --no-ri'
+alias shortstat=shortstatFunc
 

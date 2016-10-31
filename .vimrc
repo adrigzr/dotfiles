@@ -10,9 +10,9 @@ set nocompatible
 
 " Syntax highlighting {{{
 set t_Co=256
-set background=dark
 syntax on
-colorscheme molotov
+set background=dark
+colorscheme solarized
 " }}}
 
 " Mapleader {{{
@@ -34,12 +34,12 @@ set diffopt+=iwhite " Ignore whitespace changes (focus on code changes)
 set encoding=utf-8 nobomb " BOM often causes trouble
 set esckeys " Allow cursor keys in insert mode
 set expandtab " Expand tabs to spaces
-set foldcolumn=0 " Column to show folds
-set foldenable " Enable folding
-set foldlevel=0 " Close all folds by default
-set foldmethod=syntax " Syntax are used to specify folds
-set foldminlines=0 " Allow folding single lines
-set foldnestmax=5 " Set max fold nesting level
+" set foldcolumn=0 " Column to show folds
+" set foldenable " Enable folding
+" set foldlevel=0 " Close all folds by default
+" set foldmethod=manual " Syntax are used to specify folds
+" set foldminlines=0 " Allow folding single lines
+" set foldnestmax=10 " Set max fold nesting level
 set formatoptions=
 set formatoptions+=c " Format comments
 set formatoptions+=r " Continue comments by default
@@ -123,6 +123,11 @@ endif
 " General {{{
 augroup general_config
   autocmd!
+
+  " Clear highlighting on escape in normal mode {{{
+  nnoremap <esc> :noh<return><esc>
+  nnoremap <esc>^[ <esc>^[
+  " }}}
 
   " Speed up viewport scrolling {{{
   nnoremap <C-e> 3<C-e>
@@ -242,6 +247,21 @@ augroup general_config
   set relativenumber " Use relative line numbers. Current line is still in status bar.
   au BufReadPost,BufNewFile * set relativenumber
   " }}}
+
+  " Vimdiff {{{
+  map dn ]c
+  map dp [c
+  map dr :diffget RE<CR>
+  map db :diffget BA<CR>
+  map dl :diffget LO<CR>
+  " }}}
+
+  " Tab mappings {{{
+  "map <c-w> :tabc<CR>
+  "map <c-PageUp> :tabn<CR>
+  "map <c-PageDown> :tabp<CR>
+  " }}}
+
 augroup END
 " }}}
 
@@ -252,6 +272,14 @@ augroup nerd_commenter
   let NERDSpaceDelims=1
   let NERDCompactSexyComs=1
   let g:NERDCustomDelimiters = { 'racket': { 'left': ';', 'leftAlt': '#|', 'rightAlt': '|#' } }
+augroup END
+" }}}
+
+" NERDTree {{{
+augroup nerf_tree
+  autocmd!
+
+  map <C-n> :NERDTreeToggle<CR>
 augroup END
 " }}}
 
@@ -268,6 +296,12 @@ augroup buffer_control
   map <Leader>ls :buffers<CR>
   map gb :bnext<CR>
   map gB :bprev<CR>
+  " }}}
+
+  " Easy buffer navigation {{{
+  "map <c-w> :bdelete<CR>
+  "map <c-PageUp> :bnext<CR>
+  "map <c-PageDown> :bprevious<CR>
   " }}}
 
   " Jump to buffer number (<N>gb) {{{
@@ -530,6 +564,7 @@ augroup airline_config
   autocmd!
   let g:airline_powerline_fonts = 1
   let g:airline_enable_syntastic = 1
+  let g:airline#extensions#syntastic#enabled = 1
   let g:airline#extensions#tabline#buffer_nr_format = '%s '
   let g:airline#extensions#tabline#buffer_nr_show = 1
   let g:airline#extensions#tabline#enabled = 1
@@ -600,9 +635,18 @@ augroup END
 " Syntastic.vim {{{
 augroup syntastic_config
   autocmd!
+  let g:syntastic_always_populate_loc_list = 1
+  let g:syntastic_loc_list_height = 5
+  let g:syntastic_auto_loc_list = 1
+  let g:syntastic_check_on_open = 1
+  let g:syntastic_check_on_wq = 0
   let g:syntastic_error_symbol = '✗'
   let g:syntastic_warning_symbol = '⚠'
   let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+  let g:syntastic_javascript_checkers = ['eslint']
+ 
+  highlight link SyntasticError InterestingWord5
+  highlight link SyntasticWarning InterestingWord5
 augroup END
 " }}}
 
@@ -629,11 +673,13 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'oplatek/Conque-Shell'
 Plug 'pangloss/vim-javascript'
 Plug 'rking/ag.vim'
+Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/syntastic'
 Plug 'slim-template/vim-slim', { 'for': 'slim' }
 Plug 'thoughtbot/vim-rspec'
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-markdown',     { 'for': 'markdown' }
 Plug 'tpope/vim-rails'
@@ -646,6 +692,7 @@ Plug 'wavded/vim-stylus',      { 'for': 'stylus' }
 Plug 'wlangstroth/vim-racket'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
+Plug 'editorconfig/editorconfig-vim'
 
 call plug#end()
 " }}}

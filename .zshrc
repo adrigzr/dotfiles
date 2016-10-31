@@ -7,22 +7,18 @@ SAVEHIST=100000
 # vim bindings
 bindkey -v
 
-
 fpath=( "$HOME/.zfunctions" $fpath )
 
-
 # antigen time!
-source ~/code/antigen/antigen.zsh
-
+source ~/Repositories/antigen/antigen.zsh
 
 ######################################################################
 ### install some antigen bundles
 
 local b="antigen-bundle"
 
-
 # Don't load the oh-my-zsh's library. Takes too long. No need.
-	# antigen use oh-my-zsh
+antigen use oh-my-zsh
 
 # Guess what to install when running an unknown command.
 $b command-not-found
@@ -31,14 +27,14 @@ $b command-not-found
 $b extract
 
 # atom editor
-$b atom
+#$b atom
 
 # homebrew  - autocomplete on `brew install`
-$b brew
-$b brew-cask
+#$b brew
+#$b brew-cask
 
 # Tracks your most used directories, based on 'frecency'.
-$b robbyrussell/oh-my-zsh plugins/z
+#$b robbyrussell/oh-my-zsh plugins/z
 
 # nicoulaj's moar completion files for zsh -- not sure why disabled.
 # $b zsh-users/zsh-completions src
@@ -57,15 +53,42 @@ $b trapd00r/zsh-syntax-highlighting-filetypes
 
 # dont set a theme, because pure does it all
 $b mafredri/zsh-async
-$b sindresorhus/pure
+#$b sindresorhus/pure
+
+# Sudo
+$b sudo
+
+# History
+$b history
+
+# Git
+$b git
+
+# Git extras
+$b git-extras
+
+# Jira
+$b jira
+
+# Tip alias
+$b djui/alias-tips
+
+# Pastebin sprunge
+$b sprunge
+
+# Oh my git
+#$b arialdomartini/oh-my-git
+#antigen theme arialdomartini/oh-my-git-themes arialdo-pathinline
 
 # Tell antigen that you're done.
-#antigen apply
+antigen apply
 
 ###
 #################################################################################################
 
-
+# Zsh git prompt
+source ~/Repositories/zsh-git-prompt/zshrc.sh
+source ~/.zsh-git-prompt
 
 # bind UP and DOWN arrow keys for history search
 zmodload zsh/terminfo
@@ -73,7 +96,7 @@ bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 
 # config for suggestions
-AUTOSUGGESTION_ACCEPT_RIGHT_ARROW=1
+#AUTOSUGGESTION_ACCEPT_RIGHT_ARROW=1
 
 export PURE_GIT_UNTRACKED_DIRTY=0
 
@@ -83,35 +106,27 @@ auto-ls () {
 	# explicit sexy ls'ing as aliases arent honored in here.
 	hash gls >/dev/null 2>&1 && CLICOLOR_FORCE=1 gls -aFh --color --group-directories-first || ls
 }
-chpwd_functions=( auto-ls $chpwd_functions )
-
+#chpwd_functions=( auto-ls $chpwd_functions )
 
 # Enable autosuggestions automatically
-zle-line-init() {
-    zle autosuggest-start
-}
-
-zle -N zle-line-init
-
+# zle-line-init() {
+#     zle autosuggest-start
+# }
+#zle -N zle-line-init
 
 # history mgmt
 # http://www.refining-linux.org/archives/49/ZSH-Gem-15-Shared-history/
 setopt inc_append_history
 setopt share_history
 
-
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-
 
 # uncomment to finish profiling
 # zprof
 
-
-
 # Load default dotfiles
 source ~/.bash_profile
 
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+#export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
