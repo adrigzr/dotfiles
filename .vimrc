@@ -262,6 +262,34 @@ augroup general_config
   "map <c-PageDown> :tabp<CR>
   " }}}
 
+  " Reload when entering the buffer or gaining focus {{{
+  au FocusGained,BufEnter * :silent! !
+  " }}}
+
+  " Save when exiting the buffer or losing focus {{{
+  "au FocusLost,WinLeave * :silent! w
+  " }}}
+
+  " Disable folding {{{
+  set nofoldenable
+  " }}}
+
+  " Surround (,wb) (,wB) (,w#) {{{
+  map <leader>w ysiw
+  " }}}
+
+  " System copy paste {{{
+  vmap <C-c> "+y
+  vmap <C-x> "+c
+  vmap <C-v> c<ESC>"+p
+  imap <C-v> <ESC>"+pa
+  " }}}
+
+  " Search current selection {{{
+  vnoremap // y/\V<C-R>"<CR>N
+  vnoremap ?? y?\V<C-R>"<CR>
+  " }}}
+
 augroup END
 " }}}
 
@@ -276,10 +304,11 @@ augroup END
 " }}}
 
 " NERDTree {{{
-augroup nerf_tree
+augroup nerd_tree
   autocmd!
 
-  map <C-n> :NERDTreeToggle<CR>
+  map <C-n> :NERDTreeFind<CR>
+  "map <C-m> :NERDTreeToggle<CR>
 augroup END
 " }}}
 
@@ -292,16 +321,26 @@ augroup buffer_control
   " }}}
 
   " Buffer navigation (,,) (gb) (gB) (,ls) {{{
-  map <Leader>, <C-^>
-  map <Leader>ls :buffers<CR>
+  map <leader>, <C-^>
+  map <leader>ls :buffers<CR>
+  map <leader>bn :bnext<CR>
+  map <leader>bp :bprev<CR>
   map gb :bnext<CR>
   map gB :bprev<CR>
   " }}}
 
+  " Open empty buffer {{{
+  map <leader>bt :enew<CR>
+  " }}}
+
+  " Close current buffer and lint window {{{
+  map <leader>bd :lclose<CR>:bdelete<CR>
+  " }}}
+
   " Easy buffer navigation {{{
   "map <c-w> :bdelete<CR>
-  "map <c-PageUp> :bnext<CR>
-  "map <c-PageDown> :bprevious<CR>
+  "nnoremap <C-S-tab> :bprevious<CR>
+  "nnoremap <C-tab>   :bnext<CR>
   " }}}
 
   " Jump to buffer number (<N>gb) {{{
@@ -312,8 +351,11 @@ augroup buffer_control
   endwhile
   " }}}
 
-  " Close Quickfix window (,qq) {{{
+  " Quickfix window (,qq) (,qo) (,qj) (,qk) {{{
   map <leader>qq :cclose<CR>
+  map <leader>qo :copen<CR>
+  map <leader>qj :cnext<CR>
+  map <leader>qk :cprev<CR>
   " }}}
 augroup END
 " }}}
@@ -531,12 +573,12 @@ augroup END
 augroup filetype_ruby
   autocmd!
 
-  au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby
+  au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby nofoldenable
 
   " Ruby.vim {{{
   let ruby_operators = 1
   let ruby_space_errors = 1
-  let ruby_fold = 1
+  let ruby_fold = 0
   " }}}
 augroup END
 " }}}
@@ -584,6 +626,7 @@ augroup ctrlp_config
   let g:ctrlp_switch_buffer = 'Et' " Jump to tab AND buffer if already open
   let g:ctrlp_open_new_file = 'r' " Open newly created files in the current window
   let g:ctrlp_open_multiple_files = 'ij' " Open multiple files in hidden buffers, and jump to the first one
+  let g:ctrlp_working_path_mode = 'r' " Use the nearest .git directory as the cwd
 augroup END
 " }}}
 
@@ -644,12 +687,19 @@ augroup syntastic_config
   let g:syntastic_warning_symbol = '⚠'
   let g:syntastic_ruby_checkers = ['mri', 'rubocop']
   let g:syntastic_javascript_checkers = ['eslint']
- 
+
   highlight link SyntasticError InterestingWord5
   highlight link SyntasticWarning InterestingWord5
 augroup END
 " }}}
 
+" EditorConfig.vim {{{
+augroup syntastic_config
+  autocmd!
+  let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+  augroup END
+
+" }}}
 
 " Plugins -------------------------------------------------------------
 
@@ -667,7 +717,6 @@ Plug 'junegunn/goyo.vim'
 Plug 'kchmck/vim-coffee-script'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kien/rainbow_parentheses.vim'
-Plug 'msanders/snipmate.vim'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'oplatek/Conque-Shell'
@@ -679,12 +728,12 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/syntastic'
 Plug 'slim-template/vim-slim', { 'for': 'slim' }
 Plug 'thoughtbot/vim-rspec'
-" Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-markdown',     { 'for': 'markdown' }
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }
 Plug 'vim-scripts/jade.vim',   { 'for': 'jade' }
@@ -693,6 +742,15 @@ Plug 'wlangstroth/vim-racket'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
+Plug 'danro/rename.vim'
+Plug 'mileszs/ack.vim'
+Plug 'severin-lemaignan/vim-minimap'
+Plug 'junegunn/vim-peekaboo'
+Plug 'justinmk/vim-sneak'
 
 call plug#end()
 " }}}
