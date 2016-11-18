@@ -16,7 +16,7 @@ colorscheme solarized
 " }}}
 
 " Mapleader {{{
-let mapleader=","
+let mapleader="\<Space>"
 " }}}
 
 " Local directories {{{
@@ -96,7 +96,7 @@ set wildchar=<TAB> " Character for CLI expansion (TAB-completion)
 set wildignore+=.DS_Store
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
 set wildignore+=*/bower_components/*,*/node_modules/*
-set wildignore+=*/smarty/*,*/vendor/*,*/.git/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
+set wildignore+=*/smarty/*,*/.git/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
 set wildmenu " Hitting TAB in command mode will show possible completions above command line
 set wildmode=list:longest " Complete only until point of ambiguity
 set winminheight=0 " Allow splits to be reduced to a single line
@@ -233,7 +233,7 @@ augroup general_config
   " }}}
 
   " Toggle folds (<Space>) {{{
-  nnoremap <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? 'zMzx' : 'zc')<CR>
+  "nnoremap <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? 'zMzx' : 'zc')<CR>
   " }}}
 
   " Fix page up and down {{{
@@ -275,14 +275,14 @@ augroup general_config
   " }}}
 
   " Surround (,wb) (,wB) (,w#) {{{
-  map <leader>w ysiw
+  " map <leader>w ysiw
   " }}}
 
   " System copy paste {{{
   vmap <C-c> "+y
   vmap <C-x> "+c
   vmap <C-v> c<ESC>"+p
-  imap <C-v> <ESC>"+pa
+  inoremap <C-v> <ESC>"+pa
   " }}}
 
   " Search current selection {{{
@@ -290,6 +290,37 @@ augroup general_config
   vnoremap ?? y?\V<C-R>"<CR>
   " }}}
 
+  " Move line (C-Up) (C-Down) {{{
+  " How to find the code: Type ":<C-v><key map>" and copy copy without "^["
+  nnoremap [1;5A mz:m-2<CR>`z==
+  nnoremap [1;5B mz:m+<CR>`z==
+  inoremap [1;5A <Esc>:m-2<CR>==gi
+  inoremap [1;5B <Esc>:m+<CR>==gi
+  vnoremap [1;5A :m'<-2<CR>gv=`>my`<mzgv`yo`z
+  vnoremap [1;5B :m'>+<CR>gv=`<my`>mzgv`yo`z
+  " }}}
+
+  " Find and reset position {{{
+  " nnoremap * *<c-o>
+  " }}}
+augroup END
+" }}}
+
+" Create directory on save {{{
+if !exists('*s:MkNonExDir')
+  function s:MkNonExDir(file, buf)
+    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+      let dir=fnamemodify(a:file, ':h')
+      if !isdirectory(dir)
+        call mkdir(dir, 'p')
+      endif
+    endif
+  endfunction
+endif
+
+augroup BWCCreateDir
+    autocmd!
+    au BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
 " }}}
 
@@ -308,7 +339,7 @@ augroup nerd_tree
   autocmd!
 
   map <C-n> :NERDTreeFind<CR>
-  "map <C-m> :NERDTreeToggle<CR>
+  map <C-m> :NERDTreeToggle<CR>
 augroup END
 " }}}
 
@@ -337,10 +368,13 @@ augroup buffer_control
   map <leader>bd :lclose<CR>:bdelete<CR>
   " }}}
 
+  " Close all buffers {{{
+  map <leader>bD :bufdo bd<CR>
+  " }}}
+
   " Easy buffer navigation {{{
-  "map <c-w> :bdelete<CR>
-  "nnoremap <C-S-tab> :bprevious<CR>
-  "nnoremap <C-tab>   :bnext<CR>
+  nnoremap [1;5D :bprevious<CR>
+  nnoremap [1;5C :bnext<CR>
   " }}}
 
   " Jump to buffer number (<N>gb) {{{
@@ -356,7 +390,17 @@ augroup buffer_control
   map <leader>qo :copen<CR>
   map <leader>qj :cnext<CR>
   map <leader>qk :cprev<CR>
+  map <leader>qc :cc<CR>
   " }}}
+
+  " Location list window (,qq) (,qo) (,qj) (,qk) {{{
+  map <leader>lq :lclose<CR>
+  map <leader>lo :lopen<CR>
+  map <leader>lj :lnext<CR>
+  map <leader>lk :lprev<CR>
+  map <leader>ll :ll<CR>
+  " }}}
+
 augroup END
 " }}}
 
@@ -445,6 +489,7 @@ augroup highlight_interesting_word
   nnoremap <silent> <leader>4 :call HiInterestingWord(4)<cr>
   nnoremap <silent> <leader>5 :call HiInterestingWord(5)<cr>
   nnoremap <silent> <leader>6 :call HiInterestingWord(6)<cr>
+  nnoremap <silent> <leader>7 :call HiInterestingWord(7)<cr>
   " }}}
 
   " Default Highlights {{{
@@ -454,6 +499,7 @@ augroup highlight_interesting_word
   hi def InterestingWord4 guifg=#000000 ctermfg=16 guibg=#b88853 ctermbg=137
   hi def InterestingWord5 guifg=#000000 ctermfg=16 guibg=#ff9eb8 ctermbg=211
   hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
+  hi def InterestingWord7 guifg=#000000 ctermfg=16 guibg=#ff0000 ctermbg=red
   " }}}
 augroup END
 " }}}
@@ -544,14 +590,24 @@ augroup END
 " JavaScript {{{
 augroup filetype_javascript
   autocmd!
-  let g:javascript_conceal = 1
-augroup END
-" }}}
+  " Load ES6 snippets
+  au FileType js UltiSnipsAddFiletypes javascript-es6
 
-" JSON {{{
-augroup filetype_json
-  autocmd!
-  au BufRead,BufNewFile *.json set ft=json syntax=javascript
+  " General conceal settings. Will keep things concealed
+  set conceallevel=1
+  set concealcursor=nvc
+
+  " even when your cursor is on top of them.
+  let g:javascript_conceal_function       = "ƒ"
+  let g:javascript_conceal_null           = "ø"
+  let g:javascript_conceal_this           = "@"
+  let g:javascript_conceal_return         = "⇚"
+  let g:javascript_conceal_undefined      = "¿"
+  let g:javascript_conceal_NaN            = "ℕ"
+  let g:javascript_conceal_prototype      = "¶"
+  let g:javascript_conceal_static         = "•"
+  let g:javascript_conceal_super          = "Ω"
+  let g:javascript_conceal_arrow_function = "⇒"
 augroup END
 " }}}
 
@@ -656,8 +712,10 @@ augroup END
 " EasyAlign.vim {{{
 augroup easy_align_config
   autocmd!
-  vmap <Enter> <Plug>(EasyAlign) " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
-  nmap <Leader>a <Plug>(EasyAlign) " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+  " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+  vmap <Enter> <Plug>(EasyAlign)
+  " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+  nmap <Leader>a <Plug>(EasyAlign)
 augroup END
 " }}}
 
@@ -688,17 +746,126 @@ augroup syntastic_config
   let g:syntastic_ruby_checkers = ['mri', 'rubocop']
   let g:syntastic_javascript_checkers = ['eslint']
 
-  highlight link SyntasticError InterestingWord5
-  highlight link SyntasticWarning InterestingWord5
+  highlight link SyntasticError InterestingWord7
+  highlight link SyntasticWarning InterestingWord7
 augroup END
 " }}}
 
 " EditorConfig.vim {{{
-augroup syntastic_config
+augroup editorconfig_config
   autocmd!
   let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-  augroup END
+augroup END
+" }}}
 
+" EasyMotion.vim {{{
+augroup easymotion_config
+  autocmd!
+  " <Leader>f{char} to move to {char}
+  map  <Leader>f <Plug>(easymotion-bd-f)
+  nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+  " s{char}{char} to move to {char}{char}
+  nmap s <Plug>(easymotion-s2)
+  nmap t <Plug>(easymotion-t2)
+
+  " Move to line
+  map <Leader>L <Plug>(easymotion-bd-jk)
+  nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+  " Move to word
+  map  <Leader>w <Plug>(easymotion-bd-w)
+  nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+  " Motions
+  map <Leader>l <Plug>(easymotion-lineforward)
+  map <Leader>j <Plug>(easymotion-j)
+  map <Leader>k <Plug>(easymotion-k)
+  map <Leader>h <Plug>(easymotion-linebackward)
+
+  let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+augroup END
+" }}}
+
+" IncSearch.vim {{{
+augroup incsearch_config
+  autocmd!
+  " You can use other keymappings like <C-l> instead of <CR> if you want to
+  " use these mappings as default search and somtimes want to move cursor with
+  " EasyMotion.
+  "function! s:incsearch_config(...) abort
+  "  return incsearch#util#deepextend(deepcopy({
+  "        \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+  "        \   'keymap': {
+  "        \     "\<CR>": '<Over>(easymotion)'
+  "        \   },
+  "        \   'is_expr': 0
+  "        \ }), get(a:, 1, {}))
+  "endfunction
+
+  "noremap <silent><expr> /  incsearch#go(<SID>incsearch_config())
+  "noremap <silent><expr> ?  incsearch#go(<SID>incsearch_config({'command': '?'}))
+  "noremap <silent><expr> g/ incsearch#go(<SID>incsearch_config({'is_stay': 1}))
+
+  " basic config
+  map /  <Plug>(incsearch-forward)
+  map ?  <Plug>(incsearch-backward)
+  map g/ <Plug>(incsearch-stay)
+
+  " :h g:incsearch#auto_nohlsearch
+  let g:incsearch#auto_nohlsearch = 1
+  map n  <Plug>(incsearch-nohl-n)
+  map N  <Plug>(incsearch-nohl-N)
+  map *  <Plug>(incsearch-nohl-*)
+  map #  <Plug>(incsearch-nohl-#)
+  map g* <Plug>(incsearch-nohl-g*)
+  map g# <Plug>(incsearch-nohl-g#)
+
+  " fuzzy search
+  map z/ <Plug>(incsearch-fuzzy-/)
+  map z? <Plug>(incsearch-fuzzy-?)
+  map zg/ <Plug>(incsearch-fuzzy-stay)
+augroup END
+" }}}
+
+" YouCompleteMe.vim {{{
+augroup youcompleteme_config
+  autocmd!
+  let g:ycm_server_python_interpreter = "/usr/bin/python"
+augroup END
+" }}}
+
+" UltiSnips.vim {{{
+augroup ultisnips_config
+  autocmd!
+  " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+  let g:UltiSnipsExpandTrigger="<c-s>"
+  let g:UltiSnipsJumpForwardTrigger="<c-b>"
+  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+  " If you want :UltiSnipsEdit to split your window.
+  let g:UltiSnipsEditSplit="vertical"
+augroup END
+" }}}
+
+" Fugitive.vim {{{
+augroup fugitive_config
+  autocmd!
+  nnoremap <leader>gs :Gstatus<CR>
+  nnoremap <leader>gc :Dispatch git commit<CR>
+  nnoremap <leader>ga :Gcommit --amend<CR>
+  nnoremap <leader>gd :Gdiff<CR>
+  nnoremap <leader>ge :Gedit<CR>
+  nnoremap <leader>gr :Gread<CR>
+  nnoremap <leader>gw :Gwrite<CR><CR>
+  nnoremap <leader>gl :silent! Glog<CR>
+  nnoremap <leader>gp :Ggrep<Space>
+  nnoremap <leader>gm :Gmove<Space>
+  nnoremap <leader>gb :Git branch<Space>
+  nnoremap <leader>go :Git checkout<Space>
+  nnoremap <leader>gps :Dispatch git push<CR>
+  nnoremap <leader>gpl :Dispatch git pull<CR>
+augroup END
 " }}}
 
 " Plugins -------------------------------------------------------------
@@ -744,13 +911,26 @@ Plug 'xolox/vim-notes'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'danro/rename.vim'
 Plug 'mileszs/ack.vim'
 Plug 'severin-lemaignan/vim-minimap'
 Plug 'junegunn/vim-peekaboo'
 Plug 'justinmk/vim-sneak'
+Plug 'easymotion/vim-easymotion'
+Plug 'haya14busa/incsearch.vim'
+Plug 'haya14busa/incsearch-easymotion.vim'
+Plug 'haya14busa/incsearch-fuzzy.vim'
+Plug 'PeterRincker/vim-argumentative'
+Plug 'Olical/vim-enmasse'
+Plug 'Valloric/YouCompleteMe'
+Plug 'elzr/vim-json'
+Plug 'rickhowe/diffchar.vim'
+Plug 'tpope/vim-dispatch'
+Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+Plug 'jiangmiao/auto-pairs'
+Plug 'kshenoy/vim-signature'
 
 call plug#end()
 " }}}
