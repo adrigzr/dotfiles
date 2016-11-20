@@ -62,7 +62,7 @@ set lispwords+=defpartial,defpage " Noir core
 set lispwords+=defaction,deffilter,defview,defsection " Ciste core
 set lispwords+=describe,it " Speclj TDD/BDD
 set magic " Enable extended regexes
-set mouse=a " Enable mouse in all in all modes
+set mouse=a " Enable mouse in all modes
 set noerrorbells " Disable error bells
 set nojoinspaces " Only insert single space after a '.', '?' and '!' with a join command
 set noshowmode " Don't show the current mode (airline.vim takes care of us)
@@ -175,6 +175,7 @@ augroup general_config
   " Toggle show tabs and trailing spaces (,c) {{{
   set lcs=tab:›\ ,trail:·,eol:¬,nbsp:_
   set fcs=fold:-
+  set list
   nnoremap <silent> <leader>c :set nolist!<CR>
   " }}}
 
@@ -215,17 +216,6 @@ augroup general_config
   " Search and replace word under cursor (,*) {{{
   nnoremap <leader>* :%s/\<<C-r><C-w>\>//<Left>
   vnoremap <leader>* "hy:%s/\V<C-r>h//<left>
-  " }}}
-
-  " Strip trailing whitespace (,ss) {{{
-  function! StripWhitespace () " {{{
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    :%s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
-  endfunction " }}}
-  noremap <leader>ss :call StripWhitespace ()<CR>
   " }}}
 
   " Join lines and restore cursor location (J) {{{
@@ -303,6 +293,10 @@ augroup general_config
   " Find and reset position {{{
   " nnoremap * *<c-o>
   " }}}
+
+  " Color NonText (see listchars) {{{
+  hi NonText ctermfg=10 guifg=#000000
+  " }}}
 augroup END
 " }}}
 
@@ -373,8 +367,8 @@ augroup buffer_control
   " }}}
 
   " Easy buffer navigation {{{
-  nnoremap [1;5D :bprevious<CR>
-  nnoremap [1;5C :bnext<CR>
+  "nnoremap [1;5D :bprevious<CR>
+  "nnoremap [1;5C :bnext<CR>
   " }}}
 
   " Jump to buffer number (<N>gb) {{{
@@ -868,6 +862,22 @@ augroup fugitive_config
 augroup END
 " }}}
 
+" Emoji.vim {{{
+augroup emoji_config
+  autocmd!
+  au FileType markdown set omnifunc=emoji#complete
+augroup END
+" }}}
+
+" BetterWhitespace.vim {{{
+augroup betterwhitespace_config
+  autocmd!
+  autocmd BufWritePre * StripWhitespace
+augroup END
+" }}}
+
+
+
 " Plugins -------------------------------------------------------------
 
 " Load plugins {{{
@@ -876,41 +886,41 @@ call plug#begin('~/.vim/plugged')
 Plug 'ap/vim-css-color'
 Plug 'bling/vim-airline'
 Plug 'FelikZ/ctrlp-py-matcher'
-Plug 'guns/vim-clojure-static'
-Plug 'joker1007/vim-ruby-heredoc-syntax'
+" Plug 'guns/vim-clojure-static'
+" Plug 'joker1007/vim-ruby-heredoc-syntax'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/vim-emoji'
-Plug 'junegunn/goyo.vim'
-Plug 'kchmck/vim-coffee-script'
+" Plug 'junegunn/goyo.vim'
+" Plug 'kchmck/vim-coffee-script'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'oplatek/Conque-Shell'
+" Plug 'oplatek/Conque-Shell'
 Plug 'pangloss/vim-javascript'
-Plug 'rking/ag.vim'
+" Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/syntastic'
-Plug 'slim-template/vim-slim', { 'for': 'slim' }
-Plug 'thoughtbot/vim-rspec'
-Plug 'tpope/vim-haml'
+" Plug 'slim-template/vim-slim', { 'for': 'slim' }
+" Plug 'thoughtbot/vim-rspec'
+" Plug 'tpope/vim-haml'
 Plug 'tpope/vim-markdown',     { 'for': 'markdown' }
-Plug 'tpope/vim-rails'
+" Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-ruby/vim-ruby'
-Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }
-Plug 'vim-scripts/jade.vim',   { 'for': 'jade' }
-Plug 'wavded/vim-stylus',      { 'for': 'stylus' }
-Plug 'wlangstroth/vim-racket'
+" Plug 'vim-ruby/vim-ruby'
+" Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }
+" Plug 'vim-scripts/jade.vim',   { 'for': 'jade' }
+" Plug 'wavded/vim-stylus',      { 'for': 'stylus' }
+" Plug 'wlangstroth/vim-racket'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
+" Plug 'MarcWeber/vim-addon-mw-utils'
+" Plug 'tomtom/tlib_vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'danro/rename.vim'
@@ -931,6 +941,9 @@ Plug 'tpope/vim-dispatch'
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 Plug 'jiangmiao/auto-pairs'
 Plug 'kshenoy/vim-signature'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'airblade/vim-gitgutter'
+Plug 'ntpeters/vim-better-whitespace'
 
 call plug#end()
 " }}}
