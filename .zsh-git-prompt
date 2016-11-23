@@ -20,6 +20,7 @@ function check_resize() {
 }
 
 PROMPT='$(check_last_exit_code) %{$fg_bold[green]%}%~%{$reset_color%} $(git_super_status)$(check_resize)$ '
+PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 GIT_PROMPT_EXECUTABLE="haskell"
 

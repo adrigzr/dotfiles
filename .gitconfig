@@ -2,11 +2,11 @@
 	default = current
 
 [merge]
-	tool = fugitive
+	tool = vimdiff
   conflictstyle = diff3
 
 [mergetool "fugitive"]
-  cmd = vim -f -c "Gdiff" "$MERGED"
+  cmd = vim -f -c "Gvdiff" "$MERGED"
 
 [mergetool]
   prompt = false

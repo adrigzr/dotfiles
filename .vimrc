@@ -92,19 +92,20 @@ set ttymouse=xterm " Set mouse type to xterm
 set undofile " Persistent Undo
 set viminfo=%,'9999,s512,n~/.vim/viminfo " Restore buffer list, marks are remembered for 9999 files, registers up to 512Kb are remembered
 set visualbell " Use visual bell instead of audible bell (annnnnoying)
+set browsedir=buffer " browse files in same dir as open file
 set wildchar=<TAB> " Character for CLI expansion (TAB-completion)
 set wildignore+=.DS_Store
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
 set wildignore+=*/bower_components/*,*/node_modules/*
-set wildignore+=*/smarty/*,*/.git/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
+set wildignore+=*/smarty/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
 set wildmenu " Hitting TAB in command mode will show possible completions above command line
-set wildmode=list:longest " Complete only until point of ambiguity
+set wildmode=list:longest,full " Complete only until point of ambiguity
+set wildignorecase
 set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
 " }}}
 
 " }}}
-
 
 " Configuration -------------------------------------------------------------
 
@@ -142,10 +143,10 @@ augroup general_config
   " }}}
 
   " Better split switching (Ctrl-j, Ctrl-k, Ctrl-h, Ctrl-l) {{{
-  map <C-j> <C-W>j
-  map <C-k> <C-W>k
-  map <C-H> <C-W>h
-  map <C-L> <C-W>l
+  " map <C-j> <C-W>j
+  " map <C-k> <C-W>k
+  " map <C-H> <C-W>h
+  " map <C-L> <C-W>l
   " }}}
 
   " Sudo write (,W) {{{
@@ -175,7 +176,6 @@ augroup general_config
   " Toggle show tabs and trailing spaces (,c) {{{
   set lcs=tab:›\ ,trail:·,eol:¬,nbsp:_
   set fcs=fold:-
-  set list
   nnoremap <silent> <leader>c :set nolist!<CR>
   " }}}
 
@@ -295,7 +295,7 @@ augroup general_config
   " }}}
 
   " Color NonText (see listchars) {{{
-  hi NonText ctermfg=10 guifg=#000000
+  hi NonText ctermfg=10 guifg=#000000 guibg=#000000 ctermbg=8
   " }}}
 augroup END
 " }}}
@@ -332,8 +332,8 @@ augroup END
 augroup nerd_tree
   autocmd!
 
-  map <C-n> :NERDTreeFind<CR>
-  map <C-m> :NERDTreeToggle<CR>
+  map <C-m> :NERDTreeFind<CR>
+  map <M-m> :NERDTreeToggle<CR>
 augroup END
 " }}}
 
@@ -371,6 +371,14 @@ augroup buffer_control
   "nnoremap [1;5C :bnext<CR>
   " }}}
 
+  " Easy buffer navigation {{{
+  nnoremap [1;5D B
+  nnoremap [1;5C W
+  inoremap [1;5D <ESC>Bi
+  inoremap [1;5C <ESC>Wi
+  " }}}
+
+
   " Jump to buffer number (<N>gb) {{{
   let c = 1
   while c <= 99
@@ -395,6 +403,12 @@ augroup buffer_control
   map <leader>ll :ll<CR>
   " }}}
 
+  " Preview window {{{
+  map <leader>pq :pclose<CR>
+  map <leader>pj :ptnext<CR>
+  map <leader>pk :ptprevious<CR>
+  " }}}
+
 augroup END
 " }}}
 
@@ -409,8 +423,8 @@ augroup jump_to_tags
   " screen.  Both will pulse the cursor line so you can see where the hell you
   " are.  <c-\> will also fold everything in the buffer and then unfold just
   " enough for you to see the destination line.
-  nnoremap <c-]> <c-]>mzzvzz15<c-e>`z:Pulse<cr>
-  nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z:Pulse<cr>
+  " nnoremap <c-]> <c-]>mzzvzz15<c-e>`z:Pulse<cr>
+  " nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z:Pulse<cr>
 
   " Pulse Line (thanks Steve Losh)
   function! s:Pulse() " {{{
@@ -589,7 +603,7 @@ augroup filetype_javascript
 
   " General conceal settings. Will keep things concealed
   set conceallevel=1
-  set concealcursor=nvc
+  set concealcursor=nc
 
   " even when your cursor is on top of them.
   let g:javascript_conceal_function       = "ƒ"
@@ -745,6 +759,14 @@ augroup syntastic_config
 augroup END
 " }}}
 
+" Ale.vim {{{
+augroup ale_config
+  autocmd!
+  let g:ale_sign_error = '✗'
+  let g:ale_sign_warning = '⚠'
+augroup END
+" }}}
+
 " EditorConfig.vim {{{
 augroup editorconfig_config
   autocmd!
@@ -876,7 +898,30 @@ augroup betterwhitespace_config
 augroup END
 " }}}
 
+" MultipleCurso.vim {{{
+augroup multiplecursor_config
+  autocmd!
+  " Remove default mappings.
+  let g:multi_cursor_use_default_mapping=0
 
+  " Remap.
+  let g:multi_cursor_next_key='<C-n>'
+  let g:multi_cursor_prev_key='<C-b>'
+  let g:multi_cursor_skip_key='<C-q>'
+  let g:multi_cursor_quit_key='<Esc>'
+
+  " Edit current search.
+  nnoremap <silent> <F3> :MultipleCursorsFind <C-R>/<CR>
+  vnoremap <silent> <F3> :MultipleCursorsFind <C-R>/<CR>
+augroup END
+" }}}
+
+" Undotree.vim {{{
+augroup undotree_config
+  autocmd!
+  noremap <silent> <F6> :UndotreeToggle<CR>
+augroup END
+" }}}
 
 " Plugins -------------------------------------------------------------
 
@@ -902,7 +947,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
 " Plug 'slim-template/vim-slim', { 'for': 'slim' }
 " Plug 'thoughtbot/vim-rspec'
 " Plug 'tpope/vim-haml'
@@ -944,6 +989,10 @@ Plug 'kshenoy/vim-signature'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'Chiel92/vim-autoformat'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'w0rp/ale'
+Plug 'mbbill/undotree'
 
 call plug#end()
 " }}}
