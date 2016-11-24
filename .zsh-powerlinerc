@@ -1,0 +1,22 @@
+# Font mode.
+POWERLEVEL9K_MODE='powerline'
+
+# Double lined prompt.
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+
+# Prompt prefix.
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
+POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX='%K{238}%F{251} $([ $EUID -ne 0 ] && echo "$" || echo "#") %f%k%F{238}%f '
+
+# Configure prompts.
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir rbenv vcs root_indicator)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs time custom_tmux)
+
+# Tmux powerline.
+POWERLEVEL9K_CUSTOM_TMUX='$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+
+# Dir.
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
+
+# Status.
+POWERLEVEL9K_STATUS_VERBOSE=false

@@ -9,6 +9,9 @@ bindkey -v
 
 fpath=( "$HOME/.zfunctions" $fpath )
 
+# PowerLine9K config.
+source ~/.zsh-powerlinerc
+
 # antigen time!
 source ~/Repositories/antigen/antigen.zsh
 
@@ -80,6 +83,9 @@ $b sprunge
 #$b arialdomartini/oh-my-git
 #antigen theme arialdomartini/oh-my-git-themes arialdo-pathinline
 
+# PowerLevel9K
+antigen theme bhilburn/powerlevel9k powerlevel9k
+
 # Tell antigen that you're done.
 antigen apply
 
@@ -87,8 +93,8 @@ antigen apply
 #################################################################################################
 
 # Zsh git prompt
-source ~/Repositories/zsh-git-prompt/zshrc.sh
-source ~/.zsh-git-prompt
+#source ~/Repositories/zsh-git-prompt/zshrc.sh
+#source ~/.zsh-git-prompt
 
 # bind UP and DOWN arrow keys for history search
 zmodload zsh/terminfo
@@ -97,8 +103,7 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 
 # config for suggestions
 #AUTOSUGGESTION_ACCEPT_RIGHT_ARROW=1
-
-export PURE_GIT_UNTRACKED_DIRTY=0
+#export PURE_GIT_UNTRACKED_DIRTY=0
 
 # Automatically list directory contents on `cd`.
 auto-ls () {
@@ -130,10 +135,3 @@ source ~/.bash_profile
 #export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Perl
-PATH="${HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="${HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="${HOME}/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"${HOME}/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"; export PERL_MM_OPT;
