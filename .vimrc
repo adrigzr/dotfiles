@@ -103,6 +103,7 @@ set wildmode=list:longest,full " Complete only until point of ambiguity
 set wildignorecase
 set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
+set shiftwidth=4 " Fix mixed-indent warning
 " }}}
 
 " }}}
@@ -332,8 +333,7 @@ augroup END
 augroup nerd_tree
   autocmd!
 
-  map <C-m> :NERDTreeFind<CR>
-  map <M-m> :NERDTreeToggle<CR>
+  map <C-t> :NERDTreeFind<CR>
 augroup END
 " }}}
 
@@ -508,6 +508,10 @@ augroup highlight_interesting_word
   hi def InterestingWord5 guifg=#000000 ctermfg=16 guibg=#ff9eb8 ctermbg=211
   hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
   hi def InterestingWord7 guifg=#000000 ctermfg=16 guibg=#ff0000 ctermbg=red
+
+  " Transparent background.
+  hi Normal guibg=NONE ctermbg=NONE
+  hi NonText guibg=NONE ctermbg=NONE
   " }}}
 augroup END
 " }}}
@@ -602,8 +606,8 @@ augroup filetype_javascript
   au FileType js UltiSnipsAddFiletypes javascript-es6
 
   " General conceal settings. Will keep things concealed
-  set conceallevel=1
-  set concealcursor=nc
+  set conceallevel=0
+  "set concealcursor=nc
 
   " even when your cursor is on top of them.
   let g:javascript_conceal_function       = "ƒ"
@@ -668,6 +672,8 @@ augroup END
 " Airline.vim {{{
 augroup airline_config
   autocmd!
+  let g:solarized_base16 = 1
+  let g:airline_theme='base16'
   let g:airline_powerline_fonts = 1
   let g:airline_enable_syntastic = 1
   let g:airline#extensions#syntastic#enabled = 1
@@ -676,6 +682,7 @@ augroup airline_config
   let g:airline#extensions#tabline#enabled = 1
   let g:airline#extensions#tabline#fnamecollapse = 0
   let g:airline#extensions#tabline#fnamemod = ':t'
+  let g:airline#extensions#whitespace#mixed_indent_algo = 1
 augroup END
 " }}}
 
@@ -985,7 +992,7 @@ Plug 'rickhowe/diffchar.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 Plug 'jiangmiao/auto-pairs'
-Plug 'kshenoy/vim-signature'
+" Plug 'kshenoy/vim-signature'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
@@ -993,6 +1000,12 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
 Plug 'mbbill/undotree'
+Plug 'altercation/vim-colors-solarized'
+Plug 'joukevandermaas/vim-ember-hbs'
+Plug 'andrewradev/ember_tools.vim'
+Plug 'alexlafroscia/vim-ember-cli'
+Plug 'alexbyk/vim-ultisnips-js-testing'
+Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 " }}}

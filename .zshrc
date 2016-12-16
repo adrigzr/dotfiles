@@ -9,6 +9,14 @@ bindkey -v
 
 fpath=( "$HOME/.zfunctions" $fpath )
 
+# Termite support.
+# Tell Termite what the current directory is.
+if [[ $TERM == xterm-termite ]]; then
+  . /etc/profile.d/vte.sh
+  __vte_osc7
+  export TERM='screen-256color'
+fi
+
 # PowerLine9K config.
 source ~/.zsh-powerlinerc
 
@@ -102,8 +110,7 @@ bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 
 # config for suggestions
-#AUTOSUGGESTION_ACCEPT_RIGHT_ARROW=1
-#export PURE_GIT_UNTRACKED_DIRTY=0
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=11"
 
 # Automatically list directory contents on `cd`.
 auto-ls () {
