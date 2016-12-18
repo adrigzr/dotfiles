@@ -34,8 +34,12 @@ set $urgent-bg-color     #dc322f
 # Lock screen.
 set $locker "$HOME/.config/i3/lock -d /tmp -b -s -o $HOME/Pictures/lock.png && sleep 1"
 
+# Docks.
+set $dock $HOME/.screenlayout/dock.sh
+set $laptop $HOME/.screenlayout/laptop.sh
+
 # Settings.
-workspace_auto_back_and_forth yes
+# workspace_auto_back_and_forth yes
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -57,9 +61,6 @@ hide_edge_borders both
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
-
-# start a terminal
-bindsym $mod+Return exec --no-startup-id $editor
 
 # kill focused window
 bindsym $mod+q kill
@@ -175,6 +176,15 @@ bindsym $mod+x exec --no-startup-id $locker
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
+# start a terminal
+bindsym $mod+Return exec --no-startup-id $editor
+
+# start a scratchpad terminal.
+bindsym $mod+Shift+Return exec --no-startup-id $editor --name __scratchpad
+
+# thunar.
+bindsym $mod+n exec --no-startup-id thunar
+
 # resize window (you can also use the mouse for that)
 set $mode_resize resize
 
@@ -220,6 +230,19 @@ mode "$mode_power" {
 
 bindsym Mod1+Control+l mode "$mode_power"
 
+# Dock mode.
+set $mode_dock Laptop (1), Dock (3)
+
+mode "$mode_dock" {
+    bindsym 1 exec --no-startup-id $laptop, mode "default"
+    bindsym 3 exec --no-startup-id $dock, mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+m mode "$mode_dock"
+
 # Order workspaces.
 workspace $ws1 output HDMI2
 workspace $ws2 output VGA1
@@ -227,7 +250,7 @@ workspace $ws3 output eDP1
 
 # Fix graphics glitch
 # new_window none
-#for_window [class=(?i)termite] border pixel 3
+# for_window [class="(?i)termite"] border pixel 3
 
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
@@ -236,20 +259,22 @@ for_window [window_role="Preferences"] floating enable
 
 for_window [window_type="dialog"] floating enable
 for_window [window_type="menu"] floating enable
+for_window [instance="__scratchpad"] floating enable
 
 # Remove borders for windows.
 for_window [class="(?i)chrome" window_role="browser"] border none
 for_window [class="(?i)termite"] border none
+for_window [class="(?i)spotify"] border none
 
 # Assigns.
 assign [class="(?i)chrome"] $ws3
-assign [class="(?i)spotify"] $ws8
+for_window [class="(?i)spotify"] move to workspace $ws8
 
 # window colors
 #                       border              background         text                 indicator
 client.focused          $bg-color           $bg-color          $text-color          #00ff00
-client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
-client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
+client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
+client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
 
 # Start i3bar to display a workspace bar (plus the system information i3status
@@ -257,7 +282,7 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 bar {
   status_command i3blocks
   font pango:System San Francisco Display 10
-  tray_output primary
+  tray_output none
   position top
   colors {
     background $bg-color
@@ -286,7 +311,7 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # Screen Layout.
-exec_always --no-startup-id $HOME/.screenlayout/dock.sh
+exec_always --no-startup-id $laptop
 
 # Wallpaper.
 exec_always --no-startup-id feh --bg-max --bg-fill $HOME/Pictures/wallhaven-453849.jpg
