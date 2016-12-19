@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+STATUS=$(playerctl status)
+
+if [[ STATUS -eq 'Playing' ]]; then
+  ARTIST=$(playerctl metadata xesam:artist)
+  TITLE=$(playerctl metadata xesam:title)
+
+  echo "$ARTIST - $TITLE"
+else
+  echo $(ncmpcpp --current-song="%a - %t")
+fi
+

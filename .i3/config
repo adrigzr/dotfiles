@@ -32,7 +32,10 @@ set $inactive-text-color #839496
 set $urgent-bg-color     #dc322f
 
 # Lock screen.
-set $locker "$HOME/.config/i3/lock -d /tmp -b -s -o $HOME/Pictures/lock.png && sleep 1"
+set $locker $HOME/.config/i3/lock -d /tmp -b -s -o $HOME/Pictures/lock.png && sleep 1
+
+# Wallpaper.
+set $wallpaper feh --bg-max --bg-fill $HOME/Pictures/wallhaven-453849.jpg
 
 # Docks.
 set $dock $HOME/.screenlayout/dock.sh
@@ -55,6 +58,16 @@ font pango:System San Francisco Display 10
 # clear in small sizes. However, its unicode glyph coverage is limited, the old
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
+
+# Gaps.
+gaps inner 7
+gaps outer 0
+
+# Disable gaps when there is only one container.
+smart_gaps on
+
+# Enable borders on gaps.
+smart_borders on
 
 # Thin borders.
 hide_edge_borders both
@@ -136,16 +149,16 @@ bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws10
+bindsym $mod+Shift+1 move container to workspace $ws1; workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2; workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3; workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4; workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5; workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
 bindsym $mod+Tab workspace back_and_forth
 
 # move workspaces
@@ -234,8 +247,8 @@ bindsym Mod1+Control+l mode "$mode_power"
 set $mode_dock Laptop (1), Dock (3)
 
 mode "$mode_dock" {
-    bindsym 1 exec --no-startup-id $laptop, mode "default"
-    bindsym 3 exec --no-startup-id $dock, mode "default"
+    bindsym 1 exec --no-startup-id $laptop && $wallpaper, mode "default"
+    bindsym 3 exec --no-startup-id $dock && $wallpaper, mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -248,9 +261,8 @@ workspace $ws1 output HDMI2
 workspace $ws2 output VGA1
 workspace $ws3 output eDP1
 
-# Fix graphics glitch
-# new_window none
-# for_window [class="(?i)termite"] border pixel 3
+# Window configuration.
+new_window pixel 3
 
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
@@ -262,12 +274,16 @@ for_window [window_type="menu"] floating enable
 for_window [instance="__scratchpad"] floating enable
 
 # Remove borders for windows.
-for_window [class="(?i)chrome" window_role="browser"] border none
-for_window [class="(?i)termite"] border none
-for_window [class="(?i)spotify"] border none
+# for_window [class="(?i)chrome" window_role="browser"] border none
+# for_window [class="(?i)termite"] border none
+# for_window [class="(?i)spotify"] border none
 
 # Assigns.
-assign [class="(?i)chrome"] $ws3
+assign [instance="__base"] $ws1
+assign [instance="__editor"] $ws2
+assign [class="(?i)chrome" window_role="browser"] $ws3
+assign [class="(?i)chrome" window_role="app" title="(?i)keep"] $ws4
+for_window [class="(?i)chrome" window_role="pop-up" title="(?i)developer"] floating disable, move to workspace $ws5
 for_window [class="(?i)spotify"] move to workspace $ws8
 
 # window colors
@@ -287,7 +303,7 @@ bar {
   colors {
     background $bg-color
     separator #839496
-#   border             background         text
+    #                 border              background         text
     focused_workspace  $bg-color          $bg-color          $text-color
     active_workspace   $inactive-bg-color $inactive-bg-color $inactive-text-color
     inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
@@ -314,10 +330,15 @@ bindsym XF86AudioPrev exec playerctl previous
 exec_always --no-startup-id $laptop
 
 # Wallpaper.
-exec_always --no-startup-id feh --bg-max --bg-fill $HOME/Pictures/wallhaven-453849.jpg
+exec_always --no-startup-id $wallpaper
 
 # Enable compton.
 exec --no-startup-id compton -b
+
+# Startup apps.
+exec --no-startup-id google-chrome
+exec --no-startup-id $editor --exec "tmux new-session -A -s base" --name "__base"
+exec --no-startup-id $editor --exec "tmux new-session -A -s editor" --name "__editor"
 
 # Gnome goodies.
 # exec --no-startup-id /usr/lib64/gnome-settings-daemon/gnome-settings-daemon
