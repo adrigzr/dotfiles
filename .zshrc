@@ -14,7 +14,7 @@ fpath=( "$HOME/.zfunctions" $fpath )
 if [[ $TERM == xterm-termite ]]; then
   . /etc/profile.d/vte.sh
   __vte_osc7
-  export TERM='screen-256color'
+  export TERM='xterm-256color'
 fi
 
 # PowerLine9K config.

@@ -2,12 +2,22 @@
 
 STATUS=$(playerctl status)
 
-if [[ STATUS -eq 'Playing' ]]; then
-  ARTIST=$(playerctl metadata xesam:artist)
-  TITLE=$(playerctl metadata xesam:title)
+# Let it be prepared for customization on several play modes :)
+case $STATUS in
+ "Playing") STATUS_ICON="";;
+esac
 
-  echo "$ARTIST - $TITLE"
-else
-  echo $(ncmpcpp --current-song="%a - %t")
+# Get info.
+ARTIST=$(playerctl metadata xesam:artist)
+TITLE=$(playerctl metadata xesam:title)
+
+## ncmpcpp mode.
+# ARTIST=$(ncmpcpp --current-song="%a")
+# TITLE=$(ncmpcpp --current-song="%t")
+
+# Only show when playing.
+if [[ $STATUS == "Playing" ]]; then
+  echo "$ARTIST - $TITLE" # full_text
+  echo "$STATUS_ICON"
+  echo "#2ebd59" # color
 fi
-

@@ -240,11 +240,11 @@ augroup general_config
   " }}}
 
   " Vimdiff {{{
-  map dn ]c
-  map dp [c
-  map dr :diffget RE<CR>
-  map db :diffget BA<CR>
-  map dl :diffget LO<CR>
+  map <leader>dn ]c
+  map <leader>dp [c
+  map <leader>dr :diffget RE<CR>
+  map <leader>db :diffget BA<CR>
+  map <leader>dl :diffget LO<CR>
   " }}}
 
   " Tab mappings {{{
@@ -905,7 +905,7 @@ augroup betterwhitespace_config
 augroup END
 " }}}
 
-" MultipleCurso.vim {{{
+" MultipleCursor.vim {{{
 augroup multiplecursor_config
   autocmd!
   " Remove default mappings.
@@ -927,6 +927,13 @@ augroup END
 augroup undotree_config
   autocmd!
   noremap <silent> <F6> :UndotreeToggle<CR>
+augroup END
+" }}}
+
+" AutoPairs.vim {{{
+augroup autopairs_config
+  autocmd!
+  let g:AutoPairsMultilineClose=0
 augroup END
 " }}}
 

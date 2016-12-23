@@ -34,13 +34,6 @@ set $urgent-bg-color     #dc322f
 # Lock screen.
 set $locker $HOME/.config/i3/lock -d /tmp -b -s -o $HOME/Pictures/lock.png && sleep 1
 
-# Wallpaper.
-set $wallpaper feh --bg-max --bg-fill $HOME/Pictures/wallhaven-453849.jpg
-
-# Docks.
-set $dock $HOME/.screenlayout/dock.sh
-set $laptop $HOME/.screenlayout/laptop.sh
-
 # Settings.
 # workspace_auto_back_and_forth yes
 
@@ -247,8 +240,9 @@ bindsym Mod1+Control+l mode "$mode_power"
 set $mode_dock Laptop (1), Dock (3)
 
 mode "$mode_dock" {
-    bindsym 1 exec --no-startup-id $laptop && $wallpaper, mode "default"
-    bindsym 3 exec --no-startup-id $dock && $wallpaper, mode "default"
+    bindsym 0 exec --no-startup-id autorandr --change && sleep 1, mode "default"
+    bindsym 1 exec --no-startup-id autorandr --load laptop && sleep 1, mode "default"
+    bindsym 3 exec --no-startup-id autorandr --load docked && sleep 1, mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -283,6 +277,7 @@ assign [instance="__base"] $ws1
 assign [instance="__editor"] $ws2
 assign [class="(?i)chrome" window_role="browser"] $ws3
 assign [class="(?i)chrome" window_role="app" title="(?i)keep"] $ws4
+assign [class="(?i)slack"] $ws4
 for_window [class="(?i)chrome" window_role="pop-up" title="(?i)developer"] floating disable, move to workspace $ws5
 for_window [class="(?i)spotify"] move to workspace $ws8
 
@@ -326,11 +321,12 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-# Screen Layout.
-exec_always --no-startup-id $laptop
+# Auto lock screen.
+exec --no-startup-id xautolock -time 5 -locker $locker
 
-# Wallpaper.
-exec_always --no-startup-id $wallpaper
+# Screen Layout.
+exec_always --no-startup-id autorandr --change
+exec --no-startup-id poll-xrandr
 
 # Enable compton.
 exec --no-startup-id compton -b

@@ -38,6 +38,10 @@ $status = $1;
 $percent = $2;
 $full_text = "$percent%";
 
+if ($percent == 100) {
+  exit(0);
+}
+
 if ($status eq 'Discharging') {
 	$full_text .= '';
 } elsif ($status eq 'Charging') {
@@ -72,13 +76,13 @@ print "$short_text\n";
 if ($status eq 'Discharging') {
 
 	if ($percent < 20) {
-		print "#FF0000\n";
+		print "#dc322f\n";
 	} elsif ($percent < 40) {
-		print "#FFAE00\n";
+		print "#cb4b16\n";
 	} elsif ($percent < 60) {
-		print "#FFF600\n";
+		print "#b58900\n";
 	} elsif ($percent < 85) {
-		print "#A8FF00\n";
+		print "#2aa198\n";
 	}
 
 	if ($percent < 5) {
