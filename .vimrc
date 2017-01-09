@@ -73,7 +73,7 @@ set ofu=syntaxcomplete#Complete " Set omni-completion method
 set regexpengine=1 " Use the old regular expression engine (it's faster for certain language syntaxes)
 set report=0 " Show all changes
 set ruler " Show the cursor position
-set scrolloff=3 " Start scrolling three lines before horizontal border of window
+set scrolloff=6 " Start scrolling three lines before horizontal border of window
 set shell=/bin/sh " Use /bin/sh for executing shell commands
 set shiftwidth=2 " The # of spaces for indenting
 set shortmess=atI " Don't show the intro message when starting vim
@@ -104,6 +104,7 @@ set wildignorecase
 set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
 set shiftwidth=4 " Fix mixed-indent warning
+set autoread " Force check disk file
 " }}}
 
 " }}}
@@ -138,8 +139,10 @@ augroup general_config
 
   " Faster split resizing (+,-) {{{
   if bufwinnr(1)
-    map + <C-W>+
-    map - <C-W>-
+    nmap + <C-W>+
+    nmap - <C-W>-
+    nmap > <C-W>>
+    nmap < <C-W><
   endif
   " }}}
 
@@ -151,6 +154,7 @@ augroup general_config
   " }}}
 
   " Sudo write (,W) {{{
+  noremap <leader>w :w<CR>
   noremap <leader>W :w !sudo tee %<CR>
   " }}}
 
@@ -254,7 +258,9 @@ augroup general_config
   " }}}
 
   " Reload when entering the buffer or gaining focus {{{
-  au FocusGained,BufEnter * :silent! !
+  au FocusGained,BufEnter,CursorHold * checktime
+  " au FocusGained,BufEnter * :silent! !
+  " au FileChangedShell * echo "File changed!"
   " }}}
 
   " Save when exiting the buffer or losing focus {{{
@@ -287,8 +293,8 @@ augroup general_config
   nnoremap [1;5B mz:m+<CR>`z==
   inoremap [1;5A <Esc>:m-2<CR>==gi
   inoremap [1;5B <Esc>:m+<CR>==gi
-  vnoremap [1;5A :m'<-2<CR>gv=`>my`<mzgv`yo`z
-  vnoremap [1;5B :m'>+<CR>gv=`<my`>mzgv`yo`z
+  vnoremap [1;5A :'<,'>m'<-2<CR>gv=`>my`<mzgv`yo`z
+  vnoremap [1;5B :'<,'>m'>+<CR>gv=`<my`>mzgv`yo`z
   " }}}
 
   " Find and reset position {{{
@@ -319,21 +325,11 @@ augroup BWCCreateDir
 augroup END
 " }}}
 
-" NERD Commenter {{{
-augroup nerd_commenter
-  autocmd!
-
-  let NERDSpaceDelims=1
-  let NERDCompactSexyComs=1
-  let g:NERDCustomDelimiters = { 'racket': { 'left': ';', 'leftAlt': '#|', 'rightAlt': '|#' } }
-augroup END
-" }}}
-
 " NERDTree {{{
 augroup nerd_tree
   autocmd!
 
-  map <C-t> :NERDTreeFind<CR>
+  map <leader>t :NERDTreeFind<CR>
 augroup END
 " }}}
 
@@ -408,7 +404,6 @@ augroup buffer_control
   map <leader>pj :ptnext<CR>
   map <leader>pk :ptprevious<CR>
   " }}}
-
 augroup END
 " }}}
 
@@ -509,7 +504,7 @@ augroup highlight_interesting_word
   hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
   hi def InterestingWord7 guifg=#000000 ctermfg=16 guibg=#ff0000 ctermbg=red
 
-  " Transparent background.
+  " Transparent background {{{
   hi Normal guibg=NONE ctermbg=NONE
   hi NonText guibg=NONE ctermbg=NONE
   " }}}
@@ -546,6 +541,14 @@ augroup restore_cursor
 augroup END
 " }}}
 
+" Custom commands ------------------------------------------------------
+
+augroup custom_commands
+  autocmd!
+
+  " Format json.
+  command! -nargs=0 FormatJSON execute "%!python -m json.tool"
+augroup END
 
 " Filetypes -------------------------------------------------------------
 
@@ -626,6 +629,7 @@ augroup END
 " Markdown {{{
 augroup filetype_markdown
   autocmd!
+  au FileType markdown set wrap
   let g:markdown_fenced_languages = ['ruby', 'html', 'javascript', 'css', 'erb=eruby.html', 'bash=sh']
 augroup END
 " }}}
@@ -669,11 +673,18 @@ augroup END
 
 " Plugin Configuration -------------------------------------------------------------
 
+" Solarized.vim {{{
+augroup solarized_config
+  autocmd!
+  let g:solarized_termcolors = 256
+  " let g:solarized_termtrans = 1
+augroup END
+" }}}
+
 " Airline.vim {{{
 augroup airline_config
   autocmd!
-  let g:solarized_base16 = 1
-  let g:airline_theme='base16'
+  let g:airline_theme = 'base16'
   let g:airline_powerline_fonts = 1
   let g:airline_enable_syntastic = 1
   let g:airline#extensions#syntastic#enabled = 1
@@ -784,27 +795,12 @@ augroup END
 " EasyMotion.vim {{{
 augroup easymotion_config
   autocmd!
-  " <Leader>f{char} to move to {char}
-  map  <Leader>f <Plug>(easymotion-bd-f)
-  nmap <Leader>f <Plug>(easymotion-overwin-f)
-
   " s{char}{char} to move to {char}{char}
   nmap s <Plug>(easymotion-s2)
   nmap t <Plug>(easymotion-t2)
 
-  " Move to line
-  map <Leader>L <Plug>(easymotion-bd-jk)
-  nmap <Leader>L <Plug>(easymotion-overwin-line)
-
-  " Move to word
-  map  <Leader>w <Plug>(easymotion-bd-w)
-  nmap <Leader>w <Plug>(easymotion-overwin-w)
-
-  " Motions
-  map <Leader>l <Plug>(easymotion-lineforward)
-  map <Leader>j <Plug>(easymotion-j)
-  map <Leader>k <Plug>(easymotion-k)
-  map <Leader>h <Plug>(easymotion-linebackward)
+  " Repeat motion.
+  map <Leader>. <Plug>(easymotion-repeat)
 
   let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 augroup END
@@ -854,7 +850,13 @@ augroup END
 " YouCompleteMe.vim {{{
 augroup youcompleteme_config
   autocmd!
+  let g:ycm_auto_trigger = 1
+  let g:ycm_min_num_of_chars_for_completion = 2
   let g:ycm_server_python_interpreter = "/usr/bin/python"
+  let g:ycm_complete_in_comments = 1
+  let g:ycm_complete_in_strings = 1
+  let g:ycm_collect_identifiers_from_comments_and_strings = 1
+  let g:ycm_seed_identifiers_with_syntax = 1
 augroup END
 " }}}
 
@@ -868,6 +870,14 @@ augroup ultisnips_config
 
   " If you want :UltiSnipsEdit to split your window.
   let g:UltiSnipsEditSplit="vertical"
+augroup END
+" }}}
+
+" SuperTab.vim {{{
+augroup supertab_config
+  autocmd!
+  let g:SuperTabDefaultCompletionType    = '<C-n>'
+  " let g:SuperTabCrMapping                = 0
 augroup END
 " }}}
 
@@ -937,6 +947,31 @@ augroup autopairs_config
 augroup END
 " }}}
 
+" ExpandRegion.vim {{{
+augroup expandregion_config
+  autocmd!
+  vmap v <Plug>(expand_region_expand)
+  vmap <C-v> <Plug>(expand_region_shrink)
+augroup END
+" }}}
+
+" Peekaboo.vim {{{
+augroup peekaboo_config
+  autocmd!
+  let g:peekaboo_delay = 750
+augroup END
+" }}}
+
+" SmoothScroll.vim {{{
+augroup smoothscroll_config
+  autocmd!
+  noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
+  noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
+  noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 4)<CR>
+  noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 4)<CR>
+augroup END
+" }}}
+
 " Plugins -------------------------------------------------------------
 
 " Load plugins {{{
@@ -944,7 +979,6 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'ap/vim-css-color'
 Plug 'bling/vim-airline'
-Plug 'FelikZ/ctrlp-py-matcher'
 " Plug 'guns/vim-clojure-static'
 " Plug 'joker1007/vim-ruby-heredoc-syntax'
 Plug 'junegunn/vim-easy-align'
@@ -952,20 +986,21 @@ Plug 'junegunn/vim-emoji'
 " Plug 'junegunn/goyo.vim'
 " Plug 'kchmck/vim-coffee-script'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'FelikZ/ctrlp-py-matcher'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'oplatek/Conque-Shell'
 Plug 'pangloss/vim-javascript'
 " Plug 'rking/ag.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeFind' }
+Plug 'tpope/vim-commentary'
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeFind' }
 " Plug 'scrooloose/syntastic'
 " Plug 'slim-template/vim-slim', { 'for': 'slim' }
 " Plug 'thoughtbot/vim-rspec'
 " Plug 'tpope/vim-haml'
-Plug 'tpope/vim-markdown',     { 'for': 'markdown' }
+Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 " Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -982,7 +1017,7 @@ Plug 'editorconfig/editorconfig-vim'
 " Plug 'tomtom/tlib_vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'danro/rename.vim'
+" Plug 'danro/rename.vim'
 Plug 'mileszs/ack.vim'
 Plug 'severin-lemaignan/vim-minimap'
 Plug 'junegunn/vim-peekaboo'
@@ -991,10 +1026,10 @@ Plug 'easymotion/vim-easymotion'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-easymotion.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
-Plug 'PeterRincker/vim-argumentative'
+" Plug 'PeterRincker/vim-argumentative'
 Plug 'Olical/vim-enmasse'
 Plug 'Valloric/YouCompleteMe'
-Plug 'elzr/vim-json'
+Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'rickhowe/diffchar.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
@@ -1013,6 +1048,14 @@ Plug 'andrewradev/ember_tools.vim'
 Plug 'alexlafroscia/vim-ember-cli'
 Plug 'alexbyk/vim-ultisnips-js-testing'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown'  }
+Plug 'terryma/vim-expand-region'
+" Plug 'jebaum/vim-tmuxify'
+" Plug 'yuttie/comfortable-motion.vim'
+Plug 'terryma/vim-smooth-scroll'
+Plug 'mhinz/vim-startify'
+Plug 'ervandew/supertab'
 
 call plug#end()
 " }}}

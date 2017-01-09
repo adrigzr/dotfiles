@@ -66,6 +66,8 @@
   ac = !git add -A && git commit
   fame = "!git ls-tree -r -z --name-only HEAD -- **/* | xargs -0 -n1 git blame --line-porcelain HEAD |grep  \"^author \"|sort|uniq -c|sort -nr"
   last = "!git for-each-ref --sort='-committerdate' --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' refs/heads/ | head -n 15"
+  lb = list-bamboo
+  rb = run-bamboo
 
 [core]
 	editor = vim

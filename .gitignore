@@ -5,6 +5,7 @@
 .vim/undo
 .vim/plugged
 .vim/*.tmp
+.vim/session
 
 # git credential file
 .gitconfig.local

@@ -4,9 +4,7 @@
 # history
 SAVEHIST=100000
 
-# vim bindings
-bindkey -v
-
+# Custom functions.
 fpath=( "$HOME/.zfunctions" $fpath )
 
 # Termite support.
@@ -36,6 +34,9 @@ $b command-not-found
 
 # Helper for extracting different types of archives.
 $b extract
+
+# Enable vi mode.
+$b vi-mode
 
 # atom editor
 #$b atom
@@ -99,6 +100,35 @@ antigen apply
 
 ###
 #################################################################################################
+
+# Fix vi-mode.
+function zle-line-init {
+  powerlevel9k_prepare_prompts
+  if (( ${+terminfo[smkx]} )); then
+    printf '%s' ${terminfo[smkx]}
+  fi
+  zle reset-prompt
+  zle -R
+}
+
+function zle-line-finish {
+  powerlevel9k_prepare_prompts
+  if (( ${+terminfo[rmkx]} )); then
+    printf '%s' ${terminfo[rmkx]}
+  fi
+  zle reset-prompt
+  zle -R
+}
+
+function zle-keymap-select {
+  powerlevel9k_prepare_prompts
+  zle reset-prompt
+  zle -R
+}
+
+zle -N zle-line-init
+zle -N ale-line-finish
+zle -N zle-keymap-select
 
 # Zsh git prompt
 #source ~/Repositories/zsh-git-prompt/zshrc.sh

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 xmodmap ~/.xmodmap
 xrdb -load ~/.Xresources
 xset r rate 300 50

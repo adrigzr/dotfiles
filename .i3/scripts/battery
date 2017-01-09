@@ -20,9 +20,12 @@ my $acpi;
 my $status;
 my $percent;
 my $ac_adapt;
+my $icon;
 my $full_text;
 my $short_text;
 my $bat_number = $ENV{BLOCK_INSTANCE} || 0;
+
+binmode STDOUT, ":utf8";
 
 # read the first line of the "acpi" command output
 open (ACPI, "acpi -b | grep 'Battery $bat_number' |") or die;
@@ -36,16 +39,31 @@ if ($acpi !~ /: (\w+), (\d+)%/) {
 
 $status = $1;
 $percent = $2;
-$full_text = "$percent%";
 
 if ($percent == 100) {
   exit(0);
 }
 
+sub getIcon {
+  my @percent = $_[0];
+
+  if ($percent < 20) {
+    return '';
+	} elsif ($percent < 40) {
+    return '';
+	} elsif ($percent < 60) {
+    return '';
+	} elsif ($percent < 85) {
+    return '';
+	}
+
+  return '';
+}
+
 if ($status eq 'Discharging') {
-	$full_text .= '';
+	$icon = getIcon($percent);
 } elsif ($status eq 'Charging') {
-	$full_text .= ' ';
+	$icon = '';
 } elsif ($status eq 'Unknown') {
 	open (AC_ADAPTER, "acpi -a |") or die;
 	$ac_adapt = <AC_ADAPTER>;
@@ -55,13 +73,14 @@ if ($status eq 'Discharging') {
 		$ac_adapt = $1;
 
 		if ($ac_adapt eq 'on-line') {
-			$full_text .= ' ';
+			$icon = '';
 		} elsif ($ac_adapt eq 'off-line') {
-			$full_text .= '';
+			$icon = getIcon($percent);
 		}
 	}
 }
 
+$full_text = "$icon $percent%";
 $short_text = $full_text;
 
 if ($acpi =~ /(\d\d:\d\d):/) {

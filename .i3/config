@@ -168,7 +168,7 @@ bindsym $mod+Shift+plus scratchpad show
 bindsym $mod+Shift+s sticky toggle
 
 # Put YouTube into fullscreen and execute this for media mode
-bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable; move window to position 1940 54
+bindsym $mod+y fullscreen disable; floating enable; resize set 400 225; sticky enable; move window to position center
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -292,7 +292,7 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 # finds out, if available)
 bar {
   status_command i3blocks
-  font pango:System San Francisco Display 10
+  font pango:Droid Sans Mono Awesome 10
   tray_output none
   position top
   colors {
@@ -335,6 +335,7 @@ exec --no-startup-id compton -b
 exec --no-startup-id google-chrome
 exec --no-startup-id $editor --exec "tmux new-session -A -s base" --name "__base"
 exec --no-startup-id $editor --exec "tmux new-session -A -s editor" --name "__editor"
+exec --no-startup-id spotify
 
 # Gnome goodies.
 # exec --no-startup-id /usr/lib64/gnome-settings-daemon/gnome-settings-daemon
