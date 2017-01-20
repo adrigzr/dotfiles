@@ -13,14 +13,14 @@ set $mod Mod4
 set $editor termite
 
 # Workspaces.
-set $ws1  "1: "
-set $ws2  "2:  "
-set $ws3  "3: "
-set $ws4  "4: "
+set $ws1  "1"
+set $ws2  "2"
+set $ws3  "3"
+set $ws4  "4"
 set $ws5  "5"
 set $ws6  "6"
 set $ws7  "7"
-set $ws8  "8:  "
+set $ws8  "8"
 set $ws9  "9"
 set $ws10 "10"
 
@@ -275,7 +275,6 @@ for_window [instance="__scratchpad"] floating enable
 # Assigns.
 assign [instance="__base"] $ws1
 assign [instance="__editor"] $ws2
-assign [class="(?i)chrome" window_role="browser"] $ws3
 assign [class="(?i)chrome" window_role="app" title="(?i)keep"] $ws4
 assign [class="(?i)slack"] $ws4
 for_window [class="(?i)chrome" window_role="pop-up" title="(?i)developer"] floating disable, move to workspace $ws5
@@ -332,7 +331,7 @@ exec --no-startup-id poll-xrandr
 exec --no-startup-id compton -b
 
 # Startup apps.
-exec --no-startup-id google-chrome
+exec --no-startup-id i3-msg "workspace $ws1; exec google-chrome"
 exec --no-startup-id $editor --exec "tmux new-session -A -s base" --name "__base"
 exec --no-startup-id $editor --exec "tmux new-session -A -s editor" --name "__editor"
 exec --no-startup-id spotify

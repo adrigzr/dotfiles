@@ -104,7 +104,7 @@ set wildignorecase
 set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
 set shiftwidth=4 " Fix mixed-indent warning
-set autoread " Force check disk file
+" set autoread " Force check disk file
 " }}}
 
 " }}}
@@ -258,7 +258,7 @@ augroup general_config
   " }}}
 
   " Reload when entering the buffer or gaining focus {{{
-  au FocusGained,BufEnter,CursorHold * checktime
+  " au FocusGained,BufEnter,CursorHold * checktime
   " au FocusGained,BufEnter * :silent! !
   " au FileChangedShell * echo "File changed!"
   " }}}
@@ -541,6 +541,29 @@ augroup restore_cursor
 augroup END
 " }}}
 
+" Multiple cursors {{{
+augroup multiple_cursor
+  autocmd!
+  let g:mc = "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>"
+
+  nnoremap cn *``cgn
+  nnoremap cN *``cgN
+
+  vnoremap <expr> cn g:mc . "``cgn"
+  vnoremap <expr> cN g:mc . "``cgN"
+
+  function! SetupCR()
+    nnoremap <Enter> :nnoremap <lt>Enter> n@z<CR>q:<C-u>let @z=strpart(@z,0,strlen(@z)-1)<CR>n@z
+  endfunction
+
+  nnoremap cq :call SetupCR()<CR>*``qz
+  nnoremap cQ :call SetupCR()<CR>#``qz
+
+  vnoremap <expr> cq ":\<C-u>call SetupCR()\<CR>" . "gv" . g:mc . "``qz"
+  vnoremap <expr> cQ ":\<C-u>call SetupCR()\<CR>" . "gv" . substitute(g:mc, '/', '?', 'g') . "``qz"
+augroup END
+
+
 " Custom commands ------------------------------------------------------
 
 augroup custom_commands
@@ -548,6 +571,9 @@ augroup custom_commands
 
   " Format json.
   command! -nargs=0 FormatJSON execute "%!python -m json.tool"
+
+  " Copy current file path.
+  command! -nargs=0 CopyPath execute "let @+ = expand('%')"
 augroup END
 
 " Filetypes -------------------------------------------------------------
@@ -1028,7 +1054,7 @@ Plug 'haya14busa/incsearch-easymotion.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
 " Plug 'PeterRincker/vim-argumentative'
 Plug 'Olical/vim-enmasse'
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'rickhowe/diffchar.vim'
 Plug 'tpope/vim-dispatch'
@@ -1046,7 +1072,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'andrewradev/ember_tools.vim'
 Plug 'alexlafroscia/vim-ember-cli'
-Plug 'alexbyk/vim-ultisnips-js-testing'
+" Plug 'alexbyk/vim-ultisnips-js-testing'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'francoiscabrol/ranger.vim'
 Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown'  }
