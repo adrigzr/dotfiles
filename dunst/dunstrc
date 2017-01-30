@@ -109,7 +109,7 @@
     # The height of a single line.  If the height is smaller than the
     # font height, it will get raised to the font height.
     # This adds empty space above and under the text.
-    line_height = 0
+    line_height = 3
 
     # Draw a line of "separatpr_height" pixel height between two
     # notifications.
@@ -180,7 +180,7 @@
 [urgency_normal]
     background = "#073642"
     foreground = "#eee8d5"
-    timeout = 5
+    timeout = 10
 
 [urgency_critical]
     background = "#dc322f"

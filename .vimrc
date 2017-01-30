@@ -1008,7 +1008,7 @@ Plug 'bling/vim-airline'
 " Plug 'guns/vim-clojure-static'
 " Plug 'joker1007/vim-ruby-heredoc-syntax'
 Plug 'junegunn/vim-easy-align'
-Plug 'junegunn/vim-emoji'
+" Plug 'junegunn/vim-emoji'
 " Plug 'junegunn/goyo.vim'
 " Plug 'kchmck/vim-coffee-script'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -1054,11 +1054,11 @@ Plug 'haya14busa/incsearch-easymotion.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
 " Plug 'PeterRincker/vim-argumentative'
 Plug 'Olical/vim-enmasse'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'rickhowe/diffchar.vim'
 Plug 'tpope/vim-dispatch'
-Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+" Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 Plug 'jiangmiao/auto-pairs'
 " Plug 'kshenoy/vim-signature'
 Plug 'christoomey/vim-tmux-navigator'
