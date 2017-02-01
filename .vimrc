@@ -883,6 +883,7 @@ augroup youcompleteme_config
   let g:ycm_complete_in_strings = 1
   let g:ycm_collect_identifiers_from_comments_and_strings = 1
   let g:ycm_seed_identifiers_with_syntax = 1
+  let g:ycm_autoclose_preview_window_after_completion = 1
 augroup END
 " }}}
 
@@ -998,6 +999,102 @@ augroup smoothscroll_config
 augroup END
 " }}}
 
+" neocomplete.vim {{{
+augroup neocomplete_config
+  autocmd!
+  let g:acp_enableAtStartup = 0 " Disable AutoComplPop.
+  let g:neocomplete#enable_at_startup = 1 " Use neocomplete.
+  let g:neocomplete#enable_smart_case = 1 " Use smartcase.
+  let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length.
+
+  " Define keyword.
+  if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+  endif
+  let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+  " Plugin key-mappings.
+  inoremap <expr><C-g>     neocomplete#undo_completion()
+  inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+  " Recommended key-mappings.
+  " <CR>: close popup and save indent.
+  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+  function! s:my_cr_function()
+    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+    " For no inserting <CR> key.
+    "return pumvisible() ? "\<C-y>" : "\<CR>"
+  endfunction
+  " <TAB>: completion.
+  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+  " <C-h>, <BS>: close popup and delete backword char.
+  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+  " Close popup by <Space>.
+  "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+  " AutoComplPop like behavior.
+  "let g:neocomplete#enable_auto_select = 1
+
+  " Shell like behavior(not recommended).
+  "set completeopt+=longest
+  "let g:neocomplete#enable_auto_select = 1
+  "let g:neocomplete#disable_auto_complete = 1
+  "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+  " Enable omni completion.
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+  " Enable heavy omni completion.
+  if !exists('g:neocomplete#sources#omni#input_patterns')
+    let g:neocomplete#sources#omni#input_patterns = {}
+  endif
+  "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+  "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+  "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+  " For perlomni.vim setting.
+  " https://github.com/c9s/perlomni.vim
+  let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+augroup END
+" }}}
+
+" neosnippet.vim {{{
+augroup neosnippet_config
+  " Plugin key-mappings.
+  " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+  imap <C-s>     <Plug>(neosnippet_expand_or_jump)
+  smap <C-s>     <Plug>(neosnippet_expand_or_jump)
+  xmap <C-s>     <Plug>(neosnippet_expand_target)
+
+  " SuperTab like snippets behavior.
+  " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+  imap <C-s>     <Plug>(neosnippet_expand_or_jump)
+  "imap <expr><TAB>
+  " \ pumvisible() ? "\<C-n>" :
+  " \ neosnippet#expandable_or_jumpable() ?
+  " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+  smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+  " For conceal markers.
+  " if has('conceal')
+  "   set conceallevel=2 concealcursor=niv
+  " endif
+
+  " Enable snipMate compatibility feature.
+  let g:neosnippet#enable_snipmate_compatibility = 1
+
+  " Tell Neosnippet about the other snippets
+  let g:neosnippet#snippets_directory=['~/.vim/plugged/vim-snippets/snippets', '~/.vim/my-snippets']
+augroup END
+" }}}
+
 " Plugins -------------------------------------------------------------
 
 " Load plugins {{{
@@ -1041,7 +1138,10 @@ Plug 'xolox/vim-notes'
 Plug 'editorconfig/editorconfig-vim'
 " Plug 'MarcWeber/vim-addon-mw-utils'
 " Plug 'tomtom/tlib_vim'
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
+Plug 'Shougo/neocomplete.vim'
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
 " Plug 'danro/rename.vim'
 Plug 'mileszs/ack.vim'
@@ -1081,7 +1181,7 @@ Plug 'terryma/vim-expand-region'
 " Plug 'yuttie/comfortable-motion.vim'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'mhinz/vim-startify'
-Plug 'ervandew/supertab'
+" Plug 'ervandew/supertab'
 
 call plug#end()
 " }}}
