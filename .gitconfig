@@ -120,4 +120,13 @@
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
-	required = true
+  required = true
+
+[http]
+  proxy = http://localhost:3128
+
+[https]
+	proxy = http://localhost:3128
+
+[url "https://github.com"]
+	insteadOf = git://github.com

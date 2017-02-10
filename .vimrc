@@ -355,7 +355,7 @@ augroup buffer_control
   " }}}
 
   " Close current buffer and lint window {{{
-  map <leader>bd :lclose<CR>:bdelete<CR>
+  map <leader>bd :lclose<bar>b#<bar>bd #<CR>
   " }}}
 
   " Close all buffers {{{

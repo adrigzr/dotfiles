@@ -25,11 +25,11 @@ set $ws9  "9"
 set $ws10 "10"
 
 # Colors.
-set $bg-color            #073642
-set $inactive-bg-color   #073642
-set $text-color          #eee8d5
-set $inactive-text-color #839496
-set $urgent-bg-color     #dc322f
+set $bg-color            #073642f2
+set $inactive-bg-color   #073642f2
+set $text-color          #eee8d5f2
+set $inactive-text-color #839496f2
+set $urgent-bg-color     #dc322ff2
 
 # Lock screen.
 set $locker $HOME/.config/i3/lock -d /tmp -b -s -o $HOME/Pictures/lock.png && sleep 1
@@ -291,9 +291,11 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 # finds out, if available)
 bar {
   status_command i3blocks
+  i3bar_command i3bar -t
   font pango:Droid Sans Mono Awesome 10
   tray_output none
   position top
+  mode hide
   colors {
     background $bg-color
     separator #839496
@@ -331,7 +333,7 @@ exec --no-startup-id poll-xrandr
 exec --no-startup-id compton -b
 
 # Startup apps.
-exec --no-startup-id i3-msg "workspace $ws1; exec google-chrome"
+exec --no-startup-id i3-msg "workspace $ws1; exec google-chrome-stable"
 exec --no-startup-id $editor --exec "tmux new-session -A -s base" --name "__base"
 exec --no-startup-id $editor --exec "tmux new-session -A -s editor" --name "__editor"
 exec --no-startup-id spotify

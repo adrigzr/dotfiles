@@ -23,6 +23,21 @@ export PATH=${PATH}:~/.local/bin
 # Alias text
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Hey fool! You have an alias: "
 
+# Proxy.
+export http_proxy=http://localhost:3128/
+export https_proxy=$http_proxy
+export ftp_proxy=$http_proxy
+export rsync_proxy=$http_proxy
+export rvm_proxy=$http_proxy
+export socks_proxy=socks://localhost:3128/
+export HTTP_PROXY=$http_proxy
+export HTTPS_PROXY=$http_proxy
+export FTP_PROXY=$http_proxy
+export RSYNC_PROXY=$http_proxy
+export RVM_PROXY=$http_proxy
+export SOCKS_PROXY=$socks_proxy
+export no_proxy=localhost,127.0.0.0/8,::1
+
 # here's LS_COLORS
 # github.com/trapd00r/LS_COLORS
 command -v gdircolors >/dev/null 2>&1 || alias gdircolors="dircolors"
