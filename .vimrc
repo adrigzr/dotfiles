@@ -808,6 +808,7 @@ augroup ale_config
   autocmd!
   let g:ale_sign_error = '✗'
   let g:ale_sign_warning = '⚠'
+  let g:ale_linters = { 'javascript': ['eslint'] }
 augroup END
 " }}}
 
@@ -1066,6 +1067,7 @@ augroup END
 
 " neosnippet.vim {{{
 augroup neosnippet_config
+  autocmd!
   " Plugin key-mappings.
   " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
   imap <C-s>     <Plug>(neosnippet_expand_or_jump)
@@ -1092,6 +1094,16 @@ augroup neosnippet_config
 
   " Tell Neosnippet about the other snippets
   let g:neosnippet#snippets_directory=['~/.vim/plugged/vim-snippets/snippets', '~/.vim/my-snippets']
+augroup END
+" }}}
+
+" vim_diff_enhanced.vim {{{
+augroup vim_diff_enhanced_config
+  autocmd!
+  " started In Diff-Mode set diffexpr (plugin not loaded yet)
+  if &diff
+    let &diffexpr='EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
+  endif
 augroup END
 " }}}
 
@@ -1156,7 +1168,7 @@ Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'Olical/vim-enmasse'
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 Plug 'elzr/vim-json', { 'for': 'json' }
-Plug 'rickhowe/diffchar.vim'
+" Plug 'rickhowe/diffchar.vim'
 Plug 'tpope/vim-dispatch'
 " Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 Plug 'jiangmiao/auto-pairs'
@@ -1182,6 +1194,8 @@ Plug 'terryma/vim-expand-region'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'mhinz/vim-startify'
 " Plug 'ervandew/supertab'
+Plug 'chrisbra/vim-diff-enhanced'
+Plug 'fcpg/vim-altscreen'
 
 call plug#end()
 " }}}

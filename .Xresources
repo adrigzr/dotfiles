@@ -12,7 +12,8 @@
 ! Rofi settings
 !-------------------------------------------------------------------------------
 
-rofi.modi: run,drun,window
+rofi.modi: combi,teiler:teiler,window
+rofi.combi-modi: run,drun
 rofi.font: System San Francisco Display 16
 rofi.columns: 1
 rofi.fullscreen: true

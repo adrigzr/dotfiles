@@ -171,6 +171,26 @@ function code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
 
 # `shellswitch [bash |zsh]`
 #   Must be in /etc/shells
-shellswitch () {
+function shellswitch () {
 	chsh -s $(brew --prefix)/bin/$1
+}
+
+# wttr.in
+function wttr() {
+  curl -H "Accept-Language: ${LANG%_*}" wttr.in/"${1:-Madrid}"
+}
+
+# Woody login
+function woodyLogin() {
+  adb shell input tap $(adb shell cat $(adb shell uiautomator dump |
+    egrep -o '[^ ]+.xml') |
+    xmllint --xpath '//node[@resource-id="com.bbva.bbvacontigo.virtual:id/loginPasswordEditText"]' - |
+    egrep -o "[0-9]+,[0-9]+" |
+    head -1 |
+    sed -e 's/,/ /') &&
+    xargs -n 2 adb shell input <<< 'text "123456" keyevent 61 keyevent 61 keyevent 66'
+}
+
+function logcat() {
+  pidcat $1 | fzf --ansi --tac --tiebreak=index -i
 }
