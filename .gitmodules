@@ -1,3 +1,3 @@
-[submodule "git-friendly"]
-	path = git-friendly
+[submodule "submodules/git-friendly"]
+	path = submodules/git-friendly
 	url = https://github.com/jamiew/git-friendly.git
