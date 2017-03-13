@@ -1,0 +1,25 @@
+{
+	"segment_data": {
+		"powerline.segments.common.net.hostname": {
+			"args": {
+				"only_if_ssh": true
+			}
+		},
+		"powerline.segments.shell.cwd": {
+			"args": {
+				"dir_limit_depth": 3
+			}
+		},
+    "powerline.segments.common.vcs.branch": {
+      "args": {
+        "status_colors": true,
+        "ignore_statuses": ["U"]
+      }
+    },
+    "powerline.segments.shell.mode": {
+      "args": {
+        "default": "viins"
+      }
+    }
+	}
+}

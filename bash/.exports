@@ -20,6 +20,9 @@ export PATH=${PATH}:~/Repositories/zsh-git-prompt/src/.bin
 # Powerline fonts
 export PATH=${PATH}:~/.local/bin
 
+# XDG config home.
+export XDG_CONFIG_HOME=$HOME/.config
+
 # Alias text
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Hey fool! You have an alias: "
 

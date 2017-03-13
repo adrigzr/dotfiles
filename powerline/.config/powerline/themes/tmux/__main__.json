@@ -1,0 +1,9 @@
+{
+	"segment_data": {
+    "powerline.segments.common.wthr.weather": {
+      "args": {
+        "location_query": "madrid, spain"
+      }
+    }
+	}
+}

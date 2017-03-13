@@ -1,5 +1,0 @@
-# Bash extra config.
-bash/.extra
-
-# Tmux sensible config.
-tmux/.tmux-powerlinerc

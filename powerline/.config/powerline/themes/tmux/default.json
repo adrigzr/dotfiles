@@ -1,0 +1,13 @@
+{
+	"segments": {
+		"right": [
+      {
+        "name": "mail",
+        "function": "powerline.segments.common.mail.email_imap_alert"
+      },
+      {
+        "function": "powerline.segments.common.wthr.weather"
+      }
+		]
+	}
+}
