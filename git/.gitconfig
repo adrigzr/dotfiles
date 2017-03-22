@@ -78,7 +78,7 @@
 	helper = cache --timeout=3600
 
 [init]
-	templatedir = /home/adriangonzalez/.git_template
+	templatedir = ~/.git_template
 
 [fetch]
 	prune = true

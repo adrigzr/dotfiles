@@ -32,7 +32,7 @@ set $inactive-text-color #839496f2
 set $urgent-bg-color     #dc322ff2
 
 # Lock screen.
-set $locker $HOME/.config/i3/lock -d /tmp -b -s -o $HOME/Pictures/lock.png && sleep 1
+set $locker sleep 1 && $HOME/.config/i3/lock -d /tmp -b -s -o $HOME/Pictures/lock.png
 
 # Settings.
 # workspace_auto_back_and_forth yes
@@ -72,7 +72,7 @@ floating_modifier $mod
 bindsym $mod+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id rofi -show combi
+bindsym $mod+d exec --no-startup-id rofi -show run
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -177,7 +177,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # Lock screen.
-bindsym $mod+x exec --no-startup-id $locker
+bindsym $mod+x exec --no-startup-id $locker -n
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
@@ -223,7 +223,7 @@ bindsym $mod+r mode "$mode_resize"
 set $mode_power System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (p) shutdown
 
 mode "$mode_power" {
-    bindsym l exec --no-startup-id $locker, mode "default"
+    bindsym l exec --no-startup-id $locker -n, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
     bindsym s exec --no-startup-id $locker && systemctl suspend, mode "default"
     bindsym h exec --no-startup-id $locker && systemctl hibernate, mode "default"
@@ -291,7 +291,7 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 # finds out, if available)
 bar {
   status_command i3blocks
-  i3bar_command i3bar -t
+  i3bar_command i3bar
   font pango:Droid Sans Mono Awesome 10
   tray_output none
   position top
@@ -313,8 +313,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -5% #d
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 20 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10 # decrease screen brightness
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
@@ -323,7 +323,7 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # Auto lock screen.
-exec --no-startup-id xautolock -time 5 -locker $locker
+# exec --no-startup-id xautolock -time 5 -locker $locker
 
 # Screen Layout.
 exec_always --no-startup-id autorandr --change
@@ -332,14 +332,11 @@ exec --no-startup-id poll-xrandr
 # Enable compton.
 exec --no-startup-id compton -b
 
-# Start powerline.
-exec --no-startup powerline-daemon -q
-
 # Startup apps.
-exec --no-startup-id i3-msg "workspace $ws1; exec google-chrome-stable"
-exec --no-startup-id $editor --exec "tmux new-session -A -s base" --name "__base"
-exec --no-startup-id $editor --exec "tmux new-session -A -s editor" --name "__editor"
-exec --no-startup-id spotify
+# exec --no-startup-id i3-msg "workspace $ws1; exec google-chrome-stable"
+# exec --no-startup-id $editor --exec "tmux new-session -A -s base" --name "__base"
+# exec --no-startup-id $editor --exec "tmux new-session -A -s editor" --name "__editor"
+# exec --no-startup-id spotify
 
 # Gnome goodies.
 # exec --no-startup-id /usr/lib64/gnome-settings-daemon/gnome-settings-daemon

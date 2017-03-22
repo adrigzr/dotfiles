@@ -164,14 +164,14 @@ setopt share_history
 
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
-# Powerline.
-source $HOME/.local/lib/python3.5/site-packages/powerline/bindings/zsh/powerline.zsh
-
 # uncomment to finish profiling
 # zprof
 
 # Load default dotfiles
 source ~/.bash_profile
+
+# Powerline.
+source $HOME/.local/lib/python3.5/site-packages/powerline/bindings/zsh/powerline.zsh
 
 #export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 

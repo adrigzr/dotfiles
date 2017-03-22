@@ -12,8 +12,7 @@
 ! Rofi settings
 !-------------------------------------------------------------------------------
 
-rofi.modi: combi,teiler:teiler,window
-rofi.combi-modi: run,drun
+rofi.modi: run,drun,teiler:teiler,window
 rofi.font: SFNS Display 16
 rofi.columns: 1
 rofi.fullscreen: true

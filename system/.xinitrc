@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 xmodmap ~/.xmodmap
 xrdb -load ~/.Xresources

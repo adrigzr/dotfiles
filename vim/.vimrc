@@ -1196,6 +1196,7 @@ Plug 'mhinz/vim-startify'
 " Plug 'ervandew/supertab'
 Plug 'chrisbra/vim-diff-enhanced'
 Plug 'fcpg/vim-altscreen'
+Plug 'mjbrownie/swapit'
 
 call plug#end()
 " }}}

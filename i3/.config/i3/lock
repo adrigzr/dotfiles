@@ -25,6 +25,7 @@ usage() {
 		                                          again to achieve the pixelize effect. For example, 4 means
 		                                          that it will be resized to 1/4 of the original and blown back up.
 		        --blur|-b                       Blur the image.
+		        --nofork|-n                     No fork.
 	EOF
 }
 
@@ -69,6 +70,9 @@ main() {
 	# Restart i3lock on non-zero exit code by default.
 	f_secloop=1
 
+  # No fork disable.
+  f_nofork=0
+
 	while (( $# )); do
 		case "$1" in
 			--help|-h) usage; return 0;;
@@ -83,6 +87,7 @@ main() {
 			--pixelize|-p) f_pixelize=1;;
 			--pixelize-scale|-P) cfg_pixelize_scale=$2; shift;;
 			--blur|-b) f_blur=1;;
+			--nofork|-n) f_nofork=1;;
 
 			--unsecure) f_secloop=0;;
 
@@ -113,15 +118,31 @@ main() {
 		return 1
 	fi
 
+  nofork=''
+
+  if (( f_nofork )); then
+    nofork='-n'
+  fi
+
 	image_prepare
 
+  # Pause dunst notifications.
+  if (( f_nofork )); then
+    pkill -u "$USER" -USR1 dunst
+  fi
+
 	if (( f_secloop )); then
-		until i3lock -t -i "$image_file"; do
+		until i3lock -t -i "$image_file" $nofork; do
 			true
 		done
 	else
-		i3lock -t -i "$image_file"
+		i3lock -t -i "$image_file" $nofork
 	fi
+
+  # Resume dunst notifications.
+  if (( f_nofork )); then
+    pkill -u "$USER" -USR2 dunst
+  fi
 }
 
 main "$@"
