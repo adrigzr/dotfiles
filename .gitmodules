@@ -7,3 +7,9 @@
 [submodule "zsh/.zim"]
 	path = zsh/.zim
 	url = https://github.com/Eriner/zim.git
+[submodule "zsh/.zsh/zsh-autosuggestions"]
+	path = zsh/.zsh/zsh-autosuggestions
+	url = git://github.com/zsh-users/zsh-autosuggestions
+[submodule "zsh/.zsh/alias-tips"]
+	path = zsh/.zsh/alias-tips
+	url = https://github.com/djui/alias-tips.git

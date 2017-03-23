@@ -46,6 +46,9 @@
         "function": "powerline.segments.shell.last_pipe_status"
       },
       {
+        "function": "powerline.segments.shell.mode"
+      },
+      {
         "function": "powerline.segments.common.time.date",
         "priority": 100,
         "args": {
