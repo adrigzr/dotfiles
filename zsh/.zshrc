@@ -21,86 +21,89 @@ fi
 # Setup fzf (fuzzy-finder).
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Source zim.
+[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ] && source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
+
 # antigen time!
-source ~/Repositories/antigen/antigen.zsh
+# source ~/Repositories/antigen/antigen.zsh
 
-######################################################################
-### install some antigen bundles
+# ######################################################################
+# ### install some antigen bundles
 
-local b="antigen-bundle"
+# local b="antigen-bundle"
 
-# Don't load the oh-my-zsh's library. Takes too long. No need.
-antigen use oh-my-zsh
+# # Don't load the oh-my-zsh's library. Takes too long. No need.
+# antigen use oh-my-zsh
 
-# Guess what to install when running an unknown command.
-$b command-not-found
+# # Guess what to install when running an unknown command.
+# $b command-not-found
 
-# Helper for extracting different types of archives.
-$b extract
+# # Helper for extracting different types of archives.
+# $b extract
 
-# Enable vi mode.
-# $b vi-mode
+# # Enable vi mode.
+# # $b vi-mode
 
-# atom editor
-#$b atom
+# # atom editor
+# #$b atom
 
-# homebrew  - autocomplete on `brew install`
-#$b brew
-#$b brew-cask
+# # homebrew  - autocomplete on `brew install`
+# #$b brew
+# #$b brew-cask
 
-# Tracks your most used directories, based on 'frecency'.
-#$b robbyrussell/oh-my-zsh plugins/z
+# # Tracks your most used directories, based on 'frecency'.
+# #$b robbyrussell/oh-my-zsh plugins/z
 
-# nicoulaj's moar completion files for zsh -- not sure why disabled.
-# $b zsh-users/zsh-completions src
+# # nicoulaj's moar completion files for zsh -- not sure why disabled.
+# # $b zsh-users/zsh-completions src
 
-# Syntax highlighting on the readline
-$b zsh-users/zsh-syntax-highlighting
+# # Syntax highlighting on the readline
+# $b zsh-users/zsh-syntax-highlighting
 
-# history search fuzzy
-$b zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
+# # history search fuzzy
+# $b zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
 
-# suggestions
-$b zsh-users/zsh-autosuggestions
+# # suggestions
+# $b zsh-users/zsh-autosuggestions
 
-# colors for all files!
-$b trapd00r/zsh-syntax-highlighting-filetypes
+# # colors for all files!
+# $b trapd00r/zsh-syntax-highlighting-filetypes
 
-# dont set a theme, because pure does it all
-# $b mafredri/zsh-async
-#$b sindresorhus/pure
+# # dont set a theme, because pure does it all
+# # $b mafredri/zsh-async
+# #$b sindresorhus/pure
 
-# Sudo
-$b sudo
+# # Sudo
+# $b sudo
 
-# History
-# aliases h, hs, hsi.
-$b history
+# # History
+# # aliases h, hs, hsi.
+# $b history
 
-# Git
-$b git
+# # Git
+# $b git
 
-# Git extras
-$b git-extras
+# # Git extras
+# $b git-extras
 
-# Jira
-$b jira
+# # Jira
+# $b jira
 
-# Tip alias
-$b djui/alias-tips
+# # Tip alias
+# $b djui/alias-tips
 
-# Pastebin sprunge
-# $b sprunge
+# # Pastebin sprunge
+# # $b sprunge
 
-# Oh my git
-#$b arialdomartini/oh-my-git
-#antigen theme arialdomartini/oh-my-git-themes arialdo-pathinline
+# # Oh my git
+# #$b arialdomartini/oh-my-git
+# #antigen theme arialdomartini/oh-my-git-themes arialdo-pathinline
 
-# PowerLevel9K
-# antigen theme bhilburn/powerlevel9k powerlevel9k
+# # PowerLevel9K
+# # antigen theme bhilburn/powerlevel9k powerlevel9k
 
-# Tell antigen that you're done.
-antigen apply
+# # Tell antigen that you're done.
+# antigen apply
 
 ###
 #################################################################################################

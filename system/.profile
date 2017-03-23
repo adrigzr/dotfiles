@@ -20,10 +20,6 @@ fi
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# z beats cd most of the time.
-#   github.com/rupa/z
-[ -f $HOME/dotfiles/submodules/z/z.sh ] && source $HOME/dotfiles/submodules/z/z.sh
-
 # Load nvm.
 export NVM_DIR="$HOME/.nvm"
 [ -f "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
