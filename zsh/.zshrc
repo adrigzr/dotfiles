@@ -10,13 +10,16 @@ fpath=( "$HOME/.zfunctions" $fpath )
 # Termite support.
 # Tell Termite what the current directory is.
 if [[ $TERM == xterm-termite ]]; then
-  . /etc/profile.d/vte.sh
+  source /etc/profile.d/vte.sh
   __vte_osc7
   export TERM='xterm-256color'
 fi
 
-# PowerLine9K config.
-# source ~/.zsh-powerlinerc
+# Load default dotfiles
+[ -f ~/.profile  ] && source ~/.profile
+
+# Setup fzf (fuzzy-finder).
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # antigen time!
 source ~/Repositories/antigen/antigen.zsh
@@ -36,7 +39,7 @@ $b command-not-found
 $b extract
 
 # Enable vi mode.
-$b vi-mode
+# $b vi-mode
 
 # atom editor
 #$b atom
@@ -54,23 +57,24 @@ $b vi-mode
 # Syntax highlighting on the readline
 $b zsh-users/zsh-syntax-highlighting
 
-# history search
+# history search fuzzy
 $b zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
 
 # suggestions
-$b tarruda/zsh-autosuggestions
+$b zsh-users/zsh-autosuggestions
 
 # colors for all files!
 $b trapd00r/zsh-syntax-highlighting-filetypes
 
 # dont set a theme, because pure does it all
-$b mafredri/zsh-async
+# $b mafredri/zsh-async
 #$b sindresorhus/pure
 
 # Sudo
 $b sudo
 
 # History
+# aliases h, hs, hsi.
 $b history
 
 # Git
@@ -85,8 +89,11 @@ $b jira
 # Tip alias
 $b djui/alias-tips
 
+# Enhance z.
+$b changyuheng/fz
+
 # Pastebin sprunge
-$b sprunge
+# $b sprunge
 
 # Oh my git
 #$b arialdomartini/oh-my-git
@@ -121,11 +128,11 @@ antigen apply
 # }
 
 # Fix vi-mode alt.
-function zle-keymap-select {
-  powerlevel9k_prepare_prompts
-  zle reset-prompt
-  zle -R
-}
+# function zle-keymap-select {
+#   powerlevel9k_prepare_prompts
+#   zle reset-prompt
+#   zle -R
+# }
 
 # zle -N zle-line-init
 # zle -N zle-line-finish
@@ -135,12 +142,25 @@ function zle-keymap-select {
 #source ~/Repositories/zsh-git-prompt/zshrc.sh
 #source ~/.zsh-git-prompt
 
-# bind UP and DOWN arrow keys for history search
+# Vi mode.
+# bindkey -v
+# autoload edit-command-line; zle -N edit-command-line
+# bindkey -M vicmd v edit-command-line
+
+# bind UP and DOWN arrow keys for history search plugin
 zmodload zsh/terminfo
 bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
 
-# config for suggestions
+# Fix ctrl+arrow keys.
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+
+# Config to make suggestion highlight visible.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=11"
 
 # Automatically list directory contents on `cd`.
@@ -162,17 +182,11 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=11"
 setopt inc_append_history
 setopt share_history
 
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 # uncomment to finish profiling
 # zprof
 
-# Load default dotfiles
-source ~/.bash_profile
-
 # Powerline.
-source $HOME/.local/lib/python3.5/site-packages/powerline/bindings/zsh/powerline.zsh
+[ -f $PYTHON3_PACKAGES/powerline/bindings/zsh/powerline.zsh ] && source $PYTHON3_PACKAGES/powerline/bindings/zsh/powerline.zsh
 
-#export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

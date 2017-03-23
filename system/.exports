@@ -1,0 +1,65 @@
+# vim as default
+export EDITOR="vim"
+export VISUAL="vim"
+
+# Don’t clear the screen after quitting a manual page
+export MANPAGER="less -X"
+
+# Java
+export JAVA_HOME=/usr/lib/jvm/default-java/jre
+
+# Android
+export ANDROID_HOME=$HOME/Android
+export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+
+# Home bin
+export PATH=${PATH}:~/bin
+
+# Powerline fonts
+export PATH=${PATH}:~/.local/bin
+
+# XDG config home.
+export XDG_CONFIG_HOME=$HOME/.config
+
+# Get python package path.
+export PYTHON_PACKAGES=$(python -m site --user-site)
+export PYTHON3_PACKAGES=$(python3 -m site --user-site)
+
+# Proxy.
+export http_proxy=http://localhost:3128/
+export https_proxy=$http_proxy
+export ftp_proxy=$http_proxy
+export rsync_proxy=$http_proxy
+export rvm_proxy=$http_proxy
+export socks_proxy=socks://localhost:3128/
+export HTTP_PROXY=$http_proxy
+export HTTPS_PROXY=$http_proxy
+export FTP_PROXY=$http_proxy
+export RSYNC_PROXY=$http_proxy
+export RVM_PROXY=$http_proxy
+export SOCKS_PROXY=$socks_proxy
+export no_proxy=localhost,127.0.0.0/8,::1
+
+# here's LS_COLORS
+# github.com/trapd00r/LS_COLORS
+command -v gdircolors >/dev/null 2>&1 || alias gdircolors="dircolors"
+eval "$(gdircolors -b ~/.dircolors)"
+
+# highlighting inside manpages and elsewhere
+export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
+export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold
+export LESS_TERMCAP_me=$'\E[0m'           # end mode
+export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
+export LESS_TERMCAP_so=$'\E[38;5;246m'    # begin standout-mode - info box
+export LESS_TERMCAP_ue=$'\E[0m'           # end underline
+export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# Perl
+export PATH="${HOME}/perl5/bin${PATH:+:${PATH}}"
+export PERL5LIB="${HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="${HOME}/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"${HOME}/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"

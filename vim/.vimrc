@@ -1197,6 +1197,10 @@ Plug 'mhinz/vim-startify'
 Plug 'chrisbra/vim-diff-enhanced'
 Plug 'fcpg/vim-altscreen'
 Plug 'mjbrownie/swapit'
+Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
+Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+Plug 'brennier/quicktex', { 'for': 'tex' }
+Plug 'beloglazov/vim-online-thesaurus'
 
 call plug#end()
 " }}}

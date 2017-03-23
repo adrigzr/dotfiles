@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-source ~/.xinitrc
+xmodmap ~/.xmodmap
+xset r rate 300 50

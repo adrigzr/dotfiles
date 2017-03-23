@@ -12,20 +12,26 @@ alias mv='mv -v'
 alias rm='rm -i -v'
 alias cp='cp -v'
 
-# Top
+# System.
 alias top='htop'
-
 alias where=which # sometimes i forget
-
 alias hosts='sudo $EDITOR /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
-
 alias ag='ag -W 200 -f --hidden'
-
 alias attach='tmux new-session -A -s'
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r $HOME/.dircolors && eval "$(dircolors -b $HOME/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
 ###
 # time to upgrade `ls`
-
 # use coreutils `ls` if possible…
 hash gls >/dev/null 2>&1 || alias gls="ls"
 
@@ -34,32 +40,16 @@ if gls --color > /dev/null 2>&1; then colorflag="--color"; else colorflag="-G"; 
 export CLICOLOR_FORCE=1
 
 # ls options: A = include hidden (but not . or ..), F = put `/` after folders, h = byte unit suffixes
-alias ls='gls -AFh ${colorflag} --group-directories-first'
+alias ls='gls -h ${colorflag} --group-directories-first'
 alias lsd='ls -l | grep "^d"' # only directories
 #    `la` defined in .functions
 ###
 
-
 # `cat` with beautiful colors. requires: sudo easy_install -U Pygments
 alias c='pygmentize -O style=monokai -f console256 -g'
 
-###
-# GIT STUFF
-
-function clone() {
-    git clone --depth=1 $1
-    cd $(basename ${1%.*})
-    bower install &
-    npm install
-}
-alias push="git push"
-
-# Undo a `git push`
-alias undopush="git push -f origin HEAD^:master"
-
 # git root
 alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
-
 
 # Networking. IP address, dig, DNS
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
@@ -67,6 +57,7 @@ alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 # wget sucks with certificates. Let's keep it simple.
 #alias wget="curl -O"
 
+# FS alias.
 alias diskspace_report="df -P -kHl"
 alias free_diskspace_report="diskspace_report"
 
@@ -77,12 +68,12 @@ alias v="vim"
 # File size
 alias fs="stat -f \"%z bytes\""
 
-shortstatFunc() {
-  git log --shortstat $1 | \
-  awk '/^ [0-9]/ { f += $1; i += $4; d += $6 } \
-  END { printf("%d files changed, %d insertions(+), %d deletions(-)", f, i, d) }'
-  echo ''
-}
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
 
-alias shortstat=shortstatFunc
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
