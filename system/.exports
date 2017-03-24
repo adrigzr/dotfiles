@@ -21,15 +21,17 @@ export PATH=${PATH}:~/.local/bin
 # XDG config home.
 export XDG_CONFIG_HOME=$HOME/.config
 
-# Get python package path.
+# Get python user package path.
 PYTHON_PACKAGES=$(python -m site --user-site)
 PYTHON3_PACKAGES=$(python3 -m site --user-site)
 
-[ -f $PYTHON_PACKAGES ] || PYTHON_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
-[ -f $PYTHON3_PACKAGES ] || PYTHON3_PACKAGES=$(python3 -c "import site; print(site.getsitepackages()[0])")
+# Else, get python system package path.
+[ ! -s $PYTHON_PACKAGES ] && PYTHON_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
+[ ! -s $PYTHON3_PACKAGES ] && PYTHON3_PACKAGES=$(python3 -c "import site; print(site.getsitepackages()[0])")
 
-[ -f $PYTHON_PACKAGES ] && export $PYTHON_PACKAGES
-[ -f $PYTHON3_PACKAGES ] && export $PYTHON3_PACKAGES
+# Export when exists.
+[ -s $PYTHON_PACKAGES ] && export PYTHON_PACKAGES
+[ -s $PYTHON3_PACKAGES ] && export PYTHON3_PACKAGES
 
 # Proxy.
 export http_proxy=http://localhost:3128/
