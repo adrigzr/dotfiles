@@ -1201,6 +1201,7 @@ Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 Plug 'brennier/quicktex', { 'for': 'tex' }
 Plug 'beloglazov/vim-online-thesaurus'
+" Plug 't9md/vim-quickhl'
 
 call plug#end()
 " }}}
