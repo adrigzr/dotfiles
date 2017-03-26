@@ -32,7 +32,7 @@ set $inactive-text-color #839496f2
 set $urgent-bg-color     #dc322ff2
 
 # Lock screen.
-set $locker sleep 1 && $HOME/.config/i3/lock -d /tmp -b -s -o $HOME/Pictures/lock.png
+set $locker sleep 1 && $HOME/.config/i3/scripts/lock -d /tmp -b -s -o $HOME/Pictures/lock.png
 
 # Settings.
 # workspace_auto_back_and_forth yes
@@ -295,6 +295,7 @@ bar {
   font pango:Droid Sans Mono Awesome 10
   tray_output none
   position top
+  height 20
   # mode hide
   colors {
     background $bg-color

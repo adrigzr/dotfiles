@@ -90,20 +90,10 @@ if ($acpi =~ /(\d\d:\d\d):/) {
 # print text
 print "$full_text\n";
 print "$short_text\n";
+print `python3 \$HOME/.config/i3/scripts/gradient '#dc322f' '#2aa198' $percent`;
 
 # consider color and urgent flag only on discharge
 if ($status eq 'Discharging') {
-
-	if ($percent < 20) {
-		print "#dc322f\n";
-	} elsif ($percent < 40) {
-		print "#cb4b16\n";
-	} elsif ($percent < 60) {
-		print "#b58900\n";
-	} elsif ($percent < 85) {
-		print "#2aa198\n";
-	}
-
 	if ($percent < 5) {
 		exit(33);
 	}

@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+
+import sys
+from colour import Color
+
+src = Color(sys.argv[1])
+dst = Color(sys.argv[2])
+stage = int(sys.argv[3])
+
+range = list(src.range_to(dst, 100))
+
+print(range[stage - 1])
+
