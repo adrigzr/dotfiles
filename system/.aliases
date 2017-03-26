@@ -1,6 +1,6 @@
 # Function helper.
 function safe_alias() {
-  ( type "$1" 2&>1 >/dev/null ) && alias $1="$2"
+  ( type "$1" 2>&1 >/dev/null ) && alias $1="$2"
 }
 
 # Easier navigation: .., ..., ~ and -
