@@ -57,7 +57,7 @@ safe_alias c 'pygmentize -O style=monokai -f console256 -g'
 safe_alias gr '[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
 
 # Networking. IP address, dig, DNS
-safe_alias ip "dig +short myip.opendns.com @resolver1.opendns.com"
+safe_alias my_ip "dig +short myip.opendns.com @resolver1.opendns.com"
 # alias dig="dig +nocmd any +multiline +noall +answer"
 # wget sucks with certificates. Let's keep it simple.
 #alias wget="curl -O"
