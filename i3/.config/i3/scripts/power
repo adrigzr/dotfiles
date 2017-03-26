@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
 
+lock_script="$HOME/.config/i3/scripts/lock"
+lock_picture="$HOME/Pictures/lock.png"
+
 case "$1" in
     lock)
-        i3lock
+        sleep 1
+        source $lock_script -d /tmp -b -s -o $lock_picture -n
         ;;
     logout)
         i3-msg exit
         ;;
     suspend)
+        sleep 1
+        source $lock_script -d /tmp -b -s -o $lock_picture
         systemctl suspend
         ;;
     hibernate)
+        sleep 1
+        source $lock_script -d /tmp -b -s -o $lock_picture
         systemctl hibernate
         ;;
     reboot)
