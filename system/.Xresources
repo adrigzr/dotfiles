@@ -19,15 +19,18 @@ rofi.fullscreen: true
 rofi.sidebar-mode: true
 rofi.eh: 2
 rofi.bw: 0
+rofi.line-margin: 20
 rofi.location: 0
 rofi.padding: 60
 rofi.fuzzy: false
+rofi.threads: 0
+rofi.terminal: termite
 rofi.color-enabled: true
+rofi.separator-style: none
 rofi.color-window: argb:ee002b37, argb:00002b37, argb:00003642
 rofi.color-normal: argb:00002b37, #819396, argb:00002b37, argb:ee003642, #819396
 rofi.color-active: argb:00002b37, #008ed4, argb:00002b37, argb:ee003642, #008ed4
 rofi.color-urgent: argb:00002b37, #da4281, argb:00002b37, argb:ee003642, #da4281
-rofi.separator-style: none
 rofi.run-command: /bin/zsh -i -c "{cmd}"
 rofi.run-list-command: alias | awk -F'[ = ]' '{print $1}' && print -l ${(ok)functions} | grep -v '^_'
 
@@ -79,3 +82,5 @@ rofi.run-list-command: alias | awk -F'[ = ]' '{print $1}' && print -l ${(ok)func
 !! white dark/light
 *color7:                 #eee8d5
 *color15:                #fdf6e3
+
+! vim: cms=!%s
