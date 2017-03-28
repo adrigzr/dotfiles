@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 
-# Set wallpaper.
-# More wallpapers: https://wall.alphacoders.com/by_color.php?hex_color=073642
-feh --bg-max --bg-fill $HOME/Pictures/Wallpapers/02.jpg
+source $HOME/.config/i3/scripts/wallpaper
 

@@ -334,6 +334,9 @@ exec --no-startup-id poll-xrandr
 # Enable compton.
 exec --no-startup-id compton -b
 
+# Wallpaper.
+exec_always --no-startup-id $HOME/.config/i3/scripts/wallpaper
+
 # Startup apps.
 # exec --no-startup-id i3-msg "workspace $ws1; exec google-chrome-stable"
 # exec --no-startup-id $editor --exec "tmux new-session -A -s base" --name "__base"

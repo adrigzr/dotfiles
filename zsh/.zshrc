@@ -16,10 +16,10 @@ if [[ $TERM == xterm-termite ]]; then
 fi
 
 # Load default dotfiles
-[ -f ~/.profile  ] && source ~/.profile
+[ -s ~/.profile  ] && source ~/.profile
 
 # Setup fzf (fuzzy-finder).
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -s ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Source zim.
 [ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ] && source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
