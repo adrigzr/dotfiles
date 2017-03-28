@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 lock_script="$HOME/.config/i3/scripts/lock"
-lock_picture="$HOME/Pictures/lock.png"
+lock_picture="$HOME/.config/i3/images/lock.png"
 
 case "$1" in
     lock)
