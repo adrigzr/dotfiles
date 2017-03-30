@@ -22,10 +22,10 @@ awk -v cpus=$cpus -v cpuload=$load '
     BEGIN {
         if (cpus <= cpuload) {
             # full text
-            print $cpuload
+            print cpuload
 
             # short text
-            print $cpuload
+            print cpuload
 
             # color
             print "#FF0000";

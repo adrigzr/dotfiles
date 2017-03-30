@@ -1203,6 +1203,8 @@ Plug 'brennier/quicktex', { 'for': 'tex' }
 Plug 'beloglazov/vim-online-thesaurus'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 " Plug 't9md/vim-quickhl'
+" Plug 'dsawardekar/portkey'
+" Plug 'dsawardekar/ember.vim'
 
 call plug#end()
 " }}}
