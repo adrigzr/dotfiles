@@ -302,15 +302,15 @@ bar {
     separator #839496
     #                 border              background         text
     focused_workspace  $bg-color          $bg-color          $text-color
-    active_workspace   $inactive-bg-color $inactive-bg-color $inactive-text-color
+    active_workspace   $bg-color          $bg-color          $text-color
     inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
     urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
   }
 }
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -5% #decrease sound volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-mute 1 0 && pactl set-sink-volume 1 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-mute 1 0 && pactl set-sink-volume 1 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
 
 # Sreen brightness controls
@@ -336,6 +336,9 @@ exec --no-startup-id compton -b
 
 # Wallpaper.
 exec_always --no-startup-id $HOME/.config/i3/scripts/wallpaper
+
+# Dropbox
+exec --no-startup-id dropbox start
 
 # Startup apps.
 # exec --no-startup-id i3-msg "workspace $ws1; exec google-chrome-stable"

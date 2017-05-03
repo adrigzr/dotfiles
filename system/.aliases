@@ -53,9 +53,7 @@ alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup 
 
 # Networking. IP address, dig, DNS
 alias my_ip="dig +short myip.opendns.com @resolver1.opendns.com"
-# alias dig="dig +nocmd any +multiline +noall +answer"
-# wget sucks with certificates. Let's keep it simple.
-#alias wget="curl -O"
+alias dig="dig +nocmd any +multiline +noall +answer"
 
 # FS alias.
 alias diskspace_report="df -P -kHl"
@@ -65,13 +63,22 @@ alias free_diskspace_report="diskspace_report"
 alias g="git"
 alias v="vim"
 
+# Wifi
+alias wifi="wicd-curses"
+
 # File size
 alias fs="stat -f \"%z bytes\""
 
 # some more ls aliases
 alias ll='ls -alF'
-alias la='ls -A'
 alias l='ls -CF'
+
+# git
+alias gfa='git fetch --all'
+
+# dunst
+alias pause_notifications='pkill -u "$USER" -USR1 dunst'
+alias resume_notifications='pkill -u "$USER" -USR2 dunst'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert

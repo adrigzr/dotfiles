@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Setup custom keys.
+xmodmap ~/.xmodmap
+
+# Setup custom properties.
+xset r rate 300 50
