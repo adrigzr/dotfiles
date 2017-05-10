@@ -75,6 +75,7 @@ alias l='ls -CF'
 
 # git
 alias gfa='git fetch --all'
+alias gfz='checkout'
 
 # dunst
 alias pause_notifications='pkill -u "$USER" -USR1 dunst'

@@ -132,3 +132,14 @@ function shortstat() {
   echo ''
 }
 
+function checkout() {
+  local branch=$(git branch -a | awk '{ print $1 }' | sed -e 's/remotes\///' -e 's/origin\///' | sort -u |
+    fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
+    --exit-0 --query="$@")
+
+  if [ -n "$branch" ]; then
+    git checkout "$branch"
+  fi
+
+  return $?
+}

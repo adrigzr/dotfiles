@@ -114,7 +114,7 @@ set shiftwidth=4 " Fix mixed-indent warning
 " FastEscape {{{
 " Speed up transition from modes
 if ! has('gui_running')
-  set ttimeoutlen=10
+  set timeoutlen=1000
   augroup FastEscape
     autocmd!
     au InsertEnter * set timeoutlen=0
@@ -1107,6 +1107,14 @@ augroup vim_diff_enhanced_config
 augroup END
 " }}}
 
+" vim_vmath.vim {{{
+augroup vim_vmath_config
+  autocmd!
+  vmap <expr>  ++  VMATH_YankAndAnalyse()
+  nmap         ++  vip++
+augroup END
+" }}}
+
 " Plugins -------------------------------------------------------------
 
 " Load plugins {{{
@@ -1139,6 +1147,7 @@ Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 " Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
 " Plug 'vim-ruby/vim-ruby'
 " Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }
@@ -1205,6 +1214,7 @@ Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 " Plug 't9md/vim-quickhl'
 " Plug 'dsawardekar/portkey'
 " Plug 'dsawardekar/ember.vim'
+Plug 'nixon/vim-vmath'
 
 call plug#end()
 " }}}
