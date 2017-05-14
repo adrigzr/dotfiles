@@ -27,3 +27,7 @@ export NVM_DIR="$HOME/.nvm"
 # Load rvm.
 [ -f "$HOME/.rvm/scripts/rvm" ] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
+# Load rust.
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# vim: ft=sh

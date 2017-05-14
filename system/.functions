@@ -132,6 +132,7 @@ function shortstat() {
   echo ''
 }
 
+# Git checkot fuzzy with fzf.
 function checkout() {
   local branch=$(git branch -a | awk '{ print $1 }' | sed -e 's/remotes\///' -e 's/origin\///' | sort -u |
     fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
@@ -143,3 +144,10 @@ function checkout() {
 
   return $?
 }
+
+# Translate.
+function t() {
+    xdg-open "https://translate.google.es/?hl=es#en/es/$@"
+}
+
+# vim: ft=sh

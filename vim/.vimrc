@@ -49,6 +49,7 @@ set formatoptions+=n " Recognize numbered lists
 set formatoptions+=2 " Use indent from 2nd line of a paragraph
 set formatoptions+=l " Don't break lines that are already long
 set formatoptions+=1 " Break before 1-letter words
+set formatoptions+=j " Join comments without leader.
 set gdefault " By default add g flag to search/replace. Add g to toggle
 set hidden " When a buffer is brought to foreground, remember undo history and marks
 set history=1000 " Increase history from 20 default to 1000
@@ -96,7 +97,7 @@ set browsedir=buffer " browse files in same dir as open file
 set wildchar=<TAB> " Character for CLI expansion (TAB-completion)
 set wildignore+=.DS_Store
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
-set wildignore+=*/bower_components/*,*/node_modules/*
+set wildignore+=*/.git/logs/*,*/.git/refs/*
 set wildignore+=*/smarty/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
 set wildmenu " Hitting TAB in command mode will show possible completions above command line
 set wildmode=list:longest,full " Complete only until point of ambiguity
@@ -132,18 +133,25 @@ augroup general_config
   nnoremap <esc>^[ <esc>^[
   " }}}
 
+  " Disable arrow keys {{{
+  nnoremap <Up> <NOP>
+  nnoremap <Down> <NOP>
+  nnoremap <Left> <NOP>
+  nnoremap <Right> <NOP>
+  " }}}
+
   " Speed up viewport scrolling {{{
   nnoremap <C-e> 3<C-e>
   nnoremap <C-y> 3<C-y>
   " }}}
 
   " Faster split resizing (+,-) {{{
-  if bufwinnr(1)
-    nmap + <C-W>+
-    nmap - <C-W>-
-    nmap > <C-W>>
-    nmap < <C-W><
-  endif
+  " if bufwinnr(1)
+  "   nmap + <C-W>+
+  "   nmap - <C-W>-
+  "   nmap > <C-W>>
+  "   nmap < <C-W><
+  " endif
   " }}}
 
   " Better split switching (Ctrl-j, Ctrl-k, Ctrl-h, Ctrl-l) {{{
@@ -342,7 +350,7 @@ augroup buffer_control
   " }}}
 
   " Buffer navigation (,,) (gb) (gB) (,ls) {{{
-  map <leader>, <C-^>
+  map <leader><leader> <C-^>
   map <leader>ls :buffers<CR>
   map <leader>bn :bnext<CR>
   map <leader>bp :bprev<CR>
@@ -639,16 +647,21 @@ augroup filetype_javascript
   "set concealcursor=nc
 
   " even when your cursor is on top of them.
-  let g:javascript_conceal_function       = "ƒ"
-  let g:javascript_conceal_null           = "ø"
-  let g:javascript_conceal_this           = "@"
-  let g:javascript_conceal_return         = "⇚"
-  let g:javascript_conceal_undefined      = "¿"
-  let g:javascript_conceal_NaN            = "ℕ"
-  let g:javascript_conceal_prototype      = "¶"
-  let g:javascript_conceal_static         = "•"
-  let g:javascript_conceal_super          = "Ω"
-  let g:javascript_conceal_arrow_function = "⇒"
+  let g:javascript_conceal_function             = "ƒ"
+  let g:javascript_conceal_null                 = "ø"
+  let g:javascript_conceal_this                 = "@"
+  let g:javascript_conceal_return               = "⇚"
+  let g:javascript_conceal_undefined            = "¿"
+  let g:javascript_conceal_NaN                  = "ℕ"
+  let g:javascript_conceal_prototype            = "¶"
+  let g:javascript_conceal_static               = "•"
+  let g:javascript_conceal_super                = "Ω"
+  let g:javascript_conceal_arrow_function       = "⇒"
+  let g:javascript_conceal_noarg_arrow_function = "🞅"
+  let g:javascript_conceal_underscore_arrow_function = "🞅"
+
+  " Enable plugins.
+  let g:javascript_plugin_jsdoc = 1
 augroup END
 " }}}
 
@@ -735,6 +748,7 @@ augroup ctrlp_config
   let g:ctrlp_open_new_file = 'r' " Open newly created files in the current window
   let g:ctrlp_open_multiple_files = 'ij' " Open multiple files in hidden buffers, and jump to the first one
   let g:ctrlp_working_path_mode = 'r' " Use the nearest .git directory as the cwd
+  let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 augroup END
 " }}}
 
@@ -1076,7 +1090,7 @@ augroup neosnippet_config
 
   " SuperTab like snippets behavior.
   " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-  imap <C-s>     <Plug>(neosnippet_expand_or_jump)
+  " imap <C-s>     <Plug>(neosnippet_expand_or_jump)
   "imap <expr><TAB>
   " \ pumvisible() ? "\<C-n>" :
   " \ neosnippet#expandable_or_jumpable() ?
@@ -1115,6 +1129,26 @@ augroup vim_vmath_config
 augroup END
 " }}}
 
+" vim_markdown_composer {{{
+augroup vim_markdown_composer
+  autocmd!
+  " Installation function.
+  function! BuildComposer(info)
+    if a:info.status != 'unchanged' || a:info.force
+      if has('nvim')
+        !cargo build --release
+      else
+        !cargo build --release --no-default-features --features json-rpc
+      endif
+    endif
+  endfunction
+
+  " Options.
+  let g:markdown_composer_refresh_rate = 250
+  let g:markdown_composer_autostart = 0
+augroup END
+" }}}
+
 " Plugins -------------------------------------------------------------
 
 " Load plugins {{{
@@ -1147,8 +1181,10 @@ Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 " Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-git'
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive' " Currently broken.
 " Plug 'vim-ruby/vim-ruby'
 " Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }
 " Plug 'vim-scripts/jade.vim',   { 'for': 'jade' }
@@ -1166,12 +1202,12 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
 " Plug 'danro/rename.vim'
 Plug 'mileszs/ack.vim'
-Plug 'severin-lemaignan/vim-minimap'
-Plug 'junegunn/vim-peekaboo'
-Plug 'justinmk/vim-sneak'
-Plug 'easymotion/vim-easymotion'
+" Plug 'severin-lemaignan/vim-minimap'
+" Plug 'junegunn/vim-peekaboo'
+" Plug 'justinmk/vim-sneak'
+" Plug 'easymotion/vim-easymotion'
 Plug 'haya14busa/incsearch.vim'
-Plug 'haya14busa/incsearch-easymotion.vim'
+" Plug 'haya14busa/incsearch-easymotion.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
 " Plug 'PeterRincker/vim-argumentative'
 Plug 'Olical/vim-enmasse'
@@ -1185,17 +1221,17 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'Chiel92/vim-autoformat'
+" Plug 'Chiel92/vim-autoformat'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
-Plug 'mbbill/undotree'
+" Plug 'mbbill/undotree'
 Plug 'altercation/vim-colors-solarized'
 Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'andrewradev/ember_tools.vim'
 Plug 'alexlafroscia/vim-ember-cli'
 " Plug 'alexbyk/vim-ultisnips-js-testing'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'francoiscabrol/ranger.vim'
+" Plug 'francoiscabrol/ranger.vim'
 Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown'  }
 Plug 'terryma/vim-expand-region'
 " Plug 'jebaum/vim-tmuxify'
@@ -1215,6 +1251,9 @@ Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 " Plug 'dsawardekar/portkey'
 " Plug 'dsawardekar/ember.vim'
 Plug 'nixon/vim-vmath'
+" Plug 'tpope/vim-vinegar'
+Plug 'majutsushi/tagbar'
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 
 call plug#end()
 " }}}

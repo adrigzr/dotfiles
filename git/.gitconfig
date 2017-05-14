@@ -68,6 +68,7 @@
   last = "!git for-each-ref --sort='-committerdate' --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' refs/heads/ | head -n 15"
   lb = list-bamboo
   rb = run-bamboo
+  current = rev-parse --abbrev-ref HEAD
 
 [core]
 	editor = vim
