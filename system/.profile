@@ -6,6 +6,10 @@ for file in $HOME/.{exports,aliases,functions,extra}; do
 done
 unset file
 
+# Disable intercepting of ctrl-s and ctrl-q as flow control.
+stty stop undef
+stty start undef
+
 # generic colouriser
 GRC=`which grc`
 if [ "$TERM" != dumb ] && [ -n "$GRC" ]

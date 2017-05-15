@@ -340,6 +340,9 @@ exec_always --no-startup-id $HOME/.config/i3/scripts/wallpaper
 # Dropbox
 exec --no-startup-id dropbox start
 
+# Autolock.
+exec --no-startup-id xautolock -time 5 -locker "$power lock" -detectsleep &
+
 # Startup apps.
 # exec --no-startup-id i3-msg "workspace $ws1; exec google-chrome-stable"
 # exec --no-startup-id $editor --exec "tmux new-session -A -s base" --name "__base"

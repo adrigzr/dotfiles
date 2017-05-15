@@ -133,8 +133,9 @@ function shortstat() {
 }
 
 # Git checkot fuzzy with fzf.
-function checkout() {
-  local branch=$(git branch -a | awk '{ print $1 }' | sed -e 's/remotes\///' -e 's/origin\///' | sort -u |
+function branch() {
+  local branch=$(git branch --all --sort=-committerdate |
+    awk '{ if ($1 != "*") { print $1 } }' | sed -e 's/remotes\///' -e 's/origin\///' | awk '!x[$0]++' |
     fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
     --exit-0 --query="$@")
 
@@ -145,9 +146,22 @@ function checkout() {
   return $?
 }
 
+# Git checkot fuzzy with fzf.
+function tag() {
+  local tag=$(git tag --sort=-committerdate | awk '!x[$0]++' |
+    fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
+    --exit-0 --query="$@")
+
+  if [ -n "$tag" ]; then
+    git checkout "$tag"
+  fi
+
+  return $?
+}
+
 # Translate.
 function t() {
     xdg-open "https://translate.google.es/?hl=es#en/es/$@"
 }
 
-# vim: ft=sh
+# vim: ft=zsh

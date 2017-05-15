@@ -3,3 +3,6 @@
 
 # Load bash_profile.
 [ -n "$PS1" ] && source ~/.bash_profile
+
+# Load fzf.
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

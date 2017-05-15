@@ -97,7 +97,8 @@ set browsedir=buffer " browse files in same dir as open file
 set wildchar=<TAB> " Character for CLI expansion (TAB-completion)
 set wildignore+=.DS_Store
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
-set wildignore+=*/.git/logs/*,*/.git/refs/*
+" set wildignore+=*/.git/logs/*,*/.git/refs/*
+set wildignore+=*/.git/*
 set wildignore+=*/smarty/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
 set wildmenu " Hitting TAB in command mode will show possible completions above command line
 set wildmode=list:longest,full " Complete only until point of ambiguity
@@ -105,6 +106,7 @@ set wildignorecase
 set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
 set shiftwidth=4 " Fix mixed-indent warning
+set tags+=./.tags/tags " Set tags folder.
 " set autoread " Force check disk file
 " }}}
 
@@ -1090,7 +1092,7 @@ augroup neosnippet_config
 
   " SuperTab like snippets behavior.
   " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-  " imap <C-s>     <Plug>(neosnippet_expand_or_jump)
+  imap <C-s>     <Plug>(neosnippet_expand_or_jump)
   "imap <expr><TAB>
   " \ pumvisible() ? "\<C-n>" :
   " \ neosnippet#expandable_or_jumpable() ?
@@ -1107,7 +1109,12 @@ augroup neosnippet_config
   let g:neosnippet#enable_snipmate_compatibility = 1
 
   " Tell Neosnippet about the other snippets
-  let g:neosnippet#snippets_directory=['~/.vim/plugged/vim-snippets/snippets', '~/.vim/my-snippets']
+  let g:neosnippet#snippets_directory=[
+        \ '~/.vim/plugged/vim-snippets/snippets',
+        \ '~/.vim/plugged/neosnippet-snippets/neosnippets',
+        \ '~/.vim/snippets',
+        \ '~/.vim/my-snippets',
+        \ ]
 augroup END
 " }}}
 
@@ -1148,6 +1155,12 @@ augroup vim_markdown_composer
   let g:markdown_composer_autostart = 0
 augroup END
 " }}}
+
+augroup vim_move
+  autocmd!
+  " Disable key bindings.
+  let g:move_map_keys = 0
+augroup END
 
 " Plugins -------------------------------------------------------------
 
@@ -1227,7 +1240,7 @@ Plug 'w0rp/ale'
 " Plug 'mbbill/undotree'
 Plug 'altercation/vim-colors-solarized'
 Plug 'joukevandermaas/vim-ember-hbs'
-Plug 'andrewradev/ember_tools.vim'
+" Plug 'andrewradev/ember_tools.vim'
 Plug 'alexlafroscia/vim-ember-cli'
 " Plug 'alexbyk/vim-ultisnips-js-testing'
 Plug 'vim-airline/vim-airline-themes'
@@ -1244,6 +1257,7 @@ Plug 'fcpg/vim-altscreen'
 Plug 'mjbrownie/swapit'
 Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+Plug 'lervag/vimtex', { 'for': 'tex' }
 Plug 'brennier/quicktex', { 'for': 'tex' }
 Plug 'beloglazov/vim-online-thesaurus'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
@@ -1253,7 +1267,8 @@ Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'nixon/vim-vmath'
 " Plug 'tpope/vim-vinegar'
 Plug 'majutsushi/tagbar'
-Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+" Plug 'matze/vim-move'
+Plug 'euclio/vim-markdown-composer', { 'for' : 'markdown', 'do': function('BuildComposer') }
 
 call plug#end()
 " }}}

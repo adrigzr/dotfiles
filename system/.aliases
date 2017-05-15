@@ -16,7 +16,6 @@ alias cp='cp -v'
 alias top='htop'
 alias where=which # sometimes i forget
 alias hosts='sudo $EDITOR /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
-alias ag='ag -W 200 -f --hidden'
 alias attach='tmux new-session -A -s'
 
 # enable color support of ls and also add handy aliases
@@ -75,7 +74,8 @@ alias l='ls -CF'
 
 # git
 alias gfa='git fetch --all'
-alias gfz='checkout'
+alias gbz='branch'
+alias gtz='tag'
 
 # dunst
 alias pause_notifications='pkill -u "$USER" -USR1 dunst'
