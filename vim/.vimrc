@@ -106,7 +106,7 @@ set wildignorecase
 set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
 set shiftwidth=4 " Fix mixed-indent warning
-set tags+=./.tags/tags " Set tags folder.
+set tags+=.tags/tags " Set tags folder.
 " set autoread " Force check disk file
 " }}}
 
@@ -131,8 +131,8 @@ augroup general_config
   autocmd!
 
   " Clear highlighting on escape in normal mode {{{
-  nnoremap <esc> :noh<return><esc>
-  nnoremap <esc>^[ <esc>^[
+  " nnoremap <esc> :noh<return><esc>
+  " nnoremap <esc>^[ <esc>^[
   " }}}
 
   " Disable arrow keys {{{
@@ -1156,11 +1156,20 @@ augroup vim_markdown_composer
 augroup END
 " }}}
 
+" vim_move.vim {{{
 augroup vim_move
   autocmd!
   " Disable key bindings.
   let g:move_map_keys = 0
 augroup END
+" }}}
+
+" vim_startify.vim {{{
+augroup vim_startify
+  autocmd!
+  let g:startify_change_to_dir = 0
+augroup END
+" }}}
 
 " Plugins -------------------------------------------------------------
 
@@ -1197,6 +1206,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-git'
+Plug 'tpope/vim-unimpaired'
 " Plug 'tpope/vim-fugitive' " Currently broken.
 " Plug 'vim-ruby/vim-ruby'
 " Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }

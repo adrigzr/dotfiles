@@ -91,8 +91,5 @@ fi;
 # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
 [ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
 
-# Reverse search compatibily.
-stty -ixon
-
 # Load fzf (fuzzy-finder).
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash

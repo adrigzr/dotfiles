@@ -128,6 +128,7 @@ main() {
 
   # Pause dunst notifications.
   if (( f_nofork )); then
+    xautolock -disable
     pkill -u "$USER" -USR1 dunst
   fi
 
@@ -141,6 +142,7 @@ main() {
 
   # Resume dunst notifications.
   if (( f_nofork )); then
+    xautolock -enable
     pkill -u "$USER" -USR2 dunst
   fi
 }

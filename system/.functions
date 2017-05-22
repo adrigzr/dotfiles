@@ -137,10 +137,14 @@ function branch() {
   local branch=$(git branch --all --sort=-committerdate |
     awk '{ if ($1 != "*") { print $1 } }' | sed -e 's/remotes\///' -e 's/origin\///' | awk '!x[$0]++' |
     fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
-    --exit-0 --query="$@")
+    --exit-0 --height=10 --query="$@")
 
   if [ -n "$branch" ]; then
-    git checkout "$branch"
+    if [ -t 1 ]; then
+      git checkout "$branch"
+    else
+      echo $branch
+    fi
   fi
 
   return $?
@@ -150,10 +154,14 @@ function branch() {
 function tag() {
   local tag=$(git tag --sort=-committerdate | awk '!x[$0]++' |
     fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
-    --exit-0 --query="$@")
+    --exit-0 --height=10 --query="$@")
 
   if [ -n "$tag" ]; then
-    git checkout "$tag"
+    if [ -t 1 ]; then
+      git checkout "$tag"
+    else
+      echo $tag
+    fi
   fi
 
   return $?
@@ -162,6 +170,44 @@ function tag() {
 # Translate.
 function t() {
     xdg-open "https://translate.google.es/?hl=es#en/es/$@"
+}
+
+# Quick transfers.
+function transfer() {
+  if [ $# -eq 0 ]; then
+    echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
+    return 1
+  fi
+
+  tmpfile=$( mktemp -t transferXXX )
+
+  if tty -s; then
+    basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
+    curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile
+  else
+    curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile
+  fi
+
+  cat $tmpfile
+  rm -f $tmpfile >/dev/null
+}
+
+# Quick paste.
+function vpaste() {
+  uri="http://vpaste.net/"
+
+  if [ -f "$1" ]; then
+    out=`curl -s -F "text=<$1" "$uri?$2"`
+  else
+    out=`curl -s -F 'text=<-' "$uri?$1"`
+  fi
+
+  echo "$out"
+
+  if [ -x "`which xclip 2>/dev/null`" -a "$DISPLAY" ]; then
+    echo -n "$out" | xclip -i -selection primary
+    echo -n "$out" | xclip -i -selection clipboard
+  fi
 }
 
 # vim: ft=zsh

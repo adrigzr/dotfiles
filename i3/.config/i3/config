@@ -62,6 +62,9 @@ smart_gaps on
 # Enable borders on gaps.
 smart_borders on
 
+# Focus on activation [smart|urgent|focus|none].
+focus_on_window_activation focus
+
 # Thin borders.
 hide_edge_borders both
 

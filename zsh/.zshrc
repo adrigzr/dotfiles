@@ -7,6 +7,9 @@ SAVEHIST=100000
 # Custom functions.
 fpath=( "$HOME/.zfunctions" $fpath )
 
+# Autoload functions.
+autoload -Uz vim
+
 # Termite support.
 # Tell Termite what the current directory is.
 if [[ $TERM == xterm-termite ]]; then

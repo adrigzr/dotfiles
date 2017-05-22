@@ -11,14 +11,14 @@ options head
 	$2
 
 snippet funcDoc
-abbr    @method / @params / @returns
+abbr    @method / @param / @returns
 alias   fd
 options head
 	/**
 	 * ${1:Description}
 	 *
 	 * @method ${2:TARGET}
-	 * @params {${3:type}} ${4:name}
+	 * @param {${3:type}} ${4:name}
 	 * @returns ${5:type}
 	 */
 	$2
