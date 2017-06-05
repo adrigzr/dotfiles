@@ -1,0 +1,7 @@
+LBUFFER="${LBUFFER}$(select-branch)"
+local ret=$?
+zle redisplay
+typeset -f zle-line-init >/dev/null && zle zle-line-init
+return $ret
+
+# vim: ft=zsh

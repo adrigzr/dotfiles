@@ -1183,7 +1183,6 @@ Plug 'bling/vim-airline'
 Plug 'junegunn/vim-easy-align'
 " Plug 'junegunn/vim-emoji'
 " Plug 'junegunn/goyo.vim'
-" Plug 'kchmck/vim-coffee-script'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'FelikZ/ctrlp-py-matcher'
 Plug 'kien/rainbow_parentheses.vim'
@@ -1279,6 +1278,8 @@ Plug 'nixon/vim-vmath'
 Plug 'majutsushi/tagbar'
 " Plug 'matze/vim-move'
 Plug 'euclio/vim-markdown-composer', { 'for' : 'markdown', 'do': function('BuildComposer') }
+Plug 'digitaltoad/vim-pug'
+Plug 'kshenoy/vim-signature'
 
 call plug#end()
 " }}}

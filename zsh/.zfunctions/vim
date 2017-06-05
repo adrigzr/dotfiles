@@ -1,4 +1,4 @@
-vim_command()
+function vim_command()
 {
   if (( $+commands[reattach-to-user-namespace] )); then
     # See: https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard

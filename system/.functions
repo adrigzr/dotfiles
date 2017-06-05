@@ -133,38 +133,46 @@ function shortstat() {
 }
 
 # Git checkot fuzzy with fzf.
-function branch() {
-  local branch=$(git branch --all --sort=-committerdate |
-    awk '{ if ($1 != "*") { print $1 } }' | sed -e 's/remotes\///' -e 's/origin\///' | awk '!x[$0]++' |
+function select-branch() {
+  local branches=$(git branch --all --sort=-committerdate 2>/dev/null)
+
+  if [ -z "$branches" ]; then
+    return 1
+  fi
+
+  local branch=$(echo $branches | awk '{ if ($1 != "*") { print $1 } }' |
+    sed -e 's/remotes\///' -e 's/origin\///' | awk '!x[$0]++' |
     fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
     --exit-0 --height=10 --query="$@")
 
-  if [ -n "$branch" ]; then
-    if [ -t 1 ]; then
-      git checkout "$branch"
-    else
-      echo $branch
-    fi
+  if [ -z "$branch" ]; then
+    return 1
   fi
 
-  return $?
+  echo -n $branch
+
+  return 0
 }
 
 # Git checkot fuzzy with fzf.
-function tag() {
-  local tag=$(git tag --sort=-committerdate | awk '!x[$0]++' |
+function select-tag() {
+  local tags=$(git tag --sort=-committerdate 2>/dev/null)
+
+  if [ -z "$tags" ]; then
+    return 1
+  fi
+
+  local tag=$(echo $tags | awk '!x[$0]++' |
     fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
     --exit-0 --height=10 --query="$@")
 
-  if [ -n "$tag" ]; then
-    if [ -t 1 ]; then
-      git checkout "$tag"
-    else
-      echo $tag
-    fi
+  if [ -z "$tag" ]; then
+    return 1
   fi
 
-  return $?
+  echo -n $tag
+
+  return 0
 }
 
 # Translate.
@@ -208,6 +216,16 @@ function vpaste() {
     echo -n "$out" | xclip -i -selection primary
     echo -n "$out" | xclip -i -selection clipboard
   fi
+}
+
+# Find branch for a given commit.
+function git-plumb() {
+  commit=$(git rev-parse $1) # expands hash if needed
+  for branch in $(git for-each-ref --format "%(refname)" refs/heads); do
+    if git rev-list "$branch" | fgrep -q "$commit"; then
+      echo -n "$branch"
+    fi
+  done
 }
 
 # vim: ft=zsh

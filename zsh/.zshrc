@@ -7,9 +7,6 @@ SAVEHIST=100000
 # Custom functions.
 fpath=( "$HOME/.zfunctions" $fpath )
 
-# Autoload functions.
-autoload -Uz vim
-
 # Termite support.
 # Tell Termite what the current directory is.
 if [[ $TERM == xterm-termite ]]; then
@@ -32,6 +29,11 @@ fi
 
 # Alias tips.
 [ -s ~/.zsh/alias-tips/alias-tips.plugin.zsh ] && source ~/.zsh/alias-tips/alias-tips.plugin.zsh
+
+# Autoload functions.
+autoload -Uz vim
+autoload -U zle-select-branch; zle -N zle-select-branch; bindkey "^B" zle-select-branch
+autoload -U zle-select-tag; zle -N zle-select-tag; bindkey "^G" zle-select-tag
 
 # Vi mode.
 bindkey -v
