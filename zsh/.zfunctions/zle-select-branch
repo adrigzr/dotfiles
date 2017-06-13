@@ -1,4 +1,4 @@
-LBUFFER="${LBUFFER}$(select-branch)"
+LBUFFER+="$(select-branch)"
 local ret=$?
 zle redisplay
 typeset -f zle-line-init >/dev/null && zle zle-line-init

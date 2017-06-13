@@ -727,6 +727,12 @@ augroup filetype_zsh
 augroup END
 " }}}
 
+" CSV {{{
+augroup filetype_csv
+  autocmd!
+  au BufRead,BufNewFile *.csv,*.dat set ft=csv
+augroup END
+" }}}
 
 " Plugin Configuration -------------------------------------------------------------
 
@@ -774,21 +780,15 @@ augroup END
 augroup ag_config
   autocmd!
 
-  if executable("ag")
+  if executable("rg")
     " Note we extract the column as well as the file and line number
-    set grepprg=ag\ --nogroup\ --nocolor\ --column
-    set grepformat=%f:%l:%c%m
+    set grepprg=rg\ --no-heading\ --vimgrep\ --smart-case\ --color=never
+    set grepformat=%f:%l:%c:%m
 
     " Have the silver searcher ignore all the same things as wilgignore
-    let b:ag_command = 'ag %s -i --nocolor --nogroup'
+    let b:rg_command = 'rg %s --files --ignore-case --color=never --hidden --glob "!' . &wildignore . '"'
 
-    for i in split(&wildignore, ",")
-      let i = substitute(i, '\*/\(.*\)/\*', '\1', 'g')
-      let b:ag_command = b:ag_command . ' --ignore "' . substitute(i, '\*/\(.*\)/\*', '\1', 'g') . '"'
-    endfor
-
-    let b:ag_command = b:ag_command . ' --hidden -g ""'
-    let g:ctrlp_user_command = b:ag_command
+    let g:ctrlp_user_command = b:rg_command
   endif
 augroup END
 " }}}
@@ -1296,6 +1296,8 @@ Plug 'majutsushi/tagbar'
 Plug 'euclio/vim-markdown-composer', { 'for' : 'markdown', 'do': function('BuildComposer') }
 Plug 'digitaltoad/vim-pug'
 Plug 'kshenoy/vim-signature'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 call plug#end()
 " }}}

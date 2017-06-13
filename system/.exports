@@ -29,6 +29,10 @@ export npm_config_progress=false
 export npm_config_proxy=http://localhost:3128/
 export npm_config_https_proxy=http://localhost:3128/
 
+# Fzf
+export FZF_DEFAULT_COMMAND="rg --files --no-ignore --hidden --follow --glob \"!{.git,node_modules,bower_components,tmp}/*\" 2> /dev/null"
+export FZF_DEFAULT_OPTS="--reverse --ansi "
+
 # Get python user package path.
 PYTHON_PACKAGES=$(python -m site --user-site)
 PYTHON3_PACKAGES=$(python3 -m site --user-site)

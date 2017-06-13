@@ -175,6 +175,18 @@ function select-tag() {
   return 0
 }
 
+# Fuzzy vim
+function fvim() {
+  local files=$(fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --multi --select-1 --inline-info \
+    --exit-0 --height=10 --query="$1")
+
+  if [ -z "$files" ]; then
+    return 1
+  fi
+
+  ${EDITOR:-vim} "${files[@]}"
+}
+
 # Translate.
 function t() {
     xdg-open "https://translate.google.es/?hl=es#en/es/$@"
