@@ -24,6 +24,11 @@ export PATH=${PATH}:~/.local/bin
 # XDG config home.
 export XDG_CONFIG_HOME=$HOME/.config
 
+# NPM
+export npm_config_progress=false
+export npm_config_proxy=http://localhost:3128/
+export npm_config_https_proxy=http://localhost:3128/
+
 # Get python user package path.
 PYTHON_PACKAGES=$(python -m site --user-site)
 PYTHON3_PACKAGES=$(python3 -m site --user-site)

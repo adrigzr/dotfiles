@@ -107,6 +107,10 @@ set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
 set shiftwidth=4 " Fix mixed-indent warning
 set tags+=.tags/tags " Set tags folder.
+set infercase " Improve ignorecase
+set synmaxcol=200 " Enable syntax highlight on the first 200 cols
+set breakindent " Preserve indentation on wrap toggle
+set showbreak=⤷ " String to use on breakindent
 " set autoread " Force check disk file
 " }}}
 
@@ -234,8 +238,15 @@ augroup general_config
   " }}}
 
   " Join lines and restore cursor location (J) {{{
-  nnoremap J mjJ`j
+  nnoremap J mjJg`j:delmarks j<CR>
   " }}}
+
+	" Remap logical movement to visual. {{{
+	nnoremap <expr> j v:count ? 'j' : 'gj'
+	nnoremap <expr> k v:count ? 'k' : 'gk'
+	nnoremap gj j
+	nnoremap gk k
+	" }}}
 
   " Toggle folds (<Space>) {{{
   "nnoremap <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? 'zMzx' : 'zc')<CR>
@@ -527,14 +538,12 @@ augroup word_processor_mode
 
   function! WordProcessorMode() " {{{
     setlocal formatoptions=t1
-    map j gj
-    map k gk
+		set spell
     setlocal smartindent
     setlocal spell spelllang=en_ca
     setlocal noexpandtab
     setlocal wrap
     setlocal linebreak
-    Goyo 100
   endfunction " }}}
   com! WP call WordProcessorMode()
 augroup END
@@ -548,6 +557,13 @@ augroup restore_cursor
     \ if line("'\"") > 1 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
+augroup END
+" }}}
+
+" Automatically equalize splits when vim is resized {{{
+augroup auto_resize
+	autocmd!
+	autocmd VimResized * wincmd =
 augroup END
 " }}}
 
