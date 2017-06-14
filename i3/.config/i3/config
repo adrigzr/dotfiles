@@ -340,8 +340,11 @@ exec --no-startup-id compton -b
 # Wallpaper.
 exec_always --no-startup-id $HOME/.config/i3/scripts/wallpaper
 
-# Dropbox
+# Dropbox.
 exec --no-startup-id dropbox start
+
+# Lib input gestures.
+exec --no-startup-id libinput-gestures-setup start
 
 # Autolock.
 exec --no-startup-id xautolock -time 5 -locker "$power lock" -detectsleep &

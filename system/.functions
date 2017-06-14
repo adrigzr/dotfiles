@@ -178,7 +178,7 @@ function select-tag() {
 # Fuzzy vim
 function fvim() {
   local files=$(fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --multi --select-1 --inline-info \
-    --exit-0 --height=10 --query="$1")
+    --exit-0 --height=10 --query="$@")
 
   if [ -z "$files" ]; then
     return 1
