@@ -36,9 +36,9 @@ autoload -U zle-select-tag; zle -N zle-select-tag; bindkey "^G" zle-select-tag
 bindkey -s "^P" "fvim\n"
 
 # Vi mode.
-bindkey -v
-autoload edit-command-line; zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
+# bindkey -v
+# autoload edit-command-line; zle -N edit-command-line
+# bindkey -M vicmd v edit-command-line
 
 # bind UP and DOWN arrow keys for history search plugin
 zmodload zsh/terminfo

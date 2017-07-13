@@ -40,6 +40,7 @@ set expandtab " Expand tabs to spaces
 " set foldmethod=manual " Syntax are used to specify folds
 " set foldminlines=0 " Allow folding single lines
 " set foldnestmax=10 " Set max fold nesting level
+set nofoldenable " Disable fold.
 set formatoptions=
 set formatoptions+=c " Format comments
 set formatoptions+=r " Continue comments by default
@@ -220,7 +221,7 @@ augroup general_config
   " }}}
 
   " Paste toggle (,p) {{{
-  set pastetoggle=<leader>p
+  " set pastetoggle=<leader>p
   map <leader>p :set invpaste paste?<CR>
   " }}}
 
@@ -288,19 +289,8 @@ augroup general_config
   "au FocusLost,WinLeave * :silent! w
   " }}}
 
-  " Disable folding {{{
-  set nofoldenable
-  " }}}
-
   " Surround (,wb) (,wB) (,w#) {{{
   " map <leader>w ysiw
-  " }}}
-
-  " System copy paste {{{
-  vmap <C-c> "+y
-  vmap <C-x> "+c
-  vmap <C-v> c<ESC>"+p
-  inoremap <C-v> <ESC>"+pa
   " }}}
 
   " Search current selection {{{
@@ -389,10 +379,14 @@ augroup buffer_control
   " }}}
 
   " Easy buffer navigation {{{
-  nnoremap [1;5D B
-  nnoremap [1;5C W
+  nnoremap [1;5D <C-Left>
+  nnoremap [1;5C <C-Right>
   inoremap [1;5D <ESC>Bi
   inoremap [1;5C <ESC>Wi
+  cnoremap [1;5D <C-Left>
+  cnoremap [1;5C <C-Right>
+  " }}}
+
   " }}}
 
 
@@ -536,16 +530,24 @@ augroup END
 augroup word_processor_mode
   autocmd!
 
-  function! WordProcessorMode() " {{{
+  function! s:goyo_enter()
     setlocal formatoptions=t1
-		set spell
     setlocal smartindent
-    setlocal spell spelllang=en_ca
+    setlocal spell
+    setlocal spelllang=es_es
     setlocal noexpandtab
     setlocal wrap
     setlocal linebreak
+    setlocal noshowmode
+    setlocal noshowcmd
+    setlocal scrolloff=999
   endfunction " }}}
-  com! WP call WordProcessorMode()
+
+  function! s:goyo_leave()
+  endfunction
+
+  au User GoyoEnter nested call <SID>goyo_enter()
+  au User GoyoLeave nested call <SID>goyo_leave()
 augroup END
 " }}}
 
@@ -739,7 +741,7 @@ augroup END
 " Solarized.vim {{{
 augroup solarized_config
   autocmd!
-  let g:solarized_termcolors = 256
+  " let g:solarized_termcolors = 256
   " let g:solarized_termtrans = 1
 augroup END
 " }}}
@@ -779,16 +781,25 @@ augroup END
 " Silver Searcher {{{
 augroup ag_config
   autocmd!
+  let g:ack_use_dispatch = 1 " enable use of dispatch
+  cnoreabbrev Ack Ack!
 
   if executable("rg")
     " Note we extract the column as well as the file and line number
     set grepprg=rg\ --no-heading\ --vimgrep\ --smart-case\ --color=never
-    set grepformat=%f:%l:%c:%m
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
 
     " Have the silver searcher ignore all the same things as wilgignore
-    let b:rg_command = 'rg %s --files --ignore-case --color=never --hidden --glob "!' . &wildignore . '"'
+    let b:rg_command = 'rg %s --files --ignore-case --color=never --hidden'
+    let b:globs = ' '
 
-    let g:ctrlp_user_command = b:rg_command
+    " Add ignore list.
+    for i in split(&wildignore, ",")
+      let b:globs = b:globs . '--glob "!' . substitute(i, '\*/\(.*\)/\*', '\1', 'g') . '" '
+    endfor
+
+    let g:ackprg = 'rg --no-heading --vimgrep --smart-case --ignore-case --hidden' . b:globs
+    let g:ctrlp_user_command = b:rg_command . b:globs
   endif
 augroup END
 " }}}
@@ -840,7 +851,7 @@ augroup ale_config
   autocmd!
   let g:ale_sign_error = '✗'
   let g:ale_sign_warning = '⚠'
-  let g:ale_linters = { 'javascript': ['eslint'] }
+  let g:ale_linters = { 'javascript': ['eslint'], 'python': ['pylint'] }
 augroup END
 " }}}
 
@@ -1038,7 +1049,9 @@ augroup neocomplete_config
   let g:acp_enableAtStartup = 0 " Disable AutoComplPop.
   let g:neocomplete#enable_at_startup = 1 " Use neocomplete.
   let g:neocomplete#enable_smart_case = 1 " Use smartcase.
+  let g:neocomplete#enable_auto_close_preview = 1 " Close preview window automatically.
   let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length.
+  let g:neopairs#enable = 1 " Enable neo pairs.
 
   " Define keyword.
   if !exists('g:neocomplete#keyword_patterns')
@@ -1187,6 +1200,33 @@ augroup vim_startify
 augroup END
 " }}}
 
+" vim_table_mode.vim {{{
+augroup vim_table_mode
+  autocmd!
+  let g:table_mode_map_prefix = '<Leader>f'
+augroup END
+" }}}
+
+" vim_dispatch.vim {{{
+augroup vim_dispatch
+  autocmd!
+  nnoremap <F9> :Dispatch<CR>
+augroup END
+" }}}
+
+" vim_checklist.vim {{{
+augroup vim_checklist
+  autocmd!
+  nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
+  nnoremap <leader>ce :ChecklistEnableCheckbox<cr>
+  nnoremap <leader>cd :ChecklistDisableCheckbox<cr>
+  vnoremap <leader>ct :ChecklistToggleCheckbox<cr>
+  vnoremap <leader>ce :ChecklistEnableCheckbox<cr>
+  vnoremap <leader>cd :ChecklistDisableCheckbox<cr>
+  let g:checklist_filetypes = ['notes', 'markdown', 'text']
+augroup END
+" }}}
+
 " Plugins -------------------------------------------------------------
 
 " Load plugins {{{
@@ -1198,7 +1238,7 @@ Plug 'bling/vim-airline'
 " Plug 'joker1007/vim-ruby-heredoc-syntax'
 Plug 'junegunn/vim-easy-align'
 " Plug 'junegunn/vim-emoji'
-" Plug 'junegunn/goyo.vim'
+Plug 'junegunn/goyo.vim'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'FelikZ/ctrlp-py-matcher'
 Plug 'kien/rainbow_parentheses.vim'
@@ -1234,9 +1274,12 @@ Plug 'editorconfig/editorconfig-vim'
 " Plug 'MarcWeber/vim-addon-mw-utils'
 " Plug 'tomtom/tlib_vim'
 " Plug 'SirVer/ultisnips'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Shougo/neocomplete.vim'
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neco-syntax'
+Plug 'Shougo/neopairs.vim'
 Plug 'honza/vim-snippets'
 " Plug 'danro/rename.vim'
 Plug 'mileszs/ack.vim'
@@ -1270,7 +1313,7 @@ Plug 'alexlafroscia/vim-ember-cli'
 " Plug 'alexbyk/vim-ultisnips-js-testing'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'francoiscabrol/ranger.vim'
-Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown'  }
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'terryma/vim-expand-region'
 " Plug 'jebaum/vim-tmuxify'
 " Plug 'yuttie/comfortable-motion.vim'
@@ -1298,6 +1341,7 @@ Plug 'digitaltoad/vim-pug'
 Plug 'kshenoy/vim-signature'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'esalter-va/vim-checklist'
 
 call plug#end()
 " }}}
