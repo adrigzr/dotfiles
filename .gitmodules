@@ -13,3 +13,6 @@
 [submodule "zsh/.zsh/alias-tips"]
 	path = zsh/.zsh/alias-tips
 	url = https://github.com/djui/alias-tips.git
+[submodule "submodules/i3status-rust"]
+	path = submodules/i3status-rust
+	url = https://github.com/XYunknown/i3status-rust.git

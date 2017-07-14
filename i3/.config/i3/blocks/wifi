@@ -23,7 +23,7 @@ INTERFACE="${BLOCK_INSTANCE:-wlan0}"
 # As per #36 -- It is transparent: e.g. if the machine has no battery or wireless
 # connection (think desktop), the corresponding block should not be displayed.
 [[ ! -d /sys/class/net/${INTERFACE}/wireless ]] ||
-    [[ "$(cat /sys/class/net/$INTERFACE/operstate)" = 'down' ]] && exit
+    [[ "$(cat /sys/class/net/$INTERFACE/operstate)" = 'down' ]] && exit 1
 
 #------------------------------------------------------------------------
 
@@ -32,6 +32,6 @@ QUALITY=$(grep $INTERFACE /proc/net/wireless | awk '{ print int($3 * 100 / 70) }
 
 #------------------------------------------------------------------------
 
-echo "$ESSID ($QUALITY%)" # full text
-echo "$ESSID ($QUALITY%)" # short text
+echo " $ESSID ($QUALITY%)" # full text
+echo " $ESSID ($QUALITY%)" # short text
 echo $(python3 $HOME/.config/i3/scripts/gradient "#dc322f" "#2aa198" $QUALITY)

@@ -25,8 +25,8 @@ set $ws9  "9"
 set $ws10 "10"
 
 # Colors.
-set $bg-color            #073642f2
-set $inactive-bg-color   #073642f2
+set $bg-color            #002b36f2
+set $inactive-bg-color   #002b36f2
 set $text-color          #eee8d5f2
 set $inactive-text-color #839496f2
 set $urgent-bg-color     #dc322ff2
@@ -293,16 +293,14 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-  status_command i3blocks
-  i3bar_command i3bar
+  status_command i3status-rs $HOME/.config/i3/config.toml
   font pango:Droid Sans Mono Awesome 10
   tray_output none
   position top
-  height 20
+  height 17
   # mode hide
   colors {
-    background $bg-color
-    separator #839496
+    background $inactive-bg-color
     #                 border              background         text
     focused_workspace  $bg-color          $bg-color          $text-color
     active_workspace   $bg-color          $bg-color          $text-color

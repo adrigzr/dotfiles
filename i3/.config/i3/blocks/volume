@@ -43,7 +43,7 @@ while (<$fh>) {
         ## print the current volume.
         else {
           if ($mute) {
-            print "\n";
+            print " 0%\n";
           } else {
             print " $volume%\n";
           }
