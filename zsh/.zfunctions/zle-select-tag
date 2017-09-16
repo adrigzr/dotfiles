@@ -1,3 +1,4 @@
+print -n '…'
 LBUFFER+="$(select-tag)"
 local ret=$?
 zle redisplay

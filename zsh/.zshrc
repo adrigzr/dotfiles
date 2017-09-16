@@ -64,4 +64,3 @@ setopt share_history
 
 # uncomment to finish profiling
 # zprof
-

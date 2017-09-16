@@ -356,3 +356,5 @@ exec --no-startup-id xautolock -time 5 -locker "$power lock" -detectsleep &
 # Gnome goodies.
 # exec --no-startup-id /usr/lib64/gnome-settings-daemon/gnome-settings-daemon
 # exec --no-startup-id nm-applet
+
+# vim: ft=i3config

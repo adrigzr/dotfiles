@@ -19,8 +19,8 @@ block = "custom"
 interval = 1
 command = "$HOME/.config/i3/blocks/wifi || $HOME/.config/i3/blocks/ethernet"
 
-[[block]]
-block = "xrandr"
+# [[block]]
+# block = "xrandr"
 
 [[block]]
 block = "disk_space"

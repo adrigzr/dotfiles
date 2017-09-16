@@ -30,4 +30,7 @@ export NVM_DIR="$HOME/.nvm"
 # Load rust.
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
+# Load travis.
+[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
+
 # vim: ft=sh

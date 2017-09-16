@@ -240,4 +240,9 @@ function git-plumb() {
   done
 }
 
+# Cheatsheet search.
+function cheat() {
+  curl cheat.sh/$@
+}
+
 # vim: ft=zsh

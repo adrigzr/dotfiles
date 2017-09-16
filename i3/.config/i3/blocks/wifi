@@ -34,4 +34,4 @@ QUALITY=$(grep $INTERFACE /proc/net/wireless | awk '{ print int($3 * 100 / 70) }
 
 echo " $ESSID ($QUALITY%)" # full text
 echo " $ESSID ($QUALITY%)" # short text
-echo $(python3 $HOME/.config/i3/scripts/gradient "#dc322f" "#2aa198" $QUALITY)
+# echo $(python3 $HOME/.config/i3/scripts/gradient "#dc322f" "#2aa198" $QUALITY)

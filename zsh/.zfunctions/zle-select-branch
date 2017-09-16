@@ -1,3 +1,4 @@
+print -n '…'
 LBUFFER+="$(select-branch)"
 local ret=$?
 zle redisplay

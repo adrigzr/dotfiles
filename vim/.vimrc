@@ -109,7 +109,7 @@ set wrapscan " Searches wrap around end of file
 set shiftwidth=4 " Fix mixed-indent warning
 set tags+=.tags/tags " Set tags folder.
 set infercase " Improve ignorecase
-set synmaxcol=200 " Enable syntax highlight on the first 200 cols
+set synmaxcol=400 " Enable syntax highlight on the first 200 cols
 set breakindent " Preserve indentation on wrap toggle
 set showbreak=⤷ " String to use on breakindent
 " set autoread " Force check disk file
@@ -186,11 +186,11 @@ augroup general_config
   " }}}
 
   " Hard to type things {{{
-  iabbrev >> →
-  iabbrev << ←
-  iabbrev ^^ ↑
-  iabbrev VV ↓
-  iabbrev aa λ
+  " iabbrev >> →
+  " iabbrev << ←
+  " iabbrev ^^ ↑
+  " iabbrev VV ↓
+  " iabbrev aa λ
   " }}}
 
   " Toggle show tabs and trailing spaces (,c) {{{
@@ -781,7 +781,6 @@ augroup END
 " Silver Searcher {{{
 augroup ag_config
   autocmd!
-  let g:ack_use_dispatch = 1 " enable use of dispatch
   cnoreabbrev Ack Ack!
 
   if executable("rg")
@@ -851,7 +850,7 @@ augroup ale_config
   autocmd!
   let g:ale_sign_error = '✗'
   let g:ale_sign_warning = '⚠'
-  let g:ale_linters = { 'javascript': ['eslint'], 'python': ['pylint'] }
+  let g:ale_linters = { 'javascript': ['eslint'], 'python': ['pylint'], 'rust': ['rls'] }
 augroup END
 " }}}
 
@@ -1227,6 +1226,14 @@ augroup vim_checklist
 augroup END
 " }}}
 
+" vim_racer.vim {{{
+augroup vim_racer
+  autocmd!
+  let g:racer_cmd = "$HOME/.cargo/bin/racer"
+  let g:racer_experimental_completer = 1
+augroup END
+" }}}
+
 " Plugins -------------------------------------------------------------
 
 " Load plugins {{{
@@ -1342,6 +1349,10 @@ Plug 'kshenoy/vim-signature'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'esalter-va/vim-checklist'
+Plug 'cespare/vim-toml'
+Plug 'mboughaba/i3config.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'racer-rust/vim-racer'
 
 call plug#end()
 " }}}
