@@ -1,117 +1,137 @@
 * {
-  background: #002b37ee;
-  foreground: #819396;
+  background: rgba(0, 43, 55, 93%);
+  foreground: rgba(129, 147, 150, 100%);
   bordercolor: @background;
-  separatorcolor: #003642ee;
-  transparent: #00000000;
+  separatorcolor: rgba(0, 54, 66, 93%);
+  transparent: rgba(0, 0, 0, 0%);
+  urgent: rgba(218, 66, 129, 100%);
+  active: rgba(0, 142, 212, 100%);
 
   normal-background: @transparent;
   normal-foreground: @foreground;
   alternate-normal-background: @transparent;
-  selected-normal-background: #003642ee;
+  alternate-normal-foreground: @foreground;
+  selected-normal-background: @separatorcolor;
   selected-normal-foreground: @normal-foreground;
 
   urgent-background: @transparent;
-  urgent-foreground: #da4281;
+  urgent-foreground: @urgent;
   alternate-urgent-background: @transparent;
+  alternate-urgent-foreground: @urgent;
   selected-urgent-background: @selected-normal-background;
   selected-urgent-foreground: @urgent-foreground;
 
   active-background: @transparent;
-  active-foreground: #008ed4;
+  active-foreground: @active;
   alternate-active-background: @transparent;
+  alternate-active-foreground: @active;
   selected-active-background: @selected-normal-background;
   selected-active-foreground: @active-foreground;
 }
 #window {
-  border:     1;
-  foreground: @foreground;
-  background: rgba ( 0, 0, 0, 0 % );
   padding:    10%;
+  text-color: @foreground;
+  background-color: @background;
+  border:     1;
+  border-color: @bordercolor;
 }
-#window.box {
-  foreground: @bordercolor;
-  background: @background;
-}
-#window.mainbox {
+#mainbox {
   border:  0;
   padding: 0;
+  background-color: @transparent;
 }
-#window.mainbox.message.box {
-  border:     1px dash 0px 0px ;
-  foreground: @separatorcolor;
+#message {
+  text-color: @foreground;
+  border:       1px dash 0px 0px ;
+  border-color: @separatorcolor;
 }
-#window.mainbox.message.normal {
-  foreground: @foreground;
-}
-#window.mainbox.listview {
+#listview {
   fixed-height: 0;
   border:       1px dash 0px 0px ;
+  border-color: @separatorcolor;
+  spacing: 2px;
+  scrollbar: true;
+  padding: 2px 0px 0px;
+  background-color: @transparent;
 }
-#window.mainbox.listview.element {
+#element {
   border: 0;
   padding: 20px;
 }
-#window.mainbox.listview.element.normal.normal {
-  foreground: @normal-foreground;
-  background: @normal-background;
+#element.normal.normal {
+  text-color: @normal-foreground;
+  background-color: @normal-background;
 }
-#window.mainbox.listview.element.normal.urgent {
-  foreground: @urgent-foreground;
-  background: @urgent-background;
+#element.normal.urgent {
+  text-color: @urgent-foreground;
+  background-color: @urgent-background;
 }
-#window.mainbox.listview.element.normal.active {
-  foreground: @active-foreground;
-  background: @active-background;
+#element.normal.active {
+  text-color: @active-foreground;
+  background-color: @active-background;
 }
-#window.mainbox.listview.element.selected.normal {
-  foreground: @selected-normal-foreground;
-  background: @selected-normal-background;
+#element.selected.normal {
+  text-color: @selected-normal-foreground;
+  background-color: @selected-normal-background;
 }
-#window.mainbox.listview.element.selected.urgent {
-  foreground: @selected-urgent-foreground;
-  background: @selected-urgent-background;
+#element.selected.urgent {
+  text-color: @selected-urgent-foreground;
+  background-color: @selected-urgent-background;
 }
-#window.mainbox.listview.element.selected.active {
-  foreground: @selected-active-foreground;
-  background: @selected-active-background;
+#element.selected.active {
+  text-color: @selected-active-foreground;
+  background-color: @selected-active-background;
 }
-#window.mainbox.listview.element.alternate.normal {
-  foreground: @alternate-normal-foreground;
-  background: @alternate-normal-background;
+#element.alternate.normal {
+  text-color: @alternate-normal-foreground;
+  background-color: @alternate-normal-background;
 }
-#window.mainbox.listview.element.alternate.urgent {
-  foreground: @alternate-urgent-foreground;
-  background: @alternate-urgent-background;
+#element.alternate.urgent {
+  text-color: @alternate-urgent-foreground;
+  background-color: @alternate-urgent-background;
 }
-#window.mainbox.listview.element.alternate.active {
-  foreground: @alternate-active-foreground;
-  background: @alternate-active-background;
+#element.alternate.active {
+  text-color: @alternate-active-foreground;
+  background-color: @alternate-active-background;
 }
-#window.mainbox.listview.scrollbar {
+#scrollbar {
   border:  0;
   padding: 0;
+  background-color: @transparent;
 }
-#window.mainbox.sidebar {
-  padding: 10px;
-  border: 1px dash 0px 0px ;
-}
-#window.mainbox.sidebar.box {
+#sidebar {
   border: 0;
+  background-color: @transparent;
 }
-#window.mainbox.sidebar.button.selected {
-  foreground: @selected-normal-foreground;
-  background: @selected-normal-background;
+#button {
+  padding: 10px;
+  text-color: @normal-foreground;
+  background-color: @transparent;
 }
-#window.mainbox.inputbar {
+#button.selected {
+  text-color: @selected-normal-foreground;
+  background-color: @selected-normal-background;
+}
+#inputbar {
   spacing: 0;
   padding: 10px;
-}
-#window.mainbox.inputbar.box {
   border: 0;
+  text-color: @foreground;
+  background-color: @transparent;
 }
-#window.mainbox.inputbar.normal {
-  foreground: @foreground;
+#case-indicator {
+  spacing:    0;
+  text-color: @normal-foreground;
+  background-color: @transparent;
 }
-
+#entry {
+  spacing:    0;
+  text-color: @normal-foreground;
+  background-color: @transparent;
+}
+#prompt {
+  spacing:    0;
+  text-color: @normal-foreground;
+  background-color: @transparent;
+}
 // vim: ft=css

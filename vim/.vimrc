@@ -4,13 +4,11 @@
 
 " Preamble {{{
 
-" Make vim more useful {{{
-set nocompatible
-" }}}
-
 " Syntax highlighting {{{
-set t_Co=256
-syntax on
+if !exists("g:syntax_on")
+  syntax enable
+endif
+set t_Co=256 " Terminal colors.
 set background=dark
 colorscheme solarized
 " }}}
@@ -70,8 +68,8 @@ set nojoinspaces " Only insert single space after a '.', '?' and '!' with a join
 set noshowmode " Don't show the current mode (airline.vim takes care of us)
 set nostartofline " Don't reset cursor to start of line when moving around
 set nowrap " Do not wrap lines
-set nu " Enable line numbers
-set ofu=syntaxcomplete#Complete " Set omni-completion method
+set number " Enable line numbers
+set omnifunc=syntaxcomplete#Complete " Set omni-completion method
 set regexpengine=1 " Use the old regular expression engine (it's faster for certain language syntaxes)
 set report=0 " Show all changes
 set ruler " Show the cursor position
@@ -320,7 +318,7 @@ augroup END
 
 " Create directory on save {{{
 if !exists('*s:MkNonExDir')
-  function s:MkNonExDir(file, buf)
+  function s:MkNonExDir(file, buf) abort
     if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
       let dir=fnamemodify(a:file, ':h')
       if !isdirectory(dir)
@@ -437,7 +435,7 @@ augroup jump_to_tags
   " nnoremap <c-\> <c-w>v<c-]>mzzMzvzz15<c-e>`z:Pulse<cr>
 
   " Pulse Line (thanks Steve Losh)
-  function! s:Pulse() " {{{
+  function! s:Pulse() abort " {{{
     redir => old_hi
     silent execute 'hi CursorLine'
     redir END
@@ -477,7 +475,7 @@ augroup highlight_interesting_word
   " word or two to stand out temporarily.  You can search for it, but that only
   " gives you one color of highlighting.  Now you can use <leader>N where N is
   " a number from 1-6 to highlight the current word in a specific color.
-  function! HiInterestingWord(n) " {{{
+  function! HiInterestingWord(n) abort " {{{
     " Save our location.
     normal! mz
 
@@ -530,7 +528,7 @@ augroup END
 augroup word_processor_mode
   autocmd!
 
-  function! s:goyo_enter()
+  function! s:goyo_enter() abort
     setlocal formatoptions=t1
     setlocal smartindent
     setlocal spell
@@ -543,7 +541,7 @@ augroup word_processor_mode
     setlocal scrolloff=999
   endfunction " }}}
 
-  function! s:goyo_leave()
+  function! s:goyo_leave() abort
   endfunction
 
   au User GoyoEnter nested call <SID>goyo_enter()
@@ -580,7 +578,7 @@ augroup multiple_cursor
   vnoremap <expr> cn g:mc . "``cgn"
   vnoremap <expr> cN g:mc . "``cgN"
 
-  function! SetupCR()
+  function! SetupCR() abort
     nnoremap <Enter> :nnoremap <lt>Enter> n@z<CR>q:<C-u>let @z=strpart(@z,0,strlen(@z)-1)<CR>n@z
   endfunction
 
@@ -1065,7 +1063,7 @@ augroup neocomplete_config
   " Recommended key-mappings.
   " <CR>: close popup and save indent.
   inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  function! s:my_cr_function()
+  function! s:my_cr_function() abort
     return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
     " For no inserting <CR> key.
     "return pumvisible() ? "\<C-y>" : "\<CR>"
@@ -1168,7 +1166,7 @@ augroup END
 augroup vim_markdown_composer
   autocmd!
   " Installation function.
-  function! BuildComposer(info)
+  function! BuildComposer(info) abort
     if a:info.status != 'unchanged' || a:info.force
       if has('nvim')
         !cargo build --release
@@ -1353,6 +1351,7 @@ Plug 'cespare/vim-toml'
 Plug 'mboughaba/i3config.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
+Plug 'xtal8/traces.vim'
 
 call plug#end()
 " }}}

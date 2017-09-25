@@ -240,11 +240,12 @@ mode "$mode_power" {
 bindsym Mod1+Control+l mode "$mode_power"
 
 # Dock mode.
-set $mode_dock Laptop (1), Dock (3)
+set $mode_dock Laptop (1), Home (2), Dock (3)
 
 mode "$mode_dock" {
     bindsym 0 exec --no-startup-id autorandr --change && sleep 1, mode "default"
     bindsym 1 exec --no-startup-id autorandr --load laptop && sleep 1, mode "default"
+    bindsym 2 exec --no-startup-id autorandr --load home && sleep 1, mode "default"
     bindsym 3 exec --no-startup-id autorandr --load docked && sleep 1, mode "default"
 
     bindsym Return mode "default"
