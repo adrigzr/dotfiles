@@ -6,7 +6,7 @@ options head
 	 * ${1:Description}
 	 *
 	 * @property ${2:TARGET}
-	 * @type ${3:type}
+	 * @type {${3:type}}
 	 */
 	$2
 
@@ -35,3 +35,17 @@ abbr    this._super(...arguments);
 alias   sp
 options head
   this._super(${1:...arguments});
+
+snippet test
+abbr	test('...', function(assert) {...});
+options head
+  test('${1:text}', function(assert) {
+    ${2:test}
+  });
+
+snippet test-arrow
+abbr	test('...', (assert) => {...});
+options head
+  test('${1:text}', (assert) => {
+    ${2:test}
+  });

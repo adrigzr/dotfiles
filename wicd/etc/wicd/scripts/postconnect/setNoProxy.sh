@@ -1,6 +1,11 @@
 #!/bin/sh
 
-IP=`/sbin/ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'`
+IP=`/sbin/ifconfig  |
+  grep 'inet addr:'|
+  grep -v '127.0.0.1' |
+  grep -v '172.17.0.1' |
+  cut -d: -f2 |
+  awk '{ print $1}'`
 
 case $IP in
   15.150.*)

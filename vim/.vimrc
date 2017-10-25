@@ -570,23 +570,23 @@ augroup END
 " Multiple cursors {{{
 augroup multiple_cursor
   autocmd!
-  let g:mc = "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>"
+  " let g:mc = "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>"
 
-  nnoremap cn *``cgn
-  nnoremap cN *``cgN
+  " nnoremap cn *``cgn
+  " nnoremap cN *``cgN
 
-  vnoremap <expr> cn g:mc . "``cgn"
-  vnoremap <expr> cN g:mc . "``cgN"
+  " vnoremap <expr> cn g:mc . "``cgn"
+  " vnoremap <expr> cN g:mc . "``cgN"
 
-  function! SetupCR() abort
-    nnoremap <Enter> :nnoremap <lt>Enter> n@z<CR>q:<C-u>let @z=strpart(@z,0,strlen(@z)-1)<CR>n@z
-  endfunction
+  " function! SetupCR() abort
+  "   nnoremap <Enter> :nnoremap <lt>Enter> n@z<CR>q:<C-u>let @z=strpart(@z,0,strlen(@z)-1)<CR>n@z
+  " endfunction
 
-  nnoremap cq :call SetupCR()<CR>*``qz
-  nnoremap cQ :call SetupCR()<CR>#``qz
+  " nnoremap cq :call SetupCR()<CR>*``qz
+  " nnoremap cQ :call SetupCR()<CR>#``qz
 
-  vnoremap <expr> cq ":\<C-u>call SetupCR()\<CR>" . "gv" . g:mc . "``qz"
-  vnoremap <expr> cQ ":\<C-u>call SetupCR()\<CR>" . "gv" . substitute(g:mc, '/', '?', 'g') . "``qz"
+  " vnoremap <expr> cq ":\<C-u>call SetupCR()\<CR>" . "gv" . g:mc . "``qz"
+  " vnoremap <expr> cQ ":\<C-u>call SetupCR()\<CR>" . "gv" . substitute(g:mc, '/', '?', 'g') . "``qz"
 augroup END
 
 
@@ -863,13 +863,13 @@ augroup END
 augroup easymotion_config
   autocmd!
   " s{char}{char} to move to {char}{char}
-  nmap s <Plug>(easymotion-s2)
-  nmap t <Plug>(easymotion-t2)
+  " nmap s <Plug>(easymotion-s2)
+  " nmap t <Plug>(easymotion-t2)
 
   " Repeat motion.
-  map <Leader>. <Plug>(easymotion-repeat)
+  " map <Leader>. <Plug>(easymotion-repeat)
 
-  let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+  " let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 augroup END
 " }}}
 
@@ -1224,6 +1224,14 @@ augroup vim_checklist
 augroup END
 " }}}
 
+" vim_sad.vim {{{
+augroup vim_sad
+  autocmd!
+  nmap sn <Plug>(sad-change-forward)
+  nmap sp <Plug>(sad-change-backward)
+augroup END
+" }}}
+
 " vim_racer.vim {{{
 augroup vim_racer
   autocmd!
@@ -1262,7 +1270,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeFind' }
 Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 " Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-surround'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-git'
@@ -1352,6 +1360,9 @@ Plug 'mboughaba/i3config.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
 Plug 'xtal8/traces.vim'
+Plug 'chrisbra/vim_faq'
+Plug 'hauleth/sad.vim'
+Plug 'machakann/vim-sandwich'
 
 call plug#end()
 " }}}

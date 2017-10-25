@@ -1,3 +1,7 @@
+configuration {
+  show-icons: true;
+}
+
 * {
   background: rgba(0, 43, 55, 93%);
   foreground: rgba(129, 147, 150, 100%);

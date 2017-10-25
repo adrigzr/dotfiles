@@ -27,6 +27,9 @@ fi
 # Alias tips.
 [ -s ~/.zsh/alias-tips/alias-tips.plugin.zsh ] && source ~/.zsh/alias-tips/alias-tips.plugin.zsh
 
+# Quiet accept line.
+[ -s ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh ] && source ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh
+
 # Autoload functions.
 autoload -U vim
 autoload -U zle-select-branch; zle -N zle-select-branch; bindkey "^B" zle-select-branch
@@ -51,8 +54,13 @@ bindkey -M vicmd 'j' history-substring-search-down
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
-# Config to make suggestion highlight visible.
+# Bind autosuggestions.
+bindkey "^A" autosuggest-accept
+
+# Config autosuggestions.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=11"
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=true
 
 # history mgmt
 # http://www.refining-linux.org/archives/49/ZSH-Gem-15-Shared-history/
