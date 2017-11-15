@@ -5,16 +5,18 @@
 " Preamble {{{
 
 " Syntax highlighting {{{
-if !exists("g:syntax_on")
+if !exists('g:syntax_on')
   syntax enable
 endif
 set t_Co=256 " Terminal colors.
 set background=dark
+set encoding=utf-8 nobomb " BOM often causes trouble
 colorscheme solarized
+scriptencoding utf-8
 " }}}
 
 " Mapleader {{{
-let mapleader="\<Space>"
+let g:mapleader="\<Space>"
 " }}}
 
 " Local directories {{{
@@ -29,7 +31,6 @@ set backspace=indent,eol,start
 set cursorline " Highlight current line
 set diffopt=filler " Add vertical spaces to keep right and left aligned
 set diffopt+=iwhite " Ignore whitespace changes (focus on code changes)
-set encoding=utf-8 nobomb " BOM often causes trouble
 set esckeys " Allow cursor keys in insert mode
 set expandtab " Expand tabs to spaces
 " set foldcolumn=0 " Column to show folds
@@ -192,9 +193,13 @@ augroup general_config
   " }}}
 
   " Toggle show tabs and trailing spaces (,c) {{{
-  set lcs=tab:›\ ,trail:·,eol:¬,nbsp:_
-  set fcs=fold:-
-  nnoremap <silent> <leader>c :set nolist!<CR>
+  set listchars=tab:\¦\ ,trail:·,eol:¬,nbsp:_
+  set fillchars=fold:-
+  nnoremap <silent> <leader>v :set nolist!<CR>
+  " }}}
+
+  " Disable space behaviour {{{
+  nnoremap <space> <NOP>
   " }}}
 
   " Clear last search (,qs) {{{
@@ -203,7 +208,7 @@ augroup general_config
   " }}}
 
   " Vim on the iPad {{{
-  if &term == "xterm-ipad"
+  if &term ==# 'xterm-ipad'
     nnoremap <Tab> <Esc>
     vnoremap <Tab> <Esc>gV
     onoremap <Tab> <Esc>
@@ -310,8 +315,9 @@ augroup general_config
   " nnoremap * *<c-o>
   " }}}
 
-  " Color NonText (see listchars) {{{
-  hi NonText ctermfg=10 guifg=#000000 guibg=#000000 ctermbg=8
+  " Color (see listchars) {{{
+  hi NonText ctermfg=10 ctermbg=8 guifg=#000000 guibg=#000000
+  hi SpecialKey term=NONE cterm=NONE
   " }}}
 augroup END
 " }}}
@@ -320,9 +326,9 @@ augroup END
 if !exists('*s:MkNonExDir')
   function s:MkNonExDir(file, buf) abort
     if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
-      let dir=fnamemodify(a:file, ':h')
-      if !isdirectory(dir)
-        call mkdir(dir, 'p')
+      let l:dir=fnamemodify(a:file, ':h')
+      if !isdirectory(l:dir)
+        call mkdir(l:dir, 'p')
       endif
     endif
   endfunction
@@ -347,7 +353,7 @@ augroup buffer_control
   autocmd!
 
   " Prompt for buffer to select (,bs) {{{
-  nnoremap <leader>bs :CtrlPBuffer<CR>
+  " nnoremap <leader>bs :CtrlPBuffer<CR>
   " }}}
 
   " Buffer navigation (,,) (gb) (gB) (,ls) {{{
@@ -389,10 +395,10 @@ augroup buffer_control
 
 
   " Jump to buffer number (<N>gb) {{{
-  let c = 1
-  while c <= 99
-    execute "nnoremap " . c . "gb :" . c . "b\<CR>"
-    let c += 1
+  let g:c = 1
+  while g:c <= 99
+    execute 'nnoremap ' . g:c . 'gb :' . g:c . 'b\<CR>'
+    let g:c += 1
   endwhile
   " }}}
 
@@ -436,30 +442,30 @@ augroup jump_to_tags
 
   " Pulse Line (thanks Steve Losh)
   function! s:Pulse() abort " {{{
-    redir => old_hi
+    redir => l:old_hi
     silent execute 'hi CursorLine'
     redir END
-    let old_hi = split(old_hi, '\n')[0]
-    let old_hi = substitute(old_hi, 'xxx', '', '')
+    let l:old_hi = split(l:old_hi, "\n")[0]
+    let l:old_hi = substitute(l:old_hi, 'xxx', '', '')
 
-    let steps = 8
-    let width = 1
-    let start = width
-    let end = steps * width
-    let color = 233
+    let l:steps = 8
+    let l:width = 1
+    let l:start = l:width
+    let l:end = l:steps * l:width
+    let l:color = 233
 
-    for i in range(start, end, width)
-      execute "hi CursorLine ctermbg=" . (color + i)
+    for l:i in range(l:start, l:end, l:width)
+      execute 'hi CursorLine ctermbg=' . (l:color + l:i)
       redraw
       sleep 6m
     endfor
-    for i in range(end, start, -1 * width)
-      execute "hi CursorLine ctermbg=" . (color + i)
+    for l:i in range(l:end, l:start, -1 * l:width)
+      execute 'hi CursorLine ctermbg=' . (l:color + l:i)
       redraw
       sleep 6m
     endfor
 
-    execute 'hi ' . old_hi
+    execute 'hi ' . l:old_hi
   endfunction " }}}
 
   command! -nargs=0 Pulse call s:Pulse()
@@ -483,16 +489,16 @@ augroup highlight_interesting_word
     normal! "zyiw
 
     " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
-    let mid = 86750 + a:n
+    let l:mid = 86750 + a:n
 
     " Clear existing matches, but don't worry if they don't exist.
-    silent! call matchdelete(mid)
+    silent! call matchdelete(l:mid)
 
     " Construct a literal pattern that has to match at boundaries.
-    let pat = '\V\<' . escape(@z, '\') . '\>'
+    let l:pat = '\V\<' . escape(@z, '\') . '\>l:mid'
 
     " Actually match the words.
-    call matchadd("InterestingWord" . a:n, pat, 1, mid)
+    call matchadd('InterestingWord' . a:n, l:pat, 1, l:mid)
 
     " Move back to our original location.
     normal! `z
@@ -520,6 +526,7 @@ augroup highlight_interesting_word
   " Transparent background {{{
   hi Normal guibg=NONE ctermbg=NONE
   hi NonText guibg=NONE ctermbg=NONE
+  hi CursorLine guibg=NONE ctermbg=NONE
   " }}}
 augroup END
 " }}}
@@ -665,18 +672,18 @@ augroup filetype_javascript
   "set concealcursor=nc
 
   " even when your cursor is on top of them.
-  let g:javascript_conceal_function             = "ƒ"
-  let g:javascript_conceal_null                 = "ø"
-  let g:javascript_conceal_this                 = "@"
-  let g:javascript_conceal_return               = "⇚"
-  let g:javascript_conceal_undefined            = "¿"
-  let g:javascript_conceal_NaN                  = "ℕ"
-  let g:javascript_conceal_prototype            = "¶"
-  let g:javascript_conceal_static               = "•"
-  let g:javascript_conceal_super                = "Ω"
-  let g:javascript_conceal_arrow_function       = "⇒"
-  let g:javascript_conceal_noarg_arrow_function = "🞅"
-  let g:javascript_conceal_underscore_arrow_function = "🞅"
+  let g:javascript_conceal_function             = 'ƒ'
+  let g:javascript_conceal_null                 = 'ø'
+  let g:javascript_conceal_this                 = '@'
+  let g:javascript_conceal_return               = '⇚'
+  let g:javascript_conceal_undefined            = '¿'
+  let g:javascript_conceal_NaN                  = 'ℕ'
+  let g:javascript_conceal_prototype            = '¶'
+  let g:javascript_conceal_static               = '•'
+  let g:javascript_conceal_super                = 'Ω'
+  let g:javascript_conceal_arrow_function       = '⇒'
+  let g:javascript_conceal_noarg_arrow_function = '🞅'
+  let g:javascript_conceal_underscore_arrow_function = '🞅'
 
   " Enable plugins.
   let g:javascript_plugin_jsdoc = 1
@@ -705,9 +712,9 @@ augroup filetype_ruby
   au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby nofoldenable
 
   " Ruby.vim {{{
-  let ruby_operators = 1
-  let ruby_space_errors = 1
-  let ruby_fold = 0
+  let g:ruby_operators = 1
+  let g:ruby_space_errors = 1
+  let g:ruby_fold = 0
   " }}}
 augroup END
 " }}}
@@ -776,12 +783,32 @@ augroup ctrlp_config
 augroup END
 " }}}
 
+" fzf.vim {{{
+augroup fzf_config
+  autocmd!
+  " Config.
+  let g:fzf_layout = { 'up': '~40%' }
+  let g:fzf_history_dir = '~/.local/share/fzf-history'
+  " Mappings.
+  nnoremap <silent> <C-p> :Files<CR>
+  " Commands.
+  command! -bang -nargs=* Rg
+        \ call fzf#vim#grep(
+        \   'rg --hidden --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+        \   <bang>0 ? fzf#vim#with_preview('up:60%')
+        \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+        \   <bang>0)
+  command! -bang -nargs=? -complete=dir Files
+        \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+augroup END
+" }}}
+
 " Silver Searcher {{{
 augroup ag_config
   autocmd!
   cnoreabbrev Ack Ack!
 
-  if executable("rg")
+  if executable('rg')
     " Note we extract the column as well as the file and line number
     set grepprg=rg\ --no-heading\ --vimgrep\ --smart-case\ --color=never
     set grepformat=%f:%l:%c:%m,%f:%l:%m
@@ -791,8 +818,8 @@ augroup ag_config
     let b:globs = ' '
 
     " Add ignore list.
-    for i in split(&wildignore, ",")
-      let b:globs = b:globs . '--glob "!' . substitute(i, '\*/\(.*\)/\*', '\1', 'g') . '" '
+    for b:i in split(&wildignore, ',')
+      let b:globs = b:globs . '--glob "!' . substitute(b:i, '\*/\(.*\)/\*', '\1', 'g') . '" '
     endfor
 
     let g:ackprg = 'rg --no-heading --vimgrep --smart-case --ignore-case --hidden' . b:globs
@@ -894,37 +921,58 @@ augroup incsearch_config
   "noremap <silent><expr> g/ incsearch#go(<SID>incsearch_config({'is_stay': 1}))
 
   " basic config
-  map /  <Plug>(incsearch-forward)
-  map ?  <Plug>(incsearch-backward)
-  map g/ <Plug>(incsearch-stay)
+  " map /  <Plug>(incsearch-forward)
+  " map ?  <Plug>(incsearch-backward)
+  " map g/ <Plug>(incsearch-stay)
 
-  " :h g:incsearch#auto_nohlsearch
-  let g:incsearch#auto_nohlsearch = 0
-  map n  <Plug>(incsearch-nohl-n)
-  map N  <Plug>(incsearch-nohl-N)
-  map *  <Plug>(incsearch-nohl-*)
-  map #  <Plug>(incsearch-nohl-#)
-  map g* <Plug>(incsearch-nohl-g*)
-  map g# <Plug>(incsearch-nohl-g#)
+  " " :h g:incsearch#auto_nohlsearch
+  " let g:incsearch#auto_nohlsearch = 0
+  " map n  <Plug>(incsearch-nohl-n)
+  " map N  <Plug>(incsearch-nohl-N)
+  " map *  <Plug>(incsearch-nohl-*)
+  " map #  <Plug>(incsearch-nohl-#)
+  " map g* <Plug>(incsearch-nohl-g*)
+  " map g# <Plug>(incsearch-nohl-g#)
 
-  " fuzzy search
-  map z/ <Plug>(incsearch-fuzzy-/)
-  map z? <Plug>(incsearch-fuzzy-?)
-  map zg/ <Plug>(incsearch-fuzzy-stay)
+  " " fuzzy search
+  " map z/ <Plug>(incsearch-fuzzy-/)
+  " map z? <Plug>(incsearch-fuzzy-?)
+  " map zg/ <Plug>(incsearch-fuzzy-stay)
+augroup END
+" }}}
+
+" incsearch_highlight.vim {{{
+augroup incsearch_highlight_config
+  autocmd!
+  " Function.
+  fu! s:toggle_hls(on_enter) abort
+      if a:on_enter
+          let s:hls_on = &hlsearch
+          set hlsearch
+      else
+          if exists('s:hls_on')
+              exe 'set '.(s:hls_on ? '' : 'no').'hls'
+              unlet! s:hls_on
+          endif
+      endif
+  endfu
+  " Commands.
+  autocmd CmdlineEnter [/\?] call s:toggle_hls(1)
+  autocmd CmdlineLeave [/\?] call s:toggle_hls(0)
 augroup END
 " }}}
 
 " YouCompleteMe.vim {{{
 augroup youcompleteme_config
   autocmd!
-  let g:ycm_auto_trigger = 1
-  let g:ycm_min_num_of_chars_for_completion = 2
-  let g:ycm_server_python_interpreter = "/usr/bin/python"
-  let g:ycm_complete_in_comments = 1
-  let g:ycm_complete_in_strings = 1
-  let g:ycm_collect_identifiers_from_comments_and_strings = 1
-  let g:ycm_seed_identifiers_with_syntax = 1
-  let g:ycm_autoclose_preview_window_after_completion = 1
+  " let g:ycm_auto_trigger = 1
+  " let g:ycm_min_num_of_chars_for_completion = 2
+  " let g:ycm_server_python_interpreter = '/usr/bin/python'
+  " let g:ycm_complete_in_comments = 1
+  " let g:ycm_complete_in_strings = 1
+  " let g:ycm_collect_identifiers_from_comments_and_strings = 1
+  " let g:ycm_seed_identifiers_with_syntax = 1
+  " let g:ycm_autoclose_preview_window_after_completion = 1
 augroup END
 " }}}
 
@@ -932,12 +980,12 @@ augroup END
 augroup ultisnips_config
   autocmd!
   " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-  let g:UltiSnipsExpandTrigger="<c-s>"
-  let g:UltiSnipsJumpForwardTrigger="<c-b>"
-  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+  " let g:UltiSnipsExpandTrigger='<c-s>'
+  " let g:UltiSnipsJumpForwardTrigger='<c-b>'
+  " let g:UltiSnipsJumpBackwardTrigger='<c-z>'
 
-  " If you want :UltiSnipsEdit to split your window.
-  let g:UltiSnipsEditSplit="vertical"
+  " " If you want :UltiSnipsEdit to split your window.
+  " let g:UltiSnipsEditSplit='vertical'
 augroup END
 " }}}
 
@@ -987,17 +1035,17 @@ augroup END
 augroup multiplecursor_config
   autocmd!
   " Remove default mappings.
-  let g:multi_cursor_use_default_mapping=0
+  " let g:multi_cursor_use_default_mapping=0
 
-  " Remap.
-  let g:multi_cursor_next_key='<C-n>'
-  let g:multi_cursor_prev_key='<C-b>'
-  let g:multi_cursor_skip_key='<C-q>'
-  let g:multi_cursor_quit_key='<Esc>'
+  " " Remap.
+  " let g:multi_cursor_next_key='<C-n>'
+  " let g:multi_cursor_prev_key='<C-b>'
+  " let g:multi_cursor_skip_key='<C-q>'
+  " let g:multi_cursor_quit_key='<Esc>'
 
-  " Edit current search.
-  nnoremap <silent> <F3> :MultipleCursorsFind <C-R>/<CR>
-  vnoremap <silent> <F3> :MultipleCursorsFind <C-R>/<CR>
+  " " Edit current search.
+  " nnoremap <silent> <F3> :MultipleCursorsFind <C-R>/<CR>
+  " vnoremap <silent> <F3> :MultipleCursorsFind <C-R>/<CR>
 augroup END
 " }}}
 
@@ -1043,67 +1091,84 @@ augroup END
 " neocomplete.vim {{{
 augroup neocomplete_config
   autocmd!
-  let g:acp_enableAtStartup = 0 " Disable AutoComplPop.
-  let g:neocomplete#enable_at_startup = 1 " Use neocomplete.
-  let g:neocomplete#enable_smart_case = 1 " Use smartcase.
-  let g:neocomplete#enable_auto_close_preview = 1 " Close preview window automatically.
-  let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length.
-  let g:neopairs#enable = 1 " Enable neo pairs.
+  "let g:acp_enableAtStartup = 0 " Disable AutoComplPop.
+  "let g:neocomplete#enable_at_startup = 1 " Use neocomplete.
+  "let g:neocomplete#enable_smart_case = 1 " Use smartcase.
+  "let g:neocomplete#enable_auto_close_preview = 1 " Close preview window automatically.
+  "let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length.
+  "let g:neopairs#enable = 1 " Enable neo pairs.
 
-  " Define keyword.
-  if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
+  "" Define keyword.
+  "if !exists('g:neocomplete#keyword_patterns')
+  "  let g:neocomplete#keyword_patterns = {}
+  "endif
+  "let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+  "" Plugin key-mappings.
+  "inoremap <expr><C-g>     neocomplete#undo_completion()
+  "inoremap <expr><C-t>     neocomplete#complete_common_string()
+
+  "" Recommended key-mappings.
+  "" <CR>: close popup and save indent.
+  "inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+  "function! s:my_cr_function() abort
+  "  return (pumvisible() ? '\<C-y>' : '' ) . '\<CR>'
+  "  " For no inserting <CR> key.
+  "  "return pumvisible() ? '\<C-y>' : '\<CR>'
+  "endfunction
+  "" <TAB>: completion.
+  "inoremap <expr><TAB>  pumvisible() ? '\<C-n>' : '\<TAB>'
+  "" <C-h>, <BS>: close popup and delete backword char.
+  "inoremap <expr><C-h> neocomplete#smart_close_popup().'\<C-h>'
+  "inoremap <expr><BS> neocomplete#smart_close_popup().'\<C-h>'
+  "" Close popup by <Space>.
+  ""inoremap <expr><Space> pumvisible() ? '\<C-y>' : '\<Space>'
+
+  "" AutoComplPop like behavior.
+  ""let g:neocomplete#enable_auto_select = 1
+
+  "" Shell like behavior(not recommended).
+  ""set completeopt+=longest
+  ""let g:neocomplete#enable_auto_select = 1
+  ""let g:neocomplete#disable_auto_complete = 1
+  ""inoremap <expr><TAB>  pumvisible() ? '\<Down>' : '\<C-x>\<C-u>'
+
+  "" Enable omni completion.
+  "autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  "autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  "autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  "autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  "autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+  "" Enable heavy omni completion.
+  "if !exists('g:neocomplete#sources#omni#input_patterns')
+  "  let g:neocomplete#sources#omni#input_patterns = {}
+  "endif
+  ""let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+  ""let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+  ""let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+  "" For perlomni.vim setting.
+  "" https://github.com/c9s/perlomni.vim
+  "let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+augroup END
+" }}}
+
+" deoplete.vim {{{
+augroup deoplete_config
+  autocmd!
+  " Config.
+  if has('python3')
+    let g:deoplete#enable_at_startup = 1
+    let g:deoplete#enable_yarp = 1
   endif
-  let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-  " Plugin key-mappings.
-  inoremap <expr><C-g>     neocomplete#undo_completion()
-  inoremap <expr><C-l>     neocomplete#complete_common_string()
+	" <C-h>, <BS>: close popup and delete backword char.
+	inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+	inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
 
-  " Recommended key-mappings.
-  " <CR>: close popup and save indent.
-  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  function! s:my_cr_function() abort
-    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-    " For no inserting <CR> key.
-    "return pumvisible() ? "\<C-y>" : "\<CR>"
-  endfunction
   " <TAB>: completion.
-  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-  " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-  " Close popup by <Space>.
-  "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-  " AutoComplPop like behavior.
-  "let g:neocomplete#enable_auto_select = 1
-
-  " Shell like behavior(not recommended).
-  "set completeopt+=longest
-  "let g:neocomplete#enable_auto_select = 1
-  "let g:neocomplete#disable_auto_complete = 1
-  "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-  " Enable omni completion.
-  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-  " Enable heavy omni completion.
-  if !exists('g:neocomplete#sources#omni#input_patterns')
-    let g:neocomplete#sources#omni#input_patterns = {}
-  endif
-  "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-  "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-  "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-  " For perlomni.vim setting.
-  " https://github.com/c9s/perlomni.vim
-  let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-
+  inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 augroup END
 " }}}
 
@@ -1133,6 +1198,7 @@ augroup neosnippet_config
 
   " Enable snipMate compatibility feature.
   let g:neosnippet#enable_snipmate_compatibility = 1
+  let g:neosnippet#enable_completed_snippet = 1
 
   " Tell Neosnippet about the other snippets
   let g:neosnippet#snippets_directory=[
@@ -1167,7 +1233,7 @@ augroup vim_markdown_composer
   autocmd!
   " Installation function.
   function! BuildComposer(info) abort
-    if a:info.status != 'unchanged' || a:info.force
+    if a:info.status !=# 'unchanged' || a:info.force
       if has('nvim')
         !cargo build --release
       else
@@ -1235,7 +1301,7 @@ augroup END
 " vim_racer.vim {{{
 augroup vim_racer
   autocmd!
-  let g:racer_cmd = "$HOME/.cargo/bin/racer"
+  let g:racer_cmd = '$HOME/.cargo/bin/racer'
   let g:racer_experimental_completer = 1
 augroup END
 " }}}
@@ -1252,8 +1318,8 @@ Plug 'bling/vim-airline'
 Plug 'junegunn/vim-easy-align'
 " Plug 'junegunn/vim-emoji'
 Plug 'junegunn/goyo.vim'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'FelikZ/ctrlp-py-matcher'
+" Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'FelikZ/ctrlp-py-matcher'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -1288,7 +1354,12 @@ Plug 'editorconfig/editorconfig-vim'
 " Plug 'tomtom/tlib_vim'
 " Plug 'SirVer/ultisnips'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'Shougo/neocomplete.vim'
+" Plug 'Shougo/neocomplete.vim'
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp' " deoplete dependency.
+Plug 'roxma/vim-hug-neovim-rpc' " deoplete dependency
+" Plug 'wokalski/autocomplete-flow' " Javascript Completion (deoplete)
+Plug 'zchee/deoplete-jedi' " Python Completion (deoplete)
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neco-syntax'
@@ -1300,9 +1371,9 @@ Plug 'mileszs/ack.vim'
 " Plug 'junegunn/vim-peekaboo'
 " Plug 'justinmk/vim-sneak'
 " Plug 'easymotion/vim-easymotion'
-Plug 'haya14busa/incsearch.vim'
+" Plug 'haya14busa/incsearch.vim'
 " Plug 'haya14busa/incsearch-easymotion.vim'
-Plug 'haya14busa/incsearch-fuzzy.vim'
+" Plug 'haya14busa/incsearch-fuzzy.vim'
 " Plug 'PeterRincker/vim-argumentative'
 Plug 'Olical/vim-enmasse'
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
@@ -1316,7 +1387,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 " Plug 'Chiel92/vim-autoformat'
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
 " Plug 'mbbill/undotree'
 Plug 'altercation/vim-colors-solarized'
@@ -1327,7 +1398,7 @@ Plug 'alexlafroscia/vim-ember-cli'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'francoiscabrol/ranger.vim'
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'terryma/vim-expand-region'
+" Plug 'terryma/vim-expand-region'
 " Plug 'jebaum/vim-tmuxify'
 " Plug 'yuttie/comfortable-motion.vim'
 Plug 'terryma/vim-smooth-scroll'
@@ -1363,6 +1434,8 @@ Plug 'xtal8/traces.vim'
 Plug 'chrisbra/vim_faq'
 Plug 'hauleth/sad.vim'
 Plug 'machakann/vim-sandwich'
+Plug 'moll/vim-node'
+Plug 'kopischke/vim-fetch'
 
 call plug#end()
 " }}}

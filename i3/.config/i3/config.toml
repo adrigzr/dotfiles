@@ -17,7 +17,7 @@ command = "$HOME/.config/i3/blocks/volume 1"
 [[block]]
 block = "custom"
 interval = 1
-command = "$HOME/.config/i3/blocks/wifi || $HOME/.config/i3/blocks/ethernet"
+command = "$HOME/.config/i3/blocks/wifi || $HOME/.config/i3/blocks/ethernet || Disconnected"
 
 # [[block]]
 # block = "xrandr"

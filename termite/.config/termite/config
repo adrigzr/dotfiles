@@ -1,5 +1,5 @@
 [options]
-#allow_bold = true
+# allow_bold = false
 #audible_bell = false
 clickable_url = false
 #dynamic_title = true
