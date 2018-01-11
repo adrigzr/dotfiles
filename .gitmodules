@@ -16,3 +16,6 @@
 [submodule "zsh/.zsh/zsh-quiet-accept-line"]
 	path = zsh/.zsh/zsh-quiet-accept-line
 	url = https://github.com/AdrieanKhisbe/zsh-quiet-accept-line.git
+[submodule "zsh/.zsh/fast-syntax-highlighting"]
+	path = zsh/.zsh/fast-syntax-highlighting
+	url = https://github.com/zdharma/fast-syntax-highlighting.git

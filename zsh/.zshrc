@@ -5,7 +5,7 @@
 SAVEHIST=100000
 
 # Custom functions.
-fpath=( "$HOME/.zfunctions" "$HOME/.ripgrep/complete" $fpath )
+fpath=( "$HOME/.zfunctions" "$HOME/.ripgrep/complete" "/usr/local/share/doc/task/scripts/zsh" "$HOME/.zim/modules/fasd/functions" $fpath )
 
 # Termite support.
 # Tell Termite what the current directory is.
@@ -26,6 +26,9 @@ fi
 
 # Alias tips.
 [ -s ~/.zsh/alias-tips/alias-tips.plugin.zsh ] && source ~/.zsh/alias-tips/alias-tips.plugin.zsh
+
+# Fast Syntax Highlighting
+[ -s ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh ] && source ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
 # Quiet accept line.
 [ -s ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh ] && source ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh
@@ -66,6 +69,9 @@ ZSH_AUTOSUGGEST_USE_ASYNC=true
 # http://www.refining-linux.org/archives/49/ZSH-Gem-15-Shared-history/
 setopt inc_append_history
 setopt share_history
+
+# Fix "cd .." autocompletion.
+zstyle ':completion:*' special-dirs true
 
 # Powerline.
 [ -f $PYTHON3_PACKAGES/powerline/bindings/zsh/powerline.zsh ] && source $PYTHON3_PACKAGES/powerline/bindings/zsh/powerline.zsh

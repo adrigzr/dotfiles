@@ -22,7 +22,7 @@ rofi.threads: 0
 rofi.terminal: termite
 rofi.theme: ~/.config/rofi/default_theme.rasi
 rofi.run-command: /usr/bin/zsh -i -c "{cmd}"
-rofi.run-list-command: alias | awk -F'[ = ]' '{print $1}' && print -l ${(ok)functions} | grep -v '^_'
+! rofi.run-list-command: alias | awk -F'[ = ]' '{print $1}' && print -l ${(ok)functions} | grep -v '^_'
 
 !-------------------------------------------------------------------------------
 ! Colors settings

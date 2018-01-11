@@ -112,6 +112,9 @@ set synmaxcol=400 " Enable syntax highlight on the first 200 cols
 set breakindent " Preserve indentation on wrap toggle
 set showbreak=⤷ " String to use on breakindent
 " set autoread " Force check disk file
+set timeout " enable timeout for mapping
+set ttimeout " enable timeout for key codes
+set ttimeoutlen=10 " unnoticeable small value
 " }}}
 
 " }}}
@@ -526,7 +529,6 @@ augroup highlight_interesting_word
   " Transparent background {{{
   hi Normal guibg=NONE ctermbg=NONE
   hi NonText guibg=NONE ctermbg=NONE
-  hi CursorLine guibg=NONE ctermbg=NONE
   " }}}
 augroup END
 " }}}
@@ -564,6 +566,14 @@ augroup restore_cursor
     \ if line("'\"") > 1 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
+augroup END
+" }}}
+
+" Highlight Ugly Code {{{
+augroup highlight_ugly_code
+  autocmd!
+  " match ErrorMsg '\s\+$' " Trailing spaces.
+  " match ErrorMsg '\%>120v.\+' " Long lines of code.
 augroup END
 " }}}
 
@@ -741,6 +751,13 @@ augroup filetype_csv
 augroup END
 " }}}
 
+" JSON {{{
+augroup filetype_json
+  autocmd!
+  au FileType json setlocal equalprg=python\ -m\ json.tool
+augroup END
+" }}}
+
 " Plugin Configuration -------------------------------------------------------------
 
 " Solarized.vim {{{
@@ -806,24 +823,13 @@ augroup END
 " Silver Searcher {{{
 augroup ag_config
   autocmd!
-  cnoreabbrev Ack Ack!
-
   if executable('rg')
     " Note we extract the column as well as the file and line number
-    set grepprg=rg\ --no-heading\ --vimgrep\ --smart-case\ --color=never
+    set grepprg=rg\ --no-heading\ --vimgrep\ --smart-case\ --color=never\ --ignore-case\ --hidden
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 
-    " Have the silver searcher ignore all the same things as wilgignore
-    let b:rg_command = 'rg %s --files --ignore-case --color=never --hidden'
-    let b:globs = ' '
-
-    " Add ignore list.
-    for b:i in split(&wildignore, ',')
-      let b:globs = b:globs . '--glob "!' . substitute(b:i, '\*/\(.*\)/\*', '\1', 'g') . '" '
-    endfor
-
-    let g:ackprg = 'rg --no-heading --vimgrep --smart-case --ignore-case --hidden' . b:globs
-    let g:ctrlp_user_command = b:rg_command . b:globs
+    " Make the command.
+    command! -nargs=+ Ack execute 'silent grep! <args>' | copen | redraw!
   endif
 augroup END
 " }}}
@@ -875,7 +881,12 @@ augroup ale_config
   autocmd!
   let g:ale_sign_error = '✗'
   let g:ale_sign_warning = '⚠'
-  let g:ale_linters = { 'javascript': ['eslint'], 'python': ['pylint'], 'rust': ['rls'] }
+  let g:ale_linters = {
+        \ 'javascript': ['eslint'],
+        \ 'python': ['pylint'],
+        \ 'rust': ['rls'],
+        \ 'text': ['proselint']
+        \ }
 augroup END
 " }}}
 
@@ -1306,6 +1317,21 @@ augroup vim_racer
 augroup END
 " }}}
 
+" vim_lsp.vim {{{
+augroup vim_lsp
+  autocmd!
+  " Config.
+  let g:LanguageClient_serverCommands = {
+      \ 'javascript': ['javascript-typescript-stdio'],
+      \ 'python': ['pyls'],
+      \ }
+
+  " Keybindings.
+  nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+  nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+augroup END
+" }}}
+
 " Plugins -------------------------------------------------------------
 
 " Load plugins {{{
@@ -1326,9 +1352,9 @@ Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'oplatek/Conque-Shell'
 Plug 'pangloss/vim-javascript'
 " Plug 'rking/ag.vim'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeFind' }
+Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
-Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeFind' }
+Plug 'Xuyuanp/nerdtree-git-plugin'
 " Plug 'scrooloose/syntastic'
 " Plug 'slim-template/vim-slim', { 'for': 'slim' }
 " Plug 'thoughtbot/vim-rspec'
@@ -1341,7 +1367,7 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-unimpaired'
-" Plug 'tpope/vim-fugitive' " Currently broken.
+Plug 'tpope/vim-fugitive'
 " Plug 'vim-ruby/vim-ruby'
 " Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }
 " Plug 'vim-scripts/jade.vim',   { 'for': 'jade' }
@@ -1355,6 +1381,7 @@ Plug 'editorconfig/editorconfig-vim'
 " Plug 'SirVer/ultisnips'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 " Plug 'Shougo/neocomplete.vim'
+Plug 'autozimu/LanguageClient-neovim', {'tag': 'binary-*-x86_64-unknown-linux-musl'}
 Plug 'Shougo/deoplete.nvim'
 Plug 'roxma/nvim-yarp' " deoplete dependency.
 Plug 'roxma/vim-hug-neovim-rpc' " deoplete dependency
@@ -1366,7 +1393,7 @@ Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neopairs.vim'
 Plug 'honza/vim-snippets'
 " Plug 'danro/rename.vim'
-Plug 'mileszs/ack.vim'
+" Plug 'mileszs/ack.vim'
 " Plug 'severin-lemaignan/vim-minimap'
 " Plug 'junegunn/vim-peekaboo'
 " Plug 'justinmk/vim-sneak'
@@ -1377,7 +1404,7 @@ Plug 'mileszs/ack.vim'
 " Plug 'PeterRincker/vim-argumentative'
 Plug 'Olical/vim-enmasse'
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
-Plug 'elzr/vim-json', { 'for': 'json' }
+Plug 'elzr/vim-json'
 " Plug 'rickhowe/diffchar.vim'
 Plug 'tpope/vim-dispatch'
 " Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }

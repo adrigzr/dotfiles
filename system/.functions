@@ -188,7 +188,7 @@ function fvim() {
 }
 
 # Translate.
-function t() {
+function trans() {
     xdg-open "https://translate.google.es/?hl=es#en/es/$@"
 }
 

@@ -13,6 +13,9 @@
 # Files
 data.location=\/home\/adriangonzalez\/Dropbox\/TaskWarrior
 
+# Theme
+include /usr/local/share/doc/task/rc/solarized-dark-256.theme
+
 # Color theme (uncomment one to use)
 #include /usr/share/doc/task/rc/light-16.theme
 #include /usr/share/doc/task/rc/light-256.theme
@@ -29,3 +32,12 @@ data.location=\/home\/adriangonzalez\/Dropbox\/TaskWarrior
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
 
+urgency.user.tag.blocked.coefficient=-6.0
+context.pfm=+pfm
+context.work=+work
+report.daily.description=Simple list of completed tasks
+report.daily.columns=end,description.count
+report.daily.labels=Finished,Description
+report.daily.sort=modified+
+report.daily.filter=status:completed and +work
+context=work

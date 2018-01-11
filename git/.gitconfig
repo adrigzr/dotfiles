@@ -69,6 +69,7 @@
   lb = list-bamboo
   rb = run-bamboo
   current = rev-parse --abbrev-ref HEAD
+  conflicts = diff --name-only --diff-filter=U
 
 [core]
   editor = vim

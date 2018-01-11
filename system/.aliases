@@ -1,11 +1,11 @@
 # Easier navigation: .., ..., ~ and -
-alias ..="cd .."
-alias cd..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-alias ~="cd ~" # `cd` is probably faster to type though
-alias -- -="cd -"
+alias ..='cd ..'
+alias cd..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ~='cd ~' # `cd` is probably faster to type though
+alias -- -='cd -'
 
 # mv, rm, cp
 alias mv='mv -v'
@@ -25,22 +25,22 @@ alias c='pygmentize -O style=monokai -f console256 -g'
 alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
 
 # Networking. IP address, dig, DNS
-alias my_ip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias dig="dig +nocmd any +multiline +noall +answer"
+alias my_ip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias dig='dig +nocmd any +multiline +noall +answer'
 
 # FS alias.
-alias diskspace_report="df -P -kHl"
-alias free_diskspace_report="diskspace_report"
+alias diskspace_report='df -P -kHl'
+alias free_diskspace_report='diskspace_report'
 
 # Shortcuts
-alias g="git"
-alias v="vim"
+alias g='git'
+alias v='vim'
 
 # Wifi
-alias wifi="wicd-curses"
+alias wifi='wicd-curses'
 
 # File size
-alias fs="stat -f \"%z bytes\""
+alias fs='stat -f "%z bytes"'
 
 # git
 alias gfa='git fetch --all'
@@ -53,5 +53,13 @@ alias resume_notifications='pkill -u "$USER" -USR2 dunst'
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# TaskWarrior
+alias tn='task next'
+alias ta='task add'
+alias td='task done'
+alias t='task'
+alias tt='task modified:today completed'
+alias ty='task modified:yesterday completed'
 
 # vim: ft=sh
