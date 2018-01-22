@@ -195,8 +195,8 @@ bindsym $mod+Shift+r restart
 # Lock screen.
 bindsym $mod+x exec --no-startup-id $power lock
 
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+# Open scratchpad editor.
+bindsym $mod+Shift+e exec --no-startup-id $HOME/.config/i3/scripts/editor
 
 # start a terminal
 bindsym $mod+Return exec --no-startup-id $editor

@@ -40,4 +40,3 @@ report.daily.columns=end,description.count
 report.daily.labels=Finished,Description
 report.daily.sort=modified+
 report.daily.filter=status:completed and +work
-context=work

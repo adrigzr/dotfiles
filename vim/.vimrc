@@ -829,7 +829,7 @@ augroup ag_config
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 
     " Make the command.
-    command! -nargs=+ Ack execute 'silent grep! <args>' | copen | redraw!
+    command! -nargs=+ -complete=dir Ack execute 'silent grep! <args>' | copen | redraw!
   endif
 augroup END
 " }}}
@@ -1325,6 +1325,7 @@ augroup vim_lsp
       \ 'javascript': ['javascript-typescript-stdio'],
       \ 'python': ['pyls'],
       \ }
+  let g:LanguageClient_diagnosticsList = 'location'
 
   " Keybindings.
   nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
@@ -1436,8 +1437,8 @@ Plug 'fcpg/vim-altscreen'
 Plug 'mjbrownie/swapit'
 Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
-Plug 'lervag/vimtex', { 'for': 'tex' }
-Plug 'brennier/quicktex', { 'for': 'tex' }
+Plug 'lervag/vimtex'
+Plug 'brennier/quicktex'
 Plug 'beloglazov/vim-online-thesaurus'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 " Plug 't9md/vim-quickhl'
@@ -1463,6 +1464,7 @@ Plug 'hauleth/sad.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'moll/vim-node'
 Plug 'kopischke/vim-fetch'
+Plug 'ludovicchabant/vim-gutentags'
 
 call plug#end()
 " }}}

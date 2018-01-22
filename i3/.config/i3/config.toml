@@ -10,6 +10,9 @@ block = "music"
 player = "spotify"
 
 [[block]]
+block = "backlight"
+
+[[block]]
 block = "custom"
 interval = 1
 command = "$HOME/.config/i3/blocks/volume 1"
@@ -18,9 +21,6 @@ command = "$HOME/.config/i3/blocks/volume 1"
 block = "custom"
 interval = 1
 command = "$HOME/.config/i3/blocks/wifi || $HOME/.config/i3/blocks/ethernet || Disconnected"
-
-# [[block]]
-# block = "xrandr"
 
 [[block]]
 block = "disk_space"
@@ -44,9 +44,6 @@ interval = 1
 block = "load"
 interval = 1
 format = "{1m}"
-
-# [[block]]
-# block = "sound"
 
 [[block]]
 block = "temperature"
