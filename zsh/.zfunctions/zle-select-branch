@@ -3,6 +3,7 @@ LBUFFER+="$(select-branch)"
 local ret=$?
 zle redisplay
 typeset -f zle-line-init >/dev/null && zle zle-line-init
+_zsh_autosuggest_clear
 return $ret
 
 # vim: ft=zsh

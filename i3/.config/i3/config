@@ -173,8 +173,12 @@ bindsym $mod+$alt+0 move container to workspace $ws10
 # move workspaces
 bindsym $mod+Control+h move workspace to output left
 bindsym $mod+Control+l move workspace to output right
+bindsym $mod+Control+k move workspace to output up
+bindsym $mod+Control+j move workspace to output down
 bindsym $mod+Control+Left move workspace to output left
 bindsym $mod+Control+Right move workspace to output right
+bindsym $mod+Control+Up move workspace to output up
+bindsym $mod+Control+Down move workspace to output down
 
 # Scratchpad.
 bindsym $mod+Shift+minus move scratchpad

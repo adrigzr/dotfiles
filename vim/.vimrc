@@ -33,13 +33,15 @@ set diffopt=filler " Add vertical spaces to keep right and left aligned
 set diffopt+=iwhite " Ignore whitespace changes (focus on code changes)
 set esckeys " Allow cursor keys in insert mode
 set expandtab " Expand tabs to spaces
-" set foldcolumn=0 " Column to show folds
-" set foldenable " Enable folding
-" set foldlevel=0 " Close all folds by default
-" set foldmethod=manual " Syntax are used to specify folds
-" set foldminlines=0 " Allow folding single lines
-" set foldnestmax=10 " Set max fold nesting level
-set nofoldenable " Disable fold.
+set foldcolumn=0 " Column to show folds
+set foldenable " Enable folding
+set foldlevel=0 " Close all folds by default
+set foldlevelstart=2 " Start fold level
+set foldmethod=syntax " Syntax are used to specify folds
+set foldminlines=0 " Allow folding single lines
+set foldnestmax=10 " Set max fold nesting level
+set foldclose=all " Close as you walk out a fold
+" set nofoldenable " Disable fold.
 set formatoptions=
 set formatoptions+=c " Format comments
 set formatoptions+=r " Continue comments by default
@@ -364,8 +366,8 @@ augroup buffer_control
   map <leader>ls :buffers<CR>
   map <leader>bn :bnext<CR>
   map <leader>bp :bprev<CR>
-  map gb :bnext<CR>
-  map gB :bprev<CR>
+  " map gb :bnext<CR>
+  " map gB :bprev<CR>
   " }}}
 
   " Open empty buffer {{{
@@ -646,7 +648,7 @@ augroup END
 " Coffee {{{
 augroup filetype_coffee
   autocmd!
-  au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+  au BufNewFile,BufReadPost *.coffee setl foldmethod=indent
 augroup END
 " }}}
 
@@ -719,12 +721,12 @@ augroup END
 augroup filetype_ruby
   autocmd!
 
-  au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby nofoldenable
+  au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby
 
   " Ruby.vim {{{
   let g:ruby_operators = 1
   let g:ruby_space_errors = 1
-  let g:ruby_fold = 0
+  let g:ruby_fold = 1
   " }}}
 augroup END
 " }}}
@@ -808,6 +810,7 @@ augroup fzf_config
   let g:fzf_history_dir = '~/.local/share/fzf-history'
   " Mappings.
   nnoremap <silent> <C-p> :Files<CR>
+  nnoremap <silent> gb :Buffers<CR>
   " Commands.
   command! -bang -nargs=* Rg
         \ call fzf#vim#grep(
@@ -1325,11 +1328,29 @@ augroup vim_lsp
       \ 'javascript': ['javascript-typescript-stdio'],
       \ 'python': ['pyls'],
       \ }
-  let g:LanguageClient_diagnosticsList = 'location'
+  let g:LanguageClient_diagnosticsList = 'Location'
 
   " Keybindings.
   nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
   nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+augroup END
+" }}}
+
+" vim_tex.vim {{{
+augroup vim_tex
+  autocmd!
+  au BufRead,BufNewFile *.tex setl ft=tex
+augroup END
+" }}}
+
+" vim_foldtext.vim {{{
+augroup vim_foldtext
+  autocmd!
+  if has('multi_byte')
+      let g:SpiffyFoldtext_format = '%c{ }  %<%f{ }═╡ %4n lines ╞═%l{ }'
+  else
+      let g:SpiffyFoldtext_format = '%c{ }  %<%f{ }=| %4n lines |=%l{ }'
+  endif
 augroup END
 " }}}
 
@@ -1465,6 +1486,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'moll/vim-node'
 Plug 'kopischke/vim-fetch'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'vim-scripts/Spiffy-Foldtext'
 
 call plug#end()
 " }}}

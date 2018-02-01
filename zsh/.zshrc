@@ -33,6 +33,9 @@ fi
 # Quiet accept line.
 [ -s ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh ] && source ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh
 
+# Spaceship prompt.
+[ -s ~/.zsh/zsh-spaceship-prompt.zsh ] && source ~/.zsh/zsh-spaceship-prompt.zsh
+
 # Autoload functions.
 autoload -U vim
 autoload -U zle-select-branch; zle -N zle-select-branch; bindkey "^B" zle-select-branch
@@ -72,9 +75,6 @@ setopt share_history
 
 # Fix "cd .." autocompletion.
 zstyle ':completion:*' special-dirs true
-
-# Powerline.
-[ -f $PYTHON3_PACKAGES/powerline/bindings/zsh/powerline.zsh ] && source $PYTHON3_PACKAGES/powerline/bindings/zsh/powerline.zsh
 
 # uncomment to finish profiling
 # zprof

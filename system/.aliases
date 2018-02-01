@@ -46,9 +46,13 @@ alias fs='stat -f "%z bytes"'
 alias gfa='git fetch --all'
 alias gcn='git clean'
 
-# dunst
-alias pause_notifications='pkill -u "$USER" -USR1 dunst'
-alias resume_notifications='pkill -u "$USER" -USR2 dunst'
+# notifications - dunst
+alias notifications_disable='pkill -u "$USER" -USR1 dunst'
+alias notifications_enable='pkill -u "$USER" -USR2 dunst'
+
+# autolock
+alias lock_enable='xautolock -enable'
+alias lock_disable='xautolock -disable'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert

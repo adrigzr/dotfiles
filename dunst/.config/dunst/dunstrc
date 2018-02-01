@@ -158,15 +158,15 @@
     # Xev might be helpful to find names for keys.
 
     # Close notification.
-    close = ctrl+masculine
+    close = ctrl+comma
 
     # Close all notifications.
-    close_all = ctrl+shift+masculine
+    close_all = ctrl+shift+comma
 
     # Redisplay last message(s).
     # On the US keyboard layout "grave" is normally above TAB and left
     # of "1".
-    history = ctrl+dead_grave
+    history = ctrl+period
 
     # Context menu.
     context = ctrl+shift+period

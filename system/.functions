@@ -245,4 +245,11 @@ function cheat() {
   curl cheat.sh/$@
 }
 
+# Lang Layout.
+function layout() {
+  setxkbmap $1
+  setxkbmap -option caps:swapescape
+  setxkbmap -option compose:menu
+}
+
 # vim: ft=zsh
