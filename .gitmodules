@@ -1,9 +1,6 @@
 [submodule "submodules/git-friendly"]
 	path = submodules/git-friendly
 	url = https://github.com/jamiew/git-friendly.git
-[submodule "submodules/z"]
-	path = submodules/z
-	url = https://github.com/rupa/z
 [submodule "zsh/.zim"]
 	path = zsh/.zim
 	url = https://github.com/Eriner/zim.git
