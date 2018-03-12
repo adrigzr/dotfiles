@@ -36,11 +36,17 @@ alias   sp
 options head
   this._super(${1:...arguments});
 
-snippet tget
+snippet ctget
 abbr    const key = this.get('key');
-alias   tget
+alias   ctget
 options head
   const ${1:key} = this.get('${2:$1}');
+
+snippet tget
+abbr    this.get('key');
+alias   tget
+options word
+  this.get('${1:key}');
 
 snippet tset
 abbr    this.set('key', key);

@@ -78,7 +78,6 @@ set report=0 " Show all changes
 set ruler " Show the cursor position
 set scrolloff=6 " Start scrolling three lines before horizontal border of window
 set shell=/bin/sh " Use /bin/sh for executing shell commands
-set shiftwidth=2 " The # of spaces for indenting
 set shortmess=atI " Don't show the intro message when starting vim
 set showtabline=2 " Always show tab bar
 set sidescrolloff=3 " Start scrolling three columns before vertical border of window
@@ -101,7 +100,7 @@ set wildignore+=.DS_Store
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
 " set wildignore+=*/.git/logs/*,*/.git/refs/*
 set wildignore+=*/.git/*
-set wildignore+=*/smarty/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
+set wildignore+=*/smarty/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*,*/recs/*
 set wildmenu " Hitting TAB in command mode will show possible completions above command line
 set wildmode=list:longest,full " Complete only until point of ambiguity
 set wildignorecase
@@ -760,6 +759,20 @@ augroup filetype_json
 augroup END
 " }}}
 
+" Bash {{{
+augroup filetype_bash
+  autocmd!
+  au FileType sh setlocal formatprg=shfmt\ -bn\ -ci
+augroup END
+" }}}
+
+" Bats {{{
+augroup filetype_bats
+  autocmd!
+  au BufNewFile,BufReadPost *.bats exe ":ALEDisableBuffer"
+augroup END
+" }}}
+
 " Plugin Configuration -------------------------------------------------------------
 
 " Solarized.vim {{{
@@ -811,6 +824,7 @@ augroup fzf_config
   " Mappings.
   nnoremap <silent> <C-p> :Files<CR>
   nnoremap <silent> gb :Buffers<CR>
+  nnoremap gp :e %:h
   " Commands.
   command! -bang -nargs=* Rg
         \ call fzf#vim#grep(
@@ -888,7 +902,6 @@ augroup ale_config
         \ 'javascript': ['eslint'],
         \ 'python': ['pylint'],
         \ 'rust': ['rls'],
-        \ 'text': ['proselint']
         \ }
 augroup END
 " }}}
@@ -1339,7 +1352,7 @@ augroup END
 " vim_tex.vim {{{
 augroup vim_tex
   autocmd!
-  au BufRead,BufNewFile *.tex setl ft=tex
+  au BufRead,BufNewFile *.tex setlocal filetype=tex formatoptions=t1 wrap spell spelllang=es_es noexpandtab linebreak smartindent synmaxcol=3000
 augroup END
 " }}}
 
@@ -1414,6 +1427,7 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neopairs.vim'
 Plug 'honza/vim-snippets'
+Plug 'jjasghar/snipmate-snippets'
 " Plug 'danro/rename.vim'
 " Plug 'mileszs/ack.vim'
 " Plug 'severin-lemaignan/vim-minimap'
@@ -1459,7 +1473,7 @@ Plug 'mjbrownie/swapit'
 Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 Plug 'lervag/vimtex'
-Plug 'brennier/quicktex'
+" Plug 'brennier/quicktex'
 Plug 'beloglazov/vim-online-thesaurus'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 " Plug 't9md/vim-quickhl'
@@ -1487,6 +1501,8 @@ Plug 'moll/vim-node'
 Plug 'kopischke/vim-fetch'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'vim-scripts/Spiffy-Foldtext'
+Plug 'tmhedberg/matchit'
+Plug 'vim-scripts/bats.vim'
 
 call plug#end()
 " }}}

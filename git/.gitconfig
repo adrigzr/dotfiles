@@ -75,6 +75,7 @@
   editor = vim
   excludesfile = ~/.gitignore
   attributesfile = ~/.gitattributes
+	preloadIndex = true
 
 [credential]
   helper = cache --timeout=3600
