@@ -1,5 +1,5 @@
 print -n '…'
-LBUFFER+="$(select-tag)"
+LBUFFER+="$(select_tag)"
 local ret=$?
 zle redisplay
 typeset -f zle-line-init >/dev/null && zle zle-line-init

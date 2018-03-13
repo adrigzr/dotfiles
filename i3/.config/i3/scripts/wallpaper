@@ -2,5 +2,5 @@
 
 # Set wallpaper.
 # More wallpapers: https://wall.alphacoders.com/by_color.php?hex_color=073642
-feh --recursive --randomize --bg-fill $(find $HOME/Pictures/Wallpapers -type f | sort -r | head -1)
+feh --recursive --randomize --bg-fill "$(find "$HOME/Pictures/Wallpapers" -type f | sort -r | head -1)"
 

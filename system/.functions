@@ -133,7 +133,7 @@ function shortstat() {
 }
 
 # Git checkot fuzzy with fzf.
-function select-branch() {
+function select_branch() {
   local branches=$(git branch --all --sort=-committerdate 2>/dev/null)
 
   if [ -z "$branches" ]; then
@@ -155,7 +155,7 @@ function select-branch() {
 }
 
 # Git checkot fuzzy with fzf.
-function select-tag() {
+function select_tag() {
   local tags=$(git tag --sort=-committerdate 2>/dev/null)
 
   if [ -z "$tags" ]; then
@@ -231,7 +231,7 @@ function vpaste() {
 }
 
 # Find branch for a given commit.
-function git-plumb() {
+function git_plumb() {
   commit=$(git rev-parse $1) # expands hash if needed
   for branch in $(git for-each-ref --format "%(refname)" refs/heads); do
     if git rev-list "$branch" | fgrep -q "$commit"; then

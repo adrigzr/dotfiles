@@ -984,8 +984,10 @@ augroup incsearch_highlight_config
       endif
   endfu
   " Commands.
-  autocmd CmdlineEnter [/\?] call s:toggle_hls(1)
-  autocmd CmdlineLeave [/\?] call s:toggle_hls(0)
+  if has('patch1206')
+      autocmd CmdlineEnter [/\?] call s:toggle_hls(1)
+      autocmd CmdlineLeave [/\?] call s:toggle_hls(0)
+  endif
 augroup END
 " }}}
 
@@ -1416,12 +1418,14 @@ Plug 'editorconfig/editorconfig-vim'
 " Plug 'SirVer/ultisnips'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 " Plug 'Shougo/neocomplete.vim'
-Plug 'autozimu/LanguageClient-neovim', {'tag': 'binary-*-x86_64-unknown-linux-musl'}
-Plug 'Shougo/deoplete.nvim'
-Plug 'roxma/nvim-yarp' " deoplete dependency.
-Plug 'roxma/vim-hug-neovim-rpc' " deoplete dependency
+if v:version > 800
+    Plug 'autozimu/LanguageClient-neovim', {'tag': 'binary-*-x86_64-unknown-linux-musl'}
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp' " deoplete dependency.
+    Plug 'roxma/vim-hug-neovim-rpc' " deoplete dependency
+    Plug 'zchee/deoplete-jedi' " Python Completion (deoplete)
+endif
 " Plug 'wokalski/autocomplete-flow' " Javascript Completion (deoplete)
-Plug 'zchee/deoplete-jedi' " Python Completion (deoplete)
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neco-syntax'
