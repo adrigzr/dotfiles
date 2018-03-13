@@ -1503,7 +1503,9 @@ Plug 'hauleth/sad.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'moll/vim-node'
 Plug 'kopischke/vim-fetch'
-Plug 'ludovicchabant/vim-gutentags'
+if executable('ctags')
+    Plug 'ludovicchabant/vim-gutentags'
+endif
 Plug 'vim-scripts/Spiffy-Foldtext'
 Plug 'tmhedberg/matchit'
 Plug 'vim-scripts/bats.vim'
