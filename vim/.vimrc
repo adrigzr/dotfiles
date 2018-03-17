@@ -705,7 +705,7 @@ augroup END
 augroup filetype_markdown
   autocmd!
   au FileType markdown set wrap
-  let g:markdown_fenced_languages = ['ruby', 'html', 'javascript', 'css', 'erb=eruby.html', 'bash=sh']
+  let g:markdown_fenced_languages = ['ruby', 'html', 'javascript', 'css', 'erb=eruby.html', 'bash=sh', 'handlebars', 'json']
 augroup END
 " }}}
 
