@@ -231,7 +231,7 @@ function vpaste() {
 }
 
 # Find branch for a given commit.
-function git_plumb() {
+function git-plumb() {
   commit=$(git rev-parse $1) # expands hash if needed
   for branch in $(git for-each-ref --format "%(refname)" refs/heads); do
     if git rev-list "$branch" | fgrep -q "$commit"; then
@@ -248,8 +248,22 @@ function cheat() {
 # Lang Layout.
 function layout() {
   setxkbmap $1
-  setxkbmap -option caps:swapescape
+  setxkbmap -option
+  # setxkbmap -option caps:swapescape
+  setxkbmap -option compose:rwin
   setxkbmap -option compose:menu
+}
+
+# Clean memory buffers and caches.
+function memfree() {
+  echo "Previous memory:"
+  free
+  sync
+  sudo swapoff -a
+  sudo swapon -a
+  sudo sh -c 'echo 3 >/proc/sys/vm/drop_caches'
+  echo "Current memory:"
+  free
 }
 
 # vim: ft=zsh

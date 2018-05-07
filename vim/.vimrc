@@ -79,7 +79,7 @@ set ruler " Show the cursor position
 set scrolloff=6 " Start scrolling three lines before horizontal border of window
 set shell=/bin/sh " Use /bin/sh for executing shell commands
 set shortmess=atI " Don't show the intro message when starting vim
-set showtabline=2 " Always show tab bar
+set showtabline=0 " Always show tab bar
 set sidescrolloff=3 " Start scrolling three columns before vertical border of window
 set smartcase " Ignore 'ignorecase' if search patter contains uppercase characters
 set smarttab " At start of line, <Tab> inserts shiftwidth spaces, <Bs> deletes shiftwidth spaces
@@ -116,6 +116,8 @@ set showbreak=⤷ " String to use on breakindent
 set timeout " enable timeout for mapping
 set ttimeout " enable timeout for key codes
 set ttimeoutlen=10 " unnoticeable small value
+set cmdheight=2 " avoid hit-enter prompts
+set regexpengine=1 " improves performance
 " }}}
 
 " }}}
@@ -732,10 +734,10 @@ augroup END
 
 " }}}
 " XML {{{
-augroup filetype_xml
-  autocmd!
-  au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
-augroup END
+" augroup filetype_xml
+"   autocmd!
+"   au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
+" augroup END
 " }}}
 
 " ZSH {{{
@@ -821,6 +823,8 @@ augroup fzf_config
   " Config.
   let g:fzf_layout = { 'up': '~40%' }
   let g:fzf_history_dir = '~/.local/share/fzf-history'
+  " Configure fzf for brew
+  set rtp+=/usr/local/opt/fzf
   " Mappings.
   nnoremap <silent> <C-p> :Files<CR>
   nnoremap <silent> gb :Buffers<CR>
@@ -899,6 +903,7 @@ augroup ale_config
   let g:ale_sign_error = '✗'
   let g:ale_sign_warning = '⚠'
   let g:ale_linters = {
+        \ 'tex': ['chktex'],
         \ 'javascript': ['eslint'],
         \ 'python': ['pylint'],
         \ 'rust': ['rls'],
@@ -1296,6 +1301,7 @@ augroup END
 augroup vim_table_mode
   autocmd!
   let g:table_mode_map_prefix = '<Leader>f'
+  let g:table_mode_corner = '|'
 augroup END
 " }}}
 
@@ -1366,6 +1372,20 @@ augroup vim_foldtext
   else
       let g:SpiffyFoldtext_format = '%c{ }  %<%f{ }=| %4n lines |=%l{ }'
   endif
+augroup END
+" }}}
+
+" vim_netrw.vim {{{
+augroup vim_netrw
+  autocmd!
+  let g:netrw_browsex_viewer = 'xdg-open'
+augroup END
+" }}}
+
+" vim_tsuquyomi.vim {{{
+augroup vim_tsuquyomi
+  autocmd!
+  let g:tsuquyomi_disable_default_mappings = 1
 augroup END
 " }}}
 
@@ -1508,7 +1528,10 @@ if executable('ctags')
 endif
 Plug 'vim-scripts/Spiffy-Foldtext'
 Plug 'tmhedberg/matchit'
-Plug 'vim-scripts/bats.vim'
+Plug 'vim-scripts/bats.vim' " Bash Test Runner
+Plug 'leafgarland/typescript-vim' " Typescript syntax
+Plug 'Quramy/tsuquyomi' " Typescript server
+Plug 'sukima/vim-ember-imports'
 
 call plug#end()
 " }}}

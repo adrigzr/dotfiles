@@ -81,7 +81,7 @@
   helper = cache --timeout=3600
 
 [init]
-  templatedir = ~/.git_template
+	templatedir = ~/.git_template
 
 [fetch]
   prune = true
@@ -125,11 +125,11 @@
   smudge = git-lfs smudge %f
   required = true
 
-[http]
-  proxy = http://localhost:3128
+; [http]
+;   proxy = http://localhost:3128
 
-[https]
-  proxy = http://localhost:3128
+; [https]
+;   proxy = http://localhost:3128
 
 [url "https://github.com"]
   insteadOf = git://github.com

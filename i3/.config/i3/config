@@ -264,6 +264,7 @@ mode "$mode_dock" {
     bindsym 1 exec --no-startup-id autorandr --load laptop && sleep 1, mode "default"
     bindsym 2 exec --no-startup-id autorandr --load home && sleep 1, mode "default"
     bindsym 3 exec --no-startup-id autorandr --load docked && sleep 1, mode "default"
+    bindsym 4 exec --no-startup-id autorandr --load home_inverted && sleep 1, mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -328,9 +329,9 @@ bar {
 }
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-mute 1 0 && pactl set-sink-volume 1 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-mute 1 0 && pactl set-sink-volume 1 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-mute 0 0 && pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-mute 0 0 && pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10 # increase screen brightness

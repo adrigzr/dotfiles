@@ -15,7 +15,7 @@ block = "backlight"
 [[block]]
 block = "custom"
 interval = 1
-command = "$HOME/.config/i3/blocks/volume 1"
+command = "$HOME/.config/i3/blocks/volume 0"
 
 [[block]]
 block = "custom"

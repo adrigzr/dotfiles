@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-# Setup custom keys.
-type caps2esc && caps2esc
-
-# Setup custom properties.
-xset r rate 300 50
-

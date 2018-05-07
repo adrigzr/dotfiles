@@ -11,7 +11,7 @@
 # Use the command 'task show' to see all defaults and overrides
 
 # Files
-data.location=\/home\/adriangonzalez\/Dropbox\/TaskWarrior
+data.location=~\/Dropbox\/TaskWarrior
 
 # Theme
 include /usr/local/share/doc/task/rc/solarized-dark-256.theme
