@@ -38,16 +38,22 @@ fi
 
 # Autoload functions.
 autoload -U vim
-autoload -U zle-select-branch; zle -N zle-select-branch; bindkey "^B" zle-select-branch
-autoload -U zle-select-tag; zle -N zle-select-tag; bindkey "^G" zle-select-tag
+autoload -U zle-select-branch; zle -N zle-select-branch; bindkey '^B' zle-select-branch
+autoload -U zle-select-tag; zle -N zle-select-tag; bindkey '^G' zle-select-tag
 
 # Custom bindings.
-bindkey -s "^P" "fvim\n"
+bindkey -s '^P' "fvim\n"
 
 # Vi mode.
-# bindkey -v
-# autoload edit-command-line; zle -N edit-command-line
-# bindkey -M vicmd v edit-command-line
+function zle-keymap-select { zle reset-prompt ; zle -R }
+zle -N zle-keymap-select
+bindkey -v
+export KEYTIMEOUT=1
+
+# Edit command line on vim.
+autoload edit-command-line; zle -N edit-command-line
+bindkey -M vicmd '^e' edit-command-line
+bindkey '^x^e' edit-command-line
 
 # bind UP and DOWN arrow keys for history search plugin
 zmodload zsh/terminfo
@@ -56,12 +62,15 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
+# History backwards
+bindkey '^r' history-incremental-search-backward
+
 # Fix ctrl+arrow keys.
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;5D" backward-word
+# bindkey "^[[1;5C" forward-word
+# bindkey "^[[1;5D" backward-word
 
 # Bind autosuggestions.
-bindkey "^A" autosuggest-accept
+bindkey '^A' autosuggest-accept
 
 # Config autosuggestions.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=11"

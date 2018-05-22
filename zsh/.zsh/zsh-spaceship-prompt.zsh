@@ -33,19 +33,23 @@ SPACESHIP_PROMPT_ORDER=(
   exec_time     # Execution time
   line_sep      # Line break
   battery       # Battery level and status
-  vi_mode       # Vi-mode indicator
   jobs          # Backgound jobs indicator
   char          # Prompt character
 )
 
 SPACESHIP_RPROMPT_ORDER=(
+  vi_mode       # Vi-mode indicator
   exit_code     # Exit code section
   time          # Time stampts section
 )
 
 SPACESHIP_PROMPT_ADD_NEWLINE=false
 SPACESHIP_TIME_SHOW=true
-SPACESHIP_VI_MODE_SHOW=false
+SPACESHIP_VI_MODE_SHOW=true
+SPACESHIP_VI_MODE_INSERT="I"
+SPACESHIP_VI_MODE_NORMAL="N"
+SPACESHIP_VI_MODE_COLOR=blue
+SPACESHIP_EXIT_CODE_PREFIX="with "
 SPACESHIP_DIR_TRUNC=2
 SPACESHIP_DIR_TRUNC_REPO=false
 SPACESHIP_EXIT_CODE_SHOW=true

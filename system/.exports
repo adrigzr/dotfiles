@@ -8,9 +8,6 @@ export MANPAGER="less -X"
 # Responsive for vi mode on CMD (https://github.com/alexandre/caps2esc).
 export KEYTIMEOUT=1
 
-# Java
-export JAVA_HOME=/usr/lib/jvm/default-java/jre
-
 # Lang
 export LANG="en_US.UTF-8"
 export LC_ALL=${LANG}
@@ -30,7 +27,7 @@ export PATH=${PATH}:$GOPATH:$GOPATH/bin
 export PATH=/usr/local/bin:${PATH}
 
 # Texlive
-export PATH=${PATH}:~/.texlive2017/bin/x86_64-linux
+export PATH=${PATH}:/Library/TeX/texbin
 
 # Home bin
 export PATH=${PATH}:~/bin
@@ -46,7 +43,7 @@ export npm_config_progress=false
 export PATH=${PATH}:./node_modules/.bin
 
 # Fzf
-export FZF_DEFAULT_COMMAND="rg --files --no-ignore --hidden --follow --glob \"!{.git,node_modules,bower_components,tmp}/*\" 2> /dev/null"
+which rg >/dev/null && export FZF_DEFAULT_COMMAND="rg --files --hidden --follow 2> /dev/null"
 export FZF_DEFAULT_OPTS="--reverse --ansi "
 
 # Get python user package path.
