@@ -645,8 +645,6 @@ augroup fzf_config
   " Config.
   let g:fzf_layout = { 'up': '~40%' }
   let g:fzf_history_dir = '~/.local/share/fzf-history'
-  " Configure fzf for brew
-  set runtimepath+=/usr/local/opt/fzf
   " Mappings.
   nnoremap <silent> <C-p> :Files<CR>
   nnoremap <silent> gb :Buffers<CR>
@@ -1026,7 +1024,7 @@ Plug 'junegunn/goyo.vim'
 " Plug 'FelikZ/ctrlp-py-matcher'
 " Plug 'kien/rainbow_parentheses.vim'
 Plug 'mustache/vim-mustache-handlebars'
-Plug 'nathanaelkane/vim-indent-guides'
+" Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'oplatek/Conque-Shell'
 Plug 'pangloss/vim-javascript'
 " Plug 'rking/ag.vim'
@@ -1041,11 +1039,11 @@ Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 " Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 " Plug 'tpope/vim-surround'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-abolish' " Camelcase, snakecase, mixedcase coercion
+Plug 'tpope/vim-sleuth' " Autodetect indentation
 Plug 'tpope/vim-git'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired' " Pair aliases and toggling options
+Plug 'tpope/vim-fugitive' " Git commands
 " Plug 'vim-ruby/vim-ruby'
 " Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }
 " Plug 'vim-scripts/jade.vim',   { 'for': 'jade' }
@@ -1053,7 +1051,7 @@ Plug 'tpope/vim-fugitive'
 " Plug 'wlangstroth/vim-racket'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
-Plug 'editorconfig/editorconfig-vim'
+Plug 'editorconfig/editorconfig-vim', { 'do': 'brew install editorconfig' }
 " Plug 'MarcWeber/vim-addon-mw-utils'
 " Plug 'tomtom/tlib_vim'
 " Plug 'SirVer/ultisnips'
@@ -1061,7 +1059,7 @@ Plug 'Shougo/vimproc.vim', { 'do' : 'make' }
 " Plug 'Shougo/neocomplete.vim'
 if v:version > 800 && has('python3')
     Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-    Plug 'Shougo/deoplete.nvim'
+    Plug 'Shougo/deoplete.nvim' " Surround wrappers
     Plug 'roxma/nvim-yarp' " deoplete dependency.
     Plug 'roxma/vim-hug-neovim-rpc', { 'do': 'pip3 install neovim' } " deoplete dependency
     Plug 'zchee/deoplete-jedi' " Python Completion (deoplete)
@@ -1083,7 +1081,7 @@ Plug 'jjasghar/snipmate-snippets'
 " Plug 'haya14busa/incsearch-easymotion.vim'
 " Plug 'haya14busa/incsearch-fuzzy.vim'
 " Plug 'PeterRincker/vim-argumentative'
-Plug 'Olical/vim-enmasse'
+Plug 'Olical/vim-enmasse' " Quickfix changes
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 Plug 'elzr/vim-json'
 " Plug 'rickhowe/diffchar.vim'
@@ -1103,7 +1101,7 @@ Plug 'joukevandermaas/vim-ember-hbs'
 " Plug 'andrewradev/ember_tools.vim'
 Plug 'alexlafroscia/vim-ember-cli'
 " Plug 'alexbyk/vim-ultisnips-js-testing'
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'vim-airline/vim-airline-themes'
 " Plug 'francoiscabrol/ranger.vim'
 Plug 'dhruvasagar/vim-table-mode'
 " Plug 'terryma/vim-expand-region'
@@ -1114,7 +1112,7 @@ Plug 'mhinz/vim-startify'
 " Plug 'ervandew/supertab'
 Plug 'chrisbra/vim-diff-enhanced'
 Plug 'fcpg/vim-altscreen'
-Plug 'mjbrownie/swapit'
+Plug 'mjbrownie/swapit' " <c-a> increments
 Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 Plug 'lervag/vimtex'
@@ -1124,27 +1122,27 @@ Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 " Plug 't9md/vim-quickhl'
 " Plug 'dsawardekar/portkey'
 " Plug 'dsawardekar/ember.vim'
-Plug 'nixon/vim-vmath'
+" Plug 'nixon/vim-vmath'
 " Plug 'tpope/vim-vinegar'
 Plug 'majutsushi/tagbar'
 " Plug 'matze/vim-move'
 Plug 'euclio/vim-markdown-composer', { 'for' : 'markdown', 'do': function('BuildComposer') }
 Plug 'digitaltoad/vim-pug'
-Plug 'kshenoy/vim-signature'
+Plug 'kshenoy/vim-signature' " Show marks
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'esalter-va/vim-checklist'
+Plug 'junegunn/fzf.vim', { 'do': 'brew install ripgrep' }
+" Plug 'esalter-va/vim-checklist'
 Plug 'cespare/vim-toml'
-Plug 'mboughaba/i3config.vim'
+" Plug 'mboughaba/i3config.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
 Plug 'xtal8/traces.vim'
 Plug 'chrisbra/vim_faq'
-Plug 'hauleth/sad.vim'
-Plug 'machakann/vim-sandwich'
+Plug 'hauleth/sad.vim' " Change and repeat
+Plug 'machakann/vim-sandwich' " Surround wrappers
 Plug 'moll/vim-node'
 Plug 'kopischke/vim-fetch'
-if executable('ctags')
+if v:version >= 800 && executable('ctags')
     Plug 'ludovicchabant/vim-gutentags'
 endif
 Plug 'vim-scripts/Spiffy-Foldtext'

@@ -22,7 +22,7 @@ fi
 [ -s ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Source zim.
-[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ] && source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
+[ -s ~/.zim/init.zsh ] && source ~/.zim/init.zsh
 
 # Alias tips.
 [ -s ~/.zsh/alias-tips/alias-tips.plugin.zsh ] && source ~/.zsh/alias-tips/alias-tips.plugin.zsh
@@ -64,10 +64,6 @@ bindkey -M vicmd 'j' history-substring-search-down
 
 # History backwards
 bindkey '^r' history-incremental-search-backward
-
-# Fix ctrl+arrow keys.
-# bindkey "^[[1;5C" forward-word
-# bindkey "^[[1;5D" backward-word
 
 # Bind autosuggestions.
 bindkey '^A' autosuggest-accept
