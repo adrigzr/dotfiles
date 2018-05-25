@@ -407,6 +407,7 @@ augroup highlight_interesting_word
   hi def InterestingWord5 guifg=#000000 ctermfg=16 guibg=#ff9eb8 ctermbg=211
   hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
   hi def InterestingWord7 guifg=#000000 ctermfg=16 guibg=#ff0000 ctermbg=red
+" }}}
 
   " Transparent background {{{
   hi Normal guibg=NONE ctermbg=NONE
@@ -417,30 +418,6 @@ augroup highlight_interesting_word
   hi NonText ctermfg=10 ctermbg=8 guifg=#000000 guibg=#000000
   hi SpecialKey term=NONE cterm=NONE
   " }}}
-augroup END
-" }}}
-
-" Word Processor Mode {{{
-augroup word_processor_mode
-  autocmd!
-  function! s:goyo_enter() abort
-    setlocal formatoptions=t1
-    setlocal smartindent
-    setlocal spell
-    setlocal spelllang=es_es
-    setlocal noexpandtab
-    setlocal wrap
-    setlocal linebreak
-    setlocal noshowmode
-    setlocal noshowcmd
-    setlocal scrolloff=999
-  endfunction " }}}
-
-  function! s:goyo_leave() abort
-  endfunction
-
-  au User GoyoEnter nested call <SID>goyo_enter()
-  au User GoyoLeave nested call <SID>goyo_leave()
 augroup END
 " }}}
 
@@ -630,15 +607,6 @@ augroup END
 
 " Plugin Configuration -------------------------------------------------------------
 
-" Lightline.vim {{{
-augroup lightline_config
-  autocmd!
-  let g:lightline = {
-    \ 'colorscheme': 'solarized',
-    \ }
-augroup END
-" }}}
-"
 " fzf.vim {{{
 augroup fzf_config
   autocmd!
@@ -672,16 +640,6 @@ augroup ag_config
     " Make the command.
     command! -nargs=+ -complete=dir Find execute 'silent grep!' <q-args> | copen | redraw!
   endif
-augroup END
-" }}}
-
-" EasyAlign.vim {{{
-augroup easy_align_config
-  autocmd!
-  " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
-  vmap <Enter> <Plug>(EasyAlign)
-  " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
-  nmap <Leader>a <Plug>(EasyAlign)
 augroup END
 " }}}
 
@@ -791,24 +749,6 @@ augroup smoothscroll_config
   noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
   noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 4)<CR>
   noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 4)<CR>
-augroup END
-" }}}
-
-" deoplete.vim {{{
-augroup deoplete_config
-  autocmd!
-  " Config.
-  if has('python3')
-    let g:deoplete#enable_at_startup = 1
-    let g:deoplete#enable_yarp = 1
-  endif
-
-	" <C-h>, <BS>: close popup and delete backword char.
-	inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
-	inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
-
-  " <TAB>: completion.
-  inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 augroup END
 " }}}
 
@@ -998,159 +938,4 @@ augroup END
 
 " Plugins -------------------------------------------------------------
 
-" vim_plug.vim {{{
-augroup vim_plug
-  autocmd!
-  if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
-augroup END
-" }}}
-
-" Load plugins {{{
-call plug#begin('~/.vim/plugged')
-
-Plug 'ap/vim-css-color'
-Plug 'itchyny/lightline.vim'
-" Plug 'bling/vim-airline'
-" Plug 'guns/vim-clojure-static'
-" Plug 'joker1007/vim-ruby-heredoc-syntax'
-Plug 'junegunn/vim-easy-align'
-" Plug 'junegunn/vim-emoji'
-Plug 'junegunn/goyo.vim'
-" Plug 'ctrlpvim/ctrlp.vim'
-" Plug 'FelikZ/ctrlp-py-matcher'
-" Plug 'kien/rainbow_parentheses.vim'
-Plug 'mustache/vim-mustache-handlebars'
-" Plug 'nathanaelkane/vim-indent-guides'
-" Plug 'oplatek/Conque-Shell'
-Plug 'pangloss/vim-javascript'
-" Plug 'rking/ag.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-commentary'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-" Plug 'scrooloose/syntastic'
-" Plug 'slim-template/vim-slim', { 'for': 'slim' }
-" Plug 'thoughtbot/vim-rspec'
-" Plug 'tpope/vim-haml'
-Plug 'tpope/vim-markdown', { 'for': 'markdown' }
-" Plug 'tpope/vim-rails'
-Plug 'tpope/vim-repeat'
-" Plug 'tpope/vim-surround'
-Plug 'tpope/vim-abolish' " Camelcase, snakecase, mixedcase coercion
-Plug 'tpope/vim-sleuth' " Autodetect indentation
-Plug 'tpope/vim-git'
-Plug 'tpope/vim-unimpaired' " Pair aliases and toggling options
-Plug 'tpope/vim-fugitive' " Git commands
-" Plug 'vim-ruby/vim-ruby'
-" Plug 'vim-scripts/fish.vim',   { 'for': 'fish' }
-" Plug 'vim-scripts/jade.vim',   { 'for': 'jade' }
-" Plug 'wavded/vim-stylus',      { 'for': 'stylus' }
-" Plug 'wlangstroth/vim-racket'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
-Plug 'editorconfig/editorconfig-vim', { 'do': 'brew install editorconfig' }
-" Plug 'MarcWeber/vim-addon-mw-utils'
-" Plug 'tomtom/tlib_vim'
-" Plug 'SirVer/ultisnips'
-Plug 'Shougo/vimproc.vim', { 'do' : 'make' }
-" Plug 'Shougo/neocomplete.vim'
-if v:version > 800 && has('python3')
-    Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-    Plug 'Shougo/deoplete.nvim' " Surround wrappers
-    Plug 'roxma/nvim-yarp' " deoplete dependency.
-    Plug 'roxma/vim-hug-neovim-rpc', { 'do': 'pip3 install neovim' } " deoplete dependency
-    Plug 'zchee/deoplete-jedi' " Python Completion (deoplete)
-endif
-" Plug 'wokalski/autocomplete-flow' " Javascript Completion (deoplete)
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/neco-syntax'
-Plug 'Shougo/neopairs.vim'
-Plug 'honza/vim-snippets'
-Plug 'jjasghar/snipmate-snippets'
-" Plug 'danro/rename.vim'
-" Plug 'mileszs/ack.vim'
-" Plug 'severin-lemaignan/vim-minimap'
-" Plug 'junegunn/vim-peekaboo'
-" Plug 'justinmk/vim-sneak'
-" Plug 'easymotion/vim-easymotion'
-" Plug 'haya14busa/incsearch.vim'
-" Plug 'haya14busa/incsearch-easymotion.vim'
-" Plug 'haya14busa/incsearch-fuzzy.vim'
-" Plug 'PeterRincker/vim-argumentative'
-Plug 'Olical/vim-enmasse' " Quickfix changes
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
-Plug 'elzr/vim-json'
-" Plug 'rickhowe/diffchar.vim'
-Plug 'tpope/vim-dispatch'
-" Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-Plug 'jiangmiao/auto-pairs'
-" Plug 'kshenoy/vim-signature'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'airblade/vim-gitgutter'
-Plug 'ntpeters/vim-better-whitespace'
-" Plug 'Chiel92/vim-autoformat'
-" Plug 'terryma/vim-multiple-cursors'
-Plug 'w0rp/ale'
-" Plug 'mbbill/undotree'
-Plug 'altercation/vim-colors-solarized'
-Plug 'joukevandermaas/vim-ember-hbs'
-" Plug 'andrewradev/ember_tools.vim'
-Plug 'alexlafroscia/vim-ember-cli'
-" Plug 'alexbyk/vim-ultisnips-js-testing'
-" Plug 'vim-airline/vim-airline-themes'
-" Plug 'francoiscabrol/ranger.vim'
-Plug 'dhruvasagar/vim-table-mode'
-" Plug 'terryma/vim-expand-region'
-" Plug 'jebaum/vim-tmuxify'
-" Plug 'yuttie/comfortable-motion.vim'
-Plug 'terryma/vim-smooth-scroll'
-Plug 'mhinz/vim-startify'
-" Plug 'ervandew/supertab'
-Plug 'chrisbra/vim-diff-enhanced'
-Plug 'fcpg/vim-altscreen'
-Plug 'mjbrownie/swapit' " <c-a> increments
-Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
-Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
-Plug 'lervag/vimtex'
-" Plug 'brennier/quicktex'
-Plug 'beloglazov/vim-online-thesaurus'
-Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
-" Plug 't9md/vim-quickhl'
-" Plug 'dsawardekar/portkey'
-" Plug 'dsawardekar/ember.vim'
-" Plug 'nixon/vim-vmath'
-" Plug 'tpope/vim-vinegar'
-Plug 'majutsushi/tagbar'
-" Plug 'matze/vim-move'
-Plug 'euclio/vim-markdown-composer', { 'for' : 'markdown', 'do': function('BuildComposer') }
-Plug 'digitaltoad/vim-pug'
-Plug 'kshenoy/vim-signature' " Show marks
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim', { 'do': 'brew install ripgrep' }
-" Plug 'esalter-va/vim-checklist'
-Plug 'cespare/vim-toml'
-" Plug 'mboughaba/i3config.vim'
-Plug 'rust-lang/rust.vim'
-Plug 'racer-rust/vim-racer'
-Plug 'xtal8/traces.vim'
-Plug 'chrisbra/vim_faq'
-Plug 'hauleth/sad.vim' " Change and repeat
-Plug 'machakann/vim-sandwich' " Surround wrappers
-Plug 'moll/vim-node'
-Plug 'kopischke/vim-fetch'
-if v:version >= 800 && executable('ctags')
-    Plug 'ludovicchabant/vim-gutentags'
-endif
-Plug 'vim-scripts/Spiffy-Foldtext'
-Plug 'tmhedberg/matchit'
-Plug 'vim-scripts/bats.vim' " Bash Test Runner
-Plug 'leafgarland/typescript-vim' " Typescript syntax
-Plug 'Quramy/tsuquyomi' " Typescript server
-Plug 'sukima/vim-ember-imports'
-
-call plug#end()
-" }}}
+source ~/.vim/config/pluggins.vim

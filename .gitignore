@@ -11,3 +11,4 @@ tmux/.tmux/plugins/tmux-*
 tmux/.tmux/resurrect
 tmux/.tmux/sidebar
 *.log
+.DS_Store
