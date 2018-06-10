@@ -11,7 +11,6 @@ endif
 set t_Co=256 " Terminal colors.
 set background=dark
 set encoding=utf-8 nobomb " BOM often causes trouble
-colorscheme solarized
 scriptencoding utf-8
 " }}}
 
@@ -121,6 +120,7 @@ set clipboard=autoselect
 set listchars=tab:\¦\ ,trail:·,eol:¬,nbsp:_
 set fillchars=fold:-
 set relativenumber " Use relative line numbers. Current line is still in status bar.
+set conceallevel=0 " No conceal
 " }}}
 
 " }}}
@@ -188,12 +188,6 @@ augroup general_config
   " Clear last search (,qs) {{{
   nnoremap <silent> <leader>qs :noh<CR>
   " map <silent> <leader>qs <Esc>:let @/ = ""<CR>
-  " }}}
-
-  " Remap keys for auto-completion menu {{{
-  inoremap <expr> <CR>   pumvisible() ? "\<C-y>" : "\<CR>"
-  inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
-  inoremap <expr> <Up>   pumvisible() ? "\<C-p>" : "\<Up>"
   " }}}
 
   " Paste toggle (,p) {{{
@@ -457,180 +451,10 @@ augroup custom_commands
 augroup END
 " }}}
 
-" Filetypes -------------------------------------------------------------
-
-" C {{{
-augroup filetype_c
-  autocmd!
-  " Highlight Custom C Types {{{
-  autocmd BufRead,BufNewFile *.[ch] let fname = expand('<afile>:p:h') . '/types.vim'
-  autocmd BufRead,BufNewFile *.[ch] if filereadable(fname)
-  autocmd BufRead,BufNewFile *.[ch]   exe 'so ' . fname
-  autocmd BufRead,BufNewFile *.[ch] endif
-  " }}}
-augroup END
-" }}}
-
-" Clojure {{{
-augroup filetype_clojure
-  autocmd!
-  let g:vimclojure#ParenRainbow = 1 " Enable rainbow parens
-  let g:vimclojure#DynamicHighlighting = 1 " Dynamic highlighting
-  let g:vimclojure#FuzzyIndent = 1 " Names beginning in 'def' or 'with' to be indented as if they were included in the 'lispwords' option
-augroup END
-" }}}
-
-" Coffee {{{
-augroup filetype_coffee
-  autocmd!
-  au BufNewFile,BufReadPost *.coffee setl foldmethod=indent
-augroup END
-" }}}
-
-" Fish {{{
-augroup filetype_fish
-  autocmd!
-  au BufRead,BufNewFile *.fish set ft=fish
-augroup END
-" }}}
-
-" Handlebars {{{
-augroup filetype_hbs
-  autocmd!
-  au BufRead,BufNewFile *.handlebars,*.hbs.erb,*.handlebars.erb setl ft=mustache syntax=mustache
-augroup END
-" }}}
-
-" Jade {{{
-augroup filetype_jade
-  autocmd!
-  au BufRead,BufNewFile *.jade set ft=jade syntax=jade
-augroup END
-" }}}
-
-" JavaScript {{{
-augroup filetype_javascript
-  autocmd!
-  " General conceal settings. Will keep things concealed
-  set conceallevel=0
-  "set concealcursor=nc
-
-  " even when your cursor is on top of them.
-  let g:javascript_conceal_function             = 'ƒ'
-  let g:javascript_conceal_null                 = 'ø'
-  let g:javascript_conceal_this                 = '@'
-  let g:javascript_conceal_return               = '⇚'
-  let g:javascript_conceal_undefined            = '¿'
-  let g:javascript_conceal_NaN                  = 'ℕ'
-  let g:javascript_conceal_prototype            = '¶'
-  let g:javascript_conceal_static               = '•'
-  let g:javascript_conceal_super                = 'Ω'
-  let g:javascript_conceal_arrow_function       = '⇒'
-  let g:javascript_conceal_noarg_arrow_function = '🞅'
-  let g:javascript_conceal_underscore_arrow_function = '🞅'
-
-  " Enable plugins.
-  let g:javascript_plugin_jsdoc = 1
-augroup END
-" }}}
-
-" Markdown {{{
-augroup filetype_markdown
-  autocmd!
-  au FileType markdown set wrap
-  let g:markdown_fenced_languages = ['ruby', 'html', 'javascript', 'css', 'erb=eruby.html', 'bash=sh', 'handlebars', 'json']
-augroup END
-" }}}
-
-" Nu {{{
-augroup filetype_nu
-  autocmd!
-  au BufNewFile,BufRead *.nu,*.nujson,Nukefile setf nu
-augroup END
-" }}}
-
-" Ruby {{{
-augroup filetype_ruby
-  autocmd!
-
-  au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby
-
-  " Ruby.vim {{{
-  let g:ruby_operators = 1
-  let g:ruby_space_errors = 1
-  let g:ruby_fold = 1
-  " }}}
-augroup END
-" }}}
-
-" XML {{{
-" augroup filetype_xml
-"   autocmd!
-"   au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
-" augroup END
-" }}}
-
-" ZSH {{{
-augroup filetype_zsh
-  autocmd!
-  au BufRead,BufNewFile .zsh_rc,.functions,.commonrc set ft=zsh
-augroup END
-" }}}
-
-" CSV {{{
-augroup filetype_csv
-  autocmd!
-  au BufRead,BufNewFile *.csv,*.dat set ft=csv
-augroup END
-" }}}
-
-" JSON {{{
-augroup filetype_json
-  autocmd!
-  au FileType json setlocal equalprg=python\ -m\ json.tool
-augroup END
-" }}}
-
-" Bash {{{
-augroup filetype_bash
-  autocmd!
-  au FileType sh setlocal formatprg=shfmt\ -bn\ -ci
-augroup END
-" }}}
-
-" Bats {{{
-augroup filetype_bats
-  autocmd!
-  au BufNewFile,BufReadPost *.bats exe ":ALEDisableBuffer"
-augroup END
-" }}}
-
 " Plugin Configuration -------------------------------------------------------------
 
-" fzf.vim {{{
-augroup fzf_config
-  autocmd!
-  " Config.
-  let g:fzf_layout = { 'up': '~40%' }
-  let g:fzf_history_dir = '~/.local/share/fzf-history'
-  " Mappings.
-  nnoremap <silent> <C-p> :Files<CR>
-  nnoremap <silent> gb :Buffers<CR>
-  nnoremap gp :e %:h
-  " Commands.
-  command! -bang -nargs=* Rg
-        \ call fzf#vim#grep(
-        \   'rg --hidden --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-        \   <bang>0 ? fzf#vim#with_preview('up:60%')
-        \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-        \   <bang>0)
-  command! -bang -nargs=? -complete=dir Files
-        \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-augroup END
-" }}}
-
-" Silver Searcher {{{
-augroup ag_config
+" Find {{{
+augroup find_config
   autocmd!
   if executable('rg')
     " Note we extract the column as well as the file and line number
@@ -643,35 +467,7 @@ augroup ag_config
 augroup END
 " }}}
 
-" Notes.vim {{{
-augroup notes_config
-  autocmd!
-  let g:notes_directories = ['~/Dropbox/Notes']
-augroup END
-" }}}
-
-" Ale.vim {{{
-augroup ale_config
-  autocmd!
-  let g:ale_sign_error = '✗'
-  let g:ale_sign_warning = '⚠'
-  let g:ale_linters = {
-        \ 'tex': ['chktex'],
-        \ 'javascript': ['eslint'],
-        \ 'python': ['pylint'],
-        \ 'rust': ['rls'],
-        \ }
-augroup END
-" }}}
-
-" EditorConfig.vim {{{
-augroup editorconfig_config
-  autocmd!
-  let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-augroup END
-" }}}
-
-" incsearch_highlight.vim {{{
+" IncSearch Highlight {{{
 augroup incsearch_highlight_config
   autocmd!
   " Function.
@@ -694,234 +490,6 @@ augroup incsearch_highlight_config
 augroup END
 " }}}
 
-" Fugitive.vim {{{
-augroup fugitive_config
-  autocmd!
-  nnoremap <leader>gs :Gstatus<CR>
-  nnoremap <leader>gc :Dispatch git commit<CR>
-  nnoremap <leader>ga :Gcommit --amend<CR>
-  nnoremap <leader>gd :Gdiff<CR>
-  nnoremap <leader>ge :Gedit<CR>
-  nnoremap <leader>gr :Gread<CR>
-  nnoremap <leader>gw :Gwrite<CR><CR>
-  nnoremap <leader>gl :silent! Glog<CR>
-  nnoremap <leader>gp :Ggrep<Space>
-  nnoremap <leader>gm :Gmove<Space>
-  nnoremap <leader>gb :Git branch<Space>
-  nnoremap <leader>go :Git checkout<Space>
-  nnoremap <leader>gps :Dispatch git push<CR>
-  nnoremap <leader>gpl :Dispatch git pull<CR>
-augroup END
-" }}}
-
-" Emoji.vim {{{
-augroup emoji_config
-  autocmd!
-  au FileType markdown setlocal omnifunc=emoji#complete
-augroup END
-" }}}
-
-" BetterWhitespace.vim {{{
-augroup betterwhitespace_config
-  autocmd!
-  autocmd BufWritePre * StripWhitespace
-augroup END
-" }}}
-
-" Undotree.vim {{{
-augroup undotree_config
-  autocmd!
-  noremap <silent> <F6> :UndotreeToggle<CR>
-augroup END
-" }}}
-
-" AutoPairs.vim {{{
-augroup autopairs_config
-  autocmd!
-  let g:AutoPairsMultilineClose=0
-augroup END
-" }}}
-
-" SmoothScroll.vim {{{
-augroup smoothscroll_config
-  autocmd!
-  noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
-  noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
-  noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 4)<CR>
-  noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 4)<CR>
-augroup END
-" }}}
-
-" neosnippet.vim {{{
-augroup neosnippet_config
-  autocmd!
-  " Plugin key-mappings.
-  " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-  imap <C-s>     <Plug>(neosnippet_expand_or_jump)
-  smap <C-s>     <Plug>(neosnippet_expand_or_jump)
-  xmap <C-s>     <Plug>(neosnippet_expand_target)
-
-  " SuperTab like snippets behavior.
-  " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-  imap <C-s>     <Plug>(neosnippet_expand_or_jump)
-  "imap <expr><TAB>
-  " \ pumvisible() ? "\<C-n>" :
-  " \ neosnippet#expandable_or_jumpable() ?
-  " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-  " For conceal markers.
-  " if has('conceal')
-  "   set conceallevel=2 concealcursor=niv
-  " endif
-
-  " Enable snipMate compatibility feature.
-  let g:neosnippet#enable_snipmate_compatibility = 1
-  let g:neosnippet#enable_completed_snippet = 1
-
-  " Tell Neosnippet about the other snippets
-  let g:neosnippet#snippets_directory=[
-        \ '~/.vim/plugged/vim-snippets/snippets',
-        \ '~/.vim/plugged/neosnippet-snippets/neosnippets',
-        \ '~/.vim/snippets',
-        \ '~/.vim/my-snippets',
-        \ ]
-augroup END
-" }}}
-
-" vim_diff_enhanced.vim {{{
-augroup vim_diff_enhanced_config
-  autocmd!
-  " started In Diff-Mode set diffexpr (plugin not loaded yet)
-  if &diff
-    let &diffexpr='EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
-  endif
-augroup END
-" }}}
-
-" vim_vmath.vim {{{
-augroup vim_vmath_config
-  autocmd!
-  vmap <expr>  ++  VMATH_YankAndAnalyse()
-  nmap         ++  vip++
-augroup END
-" }}}
-
-" vim_markdown_composer {{{
-augroup vim_markdown_composer
-  autocmd!
-  " Installation function.
-  function! BuildComposer(info) abort
-    if a:info.status !=# 'unchanged' || a:info.force
-      if has('nvim')
-        !cargo build --release
-      else
-        !cargo build --release --no-default-features --features json-rpc
-      endif
-    endif
-  endfunction
-
-  " Options.
-  let g:markdown_composer_refresh_rate = 250
-  let g:markdown_composer_autostart = 0
-augroup END
-" }}}
-
-" vim_move.vim {{{
-augroup vim_move
-  autocmd!
-  " Disable key bindings.
-  let g:move_map_keys = 0
-augroup END
-" }}}
-
-" vim_startify.vim {{{
-augroup vim_startify
-  autocmd!
-  let g:startify_change_to_dir = 0
-augroup END
-" }}}
-
-" vim_table_mode.vim {{{
-augroup vim_table_mode
-  autocmd!
-  let g:table_mode_map_prefix = '<Leader>f'
-  let g:table_mode_corner = '|'
-augroup END
-" }}}
-
-" vim_dispatch.vim {{{
-augroup vim_dispatch
-  autocmd!
-  nnoremap <F9> :Dispatch<CR>
-augroup END
-" }}}
-
-" vim_checklist.vim {{{
-augroup vim_checklist
-  autocmd!
-  nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
-  nnoremap <leader>ce :ChecklistEnableCheckbox<cr>
-  nnoremap <leader>cd :ChecklistDisableCheckbox<cr>
-  vnoremap <leader>ct :ChecklistToggleCheckbox<cr>
-  vnoremap <leader>ce :ChecklistEnableCheckbox<cr>
-  vnoremap <leader>cd :ChecklistDisableCheckbox<cr>
-  let g:checklist_filetypes = ['notes', 'markdown', 'text']
-augroup END
-" }}}
-
-" vim_sad.vim {{{
-augroup vim_sad
-  autocmd!
-  nmap sn <Plug>(sad-change-forward)
-  nmap sp <Plug>(sad-change-backward)
-augroup END
-" }}}
-
-" vim_racer.vim {{{
-augroup vim_racer
-  autocmd!
-  let g:racer_cmd = '$HOME/.cargo/bin/racer'
-  let g:racer_experimental_completer = 1
-augroup END
-" }}}
-
-" vim_lsp.vim {{{
-augroup vim_lsp
-  autocmd!
-  " Config.
-  let g:LanguageClient_serverCommands = {
-      \ 'javascript': ['javascript-typescript-stdio'],
-      \ 'python': ['pyls'],
-      \ }
-  let g:LanguageClient_diagnosticsList = 'Location'
-
-  " Keybindings.
-  nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-  nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-augroup END
-" }}}
-
-" vim_tex.vim {{{
-augroup vim_tex
-  autocmd!
-  au BufRead,BufNewFile *.tex setlocal filetype=tex formatoptions=t1 wrap spell spelllang=es_es noexpandtab linebreak smartindent synmaxcol=3000 display=lastline
-  let g:vimtex_quickfix_open_on_warning=0
-augroup END
-" }}}
-
-" vim_foldtext.vim {{{
-augroup vim_foldtext
-  autocmd!
-  if has('multi_byte')
-      let g:SpiffyFoldtext_format = '%c{ }  %<%f{ }═╡ %4n lines ╞═%l{ }'
-  else
-      let g:SpiffyFoldtext_format = '%c{ }  %<%f{ }=| %4n lines |=%l{ }'
-  endif
-augroup END
-" }}}
-
 " vim_netrw.vim {{{
 augroup vim_netrw
   autocmd!
@@ -929,13 +497,15 @@ augroup vim_netrw
 augroup END
 " }}}
 
-" vim_tsuquyomi.vim {{{
-augroup vim_tsuquyomi
-  autocmd!
-  let g:tsuquyomi_disable_default_mappings = 1
-augroup END
+" Syntax {{{
+source ~/.vim/config/syntax.vim
 " }}}
 
-" Plugins -------------------------------------------------------------
-
+" Load Plugins {{{
 source ~/.vim/config/pluggins.vim
+" }}}
+
+" Color schemes {{{
+colorscheme solarized
+" }}}
+
