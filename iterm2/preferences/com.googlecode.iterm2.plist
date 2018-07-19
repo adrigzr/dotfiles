@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AboutToPasteTabsWithCancel</key>
+	<true/>
+	<key>AboutToPasteTabsWithCancel_selection</key>
+	<integer>0</integer>
 	<key>AppleAntiAliasingThreshold</key>
 	<integer>1</integer>
 	<key>AppleScrollAnimationEnabled</key>
@@ -61,15 +65,15 @@
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>501 247 445 77 0 0 1680 1050 </string>
 	<key>NSWindow Frame ProfilesPanel</key>
-	<string>346 675 735 382 0 0 1920 1057 </string>
+	<string>346 518 735 382 0 0 1440 900 </string>
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 126 606 469 0 0 1680 1050 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>298 323 918 512 0 0 1920 1080 </string>
+	<string>171 206 1016 512 0 0 1440 900 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>141 45 563 769 0 0 1920 1057 </string>
+	<string>141 423 570 377 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>956 308 570 377 0 0 1920 1080 </string>
+	<string>786 295 570 377 0 0 1680 1050 </string>
 	<key>NeverWarnAboutShortLivedSessions_31882F14-534A-41BE-A56C-64BD64030D05</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_31882F14-534A-41BE-A56C-64BD64030D05_selection</key>
@@ -1357,8 +1361,12 @@
 			<array/>
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
+			<key>Thin Strokes</key>
+			<integer>4</integer>
 			<key>Transparency</key>
 			<real>0.0</real>
+			<key>Unicode Normalization</key>
+			<integer>0</integer>
 			<key>Unicode Version</key>
 			<integer>8</integer>
 			<key>Unlimited Scrollback</key>
@@ -2110,6 +2118,8 @@
 	<false/>
 	<key>OpenNoWindowsAtStartup</key>
 	<false/>
+	<key>PMPrintingExpandedStateForPrint2</key>
+	<false/>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>
@@ -2145,6 +2155,8 @@
 	</dict>
 	<key>PrefsCustomFolder</key>
 	<string>/Users/adrian-gonzalez/dotfiles/iterm2/preferences</string>
+	<key>Print In Black And White</key>
+	<true/>
 	<key>PromptOnQuit</key>
 	<false/>
 	<key>QuitWhenAllWindowsClosed</key>
@@ -2158,7 +2170,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2018-05-25T09:51:38Z</date>
+	<date>2018-06-10T15:00:27Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>ShowFullScreenTabBar</key>

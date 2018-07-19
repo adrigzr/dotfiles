@@ -32,6 +32,7 @@ let g:lightline = {
       \        [ 'lineinfo' ],
       \		     [ 'percent' ],
       \		     [ 'fileformat', 'fileencoding', 'filetype' ],
+      \        [ 'gutentags' ],
       \   ]
       \ },
       \ 'component_function': {
@@ -40,7 +41,8 @@ let g:lightline = {
       \ },
       \ 'component_expand': {
       \	  'alewarning': 'LightlineAleWarning',
-      \	  'aleerror': 'LightlineAleError'
+      \	  'aleerror': 'LightlineAleError',
+      \   'gutentags': 'LightlineGutentags'
       \ },
       \ 'component_type': {
       \   'alewarning': 'warning',
@@ -69,13 +71,20 @@ function! LightlineAleError() abort " {{{
   let l:count = LightlineAleCount()
   return l:count.error > 0 ? l:count.error : ''
 endfunction " }}}
-augroup lightline_aleinfo " {{{
+function! LightlineGutentags() abort " {{{
+  return gutentags#statusline()
+endfunction " }}}
+augroup lightline_update " {{{
   autocmd!
   autocmd User ALELintPOST call lightline#update()
+  autocmd User GutentagsUpdating call lightline#update()
+  autocmd User GutentagsUpdated call lightline#update()
 augroup END " }}}
 " }}}
 
 " Text {{{
+Plug 'inkarkat/vim-SpellCheck' " Populate spell check to quickfix.
+Plug 'inkarkat/vim-ingo-library' " Dependency for vim-SpellCheck.
 Plug 'junegunn/goyo.vim'
 function! s:goyo_enter() abort " {{{
   setlocal formatoptions=t1
@@ -270,7 +279,7 @@ endif
 
 " Parens, Brackets, etc... {{{
 Plug 'jiangmiao/auto-pairs'
-let g:AutoPairsFlyMode = 1
+let g:AutoPairsFlyMode = 0
 let g:AutoPairsMultilineClose = 0
 let g:AutoPairsShortcutBackInsert = '<c-b>'
 Plug 'machakann/vim-sandwich' " Surround wrappers
@@ -313,6 +322,7 @@ let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ 'python': ['pylint'],
       \ 'rust': ['rls'],
+      \ 'zsh': ['shellcheck'],
       \ }
 " }}}
 
@@ -374,7 +384,6 @@ endfunction " }}}
 augroup vim_tex " {{{
   autocmd!
   au BufRead,BufNewFile *.tex setfiletype tex
-  au FileType tex setlocal formatoptions=t1 wrap spell spelllang=es_es noexpandtab linebreak smartindent synmaxcol=3000 display=lastline
 augroup END " }}}
 " }}}
 
@@ -384,7 +393,7 @@ Plug 'beloglazov/vim-online-thesaurus'
 
 " Tags {{{
 Plug 'majutsushi/tagbar'
-if v:version >= 800 && system('ctags -v >/dev/null') && v:shell_error
+if v:version >= 800
     Plug 'ludovicchabant/vim-gutentags'
 endif
 " }}}
@@ -395,7 +404,7 @@ let g:table_mode_map_prefix = '<Leader>f'
 let g:table_mode_corner = '|'
 Plug 'JamshedVesuna/vim-markdown-preview' " Compilation
 let g:vim_markdown_preview_hotkey = '<leader>m'
-let g:vim_markdown_preview_github = 1
+let vim_markdown_preview_pandoc=1
 " }}}
 
 " Marks {{{
@@ -414,6 +423,7 @@ let g:racer_experimental_completer = 1
 Plug 'Quramy/tsuquyomi' " Typescript server
 " let g:tsuquyomi_disable_default_mappings = 1
 Plug 'sukima/vim-ember-imports' " Ember Imports
+Plug 'wannesm/wmgraphviz.vim' " Graphviz plugin
 " }}}
 
 call plug#end()

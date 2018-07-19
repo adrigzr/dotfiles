@@ -39,7 +39,7 @@ set foldlevelstart=-1 " Start fold level
 set foldmethod=syntax " Syntax are used to specify folds
 set foldminlines=0 " Allow folding single lines
 set foldnestmax=10 " Set max fold nesting level
-set foldclose=all " Close as you walk out a fold
+set foldclose="" Close as you walk out a fold
 " set nofoldenable " Disable fold.
 set formatoptions=
 set formatoptions+=c " Format comments
@@ -448,6 +448,31 @@ augroup custom_commands
 
   " Copy current file path.
   command! -nargs=0 CopyPath execute "let @+ = expand('%')"
+augroup END
+" }}}
+
+" Swap Cursors on mode change {{{
+if exists('$TMUX')
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+" }}}
+
+" Relative numbers {{{
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+" }}}
+
+" Text configuration {{{
+augroup text_config
+  autocmd!
+  au FileType tex,markdown setlocal formatoptions=t1 wrap spell spelllang=es_es noexpandtab linebreak smartindent synmaxcol=3000 display=lastline
 augroup END
 " }}}
 

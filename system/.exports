@@ -14,7 +14,7 @@ export LANG="en_US.UTF-8"
 export LC_ALL=${LANG}
 
 # Android
-export ANDROID_HOME=$HOME/Library/Android
+export ANDROID_HOME=$HOME/Library/Android/sdk
 export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 export PATH=${PATH}:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools
 
@@ -43,6 +43,9 @@ export XDG_CONFIG_HOME=$HOME/.config
 export npm_config_progress=false
 export PATH=${PATH}:./node_modules/.bin
 
+# Notes
+export NOTE_DIR=$HOME/Dropbox/Texts
+
 # Fzf
 which rg >/dev/null && export FZF_DEFAULT_COMMAND="rg --files --hidden --follow 2> /dev/null"
 export FZF_DEFAULT_OPTS="--reverse --ansi "
@@ -54,6 +57,9 @@ fi
 if which python3 >/dev/null; then
 PYTHON3_PACKAGES=$(python3 -m site --user-site)
 fi
+
+# Ruby
+which gem >/dev/null && export PATH=$(gem environment gemdir)/bin:${PATH}
 
 # Else, get python system package path.
 [ ! -s $PYTHON_PACKAGES ] && PYTHON_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
