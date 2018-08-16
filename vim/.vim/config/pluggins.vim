@@ -109,6 +109,10 @@ augroup goyo_vim " {{{
 augroup END " }}}
 " }}}
 
+" Search {{{
+Plug 'wsdjeg/FlyGrep.vim'
+" }}}
+
 " Syntax {{{
 Plug 'sheerun/vim-polyglot'
 let g:polyglot_disabled = ['markdown', 'latex']
@@ -324,6 +328,10 @@ let g:ale_linters = {
       \ 'rust': ['rls'],
       \ 'zsh': ['shellcheck'],
       \ }
+" }}}
+
+" Scratchpad {{{
+Plug 'metakirby5/codi.vim'
 " }}}
 
 " Navigation {{{

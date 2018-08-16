@@ -41,17 +41,17 @@ draw_bold_text_with_bright_colors: true
 font:
   # The normal (roman) font face to use.
   normal:
-    family: Droid Sans Mono for Powerline
-    style: Regular
+    family: Hack Nerd Font Mono
+    # style: Regular
 
   # The bold font face
   bold:
-    family: Droid Sans Mono for Powerline
+    family: Hack Nerd Font Mono
     # style: Bold
 
   # The italic font face
   italic:
-    family: Droid Sans Mono for Powerline
+    family: Hack Nerd Font Mono
     # style: Italic
 
   # Point size of the font
@@ -193,6 +193,9 @@ hide_cursor_when_typing: false
 # - Beam
 cursor_style: Block
 
+# Whether the cursor should be a hollow block on window focus loss
+unfocused_hollow_cursor: true
+
 # Live config reload (changes require restart)
 live_config_reload: true
 
@@ -245,6 +248,9 @@ key_bindings:
   - { key: Space,    mods: Control, chars: "\x00"                        }
   - { key: V,        mods: Command, action: Paste                        }
   - { key: C,        mods: Command, action: Copy                         }
+  - { key: N,        mods: Command, command: { program: "open", args: ["-nb", "io.alacritty"] } }
+  - { key: Paste,                   action: Paste                        }
+  - { key: Copy,                    action: Copy                         }
   - { key: Q,        mods: Command, action: Quit                         }
   - { key: W,        mods: Command, action: Quit                         }
   - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
