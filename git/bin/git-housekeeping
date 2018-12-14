@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+read -p "Enter repository HEAD [origin/develop]:" -r head
+if [[ -z $head ]]; then
+    head="origin/develop"
+fi
+
+echo "Local branches already merged:"
+branches=$(git branch --merged $head); echo "$branches"
+
+read -p "Do you want to delete? [yN]" -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    for branch in $branches; do
+        git branch -d "$branch"
+    done
+fi
+
+echo "Pruning references to remote branches..."
+git remote prune origin
+
+echo "Pruning repository loose objects..."
+git gc --aggressive
+

@@ -1,6 +1,6 @@
 tags*
 .ropeproject
-vim/.vim/autoload/*.vim
+vim/.vim/autoload/*.old
 vim/.vim/swaps
 vim/.vim/undo
 vim/.vim/viminfo

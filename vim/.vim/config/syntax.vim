@@ -62,3 +62,8 @@ augroup filetype_bats " {{{
   autocmd!
   au BufNewFile,BufReadPost *.bats exe ":ALEDisableBuffer"
 augroup END " }}}
+
+augroup filetype_dot " {{{
+  autocmd!
+  au FileType dot setlocal makeprg=dot\ -Tpng\ \"%:p\"\ -o\ \"%:p:r.png\"
+augroup END " }}}

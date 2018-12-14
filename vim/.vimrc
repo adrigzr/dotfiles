@@ -30,6 +30,9 @@ set backspace=indent,eol,start
 set cursorline " Highlight current line
 set diffopt=filler " Add vertical spaces to keep right and left aligned
 set diffopt+=iwhite " Ignore whitespace changes (focus on code changes)
+set diffopt+=internal " Use the internal diff library
+set diffopt+=indent-heuristic " Use the indent heuristic
+set diffopt+=algorithm:patience " Use patience diff algorithm
 set esckeys " Allow cursor keys in insert mode
 " set expandtab " Expand tabs to spaces
 set foldenable " Enable folding
@@ -116,11 +119,12 @@ set timeout " enable timeout for mapping
 set ttimeout " enable timeout for key codes
 set ttimeoutlen=10 " unnoticeable small value
 set cmdheight=1 " avoid hit-enter prompts
-set clipboard=autoselect
+" set clipboard=autoselect
 set listchars=tab:\¦\ ,trail:·,eol:¬,nbsp:_
 set fillchars=fold:-
 set relativenumber " Use relative line numbers. Current line is still in status bar.
 set conceallevel=0 " No conceal
+set timeoutlen=1000
 " }}}
 
 " }}}
@@ -130,7 +134,6 @@ set conceallevel=0 " No conceal
 " FastEscape {{{
 " Speed up transition from modes
 if ! has('gui_running')
-  set timeoutlen=1000
   augroup FastEscape
     autocmd!
     au InsertEnter * set timeoutlen=0
@@ -139,115 +142,8 @@ if ! has('gui_running')
 endif
 " }}}
 
-" General {{{
-augroup general_config
-  autocmd!
-
-  " Clear highlighting on escape in normal mode {{{
-  " nnoremap <esc> :noh<return><esc>
-  " nnoremap <esc>^[ <esc>^[
-  " }}}
-
-  " Disable arrow keys {{{
-  nnoremap <Up> <NOP>
-  nnoremap <Down> <NOP>
-  nnoremap <Left> <NOP>
-  nnoremap <Right> <NOP>
-  " }}}
-
-  " Speed up viewport scrolling {{{
-  nnoremap <C-e> 3<C-e>
-  nnoremap <C-y> 3<C-y>
-  " }}}
-
-  " Sudo write (,W) {{{
-  noremap <leader>w :w<CR>
-  noremap <leader>W :w !sudo tee %<CR>
-  " }}}
-
-  " Get output of shell commands (:R echo foo) {{{
-  command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
-  " }}}
-
-  " Remap :W to :w {{{
-  command! W w
-  " }}}
-
-  " Better mark jumping (line + col) {{{
-  nnoremap ' `
-  " }}}
-
-  " Toggle show tabs and trailing spaces (,c) {{{
-  nnoremap <silent> <leader>v :set nolist!<CR>
-  " }}}
-
-  " Disable space behaviour {{{
-  nnoremap <space> <NOP>
-  " }}}
-
-  " Clear last search (,qs) {{{
-  nnoremap <silent> <leader>qs :noh<CR>
-  " map <silent> <leader>qs <Esc>:let @/ = ""<CR>
-  " }}}
-
-  " Paste toggle (,p) {{{
-  nnoremap <leader>p :set invpaste paste?<CR>
-  " }}}
-
-  " Yank from cursor to end of line {{{
-  nnoremap Y y$
-  " }}}
-
-  " Insert newline {{{
-  nnoremap <leader><Enter> o<ESC>
-  " }}}
-
-  " Search and replace word under cursor (,*) {{{
-  nnoremap <leader>* :%s/\<<C-r><C-w>\>//<Left>
-  vnoremap <leader>* "hy:%s/\V<C-r>h//<left>
-  " }}}
-
-  " Join lines and restore cursor location (J) {{{
-  nnoremap J mjJg`j:delmarks j<CR>
-  " }}}
-
-	" Remap logical movement to visual. {{{
-	nnoremap <expr> j v:count ? 'j' : 'gj'
-	nnoremap <expr> k v:count ? 'k' : 'gk'
-	nnoremap gj j
-	nnoremap gk k
-	" }}}
-
-  " Fix page up and down {{{
-  map <PageUp> <C-U>
-  map <PageDown> <C-D>
-  imap <PageUp> <C-O><C-U>
-  imap <PageDown> <C-O><C-D>
-  " }}}
-
-  " Vimdiff {{{
-  map <leader>dn ]c
-  map <leader>dp [c
-  map <leader>dr :diffget RE<CR>
-  map <leader>db :diffget BA<CR>
-  map <leader>dl :diffget LO<CR>
-  " }}}
-
-  " Search current selection {{{
-  vnoremap // y/\V<C-R>"<CR>N
-  vnoremap ?? y?\V<C-R>"<CR>
-  " }}}
-
-  " Move line (C-Up) (C-Down) {{{
-  " How to find the code: Type ":<C-v><key map>" and copy copy without "^["
-  nnoremap [1;5A mz:m-2<CR>`z==
-  nnoremap [1;5B mz:m+<CR>`z==
-  inoremap [1;5A <Esc>:m-2<CR>==gi
-  inoremap [1;5B <Esc>:m+<CR>==gi
-  vnoremap [1;5A :'<,'>m'<-2<CR>gv=`>my`<mzgv`yo`z
-  vnoremap [1;5B :'<,'>m'>+<CR>gv=`<my`>mzgv`yo`z
-  " }}}
-augroup END
+" Mappings {{{
+source ~/.vim/config/mappings.vim
 " }}}
 
 " Create directory on save {{{
@@ -265,54 +161,6 @@ endif
 augroup BWCCreateDir
     autocmd!
     au BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
-augroup END
-" }}}
-
-" NERDTree {{{
-augroup nerd_tree
-  autocmd!
-  nnoremap <leader>t :NERDTreeFind<CR>
-augroup END
-" }}}
-
-" Buffers {{{
-augroup buffer_control
-  autocmd!
-  nnoremap <leader>bs :Buffers<CR>
-  nnoremap <leader>bt :enew<CR>
-  nnoremap <leader>bd :lclose<bar>b#<bar>bd #<CR>
-  nnoremap <leader>bD :bufdo bd<CR>
-  nnoremap <leader><leader> <c-^>
-
-  " Jump to buffer number (<N>gb) {{{
-  let g:c = 1
-  while g:c <= 99
-    execute 'nnoremap ' . g:c . 'gb :' . g:c . 'b\<CR>'
-    let g:c += 1
-  endwhile
-  " }}}
-
-  " Quickfix window (,qq) (,qo) (,qj) (,qk) {{{
-  nnoremap <leader>qq :cclose<CR>
-  nnoremap <leader>qo :copen<CR>
-  nnoremap <leader>qj :cnext<CR>
-  nnoremap <leader>qk :cprev<CR>
-  nnoremap <leader>qc :cc<CR>
-  " }}}
-
-  " Location list window (,qq) (,qo) (,qj) (,qk) {{{
-  nnoremap <leader>lq :lclose<CR>
-  nnoremap <leader>lo :lopen<CR>
-  nnoremap <leader>lj :lnext<CR>
-  nnoremap <leader>lk :lprev<CR>
-  nnoremap <leader>ll :ll<CR>
-  " }}}
-
-  " Preview window {{{
-  nnoremap <leader>pq :pclose<CR>
-  nnoremap <leader>pj :ptnext<CR>
-  nnoremap <leader>pk :ptprevious<CR>
-  " }}}
 augroup END
 " }}}
 
@@ -351,58 +199,9 @@ augroup jump_to_tags
 augroup END
 " }}}
 
-" Highlight Interesting Words {{{
-augroup highlight_interesting_word
+" Colors {{{
+augroup colors_config
   autocmd!
-  " This mini-plugin provides a few mappings for highlighting words temporarily.
-  "
-  " Sometimes you're looking at a hairy piece of code and would like a certain
-  " word or two to stand out temporarily.  You can search for it, but that only
-  " gives you one color of highlighting.  Now you can use <leader>N where N is
-  " a number from 1-6 to highlight the current word in a specific color.
-  function! HiInterestingWord(n) abort " {{{
-    " Save our location.
-    normal! mz
-
-    " Yank the current word into the z register.
-    normal! "zyiw
-
-    " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
-    let l:mid = 86750 + a:n
-
-    " Clear existing matches, but don't worry if they don't exist.
-    silent! call matchdelete(l:mid)
-
-    " Construct a literal pattern that has to match at boundaries.
-    let l:pat = '\V\<' . escape(@z, '\') . '\>l:mid'
-
-    " Actually match the words.
-    call matchadd('InterestingWord' . a:n, l:pat, 1, l:mid)
-
-    " Move back to our original location.
-    normal! `z
-  endfunction " }}}
-
-  " Mappings {{{
-  nnoremap <silent> <leader>1 :call HiInterestingWord(1)<cr>
-  nnoremap <silent> <leader>2 :call HiInterestingWord(2)<cr>
-  nnoremap <silent> <leader>3 :call HiInterestingWord(3)<cr>
-  nnoremap <silent> <leader>4 :call HiInterestingWord(4)<cr>
-  nnoremap <silent> <leader>5 :call HiInterestingWord(5)<cr>
-  nnoremap <silent> <leader>6 :call HiInterestingWord(6)<cr>
-  nnoremap <silent> <leader>7 :call HiInterestingWord(7)<cr>
-  " }}}
-
-  " Default Highlights {{{
-  hi def InterestingWord1 guifg=#000000 ctermfg=16 guibg=#ffa724 ctermbg=214
-  hi def InterestingWord2 guifg=#000000 ctermfg=16 guibg=#aeee00 ctermbg=154
-  hi def InterestingWord3 guifg=#000000 ctermfg=16 guibg=#8cffba ctermbg=121
-  hi def InterestingWord4 guifg=#000000 ctermfg=16 guibg=#b88853 ctermbg=137
-  hi def InterestingWord5 guifg=#000000 ctermfg=16 guibg=#ff9eb8 ctermbg=211
-  hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
-  hi def InterestingWord7 guifg=#000000 ctermfg=16 guibg=#ff0000 ctermbg=red
-" }}}
-
   " Transparent background {{{
   hi Normal guibg=NONE ctermbg=NONE
   hi NonText guibg=NONE ctermbg=NONE
@@ -475,8 +274,6 @@ augroup text_config
   au FileType tex,markdown setlocal formatoptions=t1 wrap spell spelllang=es_es noexpandtab linebreak smartindent synmaxcol=3000 display=lastline
 augroup END
 " }}}
-
-" Plugin Configuration -------------------------------------------------------------
 
 " Find {{{
 augroup find_config

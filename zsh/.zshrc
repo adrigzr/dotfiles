@@ -5,7 +5,7 @@
 SAVEHIST=100000
 
 # Custom functions.
-fpath=( "$HOME/.zfunctions" "$HOME/.ripgrep/complete" "/usr/local/share/doc/task/scripts/zsh" "$HOME/.zim/modules/fasd/functions" $fpath )
+fpath=( "$HOME/.zfunctions" "$HOME/.ripgrep/complete" "/usr/local/share/doc/task/scripts/zsh" $fpath )
 
 # Termite support.
 # Tell Termite what the current directory is.
@@ -36,18 +36,10 @@ fi
 # Spaceship prompt.
 [ -s ~/.zsh/zsh-spaceship-prompt.zsh ] && source ~/.zsh/zsh-spaceship-prompt.zsh
 
-# Autoload functions.
-autoload -U vim
-autoload -U zle-select-branch; zle -N zle-select-branch; bindkey '^B' zle-select-branch
-autoload -U zle-select-tag; zle -N zle-select-tag; bindkey '^G' zle-select-tag
-
-# Custom bindings.
-bindkey -s '^P' "fvim\n"
-
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }
 zle -N zle-keymap-select
-bindkey -v
+# bindkey -v
 export KEYTIMEOUT=1
 
 # Edit command line on vim.
@@ -61,6 +53,14 @@ bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
+
+# Autoload functions.
+autoload -U vim
+autoload -U zle-select-branch; zle -N zle-select-branch; bindkey '^B' zle-select-branch
+autoload -U zle-select-tag; zle -N zle-select-tag; bindkey '^G' zle-select-tag
+
+# Custom bindings.
+bindkey -s '^P' "fvim\n"
 
 # History backwards
 bindkey '^r' history-incremental-search-backward

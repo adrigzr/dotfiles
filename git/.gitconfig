@@ -133,3 +133,11 @@
 
 [url "https://github.com"]
   insteadOf = git://github.com
+
+[user]
+	signingkey = BCE163ECD8C52480
+
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg

@@ -139,7 +139,7 @@ let g:ruby_operators = 1
 let g:ruby_space_errors = 1
 let g:ruby_fold = 1
 Plug 'tpope/vim-markdown', { 'for': 'markdown' }
-let g:markdown_fenced_languages = ['ruby', 'html', 'javascript', 'css', 'erb=eruby.html', 'bash=sh', 'handlebars', 'json']
+let g:markdown_fenced_languages = ['ruby', 'html', 'javascript', 'typescript', 'css', 'erb=eruby.html', 'bash=sh', 'handlebars', 'json']
 Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
 Plug 'vim-scripts/bats.vim' " Bash Test Runner
@@ -148,6 +148,7 @@ Plug 'vim-scripts/bats.vim' " Bash Test Runner
 " File tree {{{
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+nnoremap <leader>t :NERDTreeFind<CR>
 " }}}
 
 " Comments {{{
@@ -231,6 +232,12 @@ Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.s
 " Needs:
 "  - npm install -g javascript-typescript-langserver
 "  - pip3 install python-language-server
+if executable('npm') && !executable('javascript-typescript-stdio')
+  call system('npm install -g javascript-typescript-langserver')
+endif
+if executable('pip3') && !executable('pyls')
+  call system('pip3 install python-language-server')
+endif
 " Keybindings.
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
@@ -238,6 +245,7 @@ nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 let g:LanguageClient_diagnosticsList = 'Location'
 let g:LanguageClient_serverCommands = {
       \ 'javascript': ['javascript-typescript-stdio'],
+      \ 'typescript': ['javascript-typescript-stdio'],
       \ 'python': ['pyls'],
       \ }
 " }}}
@@ -428,10 +436,36 @@ Plug 'moll/vim-node' " Node
 Plug 'racer-rust/vim-racer' " Rust
 let g:racer_cmd = '$HOME/.cargo/bin/racer'
 let g:racer_experimental_completer = 1
-Plug 'Quramy/tsuquyomi' " Typescript server
+" Plug 'Quramy/tsuquyomi' " Typescript server
 " let g:tsuquyomi_disable_default_mappings = 1
 Plug 'sukima/vim-ember-imports' " Ember Imports
 Plug 'wannesm/wmgraphviz.vim' " Graphviz plugin
+Plug 'junegunn/vader.vim' " Vim script tester
+function! s:exercism_tests() abort " {{{
+  if expand('%:e') ==# 'vim'
+    let testfile = printf('%s/%s.vader', expand('%:p:h'),
+          \ tr(expand('%:p:h:t'), '-', '_'))
+    if !filereadable(testfile)
+      echoerr 'File does not exist: '. testfile
+      return
+    endif
+    source %
+    execute 'Vader' testfile
+  else
+    let sourcefile = printf('%s/%s.vim', expand('%:p:h'),
+          \ tr(expand('%:p:h:t'), '-', '_'))
+    if !filereadable(sourcefile)
+      echoerr 'File does not exist: '. sourcefile
+      return
+    endif
+    execute 'source' sourcefile
+    Vader
+  endif
+endfunction " }}}
+augroup vim_plug " {{{
+  autocmd!
+  au BufRead *.{vader,vim} command! -buffer Test call s:exercism_tests()
+augroup END " }}}
 " }}}
 
 call plug#end()
