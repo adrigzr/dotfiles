@@ -40,8 +40,8 @@ Plug 'vim-scripts/bats.vim' " Bash Test Runner
 " }}}
 
 " File tree {{{
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeFind' }
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 " }}}
 
 " Comments {{{
@@ -137,11 +137,11 @@ Plug 'lervag/vimtex'
 " }}}
 
 " Thesaurus {{{
-Plug 'beloglazov/vim-online-thesaurus'
+" Plug 'beloglazov/vim-online-thesaurus'
 " }}}
 
 " Tags {{{
-Plug 'majutsushi/tagbar'
+" Plug 'majutsushi/tagbar'
 if v:version >= 800
     Plug 'ludovicchabant/vim-gutentags'
 endif
@@ -149,7 +149,7 @@ endif
 
 " Markdown {{{
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'JamshedVesuna/vim-markdown-preview' " Compilation
+Plug 'JamshedVesuna/vim-markdown-preview', { 'for': 'markdown' } " Compilation
 " }}}
 
 " Marks {{{

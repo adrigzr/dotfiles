@@ -9,7 +9,6 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 " Mappings.
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> gb :Buffers<CR>
-nnoremap gp :e %:h
 
 " Commands.
 command! -bang -nargs=* Rg

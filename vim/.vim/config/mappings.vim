@@ -49,6 +49,10 @@ nnoremap <silent> <leader>qs :noh<CR>
 nnoremap <leader>p :set invpaste paste?<CR>
 " }}}
 
+" Edit near files {{{
+nnoremap gp :e %:h
+" }}}
+
 " Yank from cursor to end of line {{{
 nnoremap Y y$
 " }}}
