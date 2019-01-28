@@ -1,4 +1,4 @@
-if !exists('g:loaded_nerd_tree')
+if !exists(':NERDTreeFind')
   finish
 endif
 

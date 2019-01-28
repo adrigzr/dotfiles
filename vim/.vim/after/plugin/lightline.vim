@@ -11,7 +11,7 @@ let g:lightline = {
       \		    [ 'gitbranch' ]
       \   ],
       \   'right': [
-      \        [ 'aleerror', 'alewarning' ],
+      \        [ 'errors', 'warnings', 'hints' ],
       \        [ 'lineinfo' ],
       \		     [ 'percent' ],
       \		     [ 'fileformat', 'fileencoding', 'filetype' ],
@@ -19,17 +19,20 @@ let g:lightline = {
       \   ]
       \ },
       \ 'component_function': {
+      \   'cocstatus': 'coc#status',
       \   'readonly': 'LightlineReadonly',
       \   'gitbranch': 'LightlineGitBranch'
       \ },
       \ 'component_expand': {
-      \	  'alewarning': 'LightlineAleWarning',
-      \	  'aleerror': 'LightlineAleError',
+      \	  'hints': 'LightlineHints',
+      \	  'warnings': 'LightlineWarnings',
+      \	  'errors': 'LightlineErrors',
       \   'gutentags': 'LightlineGutentags'
       \ },
       \ 'component_type': {
-      \   'alewarning': 'warning',
-      \   'aleerror': 'error',
+      \   'hints': 'info',
+      \   'warnings': 'warning',
+      \   'errors': 'error',
       \ }
       \ }
 
@@ -45,20 +48,32 @@ function! LightlineGitBranch() abort
   return ''
 endfunction
 
-function! LightlineAleCount() abort
+function! AleCount(type) abort
   let l:bufnr = bufnr('%')
-  return ale#statusline#Count(l:bufnr)
+  let l:count = ale#statusline#Count(l:bufnr)
+  if empty(l:count) | return 0 | endif
+  return get(l:count, a:type, 0)
 endfunction
 
-function! LightlineAleWarning() abort
-
-  let l:count = LightlineAleCount()
-  return l:count.warning > 0 ? l:count.warning : ''
+function! CocDiagnosticInfo(type) abort
+  let l:info = get(b:, 'coc_diagnostic_info', {})
+  if empty(l:info) | return 0 | endif
+  return get(l:info, a:type, 0)
 endfunction
 
-function! LightlineAleError() abort
-  let l:count = LightlineAleCount()
-  return l:count.error > 0 ? l:count.error : ''
+function! LightlineHints() abort
+  let l:count = AleCount('info') + CocDiagnosticInfo('hint') + CocDiagnosticInfo('information')
+  return l:count > 0 ? l:count : ''
+endfunction
+
+function! LightlineWarnings() abort
+  let l:count = AleCount('warning') + CocDiagnosticInfo('warning')
+  return l:count > 0 ? l:count : ''
+endfunction
+
+function! LightlineErrors() abort
+  let l:count = AleCount('error') + CocDiagnosticInfo('error')
+  return l:count > 0 ? l:count : ''
 endfunction
 
 function! LightlineGutentags() abort
@@ -68,6 +83,7 @@ endfunction
 augroup lightline_update
   autocmd!
   autocmd User ALELintPOST call lightline#update()
+  autocmd User CocDiagnosticChange call lightline#update()
   autocmd User GutentagsUpdating call lightline#update()
   autocmd User GutentagsUpdated call lightline#update()
 augroup END

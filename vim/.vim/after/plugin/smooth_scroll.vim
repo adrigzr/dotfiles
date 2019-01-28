@@ -1,4 +1,4 @@
-if !exists('*smooth_scroll#up') || !exists('*smooth_scroll#down')
+if &runtimepath !~# 'smooth-scroll'
   finish
 endif
 

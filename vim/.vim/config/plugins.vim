@@ -88,21 +88,24 @@ Plug 'ntpeters/vim-better-whitespace'
 " }}}
 
 " LSP {{{
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 " }}}
 
 " Autocompletion {{{
-if v:version > 800 && has('python3')
-  Plug 'Shougo/deoplete.nvim', { 'do': 'pip3 install neovim' } " Surround wrappers
-  Plug 'roxma/nvim-yarp' " deoplete dependency.
-  Plug 'roxma/vim-hug-neovim-rpc' " deoplete dependency
-  Plug 'Shougo/neco-syntax' " syntax source
-  Plug 'Shougo/neco-vim' " vim source
-  Plug 'ujihisa/neco-look' " words source
-  Plug 'wellle/tmux-complete.vim' " tmux panel source
-  Plug 'fszymanski/deoplete-emoji' " emoji source
-  Plug 'Shougo/context_filetype.vim' " code fences source
-endif
+" if v:version > 800 && has('python3')
+"   Plug 'Shougo/deoplete.nvim', { 'do': 'pip3 install neovim' } " Surround wrappers
+"   Plug 'roxma/nvim-yarp' " deoplete dependency.
+"   Plug 'roxma/vim-hug-neovim-rpc' " deoplete dependency
+"   Plug 'Shougo/neco-syntax' " syntax source
+"   Plug 'Shougo/neco-vim' " vim source
+"   Plug 'ujihisa/neco-look' " words source
+"   Plug 'wellle/tmux-complete.vim' " tmux panel source
+"   Plug 'fszymanski/deoplete-emoji' " emoji source
+"   Plug 'Shougo/context_filetype.vim' " code fences source
+" endif
+Plug 'Shougo/neco-syntax' " vim syntax source
+Plug 'neoclide/coc-neco'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install() }}
 " }}}
 
 " Parens, Brackets, etc... {{{
@@ -143,7 +146,7 @@ Plug 'lervag/vimtex'
 " Tags {{{
 " Plug 'majutsushi/tagbar'
 if v:version >= 800
-    Plug 'ludovicchabant/vim-gutentags'
+    " Plug 'ludovicchabant/vim-gutentags'
 endif
 " }}}
 
