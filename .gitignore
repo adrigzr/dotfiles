@@ -7,6 +7,7 @@ vim/.vim/viminfo
 vim/.vim/plugged
 vim/.vim/spell/*.add
 vim/.vim/spell/*.spl
+vim/.vim/.netrwhist
 tmux/.tmux/plugins/tmux-*
 tmux/.tmux/resurrect
 tmux/.tmux/sidebar

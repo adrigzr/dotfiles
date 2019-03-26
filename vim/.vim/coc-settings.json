@@ -1,6 +1,5 @@
 {
-  "coc.preferences.codeLens.enable": true,
-  "coc.preferences.diagnostic.displayByAle": true,
+  "diagnostic.displayByAle": true,
   "languageserver": {
     "bash": {
       "command": "bash-language-server",

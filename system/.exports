@@ -59,6 +59,7 @@ PYTHON3_PACKAGES=$(python3 -m site --user-site)
 fi
 
 # Ruby
+export PATH="/usr/local/opt/ruby@2.3/bin:$PATH"
 which gem >/dev/null && export PATH=$(gem environment gemdir)/bin:${PATH}
 
 # Fix GPG

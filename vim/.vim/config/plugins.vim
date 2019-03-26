@@ -105,7 +105,7 @@ Plug 'ntpeters/vim-better-whitespace'
 " endif
 Plug 'Shougo/neco-syntax' " vim syntax source
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install() }}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
 " }}}
 
 " Parens, Brackets, etc... {{{

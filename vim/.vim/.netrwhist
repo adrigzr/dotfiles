@@ -1,5 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/Users/adrian-gonzalez/Repositories/pr-manager/src/entities'
-let g:netrw_dirhist_2='/Users/adrian-gonzalez/Repositories/pr-manager/src/entities/api'
-let g:netrw_dirhist_3='/Users/adrian-gonzalez/Repositories/woody-html/html/node_modules/ember-cli-babel'
