@@ -67,3 +67,23 @@ options head
   test('${1:text}', (assert) => {
     ${2:test}
   });
+
+snippet equal
+abbr	assert.equal(a, b, c);
+options head
+  assert.equal(${1:expect}, ${2:result}, '${3:assertion}');
+
+snippet notEqual
+abbr	assert.notEqual(a, b, c);
+options head
+  assert.notEqual(${1:expect}, ${2:result}, '${3:assertion}');
+
+snippet ok
+abbr	assert.ok(a, b);
+options head
+  assert.ok(${1:expect}, '${3:assertion}');
+
+snippet notOk
+abbr	assert.notOk(a, b);
+options head
+  assert.notOk(${1:expect}, '${3:assertion}');

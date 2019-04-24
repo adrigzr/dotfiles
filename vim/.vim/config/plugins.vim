@@ -172,6 +172,7 @@ Plug 'moll/vim-node' " Node
 Plug 'racer-rust/vim-racer' " Rust
 " Plug 'Quramy/tsuquyomi' " Typescript server
 " let g:tsuquyomi_disable_default_mappings = 1
+Plug 'sukima/vim-javascript-imports'
 Plug 'sukima/vim-ember-imports' " Ember Imports
 Plug 'wannesm/wmgraphviz.vim' " Graphviz plugin
 Plug 'junegunn/vader.vim' " Vim script tester

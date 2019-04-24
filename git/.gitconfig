@@ -136,6 +136,8 @@
 
 [user]
 	signingkey = 531577578FAF05AE
+	name = adrigzr
+	email = adrigzr@users.noreply.github.com
 
 [commit]
 	gpgsign = true

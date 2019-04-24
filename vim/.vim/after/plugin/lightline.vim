@@ -7,27 +7,37 @@ let g:lightline = {
       \ 'active': {
       \   'left': [
       \       [ 'mode', 'paste' ],
+      \		    [ 'gitbranch' ],
+      \		    [ 'path' ],
       \		    [ 'readonly', 'filename', 'modified' ],
-      \		    [ 'gitbranch' ]
       \   ],
       \   'right': [
       \        [ 'errors', 'warnings', 'hints' ],
       \        [ 'lineinfo' ],
       \		     [ 'percent' ],
       \		     [ 'fileformat', 'fileencoding', 'filetype' ],
-      \        [ 'gutentags' ],
+      \   ]
+      \ },
+      \ 'inactive': {
+      \   'left': [
+      \		    [ 'readonly', 'filename', 'modified' ]
+      \   ],
+      \   'right': [
+      \        [ 'lineinfo' ],
+      \		     [ 'percent' ],
+      \		     [ 'fileformat', 'fileencoding', 'filetype' ],
       \   ]
       \ },
       \ 'component_function': {
       \   'cocstatus': 'coc#status',
       \   'readonly': 'LightlineReadonly',
-      \   'gitbranch': 'LightlineGitBranch'
+      \   'gitbranch': 'LightlineGitBranch',
+      \   'path': 'LightlinePath'
       \ },
       \ 'component_expand': {
       \	  'hints': 'LightlineHints',
       \	  'warnings': 'LightlineWarnings',
       \	  'errors': 'LightlineErrors',
-      \   'gutentags': 'LightlineGutentags'
       \ },
       \ 'component_type': {
       \   'hints': 'info',
@@ -46,6 +56,10 @@ function! LightlineGitBranch() abort
     return branch !=# '' ? ' '.branch : ''
   endif
   return ''
+endfunction
+
+function! LightlinePath() abort
+    return fnamemodify(expand('%:h'), ':~:.')
 endfunction
 
 function! AleCount(type) abort
@@ -76,14 +90,8 @@ function! LightlineErrors() abort
   return l:count > 0 ? l:count : ''
 endfunction
 
-function! LightlineGutentags() abort
-  return gutentags#statusline()
-endfunction
-
 augroup lightline_update
   autocmd!
   autocmd User ALELintPOST call lightline#update()
   autocmd User CocDiagnosticChange call lightline#update()
-  autocmd User GutentagsUpdating call lightline#update()
-  autocmd User GutentagsUpdated call lightline#update()
 augroup END

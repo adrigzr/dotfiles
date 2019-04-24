@@ -8,3 +8,7 @@ let g:ale_linters = {
       \ 'rust': ['rls'],
       \ 'zsh': ['shellcheck'],
       \ }
+let g:ale_fix_on_save = 1
+let g:ale_fixers = {
+      \ 'javascript': ['eslint']
+      \ }
