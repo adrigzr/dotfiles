@@ -28,7 +28,7 @@ Plug 'junegunn/goyo.vim'
 " }}}
 
 " Search {{{
-Plug 'wsdjeg/FlyGrep.vim'
+" Plug 'wsdjeg/FlyGrep.vim'
 " }}}
 
 " Syntax {{{
@@ -105,7 +105,7 @@ Plug 'ntpeters/vim-better-whitespace'
 " endif
 Plug 'Shougo/neco-syntax' " vim syntax source
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install'}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 " }}}
 
 " Parens, Brackets, etc... {{{
@@ -133,6 +133,13 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim', { 'do': 'brew install ripgrep' }
+if v:version >= 800 && has('python3')
+  if !has('nvim')
+    Plug 'roxma/nvim-yarp' " denite dependency.
+    Plug 'roxma/vim-hug-neovim-rpc' " denite dependency
+  endif
+  " Plug 'Shougo/denite.nvim', { 'do': 'pip3 install pynvim' }
+endif
 " }}}
 
 " Latex {{{
@@ -176,6 +183,9 @@ Plug 'sukima/vim-javascript-imports'
 Plug 'sukima/vim-ember-imports' " Ember Imports
 Plug 'wannesm/wmgraphviz.vim' " Graphviz plugin
 Plug 'junegunn/vader.vim' " Vim script tester
+if has('nvim')
+  Plug 'meain/vim-package-info', { 'do': 'npm install -g neovim && npm install' } " View the latest version of packages
+endif
 " }}}
 
 call plug#end()
