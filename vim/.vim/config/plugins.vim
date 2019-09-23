@@ -24,7 +24,7 @@ Plug 'itchyny/lightline.vim'
 " Text {{{
 Plug 'inkarkat/vim-SpellCheck' " Populate spell check to quickfix.
 Plug 'inkarkat/vim-ingo-library' " Dependency for vim-SpellCheck.
-Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/goyo.vim'
 " }}}
 
 " Search {{{
@@ -54,14 +54,14 @@ Plug 'tpope/vim-abolish' " Camelcase, snakecase, mixedcase coercion
 Plug 'tpope/vim-sleuth' " Autodetect indentation
 Plug 'tpope/vim-unimpaired' " Pair aliases and toggling options
 Plug 'mhinz/vim-startify' " Startup screen
-Plug 'fcpg/vim-altscreen' " Clean terminal on vim shell commands
+" Plug 'fcpg/vim-altscreen' " Clean terminal on vim shell commands
 Plug 'mjbrownie/swapit' " <c-a> increments
 Plug 'xtal8/traces.vim' " Search highlight as typing
 Plug 'hauleth/sad.vim' " Change and repeat
 Plug 'kopischke/vim-fetch' " Handle line number on filename
 Plug 'vim-scripts/Spiffy-Foldtext' " Pretty folds
 Plug 'tmhedberg/matchit' " Extend % command
-Plug 'ap/vim-css-color' " Hex colors highlight
+" Plug 'ap/vim-css-color' " Hex colors highlight
 Plug 'junegunn/vim-easy-align' " Align text
 Plug 'tpope/vim-dispatch' " Async shell commands
 " }}}
@@ -105,7 +105,7 @@ Plug 'ntpeters/vim-better-whitespace'
 " endif
 Plug 'Shougo/neco-syntax' " vim syntax source
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'neoclide/coc.nvim', {'tag': '*' }
 " }}}
 
 " Parens, Brackets, etc... {{{
@@ -125,7 +125,7 @@ Plug 'w0rp/ale'
 " }}}
 
 " Scratchpad {{{
-Plug 'metakirby5/codi.vim'
+" Plug 'metakirby5/codi.vim'
 " }}}
 
 " Navigation {{{
@@ -152,13 +152,13 @@ Plug 'lervag/vimtex'
 
 " Tags {{{
 " Plug 'majutsushi/tagbar'
-if v:version >= 800
+" if v:version >= 800
     " Plug 'ludovicchabant/vim-gutentags'
-endif
+" endif
 " }}}
 
 " Markdown {{{
-Plug 'dhruvasagar/vim-table-mode'
+Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown' }
 Plug 'JamshedVesuna/vim-markdown-preview', { 'for': 'markdown' } " Compilation
 " }}}
 
@@ -186,6 +186,8 @@ Plug 'junegunn/vader.vim' " Vim script tester
 if has('nvim')
   Plug 'meain/vim-package-info', { 'do': 'npm install -g neovim && npm install' } " View the latest version of packages
 endif
+Plug 'mattn/emmet-vim'
+Plug 'posva/vim-vue'
 " }}}
 
 call plug#end()

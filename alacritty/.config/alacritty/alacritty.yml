@@ -29,13 +29,58 @@ window:
 
   # Window decorations
   # Setting this to false will result in window without borders and title bar.
-  decorations: true
+  decorations: transparent
+
+  # Startup Mode (changes require restart)
+  #
+  # Values for `startup_mode`:
+  #   - Windowed
+  #   - Maximized
+  #   - Fullscreen
+  #
+  # Values for `startup_mode` (macOS only):
+  #   - SimpleFullscreen
+  startup_mode: Windowed
+
+  # Window title
+  #title: Alacritty
+
+  # Window class (Linux only):
+  class:
+    # Application instance name
+    instance: Alacritty
+    # General application class
+    general: Alacritty
+
+  # GTK theme variant (Linux only)
+  #
+  # Override the variant of the GTK theme. Commonly supported values are `dark` and `light`.
+  # Set this to `None` to use the default theme variant.
+  gtk_theme_variant: None
+
+scrolling:
+  # Maximum number of lines in the scrollback buffer.
+  # Specifying '0' will disable scrolling.
+  history: 0
+
+  # Number of lines the viewport will move for every line scrolled when
+  # scrollback is enabled (history > 0).
+  multiplier: 3
+
+  # Faux Scrolling
+  #
+  # The `faux_multiplier` setting controls the number of lines the terminal
+  # should scroll when the alternate screen buffer is active. This is used
+  # to allow mouse scrolling for applications like `man`.
+  #
+  # Specifying `0` will disable faux scrolling.
+  faux_multiplier: 3
+
+  # Scroll to the bottom when new text is written to the terminal.
+  auto_scroll: false
 
 # Display tabs using this many cells (changes require restart)
 tabspaces: 4
-
-# When true, bold text is drawn using the bright variant of colors.
-draw_bold_text_with_bright_colors: true
 
 # Font configuration (changes require restart)
 font:
@@ -75,8 +120,8 @@ font:
   # false.
   use_thin_strokes: true
 
-# Should display the render timer
-render_timer: false
+# When true, bold text is drawn using the bright variant of colors.
+draw_bold_text_with_bright_colors: true
 
 # Use custom cursor colors. If true, display the cursor in the cursor.foreground
 # and cursor.background colors, otherwise invert the colors of the cursor.
@@ -136,27 +181,92 @@ colors:
 visual_bell:
   animation: EaseOutExpo
   duration: 0
+  color: '0xffffff'
 
 # Background opacity
 background_opacity: 1.0
 
-# Mouse bindings
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
+
+  # When set to `true`, selected text will be copied to the primary clipboard.
+  save_to_clipboard: false
+
+dynamic_title: true
+
+cursor:
+  # Cursor style
+  #
+  # Values for `style`:
+  #   - ▇ Block
+  #   - _ Underline
+  #   - | Beam
+  style: Block
+
+  # If this is `true`, the cursor will be rendered as a hollow box when the
+  # window is not focused.
+  unfocused_hollow: true
+
+# Live config reload (changes require restart)
+live_config_reload: true
+
+# Shell
 #
-# Currently doesn't support modifiers. Both the `mouse` and `action` fields must
-# be specified.
+# You can set `shell.program` to the path of your favorite shell, e.g. `/bin/fish`.
+# Entries in `shell.args` are passed unmodified as arguments to the shell.
 #
-# Values for `mouse`:
-# - Middle
-# - Left
-# - Right
-# - Numeric identifier such as `5`
+# Default:
+#   - (macOS) /bin/bash --login
+#   - (Linux) user login shell
+#   - (Windows) powershell
+#shell:
+#  program: /bin/bash
+#  args:
+#    - --login
+
+# Startup directory
 #
-# Values for `action`:
-# - Paste
-# - PasteSelection
-# - Copy (TODO)
-mouse_bindings:
-  - { mouse: Middle, action: PasteSelection }
+# Directory the shell is started in. If this is unset, or `None`, the working
+# directory of the parent process will be used.
+working_directory: None
+
+# Windows 10 ConPTY backend (Windows only)
+#
+# This will enable better color support and may resolve other issues,
+# however this API and its implementation is still young and so is
+# disabled by default, as stability may not be as good as the winpty
+# backend.
+#
+# Alacritty will fall back to the WinPTY automatically if the ConPTY
+# backend cannot be initialized.
+enable_experimental_conpty_backend: false
+
+# Send ESC (\x1b) before characters when alt is pressed.
+alt_send_esc: true
+
+debug:
+  # Display the time it takes to redraw each frame.
+  render_timer: false
+
+  # Keep the log file after quitting Alacritty.
+  persistent_logging: false
+
+  # Log level
+  #
+  # Values for `log_level`:
+  #   - None
+  #   - Error
+  #   - Warn
+  #   - Info
+  #   - Debug
+  #   - Trace
+  log_level: Warn
+
+  # Print all received window events.
+  print_events: false
+
+  # Record all characters and escape sequences as test data.
+  ref_test: false
 
 mouse:
   # Click settings
@@ -167,46 +277,52 @@ mouse:
   double_click: { threshold: 300 }
   triple_click: { threshold: 300 }
 
-  # Faux Scrollback
-  #
-  # The `faux_scrollback_lines` setting controls the number
-  # of lines the terminal should scroll when the alternate
-  # screen buffer is active. This is used to allow mouse
-  # scrolling for applications like `man`.
-  #
-  # To disable this completely, set `faux_scrollback_lines` to 0.
-  faux_scrollback_lines: 1
+  # If this is `true`, the cursor is temporarily hidden when typing.
+  hide_when_typing: false
 
-selection:
-  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+  url:
+    # URL launcher
+    #
+    # This program is executed when clicking on a text which is recognized as a URL.
+    # The URL is always added to the command as the last parameter.
+    #
+    # When set to `None`, URL launching will be disabled completely.
+    #
+    # Default:
+    #   - (macOS) open
+    #   - (Linux) xdg-open
+    #   - (Windows) explorer
+    #launcher:
+    #  program: xdg-open
+    #  args: []
 
-dynamic_title: true
+    # URL modifiers
+    #
+    # These are the modifiers that need to be held down for opening URLs when clicking
+    # on them. The available modifiers are documented in the key binding section.
+    modifiers: None
 
-hide_cursor_when_typing: false
-
-# Style of the cursor
+# Mouse bindings
 #
-# Values for 'cursor_style':
-# - Block
-# - Underline
-# - Beam
-cursor_style: Block
-
-# Whether the cursor should be a hollow block on window focus loss
-unfocused_hollow_cursor: true
-
-# Live config reload (changes require restart)
-live_config_reload: true
-
-# Shell
+# Mouse bindings are specified as a list of objects, much like the key
+# bindings further below.
 #
-# You can set shell.program to the path of your favorite shell, e.g. /bin/fish.
-# Entries in shell.args are passed unmodified as arguments to the shell.
+# Each mouse binding will specify a:
 #
-# shell:
-#   program: /bin/bash
-#   args:
-#     - --login
+# - `mouse`:
+#
+#   - Middle
+#   - Left
+#   - Right
+#   - Numeric identifier such as `5`
+#
+# - `action` (see key bindings)
+#
+# And optionally:
+#
+# - `mods` (see key bindings)
+mouse_bindings:
+  - { mouse: Middle, action: PasteSelection }
 
 # Key bindings
 #
@@ -243,27 +359,112 @@ live_config_reload: true
 #   `command` must be a map containing a `program` string, and `args` array of
 #     strings. For example:
 #     - { ... , command: { program: "alacritty", args: ["-e", "vttest"] } }
+#
+#   - Copy
+#   - Paste
+#   - PasteSelection
+#   - IncreaseFontSize
+#   - DecreaseFontSize
+#   - ResetFontSize
+#   - ScrollPageUp
+#   - ScrollPageDown
+#   - ScrollLineUp
+#   - ScrollLineDown
+#   - ScrollToTop
+#   - ScrollToBottom
+#   - ClearHistory
+#   - Hide
+#   - Quit
+#   - ToggleFullscreen
+#   - SpawnNewInstance
+#   - ClearLogNotice
+#   - None
+#
+#   (macOS only):
+#   - ToggleSimpleFullscreen: Enters fullscreen without occupying another space
+#
+# - `command`: Fork and execute a specified command plus arguments
+#
+#    The `command` field must be a map containing a `program` string and an
+#    `args` array of command line parameter strings. For example:
+#       `{ program: "alacritty", args: ["-e", "vttest"] }`
+#
+# And optionally:
+#
+# - `mods`: Key modifiers to filter binding actions
+#
+#    - Command
+#    - Control
+#    - Option
+#    - Super
+#    - Shift
+#    - Alt
+#
+#    Multiple `mods` can be combined using `|` like this:
+#       `mods: Control|Shift`.
+#    Whitespace and capitalization are relevant and must match the example.
+#
+# - `mode`: Indicate a binding for only specific terminal reported modes
+#
+#    This is mainly used to send applications the correct escape sequences
+#    when in different modes.
+#
+#    - AppCursor
+#    - AppKeypad
+#    - Alt
+#
+#    A `~` operator can be used before a mode to apply the binding whenever
+#    the mode is *not* active, e.g. `~Alt`.
+#
+# Bindings are always filled by default, but will be replaced when a new
+# binding with the same triggers is defined. To unset a default binding, it can
+# be mapped to the `None` action.
 key_bindings:
-  - { key: Space,    mods: Control, chars: "\x00"                        }
-  - { key: V,        mods: Command, action: Paste                        }
-  - { key: C,        mods: Command, action: Copy                         }
+  # (Windows/Linux only)
+  #- { key: V,        mods: Control|Shift, action: Paste            }
+  #- { key: C,        mods: Control|Shift, action: Copy             }
+  #- { key: Insert,   mods: Shift,         action: PasteSelection   }
+  #- { key: Key0,     mods: Control,       action: ResetFontSize    }
+  #- { key: Equals,   mods: Control,       action: IncreaseFontSize }
+  #- { key: Add,      mods: Control,       action: IncreaseFontSize }
+  #- { key: Subtract, mods: Control,       action: DecreaseFontSize }
+  #- { key: Minus,    mods: Control,       action: DecreaseFontSize }
+  #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
+
+  # (macOS only)
+  - { key: Key0,   mods: Command,         action: ResetFontSize    }
+  - { key: Equals, mods: Command,         action: IncreaseFontSize }
+  - { key: Add,    mods: Command,         action: IncreaseFontSize }
+  - { key: Minus,  mods: Command,         action: DecreaseFontSize }
+  - { key: K,      mods: Command,         action: ClearHistory     }
+  - { key: K,      mods: Command,         chars: "\x0c"            }
+  - { key: V,      mods: Command,         action: Paste            }
+  - { key: C,      mods: Command,         action: Copy             }
+  - { key: H,      mods: Command,         action: Hide             }
+  - { key: Q,      mods: Command,         action: Quit             }
+  - { key: W,      mods: Command,         action: Quit             }
+  - { key: F,      mods: Command|Control, action: ToggleFullscreen }
   - { key: N,        mods: Command, command: { program: "open", args: ["-nb", "io.alacritty"] } }
+  - { key: Space,    mods: Control, chars: "\x00"                        }
   - { key: Paste,                   action: Paste                        }
   - { key: Copy,                    action: Copy                         }
-  - { key: Q,        mods: Command, action: Quit                         }
-  - { key: W,        mods: Command, action: Quit                         }
+  - { key: L,        mods: Control, action: ClearLogNotice                   }
+  - { key: L,        mods: Control, chars: "\x0c"                            }
+  - { key: Home,     mods: Alt,     chars: "\x1b[1;3H"                       }
   - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,                    chars: "\x1b[H",   mode: ~AppCursor  }
+  - { key: End,      mods: Alt,     chars: "\x1b[1;3F"                       }
   - { key: End,                     chars: "\x1bOF",   mode: AppCursor   }
   - { key: End,                     chars: "\x1b[F",   mode: ~AppCursor  }
-  - { key: Key0,     mods: Command, action: ResetFontSize                }
-  - { key: Equals,   mods: Command, action: IncreaseFontSize             }
-  - { key: Minus,    mods: Command, action: DecreaseFontSize             }
-  - { key: PageUp,   mods: Shift,   chars: "\x1b[5;2~"                   }
-  - { key: PageUp,   mods: Control, chars: "\x1b[5;5~"                   }
-  - { key: PageUp,                  chars: "\x1b[5~"                     }
-  - { key: PageDown, mods: Shift,   chars: "\x1b[6;2~"                   }
-  - { key: PageDown, mods: Control, chars: "\x1b[6;5~"                   }
+  - { key: PageUp,   mods: Shift,   action: ScrollPageUp,   mode: ~Alt       }
+  - { key: PageUp,   mods: Shift,   chars: "\x1b[5;2~",     mode: Alt        }
+  - { key: PageUp,   mods: Control, chars: "\x1b[5;5~"                       }
+  - { key: PageUp,   mods: Alt,     chars: "\x1b[5;3~"                       }
+  - { key: PageUp,                  chars: "\x1b[5~"                         }
+  - { key: PageDown, mods: Shift,   action: ScrollPageDown, mode: ~Alt       }
+  - { key: PageDown, mods: Shift,   chars: "\x1b[6;2~",     mode: Alt        }
+  - { key: PageDown, mods: Control, chars: "\x1b[6;5~"                       }
+  - { key: PageDown, mods: Alt,     chars: "\x1b[6;3~"                       }
   - { key: PageDown,                chars: "\x1b[6~"                     }
   - { key: Tab,      mods: Shift,   chars: "\x1b[Z"                      }
   - { key: Back,                    chars: "\x7f"                        }
@@ -338,15 +539,16 @@ key_bindings:
   - { key: F10,      mods: Alt,     chars: "\x1b[21;6~"                  }
   - { key: F11,      mods: Alt,     chars: "\x1b[23;6~"                  }
   - { key: F12,      mods: Alt,     chars: "\x1b[24;6~"                  }
-  - { key: F1,       mods: Command, chars: "\x1b[1;3P"                   }
-  - { key: F2,       mods: Command, chars: "\x1b[1;3Q"                   }
-  - { key: F3,       mods: Command, chars: "\x1b[1;3R"                   }
-  - { key: F4,       mods: Command, chars: "\x1b[1;3S"                   }
-  - { key: F5,       mods: Command, chars: "\x1b[15;3~"                  }
-  - { key: F6,       mods: Command, chars: "\x1b[17;3~"                  }
-  - { key: F7,       mods: Command, chars: "\x1b[18;3~"                  }
-  - { key: F8,       mods: Command, chars: "\x1b[19;3~"                  }
-  - { key: F9,       mods: Command, chars: "\x1b[20;3~"                  }
-  - { key: F10,      mods: Command, chars: "\x1b[21;3~"                  }
-  - { key: F11,      mods: Command, chars: "\x1b[23;3~"                  }
-  - { key: F12,      mods: Command, chars: "\x1b[24;3~"                  }
+  - { key: F1,       mods: Super,   chars: "\x1b[1;3P"                       }
+  - { key: F2,       mods: Super,   chars: "\x1b[1;3Q"                       }
+  - { key: F3,       mods: Super,   chars: "\x1b[1;3R"                       }
+  - { key: F4,       mods: Super,   chars: "\x1b[1;3S"                       }
+  - { key: F5,       mods: Super,   chars: "\x1b[15;3~"                      }
+  - { key: F6,       mods: Super,   chars: "\x1b[17;3~"                      }
+  - { key: F7,       mods: Super,   chars: "\x1b[18;3~"                      }
+  - { key: F8,       mods: Super,   chars: "\x1b[19;3~"                      }
+  - { key: F9,       mods: Super,   chars: "\x1b[20;3~"                      }
+  - { key: F10,      mods: Super,   chars: "\x1b[21;3~"                      }
+  - { key: F11,      mods: Super,   chars: "\x1b[23;3~"                      }
+  - { key: F12,      mods: Super,   chars: "\x1b[24;3~"                      }
+  - { key: NumpadEnter,             chars: "\n"                              }

@@ -7,6 +7,8 @@ endif
 imap <C-s>     <Plug>(neosnippet_expand_or_jump)
 smap <C-s>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-s>     <Plug>(neosnippet_expand_target)
+imap <C-j>     <Plug>(neosnippet_jump)
+smap <C-j>     <Plug>(neosnippet_jump)
 
 " SuperTab like snippets behavior.
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.

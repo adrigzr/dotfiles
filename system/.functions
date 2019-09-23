@@ -293,4 +293,15 @@ function n() {
   fi
 }
 
+# Setup semantic-release env.
+function semantic_env() {
+  name=$(git config user.name)
+  email=$(git config user.email)
+
+  export GIT_AUTHOR_NAME=${name}
+  export GIT_AUTHOR_EMAIL=${email}
+  export GIT_COMMITTER_NAME=${name}
+  export GIT_COMMITTER_EMAIL=${email}
+}
+
 # vim: ft=zsh

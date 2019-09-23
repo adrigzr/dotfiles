@@ -7,5 +7,5 @@ nnoremap <silent> <buffer> <C-p>
 nnoremap <silent> <buffer> <C-n>
       \ :<C-U>call quickfixed#newer()<CR>
 
-let b:undo_ftplugin .= '|nunmap <buffer> <C-p>'
+let b:undo_ftplugin = '|nunmap <buffer> <C-p>'
       \ . '|nunmap <buffer> <C-n>'
