@@ -8,7 +8,11 @@
 if !exists('g:syntax_on')
   syntax enable
 endif
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
 set t_Co=256 " Terminal colors.
+set t_ut=
 set background=dark
 set encoding=utf-8 nobomb " BOM often causes trouble
 scriptencoding utf-8
@@ -148,6 +152,6 @@ runtime! config/*.vim
 " }}}
 
 " Color schemes {{{
-colorscheme solarized
+colorscheme onedark
 " }}}
 

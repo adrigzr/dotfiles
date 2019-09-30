@@ -14,7 +14,11 @@ augroup END
 call plug#begin('~/.vim/plugged')
 
 " Themes {{{
-Plug 'altercation/vim-colors-solarized'
+" Plug 'altercation/vim-colors-solarized'
+" Plug 'tomasiser/vim-code-dark'
+" Plug 'haishanh/night-owl.vim'
+" Plug 'flrnprz/plastic.vim'
+Plug 'joshdick/onedark.vim'
 " }}}
 
 " Statusbar {{{
