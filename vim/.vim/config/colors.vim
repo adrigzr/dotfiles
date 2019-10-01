@@ -21,8 +21,8 @@ augroup colors
   " }}}
   " Color (see listchars) {{{
   autocmd ColorScheme *
-        \ highlight NonText ctermfg=10 ctermbg=8 guifg=#000000 guibg=#000000 |
         \ highlight SpecialKey term=NONE cterm=NONE
+        " \ highlight NonText ctermfg=10 ctermbg=8 guifg=#000000 guibg=#000000 |
   " }}}
   " Folded {{{
   autocmd ColorScheme *
