@@ -72,7 +72,7 @@
   conflicts = diff --name-only --diff-filter=U
 
 [core]
-  editor = vim
+  editor = nvim
   excludesfile = ~/.gitignore
   attributesfile = ~/.gitattributes
 	preloadIndex = true

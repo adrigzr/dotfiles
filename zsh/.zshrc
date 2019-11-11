@@ -69,7 +69,7 @@ bindkey '^r' history-incremental-search-backward
 bindkey '^A' autosuggest-accept
 
 # Config autosuggestions.
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=11"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=59"
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 

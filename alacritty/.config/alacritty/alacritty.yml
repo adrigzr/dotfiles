@@ -29,7 +29,7 @@ window:
 
   # Window decorations
   # Setting this to false will result in window without borders and title bar.
-  decorations: transparent
+  decorations: full
 
   # Startup Mode (changes require restart)
   #
@@ -43,7 +43,7 @@ window:
   startup_mode: Windowed
 
   # Window title
-  #title: Alacritty
+  title: Terminal
 
   # Window class (Linux only):
   class:

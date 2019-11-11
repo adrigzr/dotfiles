@@ -187,9 +187,9 @@ Plug 'sukima/vim-javascript-imports'
 Plug 'sukima/vim-ember-imports' " Ember Imports
 Plug 'wannesm/wmgraphviz.vim' " Graphviz plugin
 Plug 'junegunn/vader.vim' " Vim script tester
-if has('nvim')
-  Plug 'meain/vim-package-info', { 'do': 'npm install -g neovim && npm install' } " View the latest version of packages
-endif
+" if has('nvim')
+  " Plug 'meain/vim-package-info', { 'do': 'npm install -g neovim && npm install' } " View the latest version of packages
+" endif
 Plug 'mattn/emmet-vim'
 Plug 'posva/vim-vue'
 " }}}
