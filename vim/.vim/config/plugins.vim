@@ -109,7 +109,7 @@ Plug 'ntpeters/vim-better-whitespace'
 " endif
 Plug 'Shougo/neco-syntax' " vim syntax source
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'tag': '*' }
+Plug 'neoclide/coc.nvim', {'branch': 'release' }
 " }}}
 
 " Parens, Brackets, etc... {{{
@@ -147,7 +147,7 @@ endif
 " }}}
 
 " Latex {{{
-Plug 'lervag/vimtex'
+" Plug 'lervag/vimtex'
 " }}}
 
 " Thesaurus {{{
