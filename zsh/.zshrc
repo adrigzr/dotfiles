@@ -15,6 +15,17 @@ if [[ $TERM == xterm-termite ]]; then
   export TERM='xterm-256color'
 fi
 
+# Config autosuggestions.
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=59"
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=true
+
+# zsh-syntax-highlighting
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+
+# Remove path separator from WORDCHARS.
+WORDCHARS=${WORDCHARS//[\/]}
+
 # Load default dotfiles
 [ -s ~/.profile  ] && source ~/.profile
 
@@ -22,7 +33,12 @@ fi
 [ -s ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Source zim.
-[ -s ~/.zim/init.zsh ] && source ~/.zim/init.zsh
+# Update static initialization script if it's outdated, before sourcing it
+if [[ ${ZIM_HOME}/init.zsh -ot ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+
+source ${ZIM_HOME}/init.zsh
 
 # Alias tips.
 [ -s ~/.zsh/alias-tips/alias-tips.plugin.zsh ] && source ~/.zsh/alias-tips/alias-tips.plugin.zsh
@@ -36,10 +52,14 @@ fi
 # Spaceship prompt.
 [ -s ~/.zsh/zsh-spaceship-prompt.zsh ] && source ~/.zsh/zsh-spaceship-prompt.zsh
 
+# PM2
+[ -s ~/.zsh/pm2.zsh ] && source ~/.zsh/pm2.zsh
+
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }
 zle -N zle-keymap-select
 # bindkey -v
+bindkey -e
 export KEYTIMEOUT=1
 
 # Edit command line on vim.
@@ -49,6 +69,13 @@ bindkey '^x^e' edit-command-line
 
 # bind UP and DOWN arrow keys for history search plugin
 zmodload zsh/terminfo
+bindkey "$terminfo[khome]" beginning-of-line # Home
+bindkey "$terminfo[kend]" end-of-line # End
+bindkey "$terminfo[kdch1]" delete-char # Delete
+bindkey "$terminfo[kich1]" overwrite-mode # Insert
+bindkey "$terminfo[kbs]" backward-delete-char # Backspace
+bindkey "$terminfo[kpp]" beginning-of-buffer-or-history # PageUp
+bindkey "$terminfo[knp]" end-of-buffer-or-history # PageDown
 bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
@@ -68,18 +95,19 @@ bindkey '^r' history-incremental-search-backward
 # Bind autosuggestions.
 bindkey '^A' autosuggest-accept
 
-# Config autosuggestions.
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=59"
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-ZSH_AUTOSUGGEST_USE_ASYNC=true
+# Fix "cd .." autocompletion.
+zstyle ':completion:*' special-dirs true
 
 # history mgmt
 # http://www.refining-linux.org/archives/49/ZSH-Gem-15-Shared-history/
 setopt inc_append_history
 setopt share_history
 
-# Fix "cd .." autocompletion.
-zstyle ':completion:*' special-dirs true
+# Remove older command from the history if a duplicate is to be added.
+setopt HIST_IGNORE_ALL_DUPS
+
+# Prompt for spelling correction of commands.
+setopt CORRECT
 
 # uncomment to finish profiling
 # zprof

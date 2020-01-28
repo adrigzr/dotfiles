@@ -192,6 +192,7 @@ Plug 'junegunn/vader.vim' " Vim script tester
 " endif
 Plug 'mattn/emmet-vim'
 Plug 'posva/vim-vue'
+Plug 'Quramy/vim-js-pretty-template'
 " }}}
 
 call plug#end()

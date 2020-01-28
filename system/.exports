@@ -47,31 +47,20 @@ export PATH=${PATH}:./node_modules/.bin
 export NOTE_DIR=$HOME/Dropbox/Texts
 
 # Fzf
-which rg >/dev/null && export FZF_DEFAULT_COMMAND="rg --files --hidden --follow 2> /dev/null"
+export FZF_DEFAULT_COMMAND="rg --files --hidden --glob \!.git --follow 2> /dev/null"
 export FZF_DEFAULT_OPTS="--reverse --ansi "
 
-# Get python user package path.
-if which python >/dev/null; then
-PYTHON_PACKAGES=$(python -m site --user-site)
-fi
-if which python3 >/dev/null; then
-PYTHON3_PACKAGES=$(python3 -m site --user-site)
-fi
-
 # Ruby
-export PATH="/usr/local/opt/ruby@2.3/bin:$PATH"
-which gem >/dev/null && export PATH=$(gem environment gemdir)/bin:${PATH}
+export PATH="/usr/local/opt/ruby@2.3/bin:${PATH}"
+# gem env gemdir
+export PATH="/usr/local/Cellar/ruby@2.3/2.3.8_1/lib/ruby/gems/2.3.0/bin:${PATH}"
 
 # Fix GPG
 export GPG_TTY=$(tty)
 
-# Else, get python system package path.
-[ ! -s $PYTHON_PACKAGES ] && PYTHON_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
-[ ! -s $PYTHON3_PACKAGES ] && PYTHON3_PACKAGES=$(python3 -c "import site; print(site.getsitepackages()[0])")
-
-# Export when exists.
-[ -s $PYTHON_PACKAGES ] && export PYTHON_PACKAGES
-[ -s $PYTHON3_PACKAGES ] && export PYTHON3_PACKAGES
+# Get python user package path.
+export PYTHON_PACKAGES="$HOME/Library/Python/2.7/lib/python/site-packages"
+export PYTHON3_PACKAGES="$HOME/Library/Python/3.7/lib/python/site-packages"
 
 # Proxy.
 proxy_enable() {
@@ -135,8 +124,9 @@ export PERL_MB_OPT="--install_base \"${HOME}/perl5\""
 export PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"
 
 # Rust
-if which rustc >/dev/null; then
-  export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
-fi
+# uncommet for rust development
+# if which rustc >/dev/null; then
+#   export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+# fi
 
 # vim: ft=sh
