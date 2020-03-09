@@ -5,6 +5,7 @@ vim/.vim/swaps
 vim/.vim/undo
 vim/.vim/viminfo
 vim/.vim/plugged
+vim/.vim/sessions
 vim/.vim/spell/*.add
 vim/.vim/spell/*.spl
 vim/.vim/.netrwhist

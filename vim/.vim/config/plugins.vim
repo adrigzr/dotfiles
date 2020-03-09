@@ -136,7 +136,7 @@ Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim', { 'do': 'brew install ripgrep' }
+Plug 'junegunn/fzf.vim', { 'do': 'brew install ripgrep && brew install bat' }
 if v:version >= 800 && has('python3')
   if !has('nvim')
     Plug 'roxma/nvim-yarp' " denite dependency.

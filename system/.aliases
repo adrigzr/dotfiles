@@ -46,6 +46,7 @@ alias fs='stat -f "%z bytes"'
 alias gfa='git fetch --all'
 alias gcn='git clean'
 alias gcz='git cz'
+alias lg='lazygit'
 
 # notifications - dunst
 alias notifications_disable='pkill -u "$USER" -USR1 dunst'
