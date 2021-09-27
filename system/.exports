@@ -26,6 +26,7 @@ export PATH=${PATH}:$GOPATH:$GOPATH/bin
 
 # MacOS
 export PATH=/usr/local/bin:${PATH}
+export PATH=/usr/local/sbin:${PATH}
 
 # Texlive
 export PATH=${PATH}:/Library/TeX/texbin
@@ -43,6 +44,9 @@ export XDG_CONFIG_HOME=$HOME/.config
 export npm_config_progress=false
 export PATH=${PATH}:./node_modules/.bin
 
+# Node
+export NODE_OPTIONS="--max-old-space-size=4096 --max-http-header-size=49152"
+
 # Notes
 export NOTE_DIR=$HOME/Dropbox/Texts
 
@@ -59,8 +63,8 @@ export PATH="/usr/local/Cellar/ruby@2.3/2.3.8_1/lib/ruby/gems/2.3.0/bin:${PATH}"
 export GPG_TTY=$(tty)
 
 # Get python user package path.
-export PYTHON_PACKAGES="$HOME/Library/Python/2.7/lib/python/site-packages"
-export PYTHON3_PACKAGES="$HOME/Library/Python/3.7/lib/python/site-packages"
+# export PYTHON_PACKAGES="$HOME/Library/Python/2.7/lib/python/site-packages"
+# export PYTHON3_PACKAGES="$HOME/Library/Python/3.7/lib/python/site-packages"
 
 # Proxy.
 proxy_enable() {

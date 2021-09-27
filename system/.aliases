@@ -34,7 +34,8 @@ alias free_diskspace_report='diskspace_report'
 
 # Shortcuts
 alias g='git'
-alias v='vim'
+alias v='nvim'
+alias vim='nvim'
 
 # Wifi
 alias wifi='wicd-curses'

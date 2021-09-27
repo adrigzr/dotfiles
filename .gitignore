@@ -9,8 +9,9 @@ vim/.vim/sessions
 vim/.vim/spell/*.add
 vim/.vim/spell/*.spl
 vim/.vim/.netrwhist
-neovim/.config/nvim/shada
+neovim/.config/nvim/shada*
 tmux/.tmux/plugins/tmux-*
+tmux/.tmux/plugins/extrakto
 tmux/.tmux/resurrect
 tmux/.tmux/sidebar
 *.log

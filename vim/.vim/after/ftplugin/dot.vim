@@ -2,6 +2,6 @@ if &filetype !=# 'dot' || v:version < 700
   finish
 endif
 
-setlocal makeprg=dot\ -Tpng\ \"%:p\"\ -o\ \"%:p:r.png\"
+setlocal makeprg=dot\ -Tsvg\ \"%:p\"\ -o\ \"%:p:r.svg\"
 
-let b:undo_ftplugin .= '|setlocal makeprg<'
+let b:undo_ftplugin = '|setlocal makeprg<'

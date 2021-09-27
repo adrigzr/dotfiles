@@ -6,6 +6,6 @@ let g:markdown_fenced_languages = [
       \ 'css',
       \ 'erb=eruby.html',
       \ 'bash=sh',
-      \ 'handlebars',
+      \ 'html.handlebars',
       \ 'json'
       \ ]

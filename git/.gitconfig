@@ -1,12 +1,21 @@
 [push]
   default = current
+	followTags = true
+
+[diff]
+  tool = fugitive
+
+[difftool]
+  prompt = false
 
 [merge]
-  tool = vimdiff
-  conflictstyle = diff3
+  tool = fugitive
+
+[mergetool "vimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
 [mergetool "fugitive"]
-  cmd = vim -f -c "Gvdiff" "$MERGED"
+  cmd = nvim -f "$MERGED" -c "Gvdiffsplit!"
 
 [mergetool]
   prompt = false
@@ -73,6 +82,14 @@
   current-commit = rev-parse HEAD
   cb = current-branch
   cc = current-commit
+	identity = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; git config user.signingkey \"$(git config user.$1.signingkey)\"; :"
+  mv-index = "!f() { \
+    old=\"$1\"; \
+    new=\"$2\"; \
+    info=$(git ls-files -s -- \"$old\" | cut -d' ' -f-2 | tr ' ' ,); \
+    git update-index --add --cacheinfo \"$info,$new\" && \
+    git rm --cached \"$old\"; \
+    }; f"
 
 [core]
   editor = nvim
@@ -137,12 +154,11 @@
 [url "https://github.com"]
   insteadOf = git://github.com
 
-[user]
-	signingkey = 531577578FAF05AE
-	name = adrigzr
-	email = adrigzr@users.noreply.github.com
-
 [commit]
-	gpgsign = true
+	gpgsign = false
+
 [gpg]
 	program = gpg
+
+[include]
+  path = ~/.gitconfig.extra

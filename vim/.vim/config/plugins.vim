@@ -14,20 +14,26 @@ augroup END
 call plug#begin('~/.vim/plugged')
 
 " Themes {{{
-Plug 'altercation/vim-colors-solarized'
+" Plug 'altercation/vim-colors-solarized'
 " Plug 'tomasiser/vim-code-dark'
 " Plug 'haishanh/night-owl.vim'
 " Plug 'flrnprz/plastic.vim'
-Plug 'joshdick/onedark.vim'
+" Plug 'joshdick/onedark.vim', { 'branch': 'main' }
+Plug 'navarasu/onedark.nvim'
+" }}}
+
+" Icons {{{
+Plug 'kyazdani42/nvim-web-devicons'
 " }}}
 
 " Statusbar {{{
-Plug 'itchyny/lightline.vim'
+" Plug 'itchyny/lightline.vim'
+Plug 'hoob3rt/lualine.nvim'
 " }}}
 
 " Text {{{
-Plug 'inkarkat/vim-SpellCheck' " Populate spell check to quickfix.
-Plug 'inkarkat/vim-ingo-library' " Dependency for vim-SpellCheck.
+" Plug 'inkarkat/vim-SpellCheck' " Populate spell check to quickfix.
+" Plug 'inkarkat/vim-ingo-library' " Dependency for vim-SpellCheck.
 " Plug 'junegunn/goyo.vim'
 " }}}
 
@@ -36,15 +42,23 @@ Plug 'inkarkat/vim-ingo-library' " Dependency for vim-SpellCheck.
 " }}}
 
 " Syntax {{{
-Plug 'sheerun/vim-polyglot'
+" Plug 'sheerun/vim-polyglot' " Disabled for nvim-treesitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'tpope/vim-markdown', { 'for': 'markdown' }
-Plug 'joukevandermaas/vim-ember-hbs'
+" Plug 'joukevandermaas/vim-ember-hbs' " Disabled for nvim-treesitter
 Plug 'chrisbra/vim-zsh', { 'for': 'zsh' }
 Plug 'vim-scripts/bats.vim' " Bash Test Runner
 " }}}
 
 " File tree {{{
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeFind' }
+" Plug 'antoinemadec/FixCursorHold.nvim' " Fixes issues in neovim
+" Plug 'lambdalisue/nerdfont.vim'
+" Plug 'lambdalisue/glyph-palette.vim'
+" Plug 'lambdalisue/fern.vim' " Tree plugin
+" Plug 'lambdalisue/fern-renderer-nerdfont.vim' " Add icons to tree
+" Plug 'lambdalisue/fern-mapping-project-top.vim' " Add mappings to tree
+" Plug 'scrooloose/nerdtree'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " Works with vim-devicons
 " Plug 'Xuyuanp/nerdtree-git-plugin'
 " }}}
 
@@ -55,9 +69,8 @@ Plug 'tpope/vim-commentary'
 " Misc {{{
 Plug 'tpope/vim-repeat' " Repeat everything
 Plug 'tpope/vim-abolish' " Camelcase, snakecase, mixedcase coercion
-Plug 'tpope/vim-sleuth' " Autodetect indentation
+" Plug 'tpope/vim-sleuth' " Autodetect indentation
 Plug 'tpope/vim-unimpaired' " Pair aliases and toggling options
-Plug 'mhinz/vim-startify' " Startup screen
 " Plug 'fcpg/vim-altscreen' " Clean terminal on vim shell commands
 Plug 'mjbrownie/swapit' " <c-a> increments
 Plug 'xtal8/traces.vim' " Search highlight as typing
@@ -66,19 +79,29 @@ Plug 'kopischke/vim-fetch' " Handle line number on filename
 Plug 'vim-scripts/Spiffy-Foldtext' " Pretty folds
 Plug 'tmhedberg/matchit' " Extend % command
 " Plug 'ap/vim-css-color' " Hex colors highlight
-Plug 'junegunn/vim-easy-align' " Align text
+" Plug 'junegunn/vim-easy-align' " Align text
 Plug 'tpope/vim-dispatch' " Async shell commands
+Plug 'norcalli/nvim-colorizer.lua'
+" Plug 'romgrk/barbar.nvim' " Tab bar line
+" }}}
+
+" Start screen {{{
+" Plug 'mhinz/vim-startify' " Startup screen
+Plug 'glepnir/dashboard-nvim'
 " }}}
 
 " Git {{{
-Plug 'tpope/vim-git'
+" Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive' " Git commands
-Plug 'airblade/vim-gitgutter' " Git gutter marks
+" Plug 'stsewd/fzf-checkout.vim'
+" Plug 'airblade/vim-gitgutter' " Git gutter marks
+Plug 'lewis6991/gitsigns.nvim'
 " Plug 'chrisbra/vim-diff-enhanced'
 " " started In Diff-Mode set diffexpr (plugin not loaded yet)
 " if &diff
 "     let &diffexpr='EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
 " endif
+Plug 'rhysd/conflict-marker.vim'
 " }}}
 
 " Notes {{{
@@ -109,7 +132,8 @@ Plug 'ntpeters/vim-better-whitespace'
 " endif
 Plug 'Shougo/neco-syntax' " vim syntax source
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'branch': 'release' }
+Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
+" Plug 'antoinemadec/coc-fzf'
 " }}}
 
 " Parens, Brackets, etc... {{{
@@ -125,7 +149,7 @@ Plug 'jjasghar/snipmate-snippets'
 " }}}
 
 " Linter {{{
-Plug 'w0rp/ale'
+" Plug 'dense-analysis/ale'
 " }}}
 
 " Scratchpad {{{
@@ -134,16 +158,20 @@ Plug 'w0rp/ale'
 
 " Navigation {{{
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'terryma/vim-smooth-scroll'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim', { 'do': 'brew install ripgrep && brew install bat' }
-if v:version >= 800 && has('python3')
-  if !has('nvim')
-    Plug 'roxma/nvim-yarp' " denite dependency.
-    Plug 'roxma/vim-hug-neovim-rpc' " denite dependency
-  endif
-  " Plug 'Shougo/denite.nvim', { 'do': 'pip3 install pynvim' }
-endif
+Plug 'nvim-lua/plenary.nvim' " Lua helpers
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' } " FZF for telescope
+Plug 'fannheyward/telescope-coc.nvim' " CoC for telescope
+Plug 'nvim-telescope/telescope.nvim', { 'do': 'brew install ripgrep' } " Fuzzy Finder
+" Plug 'terryma/vim-smooth-scroll'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim', { 'do': 'brew install ripgrep && brew install bat' }
+" if v:version >= 800 && has('python3')
+"   if !has('nvim')
+"     Plug 'roxma/nvim-yarp' " denite dependency.
+"     Plug 'roxma/vim-hug-neovim-rpc' " denite dependency
+"   endif
+"   " Plug 'Shougo/denite.nvim', { 'do': 'pip3 install pynvim' }
+" endif
 " }}}
 
 " Latex {{{
@@ -167,20 +195,24 @@ Plug 'JamshedVesuna/vim-markdown-preview', { 'for': 'markdown' } " Compilation
 " }}}
 
 " Marks {{{
-Plug 'kshenoy/vim-signature' " Show marks
+" Plug 'kshenoy/vim-signature' " Show marks
 " }}}
 
 " Help {{{
-Plug 'chrisbra/vim_faq'
+" Plug 'chrisbra/vim_faq'
 " }}}
 
 " Debugging {{{
 Plug 'tpope/vim-scriptease'
 " }}}
 
+" Helpers {{{
+Plug 'folke/which-key.nvim'
+" }}}
+
 " Language Tools {{{
 Plug 'moll/vim-node' " Node
-Plug 'racer-rust/vim-racer' " Rust
+" Plug 'racer-rust/vim-racer' " Rust
 " Plug 'Quramy/tsuquyomi' " Typescript server
 " let g:tsuquyomi_disable_default_mappings = 1
 Plug 'sukima/vim-javascript-imports'

@@ -13,7 +13,7 @@ let g:large_file = 1 * 1024 * 1024
 
 augroup large_file
   autocmd!
-  autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f > g:large_file || f == -2 | call LargeFile() | else | call SmallFile() | endif
+  " autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f > g:large_file || f == -2 | call LargeFile() | else | call SmallFile() | endif
 augroup END
 
 function! LargeFile()

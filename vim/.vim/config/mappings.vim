@@ -33,7 +33,7 @@ nnoremap ' `
 " }}}
 
 " Toggle show tabs and trailing spaces (,c) {{{
-nnoremap <silent> <leader>v :set nolist!<CR>
+" nnoremap <silent> <leader>v :set nolist!<CR>
 " }}}
 
 " Disable space behaviour {{{
@@ -46,7 +46,7 @@ nnoremap <silent> <leader>qs :noh<CR>
 " }}}
 
 " Paste toggle (,p) {{{
-nnoremap <leader>p :set invpaste paste?<CR>
+" nnoremap <leader>p :set invpaste paste?<CR>
 " }}}
 
 " Edit near files {{{
@@ -109,8 +109,9 @@ vnoremap [1;5B :'<,'>m'>+<CR>gv=`<my`>mzgv`yo`z
 
 nnoremap <leader>bs :Buffers<CR>
 nnoremap <leader>bt :enew<CR>
-nnoremap <leader>bd :lclose<bar>b#<bar>bd #<CR>
-nnoremap <leader>bD :bufdo bd<CR>
+" nnoremap <leader>bd :lclose<bar>b#<bar>bd #<CR>
+nnoremap <leader>bd :BufferClose<CR>
+nnoremap <leader>bD :bufdo :BufferClose<CR>
 nnoremap <leader><leader> <c-^>
 
 " Quickfix window (,qq) (,qo) (,qj) (,qk) {{{

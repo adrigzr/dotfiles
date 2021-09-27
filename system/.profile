@@ -33,4 +33,8 @@ export NVM_DIR="$HOME/.nvm"
 # Load travis.
 [ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
 
+# Load jabba.
+[ -f "$HOME/.jabba/jabba.sh" ] && source "$HOME/.jabba/jabba.sh" >/dev/null
+
 # vim: ft=sh
+

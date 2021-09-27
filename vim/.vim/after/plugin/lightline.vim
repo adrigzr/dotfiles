@@ -10,6 +10,7 @@ let g:lightline = {
       \		    [ 'gitbranch' ],
       \		    [ 'path' ],
       \		    [ 'readonly', 'filename', 'modified' ],
+      \       [ 'cocstatus' ],
       \   ],
       \   'right': [
       \        [ 'errors', 'warnings', 'hints' ],
@@ -20,6 +21,7 @@ let g:lightline = {
       \ },
       \ 'inactive': {
       \   'left': [
+      \		    [ 'path' ],
       \		    [ 'readonly', 'filename', 'modified' ]
       \   ],
       \   'right': [
@@ -29,7 +31,7 @@ let g:lightline = {
       \   ]
       \ },
       \ 'component_function': {
-      \   'cocstatus': 'coc#status',
+      \   'cocstatus': 'CocStatus',
       \   'readonly': 'LightlineReadonly',
       \   'gitbranch': 'LightlineGitBranch',
       \   'path': 'LightlinePath'
@@ -51,8 +53,8 @@ function! LightlineReadonly() abort
 endfunction
 
 function! LightlineGitBranch() abort
-  if exists('*fugitive#head')
-    let branch = fugitive#head()
+  if exists('*FugitiveHead')
+    let branch = FugitiveHead()
     return branch !=# '' ? ' '.branch : ''
   endif
   return ''
@@ -63,10 +65,15 @@ function! LightlinePath() abort
 endfunction
 
 function! AleCount(type) abort
+  if !exists('g:ale_enabled') | return 0 | endif
   let l:bufnr = bufnr('%')
   let l:count = ale#statusline#Count(l:bufnr)
   if empty(l:count) | return 0 | endif
   return get(l:count, a:type, 0)
+endfunction
+
+function! CocStatus() abort
+  return get(g:, 'coc_status', '')
 endfunction
 
 function! CocDiagnosticInfo(type) abort
@@ -92,6 +99,5 @@ endfunction
 
 augroup lightline_update
   autocmd!
-  autocmd User ALELintPOST call lightline#update()
-  autocmd User CocDiagnosticChange call lightline#update()
+  autocmd User ALELintPost,CocStatusChange,CocDiagnosticChange call lightline#update()
 augroup END

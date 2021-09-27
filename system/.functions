@@ -120,7 +120,7 @@ function wttr() {
 }
 
 function logcat() {
-  pidcat $1 | fzf --ansi --tac --tiebreak=index -i
+  pidcat "$1" | fzf --ansi --tac --tiebreak=index -i --bind "ctrl-m:execute: sh -c 'echo {} | more'"
 }
 
 # Git short stat.
@@ -302,6 +302,51 @@ function semantic_env() {
   export GIT_AUTHOR_EMAIL=${email}
   export GIT_COMMITTER_NAME=${name}
   export GIT_COMMITTER_EMAIL=${email}
+}
+
+function adbwifi() {
+  local ip
+  local port
+  local serial
+
+  port="5555"
+  ip=$(adb shell ip -f inet addr show wlan0 | grep inet | awk '{ print $2 }' | awk -F '/' '{ print $1 }')
+  serial="${ip}:${port}"
+
+  adb tcpip "${port}" >/dev/null
+  adb connect "${serial}" >/dev/null
+  # adb -s "${serial}" reverse tcp:4200 tcp:4200
+  # adb -s "${serial}" reverse tcp:8081 tcp:8081
+  # adb -s "${serial}" reverse tcp:49152 tcp:49152
+
+  # while : ; do
+  #   adb -s "${serial}" shell ping -c 1 localhost >/dev/null || exit 1
+  #   sleep 60
+  # done &
+
+  echo "Connected to ${serial}! You can unplug your device now..."
+}
+
+# Show a notify message.
+function notify() {
+  local text="${1}"
+  local title="${2}"
+  local subtitle="${3}"
+  # List of sounds: /System/Library/Sounds
+  local sound="${4:-Glass}"
+  local str="display notification \"${text}\" "
+
+  if [ ! -z "${title}" ]; then
+    str+="with title \"${title}\" "
+  fi
+
+  if [ ! -z "${subtitle}" ]; then
+    str+="subtitle \"${subtitle}\" "
+  fi
+
+  str+="sound name \"${sound}\" "
+
+  osascript -e "${str}"
 }
 
 # vim: ft=zsh

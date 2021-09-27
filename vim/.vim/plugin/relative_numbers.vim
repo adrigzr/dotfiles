@@ -9,8 +9,8 @@ if exists('g:loaded_relative_numbers')
 endif
 let g:loaded_relative_numbers = 1
 
-augroup relative_numbers
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-augroup END
+" augroup relative_numbers
+"   autocmd!
+"   autocmd BufEnter,FocusGained,InsertLeave * if &number | set relativenumber | endif
+"   autocmd BufLeave,FocusLost,InsertEnter   * if &number | set norelativenumber | endif
+" augroup END
