@@ -40,20 +40,21 @@
     defaults write com.apple.notificationcenterui bannerTime -int 1
     ```
 
-1. Setup zsh
+1. Setup zsh & [zim](https://github.com/zimfw/zimfw)
 
     ```bash
     curl -s -L --create-dirs -o ~/.zim/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
     zsh ~/.zim/zimfw.zsh install
     ```
 
-1. Setup tmux
+1. Setup tmux & [tpm](https://github.com/tmux-plugins/tpm)
 
     ```bash
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     ~/.tmux/plugins/tpm/bin/install_plugins
     ```
 
-1. Setup asdf
+1. Setup [asdf](https://github.com/asdf-vm/asdf)
 
     ```bash
     asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
