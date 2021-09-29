@@ -17,3 +17,5 @@ tmux/.tmux/sidebar
 *.log
 *.tmp
 .DS_Store
+ssh/.ssh/*
+!ssh/.ssh/config

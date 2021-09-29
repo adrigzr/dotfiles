@@ -21,8 +21,8 @@ fi
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # Load nvm.
-export NVM_DIR="$HOME/.nvm"
-[ -f "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
+# export NVM_DIR="$HOME/.config/nvm"
+# [ -f "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # Load rvm.
 [ -f "$HOME/.rvm/scripts/rvm" ] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
@@ -37,4 +37,3 @@ export NVM_DIR="$HOME/.nvm"
 [ -f "$HOME/.jabba/jabba.sh" ] && source "$HOME/.jabba/jabba.sh" >/dev/null
 
 # vim: ft=sh
-

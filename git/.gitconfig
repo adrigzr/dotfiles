@@ -101,14 +101,14 @@
   helper = cache --timeout=3600
 
 [init]
-	templatedir = ~/.git_template
+	templatedir = ~/.gittemplate
 
 [fetch]
   prune = true
 
-# [pager]
-# 	diff = diff-so-fancy | less --tabs=4 -RFX
-# 	show = diff-so-fancy | less --tabs=4 -RFX
+; [pager]
+; 	diff = diff-so-fancy | less --tabs=4 -RFX
+; 	show = diff-so-fancy | less --tabs=4 -RFX
 
 [color "diff"]
   meta = yellow bold

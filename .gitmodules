@@ -10,12 +10,6 @@
 [submodule "zsh/.zsh/fast-syntax-highlighting"]
 	path = zsh/.zsh/fast-syntax-highlighting
 	url = https://github.com/zdharma/fast-syntax-highlighting.git
-[submodule "zsh/.zsh/spaceship-prompt"]
-	path = zsh/.zsh/spaceship-prompt
-	url = https://github.com/denysdovhan/spaceship-prompt.git
-[submodule "zsh/.zim"]
-	path = zsh/.zim
-	url = https://github.com/zimfw/zimfw.git
 [submodule "tmux/.tmux/plugins/tpm"]
 	path = tmux/.tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm

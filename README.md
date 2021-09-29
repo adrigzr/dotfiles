@@ -1,6 +1,67 @@
-# Powerline
+# dotfiles
 
-## Assets
+## Installation
 
-- [Powerline daemon file](https://github.com/joeroback/powerline).
-- [i3status-rust](https://github.com/XYunknown/i3status-rust.git)
+### Mac OS
+
+1. Upgrade to latest Mac OS version and install CLT.
+
+    ```bash
+    softwareupdate --all --install --force
+    sudo xcode-select --install
+    ```
+
+1. Install [brew](https://brew.sh/index_es) and useful packages.
+
+    ```bash
+    brew install git tmux ripgrep fzf stow gnu-sed neovim editorconfig bat asdf gpg gawk
+    brew install --cask iterm2 font-hack-nerd-font
+    ```
+
+1. Clone repository and stow packages.
+
+    ```bash
+    git clone --recurse-submodules -j8 https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
+    stow system tmux ssh git zsh neovim vim
+    ```
+
+1. Tweak Mac OS default settings
+
+    Reduce key repeat delay:
+
+    ```bash
+    defaults write -g InitialKeyRepeat -int 10
+    defaults write -g KeyRepeat -int 1
+    ```
+
+    Increase duration of notifications:
+
+    ```bash
+    defaults write com.apple.notificationcenterui bannerTime -int 1
+    ```
+
+1. Setup zsh
+
+    ```bash
+    curl -s -L --create-dirs -o ~/.zim/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+    zsh ~/.zim/zimfw.zsh install
+    ```
+
+1. Setup tmux
+
+    ```bash
+    ~/.tmux/plugins/tpm/bin/install_plugins
+    ```
+
+1. Setup asdf
+
+    ```bash
+    asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+    asdf install
+    ```
+
+1. Setup neovim
+
+    ```bash
+    nvim -c "PlugUpgrade" -c "PlugInstall"
+    ```

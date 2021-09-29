@@ -4,6 +4,7 @@ let g:coc_global_extensions = [
       \ 'coc-docker',
       \ 'coc-ember',
       \ 'coc-eslint',
+      \ 'coc-explorer',
       \ 'coc-json',
       \ 'coc-lists',
       \ 'coc-neosnippet',

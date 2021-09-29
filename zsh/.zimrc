@@ -20,6 +20,9 @@ zmodule utility
 # Provides archive and unarchive functions for easy archive manipulation.
 zmodule archive
 
+# Asdf
+zmodule asdf
+
 # Fasd
 zmodule fasd
 
@@ -32,8 +35,14 @@ zmodule homebrew
 #
 # Prompt
 #
+# Exposes to prompts how long the last command took to execute, used by asciiship.
+zmodule duration-info
+
 # Exposes git repository status information to prompts.
 zmodule git-info
+
+# Spaceship prompt
+zmodule spaceship-prompt/spaceship-prompt --name spaceship
 
 # A customizable version of steeef's prompt theme.
 # zmodule steeef

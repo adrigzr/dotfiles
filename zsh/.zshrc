@@ -32,6 +32,9 @@ WORDCHARS=${WORDCHARS//[\/]}
 # Setup fzf (fuzzy-finder).
 [ -s ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Fix git aliases
+zstyle ':zim:git' aliases-prefix 'g'
+
 # Source zim.
 # Update static initialization script if it's outdated, before sourcing it
 if [[ ${ZIM_HOME}/init.zsh -ot ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
@@ -48,9 +51,6 @@ source ${ZIM_HOME}/init.zsh
 
 # Quiet accept line.
 [ -s ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh ] && source ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh
-
-# Spaceship prompt.
-[ -s ~/.zsh/zsh-spaceship-prompt.zsh ] && source ~/.zsh/zsh-spaceship-prompt.zsh
 
 # PM2
 [ -s ~/.zsh/pm2.zsh ] && source ~/.zsh/pm2.zsh

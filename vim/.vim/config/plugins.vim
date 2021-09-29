@@ -39,6 +39,7 @@ Plug 'hoob3rt/lualine.nvim'
 
 " Search {{{
 " Plug 'wsdjeg/FlyGrep.vim'
+Plug 'windwp/nvim-spectre'
 " }}}
 
 " Syntax {{{
