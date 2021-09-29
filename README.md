@@ -23,7 +23,7 @@
 
     ```bash
     git clone --recurse-submodules -j8 https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
-    stow system tmux ssh git zsh neovim vim
+    stow asdf git neovim ssh system tmux vim zsh
     ```
 
 1. Tweak Mac OS default settings

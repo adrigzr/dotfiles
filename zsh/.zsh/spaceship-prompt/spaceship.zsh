@@ -1,8 +1,8 @@
 # Load plugin.
-autoload -U promptinit; promptinit
+# autoload -U promptinit; promptinit
 
 # Select prompt.
-prompt spaceship
+# prompt spaceship
 
 # Configuration.
 SPACESHIP_PROMPT_ORDER=(

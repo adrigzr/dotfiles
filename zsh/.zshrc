@@ -32,6 +32,9 @@ WORDCHARS=${WORDCHARS//[\/]}
 # Setup fzf (fuzzy-finder).
 [ -s ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Spaceship prompt.
+[ -s ~/.zsh/spaceship-prompt/spaceship.zsh ] && source ~/.zsh/spaceship-prompt/spaceship.zsh
+
 # Fix git aliases
 zstyle ':zim:git' aliases-prefix 'g'
 
