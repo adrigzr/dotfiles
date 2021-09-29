@@ -14,6 +14,7 @@
 1. Install [brew](https://brew.sh/index_es) and useful packages.
 
     ```bash
+    brew tap homebrew/cask-fonts
     brew install git tmux ripgrep fzf stow gnu-sed neovim editorconfig bat asdf gpg gawk
     brew install --cask iterm2 font-hack-nerd-font
     ```
