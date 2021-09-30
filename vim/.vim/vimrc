@@ -8,8 +8,10 @@
 if !exists('g:syntax_on')
   syntax enable
 endif
+
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+
 set t_Co=256 " Terminal colors.
 set t_ut=
 set background=dark
@@ -147,6 +149,11 @@ if !has('nvim')
 endif
 " }}}
 
+" Enable italics (https://gist.github.com/gutoyr/4192af1aced7a1b555df06bd3781a722) {{{
+" let &t_ZH="\e[3m"
+" let &t_ZR="\e[23m"
+" }}}
+
 " }}}"
 
 " Load config {{{
@@ -154,6 +161,10 @@ runtime! config/*.vim
 " }}}
 
 " Color schemes {{{
-colorscheme onedark
+try
+  colorscheme onedark
+catch /^Vim\%((\a\+)\)\=:E185/
+  echo v:exception
+endtry
 " }}}
 

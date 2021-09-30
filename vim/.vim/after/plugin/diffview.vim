@@ -1,6 +1,6 @@
 lua << EOF
 
-local exists, module = pcall(require, "colorizer")
+local exists, module = pcall(require, "diffview")
 
 if not exists then
   return

@@ -102,7 +102,8 @@ Plug 'lewis6991/gitsigns.nvim'
 " if &diff
 "     let &diffexpr='EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
 " endif
-Plug 'rhysd/conflict-marker.vim'
+Plug 'rhysd/conflict-marker.vim' " Mappings for conflicts
+Plug 'sindrets/diffview.nvim' " Diff view
 " }}}
 
 " Notes {{{
@@ -133,7 +134,7 @@ Plug 'ntpeters/vim-better-whitespace'
 " endif
 Plug 'Shougo/neco-syntax' " vim syntax source
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm install -g yarn && yarn install --frozen-lockfile'}
 " Plug 'antoinemadec/coc-fzf'
 " }}}
 

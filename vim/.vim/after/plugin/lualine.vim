@@ -1,10 +1,12 @@
-" if !exists('g:loaded_lualine')
-"   finish
-" endif
-
 lua << EOF
 
-require'lualine'.setup {
+local exists, module = pcall(require, "lualine")
+
+if not exists then
+  return
+end
+
+module.setup {
   options = {
     icons_enabled = true,
     theme = 'onedark',

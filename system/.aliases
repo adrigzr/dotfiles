@@ -16,7 +16,7 @@ alias cp='cp -v'
 alias top='htop'
 alias where=which # sometimes i forget
 alias hosts='sudo $EDITOR /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
-alias attach='tmux new-session -A -s'
+alias attach='TERM=screen-256color tmux new-session -A -s'
 
 # `cat` with beautiful colors. requires: sudo easy_install -U Pygments
 alias c='pygmentize -O style=monokai -f console256 -g'

@@ -1,6 +1,10 @@
 lua << EOF
 
-local wk = require("which-key")
+local exists, wk = pcall(require, "which-key")
+
+if not exists then
+  return
+end
 
 wk.setup {
   enable = true,
