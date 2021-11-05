@@ -27,13 +27,13 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 WORDCHARS=${WORDCHARS//[\/]}
 
 # Load default dotfiles
-[ -s ~/.profile  ] && source ~/.profile
+[ -s "$HOME/.profile"  ] && source "$HOME/.profile"
 
 # Setup fzf (fuzzy-finder).
-[ -s ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -s "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 # Spaceship prompt.
-[ -s ~/.zsh/spaceship-prompt/spaceship.zsh ] && source ~/.zsh/spaceship-prompt/spaceship.zsh
+[ -s "$HOME/.zsh/spaceship-prompt/spaceship.zsh" ] && source "$HOME/.zsh/spaceship-prompt/spaceship.zsh"
 
 # Fix git aliases
 zstyle ':zim:git' aliases-prefix 'g'
@@ -47,16 +47,19 @@ fi
 source ${ZIM_HOME}/init.zsh
 
 # Alias tips.
-[ -s ~/.zsh/alias-tips/alias-tips.plugin.zsh ] && source ~/.zsh/alias-tips/alias-tips.plugin.zsh
+[ -s "$HOME/.zsh/alias-tips/alias-tips.plugin.zsh" ] && source "$HOME/.zsh/alias-tips/alias-tips.plugin.zsh"
 
 # Fast Syntax Highlighting
-[ -s ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh ] && source ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+[ -s "$HOME/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh" ] && source "$HOME/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 
 # Quiet accept line.
-[ -s ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh ] && source ~/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh
+[ -s "$HOME/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh" ] && source "$HOME/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh"
 
 # PM2
-[ -s ~/.zsh/pm2.zsh ] && source ~/.zsh/pm2.zsh
+[ -s "$HOME/.zsh/pm2.zsh" ] && source "$HOME/.zsh/pm2.zsh"
+
+# Iterm2
+[ -s "${HOME}/.iterm2_shell_integration.zsh" ] && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }
@@ -110,7 +113,7 @@ setopt share_history
 setopt HIST_IGNORE_ALL_DUPS
 
 # Prompt for spelling correction of commands.
-setopt CORRECT
+# setopt CORRECT
 
 # uncomment to finish profiling
 # zprof

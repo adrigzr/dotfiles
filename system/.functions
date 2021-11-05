@@ -349,4 +349,10 @@ function notify() {
   osascript -e "${str}"
 }
 
+function killport() {
+  local port="${1}"
+
+  kill $(lsof -t -i:$port)
+}
+
 # vim: ft=zsh

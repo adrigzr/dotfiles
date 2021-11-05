@@ -1,5 +1,3 @@
-lua << EOF
-
 local exists, module = pcall(require, "lualine")
 
 if not exists then
@@ -33,5 +31,3 @@ module.setup {
   tabline = {},
   extensions = {}
 }
-
-EOF

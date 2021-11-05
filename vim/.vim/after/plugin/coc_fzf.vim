@@ -2,7 +2,6 @@ if !exists('g:loaded_coc_fzf')
   finish
 endif
 
-
 " nnoremap <silent> <leader><leader> :<C-u>CocFzfList<CR>
 nnoremap <silent> <leader>ld       :<C-u>CocFzfList diagnostics<CR>
 nnoremap <silent> <leader>lb       :<C-u>CocFzfList diagnostics --current-buf<CR>

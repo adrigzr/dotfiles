@@ -110,8 +110,8 @@ vnoremap [1;5B :'<,'>m'>+<CR>gv=`<my`>mzgv`yo`z
 nnoremap <leader>bs :Buffers<CR>
 nnoremap <leader>bt :enew<CR>
 " nnoremap <leader>bd :lclose<bar>b#<bar>bd #<CR>
-nnoremap <leader>bd :BufferClose<CR>
-nnoremap <leader>bD :bufdo :BufferClose<CR>
+nnoremap <leader>bd :Bdelete<CR>
+nnoremap <leader>bD :bufdo :Bdelete<CR>
 nnoremap <leader><leader> <c-^>
 
 " Quickfix window (,qq) (,qo) (,qj) (,qk) {{{

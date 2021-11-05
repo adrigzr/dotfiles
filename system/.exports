@@ -14,41 +14,42 @@ export LANG="en_US.UTF-8"
 export LC_ALL=${LANG}
 
 # Android
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
-export PATH=${PATH}:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_SDK_ROOT/emulator:${PATH}"
 
 # Go
 export GOROOT=/usr/lib/go-1.9
-export GOPATH=$HOME/go
-export PATH=${PATH}:$GOROOT:$GOROOT/bin
-export PATH=${PATH}:$GOPATH:$GOPATH/bin
+export GOPATH="$HOME/go"
+export PATH="${PATH}:$GOROOT:$GOROOT/bin"
+export PATH="${PATH}:$GOPATH:$GOPATH/bin"
 
 # MacOS
-export PATH=/usr/local/bin:${PATH}
-export PATH=/usr/local/sbin:${PATH}
+export PATH="/usr/local/bin:${PATH}"
+export PATH="/usr/local/sbin:${PATH}"
 
 # Texlive
-export PATH=${PATH}:/Library/TeX/texbin
+export PATH="${PATH}:/Library/TeX/texbin"
 
 # Home bin
-export PATH=${PATH}:~/bin
+export PATH="${PATH}:~/bin"
 
 # Powerline fonts
-export PATH=${PATH}:~/.local/bin
+export PATH="${PATH}:~/.local/bin"
 
 # XDG config home.
-export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CONFIG_HOME="$HOME/.config"
 
 # NPM
 export npm_config_progress=false
-export PATH=${PATH}:./node_modules/.bin
+export PATH="./node_modules/.bin:$PATH"
+# [ -f "$HOME/.asdf/shims/yarn" ] && export PATH="$(yarn global bin):$PATH"
 
 # Node
 export NODE_OPTIONS="--max-old-space-size=4096 --max-http-header-size=49152"
 
 # Notes
-export NOTE_DIR=$HOME/Dropbox/Texts
+export NOTE_DIR="$HOME/Dropbox/Texts"
 
 # Fzf
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob \!.git --follow 2> /dev/null"

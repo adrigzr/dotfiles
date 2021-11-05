@@ -1,6 +1,6 @@
 {
     "coc.preferences.colorSupport": true,
-    "coc.preferences.formatOnSaveFiletypes": ["handlebars"],
+    "coc.preferences.formatOnSaveFiletypes": ["handlebars", "prisma"],
     "coc.preferences.rootPatterns": [
         "package.json",
         "tsconfig.json",
@@ -79,7 +79,7 @@
     "suggest.timeout": 5000,
     "tsserver.disableAutomaticTypeAcquisition": false,
     "tsserver.maxTsServerMemory": 3072,
-    "typescript.updateImportsOnFileMove.enable": false,
+    "typescript.updateImportsOnFileMove.enable": true,
     "homeassistant.hostUrl": "http://192.168.1.142:8123",
     "homeassistant.longLivedAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZmFiNWEyYmE5NTA0YWQxYTliYzljZWZjMjk2ODk4YSIsImlhdCI6MTYyMDEzNDM4NSwiZXhwIjoxOTM1NDk0Mzg1fQ.tBlVFEEoUSfM7TdR_0NM74b6FddH6VHpgmVzyIlNc6E"
 }

@@ -117,7 +117,7 @@ set wrapscan " Searches wrap around end of file
 set shiftwidth=4 " Fix mixed-indent warning
 set tags+=.tags/tags " Set tags folder.
 set infercase " Improve ignorecase
-set synmaxcol=200 " Enable syntax highlight on the first 200 cols
+set synmaxcol=400 " Enable syntax highlight on the first 200 cols
 set breakindent " Preserve indentation on wrap toggle
 set showbreak=⤷ " String to use on breakindent
 " set autoread " Force check disk file
@@ -135,6 +135,8 @@ set timeoutlen=500
 set iskeyword+=-
 set updatetime=300
 " set nocursorline
+set pyxversion=3
+set completeopt=menu,menuone,noselect
 
 " Neovim only settings.
 if has('nvim')

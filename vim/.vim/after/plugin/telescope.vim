@@ -64,7 +64,12 @@ require('telescope').setup {
     pickers = {
         find_files = {
             hidden = true
-        }
+        },
+        buffers = {
+            ignore_current_buffer = true,
+            sort_mru = true,
+            sort_lastused = true,
+        },
     },
     extensions = {
         fzf = {
@@ -78,6 +83,9 @@ require('telescope').setup {
 }
 
 require('telescope').load_extension('fzf')
-require('telescope').load_extension('coc')
+
+if vim.g.did_coc_loaded then
+  require('telescope').load_extension('coc')
+end
 
 EOF

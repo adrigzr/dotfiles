@@ -1,5 +1,3 @@
-lua << EOF
-
 local exists, module = pcall(require, "gitsigns")
 
 if not exists then
@@ -9,5 +7,3 @@ end
 module.setup {
   current_line_blame = true
 }
-
-EOF

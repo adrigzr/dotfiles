@@ -1,5 +1,3 @@
-lua << EOF
-
 local exists, wk = pcall(require, "which-key")
 
 if not exists then
@@ -91,5 +89,3 @@ wk.register(files_config, { prefix = "<leader>f" })
 wk.register(git_config, { prefix = "<leader>g" })
 wk.register(lsp_config, { prefix = "<leader>l" })
 wk.register(vim_config, { prefix = "<leader>v" })
-
-EOF

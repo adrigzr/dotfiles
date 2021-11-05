@@ -1,5 +1,3 @@
-lua << EOF
-
 local exists, module = pcall(require, "colorizer")
 
 if not exists then
@@ -7,5 +5,3 @@ if not exists then
 end
 
 module.setup {}
-
-EOF

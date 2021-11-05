@@ -15,7 +15,7 @@
 
     ```bash
     brew tap homebrew/cask-fonts
-    brew install git tmux ripgrep fzf stow gnu-sed neovim editorconfig bat asdf gpg gawk
+    brew install git tmux ripgrep fzf stow gnu-sed neovim editorconfig bat asdf gpg gawk htop ffmpeg jq fd
     brew install --cask iterm2 font-hack-nerd-font
     ```
 
@@ -63,8 +63,14 @@
     asdf install
     ```
 
+1. Setup node
+
+    ```bash
+    npm install -g bash-language-server
+    ```
+
 1. Setup neovim
 
     ```bash
-    nvim -c "PlugUpgrade" -c "PlugInstall"
+    nvim -c "PlugUpgrade" -c "PlugInstall" -c "checkhealth"
     ```
