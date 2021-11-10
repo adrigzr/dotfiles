@@ -89,7 +89,7 @@ set report=0 " Show all changes
 set ruler " Show the cursor position
 set scrolloff=6 " Start scrolling three lines before horizontal border of window
 set shell=/bin/sh " Use /bin/sh for executing shell commands
-set shortmess=atI " Don't show the intro message when starting vim
+" set shortmess=atI " Bunch of stuff
 set showtabline=1 " Show tab bar
 set sidescrolloff=3 " Start scrolling three columns before vertical border of window
 set smartcase " Ignore 'ignorecase' if search patter contains uppercase characters
@@ -137,6 +137,7 @@ set updatetime=300
 " set nocursorline
 set pyxversion=3
 set completeopt=menu,menuone,noselect
+set shell=/bin/zsh
 
 " Neovim only settings.
 if has('nvim')
@@ -157,6 +158,9 @@ endif
 " }}}
 
 " }}}"
+
+" Call impatient first of all
+lua pcall(require, "impatient")
 
 " Load config {{{
 runtime! config/*.vim

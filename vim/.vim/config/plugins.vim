@@ -91,6 +91,7 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'moll/vim-bbye' " BufferClose commands
 Plug 'github/copilot.vim' " Github copilot
 Plug 'lukas-reineke/indent-blankline.nvim' " Indentation guides
+Plug 'lewis6991/impatient.nvim' " Speedup nvim
 " }}}
 
 " Start screen {{{
@@ -127,6 +128,8 @@ Plug 'ntpeters/vim-better-whitespace'
 " Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
+Plug 'folke/trouble.nvim' " Pretty diagnostics
+Plug 'filipdutescu/renamer.nvim', { 'branch': 'master' }
 " }}}
 
 " Autocompletion {{{
@@ -152,6 +155,7 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/cmp-nvim-lua'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'onsails/lspkind-nvim' " Pretty completion items
 " }}}
 
 " Snippets {{{
@@ -216,7 +220,7 @@ Plug 'nvim-telescope/telescope.nvim' " Fuzzy Finder
 
 " Markdown {{{
 Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown' }
-Plug 'JamshedVesuna/vim-markdown-preview', { 'for': 'markdown' } " Compilation
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 " }}}
 
 " Marks {{{
