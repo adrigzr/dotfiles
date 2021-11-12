@@ -102,6 +102,7 @@
 
 [init]
 	templatedir = ~/.gittemplate
+	defaultBranch = master
 
 [fetch]
   prune = true

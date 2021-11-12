@@ -5,7 +5,7 @@ if not exists then
 end
 
 local lspkind = require('lspkind')
-local custom = require('custom/diagnostics')
+local custom = require('custom')
 
 local feedkey = function(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
@@ -35,7 +35,7 @@ module.setup {
         if copilot_keys ~= "" then
           vim.api.nvim_feedkeys(copilot_keys, "i", true)
         -- Insert tab if prev char is a space
-        elseif custom.check_backspace() then
+        elseif custom.util.check_backspace() then
           fallback()
         -- Otherwise open cmp
         else

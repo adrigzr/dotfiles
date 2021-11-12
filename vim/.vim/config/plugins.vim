@@ -130,6 +130,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'folke/trouble.nvim' " Pretty diagnostics
 Plug 'filipdutescu/renamer.nvim', { 'branch': 'master' }
+Plug 'b0o/schemastore.nvim' " Schemas for jsonls
 " }}}
 
 " Autocompletion {{{

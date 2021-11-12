@@ -5,7 +5,7 @@ if not exists then
 end
 
 local util = require('lspconfig/util')
-local custom = require('custom/diagnostics')
+local custom = require('custom')
 
 -- Debugging
 -- vim.lsp.set_log_level("debug")
@@ -23,6 +23,11 @@ vim.cmd[[
 	sign define DiagnosticSignHint text= texthl=DiagnosticSignHint numhl=DiagnosticSignHint
 ]]
 
+-- Redefine highlight groups
+vim.cmd[[
+  highlight LspSignatureActiveParameter gui=undercurl
+]]
+
 -- Format on save
 vim.cmd[[
   augroup lsp_format
@@ -35,7 +40,7 @@ vim.cmd[[
 vim.cmd[[
   augroup lsp_diagnostics
     autocmd!
-    autocmd CursorHold,CursorHoldI * lua require('custom/diagnostics').hover()
+    autocmd CursorHold,CursorHoldI * lua require('custom.lsp').hover()
   augroup END
 ]]
 
@@ -53,30 +58,42 @@ local function common_on_attach(_, bufnr)
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<cmd>lua require("custom/diagnostics").goto_definition()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua require("custom.lsp").goto_definition()<CR>', opts)
   buf_set_keymap('n', 'gt', '<cmd>Telescope lsp_type_definitions<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>Telescope lsp_implementations<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>Telescope lsp_references<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev({ popup_opts = { border = require("custom/diagnostics").border }})<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next({ popup_opts = { border = require("custom/diagnostics").border }})<CR>', opts)
-  buf_set_keymap('n', '<C-]>', '<cmd>lua require("custom/diagnostics").goto_definition()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua require("custom.lsp").show_info()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev({ popup_opts = { border = require("custom.lsp").border }})<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next({ popup_opts = { border = require("custom.lsp").border }})<CR>', opts)
+  buf_set_keymap('n', '<C-]>', '<cmd>lua require("custom.lsp").goto_definition()<CR>', opts)
   buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', '<leader>rn', '<cmd>lua require("renamer").rename()<CR>', opts)
   buf_set_keymap('v', '<leader>rn', '<cmd>lua require("renamer").rename()<CR>', opts)
-  buf_set_keymap('n', '<leader>ca', '<cmd>Telescope lsp_code_actions<CR>', opts)
+  buf_set_keymap('n', '<leader>ca', '<cmd>require("telescope.builtin").lsp_code_actions(require("telescope.themes").get_cursor())<CR>', opts)
   buf_set_keymap('n', '<leader>cf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   buf_set_keymap('n', '<leader>cd', '<cmd>TroubleToggle lsp_document_diagnostics<CR>', opts)
   buf_set_keymap('n', '<leader>cw', '<cmd>TroubleToggle lsp_workspace_diagnostics<CR>', opts)
   buf_set_keymap('n', '<leader>cs', '<cmd>Telescope lsp_document_symbols<CR>', opts)
 end
 
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+
 local handler_opts = {
-  border = custom.border,
-  close_events = custom.close_events,
+  border = custom.lsp.border,
+  close_events = custom.lsp.close_events,
   focusable = false,
+}
+
+local runtime_path = vim.split(package.path, ';')
+
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
+local handlers = {
+  ["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, handler_opts),
+  ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, handler_opts),
 }
 
 module.on_server_ready(function(server)
@@ -84,19 +101,23 @@ module.on_server_ready(function(server)
   local opts = {
     on_attach = common_on_attach,
     capabilities = capabilities,
-    handlers = {
-      ["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, handler_opts),
-      ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, handler_opts),
-    }
+    handlers = handlers,
   }
 
   if server.name == 'sumneko_lua' then
     opts.settings = {
       Lua = {
+        runtime = {
+          version = "LuaJIT",
+          path = runtime_path,
+        },
         diagnostics = {
           globals = {
             vim = true,
           },
+        },
+        workspace = {
+          library = vim.api.nvim_get_runtime_file('', true),
         },
       },
     }
@@ -111,12 +132,20 @@ module.on_server_ready(function(server)
   end
 
   if server.name == "tsserver" then
-    opts.root_dir = util.root_pattern("tsconfig.json", "jsconfig.json")
+    opts.root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", ".git")
     opts.on_attach = function (client, bufnr)
       -- Disable tsserver formatting
       client.resolved_capabilities.document_formatting = false
       common_on_attach(client, bufnr)
     end
+  end
+
+  if server.name == 'jsonls' then
+    opts.settings = {
+      json = {
+        schemas = require('schemastore').json.schemas(),
+      }
+    }
   end
 
   server:setup(opts)
