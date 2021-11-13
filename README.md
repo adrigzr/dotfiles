@@ -23,7 +23,7 @@
 
     ```bash
     git clone --recurse-submodules -j8 https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
-    stow asdf git neovim ssh system tmux vim zsh
+    stow asdf git neovim ssh system tmux zsh
     ```
 
 1. Tweak Mac OS default settings
@@ -72,5 +72,5 @@
 1. Setup neovim
 
     ```bash
-    nvim -c "PlugUpgrade" -c "PlugInstall" -c "checkhealth"
+    nvim -c "checkhealth"
     ```

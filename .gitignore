@@ -9,7 +9,7 @@ vim/.vim/sessions
 vim/.vim/spell/*.add
 vim/.vim/spell/*.spl
 vim/.vim/.netrwhist
-neovim/.config/nvim/shada*
+packer_compiled.lua
 *.log
 *.tmp
 .DS_Store
