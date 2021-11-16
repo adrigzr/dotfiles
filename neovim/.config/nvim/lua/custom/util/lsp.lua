@@ -85,7 +85,7 @@ local function hover()
     if #line_diagnostics ~= 0 then
       return vim.diagnostic.open_float(nil, {
         scope = "line",
-        border = misc.border,
+        border = "rounded",
         focusable = false,
         source = 'always',
         format = diagnostic.format_message,

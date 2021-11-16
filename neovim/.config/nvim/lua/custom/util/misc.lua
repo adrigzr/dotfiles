@@ -1,17 +1,5 @@
 local M = {}
 
--- Border style
-M.border = {
-  {"╭", "NormalFloat"},
-  {"─", "NormalFloat"},
-  {"╮", "NormalFloat"},
-  {"│", "NormalFloat"},
-  {"╯", "NormalFloat"},
-  {"─", "NormalFloat"},
-  {"╰", "NormalFloat"},
-  {"│", "NormalFloat"},
-}
-
 -- Try to load a module
 function M.prequire(module)
   local ok, mod = pcall(require, module)

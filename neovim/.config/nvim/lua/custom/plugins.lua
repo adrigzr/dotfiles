@@ -42,11 +42,16 @@ packer.startup({ function()
   use { 'windwp/nvim-spectre', module = 'spectre' } -- Classic Search & Replace
   use 'kevinhwang91/nvim-hlslens' -- Search Helper
   use 'xtal8/traces.vim' -- Replace highlight as typing
-  use { 'ggandor/lightspeed.nvim', config = function() require('lightspeed').setup {} end } -- Quick search motions
+  use 'ggandor/lightspeed.nvim' -- Quick search motions
   use 'hauleth/sad.vim' -- Change and repeat
 
   -- Syntax
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}  -- We recommend updating the parsers on update
+  use 'nvim-treesitter/playground' -- Playground for treesitter
+  use 'romgrk/nvim-treesitter-context' -- Add function context while scrolling
+  use 'SmiteshP/nvim-gps' -- Add context to the status line
+  use 'windwp/nvim-ts-autotag' -- Autocloses html tags
+  use 'p00f/nvim-ts-rainbow' -- Colorize parens
   use { 'tpope/vim-markdown', ft = 'markdown' }
   use { 'joukevandermaas/vim-ember-hbs', ft = { 'handlebars', 'javascript', 'typescript' } }
   use { 'chrisbra/vim-zsh', ft = 'zsh' }
@@ -83,18 +88,22 @@ packer.startup({ function()
   -- LSP
   use 'neovim/nvim-lspconfig'
   use 'williamboman/nvim-lsp-installer'
+  use 'jose-elias-alvarez/null-ls.nvim'
   use 'folke/trouble.nvim' -- Pretty diagnostics
   use { 'filipdutescu/renamer.nvim', branch = 'master', config = function() require('renamer').setup {} end } -- Pretty rename box
   use 'b0o/schemastore.nvim' -- Schemas for jsonls
 
   -- Completion
+  use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/cmp-vsnip'
   use 'hrsh7th/cmp-nvim-lua'
-  use 'hrsh7th/nvim-cmp'
+  use 'hrsh7th/cmp-calc'
+  use 'ray-x/cmp-treesitter'
+  use 'f3fora/cmp-spell'
   use 'onsails/lspkind-nvim' -- Pretty completion items
   use 'hrsh7th/vim-vsnip'
   use 'hrsh7th/vim-vsnip-integ'
@@ -113,12 +122,12 @@ packer.startup({ function()
   use 'github/copilot.vim' -- Github copilot
   use 'lukas-reineke/indent-blankline.nvim' -- Indentation guides
   use 'tpope/vim-surround' -- Surround wrappers
-  use 'p00f/nvim-ts-rainbow' -- Colorize parens
   use 'windwp/nvim-autopairs' -- Auto-pairs
   use { 'dhruvasagar/vim-table-mode', ft = 'markdown' } -- Handle tables in markdown
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'  } -- Markdown previewer
   use 'tpope/vim-scriptease' -- Pretty debug messages
   use 'folke/which-key.nvim' -- Pretty keybind hints
+  use 'adrigzr/scrollbar.nvim' -- Scrollbar
 
   if packer_bootstrap then
     packer.sync()
@@ -128,7 +137,7 @@ end,
     compile_path = vim.fn.stdpath('config') .. '/lua/packer_compiled.lua',
     display = {
       open_fn = function()
-        return require('packer.util').float({ border = require('custom.util.misc').border })
+        return require('packer.util').float({ border = 'rounded' })
       end
     }
   }

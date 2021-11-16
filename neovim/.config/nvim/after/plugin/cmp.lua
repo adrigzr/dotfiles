@@ -20,7 +20,16 @@ module.setup {
   mapping = {
     ['<C-d>'] = module.mapping(module.mapping.scroll_docs(-4), { 'i', 'c' }),
     ['<C-f>'] = module.mapping(module.mapping.scroll_docs(4), { 'i', 'c' }),
-    ['<C-e>'] = module.mapping(module.mapping.close()),
+    -- ['<C-e>'] = module.mapping(module.mapping.close()),
+    ['<C-e>'] = module.mapping(function(fallback)
+      if module.visible() then
+        module.close()
+      elseif vim.b._copilot_suggestion then
+        vim.fn["copilot#Dismiss"]()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
     ["<Tab>"] = module.mapping(function(fallback)
       -- Go to next item if cmp is visible
       if module.visible() then
@@ -58,6 +67,9 @@ module.setup {
     { name = 'buffer' },
     { name = 'vsnip', priority = 9999 },
     { name = 'path' },
+    { name = 'calc' },
+    { name = 'treesitter' },
+    { name = 'spell' },
   }),
   documentation = {
     border = "rounded",

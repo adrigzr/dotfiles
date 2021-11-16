@@ -4,7 +4,9 @@ if not exists then
   return
 end
 
+local config = require("lspconfig")
 local util = require('lspconfig/util')
+local null_ls = require('null-ls')
 
 -- Debugging
 -- vim.lsp.set_log_level("debug")
@@ -20,11 +22,6 @@ vim.cmd[[
 	sign define DiagnosticSignWarn text=⚠ texthl=DiagnosticSignWarn numhl=DiagnosticSignWarn
 	sign define DiagnosticSignInfo text=ℹ texthl=DiagnosticSignInfo numhl=DiagnosticSignInfo
 	sign define DiagnosticSignHint text= texthl=DiagnosticSignHint numhl=DiagnosticSignHint
-]]
-
--- Redefine highlight groups
-vim.cmd[[
-  highlight LspSignatureActiveParameter gui=undercurl
 ]]
 
 -- Format on save
@@ -62,13 +59,13 @@ local function common_on_attach(_, bufnr)
   buf_set_keymap('n', 'gi', '<cmd>Telescope lsp_implementations<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>Telescope lsp_references<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>lua require("custom.util.lsp").show_info()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev({ popup_opts = { border = require("custom.util.misc").border }})<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next({ popup_opts = { border = require("custom.util.misc").border }})<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev({ float = { border = "rounded" }})<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next({ float = { border = "rounded" }})<CR>', opts)
   buf_set_keymap('n', '<C-]>', '<cmd>lua require("custom.util.lsp").goto_definition()<CR>', opts)
   buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', '<leader>rn', '<cmd>lua require("renamer").rename()<CR>', opts)
   buf_set_keymap('v', '<leader>rn', '<cmd>lua require("renamer").rename()<CR>', opts)
-  buf_set_keymap('n', '<leader>ca', '<cmd>require("telescope.builtin").lsp_code_actions(require("telescope.themes").get_cursor())<CR>', opts)
+  buf_set_keymap('n', '<leader>ca', '<cmd>lua require("telescope.builtin").lsp_code_actions(require("telescope.themes").get_cursor())<CR>', opts)
   buf_set_keymap('n', '<leader>cf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   buf_set_keymap('n', '<leader>cd', '<cmd>TroubleToggle lsp_document_diagnostics<CR>', opts)
   buf_set_keymap('n', '<leader>cw', '<cmd>TroubleToggle lsp_workspace_diagnostics<CR>', opts)
@@ -80,20 +77,25 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
 local handler_opts = {
-  border = require('custom.util.misc').border,
+  border = "rounded",
   close_events = require('custom.util.lsp').close_events,
   focusable = false,
 }
-
-local runtime_path = vim.split(package.path, ';')
-
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
 
 local handlers = {
   ["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, handler_opts),
   ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, handler_opts),
 }
+
+null_ls.config({
+  diagnostics_format = "#{s}: #{m} (#{c}",
+  sources = {}
+})
+
+config["null-ls"].setup({
+  on_attach = common_on_attach,
+  handlers = handlers,
+})
 
 module.on_server_ready(function(server)
   -- LSP Options: https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
@@ -104,6 +106,11 @@ module.on_server_ready(function(server)
   }
 
   if server.name == 'sumneko_lua' then
+    local runtime_path = vim.split(package.path, ';')
+
+    table.insert(runtime_path, "lua/?.lua")
+    table.insert(runtime_path, "lua/?/init.lua")
+
     opts.settings = {
       Lua = {
         runtime = {
