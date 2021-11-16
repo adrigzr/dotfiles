@@ -1,14 +1,14 @@
-local exists, module = pcall(require, 'onedark')
+local exists = pcall(require, "onedark")
 
 if not exists then
   return
 end
 
-vim.g.onedark_style = 'dark'
+vim.g.onedark_style = "dark"
 vim.g.onedark_terminal_italics = 1
-vim.g.onedark_toggle_style_keymap = '<nop>'
+vim.g.onedark_toggle_style_keymap = "<nop>"
 
-vim.cmd[[
+vim.cmd [[
   colorscheme onedark
 
   " [Tree] Turn tree background same as regular background
@@ -31,8 +31,8 @@ vim.cmd[[
 
 -- [Rainbow] Change treesitter rainbow colors
 for i = 1, 7 do
-  vim.cmd('highlight rainbowcol' .. i .. ' guifg=' .. vim.g['terminal_color_' .. i])
+  vim.cmd("highlight rainbowcol" .. i .. " guifg=" .. vim.g["terminal_color_" .. i])
 end
 
 -- Init lightspeed colors
-require('lightspeed').init_highlight(true)
+require("lightspeed").init_highlight(true)

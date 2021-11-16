@@ -2,13 +2,13 @@
 pcall(require, "impatient")
 
 -- Load settings
-require('custom.settings')
+require "custom.settings"
 
 -- Try to load packer compiled file
-pcall(require, 'packer_compiled')
+pcall(require, "packer_compiled")
 
 -- Load config vimfiles
-vim.api.nvim_command('runtime! config/*.vim')
+vim.api.nvim_command "runtime! config/*.vim"
 
 -- Load packer
-require('custom.plugins')
+require "custom.plugins"

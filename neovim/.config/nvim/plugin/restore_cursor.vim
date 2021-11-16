@@ -9,6 +9,8 @@ if exists('g:loaded_restore_cursor')
 endif
 let g:loaded_restore_cursor = 1
 
+scriptencoding utf-8
+
 augroup restore_cursor
   autocmd!
   autocmd BufReadPost *

@@ -1,13 +1,20 @@
 -- Install packer
 local fn = vim.fn
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
 local packer_bootstrap
 
 if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
+  packer_bootstrap = fn.system {
+    "git",
+    "clone",
+    "--depth",
+    "1",
+    "https://github.com/wbthomason/packer.nvim",
+    install_path,
+  }
 end
 
-vim.cmd[[
+vim.cmd [[
   augroup packer
     autocmd!
     autocmd BufWritePost init.lua PackerCompile
@@ -16,129 +23,151 @@ vim.cmd[[
 ]]
 
 -- Plugins
-local packer = require('packer')
+local packer = require "packer"
 local use = packer.use
 
-packer.startup({ function()
-  -- Meta
-  use 'wbthomason/packer.nvim'
+packer.startup {
+  function()
+    -- Meta
+    use "wbthomason/packer.nvim"
 
-  -- Performance
-  use 'lewis6991/impatient.nvim'
+    -- Performance
+    use "lewis6991/impatient.nvim"
 
-  -- Utils
-  use 'nvim-lua/plenary.nvim'
+    -- Utils
+    use "nvim-lua/plenary.nvim"
 
-  -- Icons
-  use { 'kyazdani42/nvim-web-devicons', config = function() require('nvim-web-devicons').setup {} end}
+    -- Icons
+    use {
+      "kyazdani42/nvim-web-devicons",
+      config = function()
+        require("nvim-web-devicons").setup {}
+      end,
+    }
 
-  -- Theme
-  use 'navarasu/onedark.nvim'
+    -- Theme
+    use "navarasu/onedark.nvim"
 
-  -- Statusbar
-  use 'hoob3rt/lualine.nvim'
+    -- Statusbar
+    use "hoob3rt/lualine.nvim"
 
-  -- Search
-  use { 'windwp/nvim-spectre', module = 'spectre' } -- Classic Search & Replace
-  use 'kevinhwang91/nvim-hlslens' -- Search Helper
-  use 'xtal8/traces.vim' -- Replace highlight as typing
-  use 'ggandor/lightspeed.nvim' -- Quick search motions
-  use 'hauleth/sad.vim' -- Change and repeat
+    -- Search
+    use { "windwp/nvim-spectre", module = "spectre" } -- Classic Search & Replace
+    use "kevinhwang91/nvim-hlslens" -- Search Helper
+    use "xtal8/traces.vim" -- Replace highlight as typing
+    use "ggandor/lightspeed.nvim" -- Quick search motions
+    use "hauleth/sad.vim" -- Change and repeat
 
-  -- Syntax
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}  -- We recommend updating the parsers on update
-  use 'nvim-treesitter/playground' -- Playground for treesitter
-  use 'romgrk/nvim-treesitter-context' -- Add function context while scrolling
-  use 'SmiteshP/nvim-gps' -- Add context to the status line
-  use 'windwp/nvim-ts-autotag' -- Autocloses html tags
-  use 'p00f/nvim-ts-rainbow' -- Colorize parens
-  use { 'tpope/vim-markdown', ft = 'markdown' }
-  use { 'joukevandermaas/vim-ember-hbs', ft = { 'handlebars', 'javascript', 'typescript' } }
-  use { 'chrisbra/vim-zsh', ft = 'zsh' }
-  use { 'vim-scripts/bats.vim', ft = 'bash' } -- Bash Test Runner
-  use { 'pantharshit00/vim-prisma', ft = 'prisma' }
-  use { 'sukima/vim-ember-imports', requires = 'sukima/vim-javascript-imports', ft = { 'javascript', 'typescript' } } -- Ember Imports
-  use { 'wannesm/wmgraphviz.vim', ft = 'dot' } -- Graphviz plugin
-  use { 'junegunn/vader.vim', ft = 'vim' } -- Vim script tester
-  use { 'posva/vim-vue', ft = { 'javascript', 'typescript' } }
-  use { 'Quramy/vim-js-pretty-template', ft = { 'javascript', 'typescript' } }
+    -- Syntax
+    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" } -- We recommend updating the parsers on update
+    use "nvim-treesitter/playground" -- Playground for treesitter
+    use "romgrk/nvim-treesitter-context" -- Add function context while scrolling
+    use "SmiteshP/nvim-gps" -- Add context to the status line
+    use "windwp/nvim-ts-autotag" -- Autocloses html tags
+    use "p00f/nvim-ts-rainbow" -- Colorize parens
+    use { "tpope/vim-markdown", ft = "markdown" }
+    use { "joukevandermaas/vim-ember-hbs", ft = { "handlebars", "javascript", "typescript" } }
+    use { "chrisbra/vim-zsh", ft = "zsh" }
+    use { "vim-scripts/bats.vim", ft = "bash" } -- Bash Test Runner
+    use { "pantharshit00/vim-prisma", ft = "prisma" }
+    use { "sukima/vim-ember-imports", requires = "sukima/vim-javascript-imports", ft = { "javascript", "typescript" } } -- Ember Imports
+    use { "wannesm/wmgraphviz.vim", ft = "dot" } -- Graphviz plugin
+    use { "junegunn/vader.vim", ft = "vim" } -- Vim script tester
+    use { "posva/vim-vue", ft = { "javascript", "typescript" } }
+    use { "Quramy/vim-js-pretty-template", ft = { "javascript", "typescript" } }
 
-  -- Navigation
-  use { 'kyazdani42/nvim-tree.lua', module = 'nvim-tree' }
-  use 'christoomey/vim-tmux-navigator'
-  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } -- FZF for telescope
-  use 'nvim-telescope/telescope.nvim' -- Fuzzy Finder
+    -- Navigation
+    use { "kyazdani42/nvim-tree.lua", module = "nvim-tree" }
+    use "christoomey/vim-tmux-navigator"
+    use { "nvim-telescope/telescope-fzf-native.nvim", run = "make" } -- FZF for telescope
+    use "nvim-telescope/telescope.nvim" -- Fuzzy Finder
 
-  -- Comments
-  use 'tpope/vim-commentary'
+    -- Comments
+    use "tpope/vim-commentary"
 
-  -- Start screen
-  use 'glepnir/dashboard-nvim'
+    -- Start screen
+    use "glepnir/dashboard-nvim"
 
-  -- Git
-  use 'tpope/vim-fugitive' -- Git commands
-  use 'lewis6991/gitsigns.nvim' -- Git gutter signs
-  use 'rhysd/conflict-marker.vim' -- Mappings for conflicts
-  use { 'sindrets/diffview.nvim', config = function() require('diffview').setup {} end } -- Diff view
+    -- Git
+    use "tpope/vim-fugitive" -- Git commands
+    use "lewis6991/gitsigns.nvim" -- Git gutter signs
+    use "rhysd/conflict-marker.vim" -- Mappings for conflicts
+    use {
+      "sindrets/diffview.nvim",
+      config = function()
+        require("diffview").setup {}
+      end,
+    } -- Diff view
 
-  -- Formatter
-  use 'editorconfig/editorconfig-vim'
-  use 'ntpeters/vim-better-whitespace'
+    -- Formatter
+    use "editorconfig/editorconfig-vim"
+    use "ntpeters/vim-better-whitespace"
 
-  -- LSP
-  use 'neovim/nvim-lspconfig'
-  use 'williamboman/nvim-lsp-installer'
-  use 'jose-elias-alvarez/null-ls.nvim'
-  use 'folke/trouble.nvim' -- Pretty diagnostics
-  use { 'filipdutescu/renamer.nvim', branch = 'master', config = function() require('renamer').setup {} end } -- Pretty rename box
-  use 'b0o/schemastore.nvim' -- Schemas for jsonls
+    -- LSP
+    use "neovim/nvim-lspconfig"
+    use "williamboman/nvim-lsp-installer"
+    use "jose-elias-alvarez/null-ls.nvim"
+    use "folke/trouble.nvim" -- Pretty diagnostics
+    use {
+      "filipdutescu/renamer.nvim",
+      branch = "master",
+      config = function()
+        require("renamer").setup {}
+      end,
+    } -- Pretty rename box
+    use "b0o/schemastore.nvim" -- Schemas for jsonls
 
-  -- Completion
-  use 'hrsh7th/nvim-cmp'
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/cmp-vsnip'
-  use 'hrsh7th/cmp-nvim-lua'
-  use 'hrsh7th/cmp-calc'
-  use 'ray-x/cmp-treesitter'
-  use 'f3fora/cmp-spell'
-  use 'onsails/lspkind-nvim' -- Pretty completion items
-  use 'hrsh7th/vim-vsnip'
-  use 'hrsh7th/vim-vsnip-integ'
-  use 'rafamadriz/friendly-snippets'
+    -- Completion
+    use "hrsh7th/nvim-cmp"
+    use "hrsh7th/cmp-nvim-lsp"
+    use "hrsh7th/cmp-buffer"
+    use "hrsh7th/cmp-path"
+    use "hrsh7th/cmp-cmdline"
+    use "hrsh7th/cmp-vsnip"
+    use "hrsh7th/cmp-nvim-lua"
+    use "hrsh7th/cmp-calc"
+    use "ray-x/cmp-treesitter"
+    use "f3fora/cmp-spell"
+    use "onsails/lspkind-nvim" -- Pretty completion items
+    use "hrsh7th/vim-vsnip"
+    use "hrsh7th/vim-vsnip-integ"
+    use "rafamadriz/friendly-snippets"
 
-  -- Misc
-  use 'tpope/vim-repeat' -- Repeat everything
-  use 'tpope/vim-abolish' -- Camelcase, snakecase, mixedcase coercion
-  use 'tpope/vim-unimpaired' -- Pair aliases and toggling options
-  use 'mjbrownie/swapit' -- <c-a> increments
-  use 'kopischke/vim-fetch' -- Handle line number on filename
-  use 'vim-scripts/Spiffy-Foldtext' -- Pretty folds
-  use { 'tpope/vim-dispatch', cmd = { 'Dispatch', 'Make', 'Focus', 'Start' } } -- Async shell commands
-  use { 'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup {} end } -- Colorize hex codes
-  use 'moll/vim-bbye' -- BufferClose commands
-  use 'github/copilot.vim' -- Github copilot
-  use 'lukas-reineke/indent-blankline.nvim' -- Indentation guides
-  use 'tpope/vim-surround' -- Surround wrappers
-  use 'windwp/nvim-autopairs' -- Auto-pairs
-  use { 'dhruvasagar/vim-table-mode', ft = 'markdown' } -- Handle tables in markdown
-  use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'  } -- Markdown previewer
-  use 'tpope/vim-scriptease' -- Pretty debug messages
-  use 'folke/which-key.nvim' -- Pretty keybind hints
-  use 'adrigzr/scrollbar.nvim' -- Scrollbar
+    -- Misc
+    use "tpope/vim-repeat" -- Repeat everything
+    use "tpope/vim-abolish" -- Camelcase, snakecase, mixedcase coercion
+    use "tpope/vim-unimpaired" -- Pair aliases and toggling options
+    use "mjbrownie/swapit" -- <c-a> increments
+    use "kopischke/vim-fetch" -- Handle line number on filename
+    use "vim-scripts/Spiffy-Foldtext" -- Pretty folds
+    use { "tpope/vim-dispatch", cmd = { "Dispatch", "Make", "Focus", "Start" } } -- Async shell commands
+    use {
+      "norcalli/nvim-colorizer.lua",
+      config = function()
+        require("colorizer").setup {}
+      end,
+    } -- Colorize hex codes
+    use "moll/vim-bbye" -- BufferClose commands
+    use "github/copilot.vim" -- Github copilot
+    use "lukas-reineke/indent-blankline.nvim" -- Indentation guides
+    use "tpope/vim-surround" -- Surround wrappers
+    use "windwp/nvim-autopairs" -- Auto-pairs
+    use { "dhruvasagar/vim-table-mode", ft = "markdown" } -- Handle tables in markdown
+    use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
+    use "tpope/vim-scriptease" -- Pretty debug messages
+    use "folke/which-key.nvim" -- Pretty keybind hints
+    use "Xuyuanp/scrollbar.nvim" -- Scrollbar
 
-  if packer_bootstrap then
-    packer.sync()
-  end
-end,
+    if packer_bootstrap then
+      packer.sync()
+    end
+  end,
   config = {
-    compile_path = vim.fn.stdpath('config') .. '/lua/packer_compiled.lua',
+    compile_path = vim.fn.stdpath "config" .. "/lua/packer_compiled.lua",
     display = {
       open_fn = function()
-        return require('packer.util').float({ border = 'rounded' })
-      end
-    }
-  }
-})
+        return require("packer.util").float { border = "rounded" }
+      end,
+    },
+  },
+}

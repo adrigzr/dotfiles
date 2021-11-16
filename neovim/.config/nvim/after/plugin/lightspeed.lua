@@ -6,7 +6,7 @@ end
 
 module.setup {}
 
-vim.cmd[[
+vim.cmd [[
   " This should fix recording macros with lightspeed
   nmap <expr> f reg_recording() . reg_executing() == "" ? "<Plug>Lightspeed_f" : "f"
   nmap <expr> F reg_recording() . reg_executing() == "" ? "<Plug>Lightspeed_F" : "F"

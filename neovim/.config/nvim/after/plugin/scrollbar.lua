@@ -5,19 +5,19 @@ if not exists then
 end
 
 vim.g.scrollbar_winblend = 100
-vim.g.scrollbar_excluded_filetypes = { 'NvimTree' }
+vim.g.scrollbar_excluded_filetypes = { "NvimTree" }
 vim.g.scrollbar_highlight = {
-  head = 'Scrollbar',
-  body = 'Scrollbar',
-  tail = 'Scrollbar',
+  head = "Scrollbar",
+  body = "Scrollbar",
+  tail = "Scrollbar",
 }
 vim.g.scrollbar_shape = {
-	head ='▎',
-	body ='▎',
-	tail ='▎',
+  head = "▎",
+  body = "▎",
+  tail = "▎",
 }
 
-vim.cmd[[
+vim.cmd [[
   augroup scrollbar
     autocmd!
     autocmd TabEnter,WinEnter,BufEnter,WinScrolled,VimResized * lua require('scrollbar').show()

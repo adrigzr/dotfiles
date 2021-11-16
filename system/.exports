@@ -129,6 +129,7 @@ export PERL_MB_OPT="--install_base \"${HOME}/perl5\""
 export PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"
 
 # Rust
+export PATH="${PATH}:/Users/adrigzr/.cargo/bin"
 # uncommet for rust development
 # if which rustc >/dev/null; then
 #   export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"

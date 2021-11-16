@@ -7,7 +7,7 @@ end
 module.setup {
   patterns = {
     json = {
-      'pair'
-    }
-  }
+      "pair",
+    },
+  },
 }

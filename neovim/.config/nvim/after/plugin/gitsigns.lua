@@ -10,6 +10,6 @@ module.setup {
     relative_time = true,
   },
   preview_config = {
-    border = 'rounded',
+    border = "rounded",
   },
 }

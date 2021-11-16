@@ -5,5 +5,5 @@ if not exists then
 end
 
 module.setup {
-  disable_filetype = { "TelescopePrompt" , "vim" },
+  disable_filetype = { "TelescopePrompt", "vim" },
 }

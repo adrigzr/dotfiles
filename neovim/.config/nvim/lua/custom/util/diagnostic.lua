@@ -10,7 +10,11 @@ end
 
 -- Format diagnostic messasge
 function M.format_message(diagnostic)
-  return string.format("%s (%s)", diagnostic.message, diagnostic.user_data.lsp.code)
+  if diagnostic.user_data then
+    return string.format("%s (%s)", diagnostic.message, diagnostic.user_data.lsp.code)
+  end
+
+  return string.format("%s", diagnostic.message)
 end
 
 return M

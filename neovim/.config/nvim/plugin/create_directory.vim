@@ -9,6 +9,8 @@ if exists('g:loaded_create_directory')
 endif
 let g:loaded_create_directory = 1
 
+scriptencoding utf-8
+
 function s:MkNonExDir(file, buf) abort
   if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
     let l:dir=fnamemodify(a:file, ':h')

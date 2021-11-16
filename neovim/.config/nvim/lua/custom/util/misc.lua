@@ -19,7 +19,7 @@ function M.get_floating_windows()
   return vim.tbl_filter(function(v)
     local config = vim.api.nvim_win_get_config(v)
 
-    return config.relative =="win" and config.win == current_win
+    return config.relative == "win" and config.win == current_win
   end, list_wins)
 end
 
@@ -39,8 +39,8 @@ end
 
 -- Check if prev character is a space
 function M.check_backspace()
-  local col = vim.fn.col('.') - 1
-  if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+  local col = vim.fn.col "." - 1
+  if col == 0 or vim.fn.getline("."):sub(col, col):match "%s" then
     return true
   else
     return false

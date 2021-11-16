@@ -5,12 +5,12 @@ if not exists then
 end
 
 module.setup {
-  separator = ' ⟩ ',
-	icons = {
-		["class-name"] = ' ',
-		["function-name"] = ' ',
-		["method-name"] = ' ',
-		["container-name"] = ' ',
-		["tag-name"] = '炙'
-	},
+  separator = " ⟩ ",
+  icons = {
+    ["class-name"] = " ",
+    ["function-name"] = " ",
+    ["method-name"] = " ",
+    ["container-name"] = " ",
+    ["tag-name"] = "炙",
+  },
 }
