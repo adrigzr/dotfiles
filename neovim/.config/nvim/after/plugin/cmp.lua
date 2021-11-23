@@ -6,10 +6,34 @@ end
 
 local lspkind = require "lspkind"
 local util = require "custom.util"
+local cmp_buffer = require "cmp_buffer"
 
 local feedkey = function(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
+
+local sources = {
+  nvim_lsp = { name = "nvim_lsp", max_item_count = 10 },
+  nvim_lua = { name = "nvim_lua" },
+  buffer = {
+    name = "buffer",
+    opts = {
+      -- Add visible buffers to completion
+      get_bufnrs = function()
+        local bufs = {}
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+          bufs[vim.api.nvim_win_get_buf(win)] = true
+        end
+        return vim.tbl_keys(bufs)
+      end,
+    },
+  },
+  vsnip = { name = "vsnip", priority = 9999 },
+  path = { name = "path" },
+  calc = { name = "calc" },
+  treesitter = { name = "treesitter" },
+  spell = { name = "spell" },
+}
 
 module.setup {
   snippet = {
@@ -62,14 +86,14 @@ module.setup {
     ["<CR>"] = module.mapping.confirm { select = true },
   },
   sources = module.config.sources {
-    { name = "nvim_lsp", max_item_count = 10 },
-    { name = "nvim_lua" },
-    { name = "buffer" },
-    { name = "vsnip", priority = 9999 },
-    { name = "path" },
-    { name = "calc" },
-    { name = "treesitter" },
-    { name = "spell" },
+    sources.nvim_lsp,
+    sources.nvim_lua,
+    sources.buffer,
+    sources.vsnip,
+    sources.path,
+    sources.calc,
+    sources.treesitter,
+    sources.spell,
   },
   documentation = {
     border = "rounded",
@@ -88,16 +112,24 @@ module.setup {
       },
     },
   },
+  sorting = {
+    comparators = {
+      -- Distance based sorting
+      function(...)
+        return cmp_buffer:compare_locality(...)
+      end,
+    },
+  },
 }
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 module.setup.cmdline("/", {
   sources = {
-    { name = "buffer" },
+    sources.buffer,
   },
 })
 
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
--- module.setup.cmdline(':', {
---   sources = module.config.sources({ { name = 'path' } }, { { name = 'cmdline' } })
--- })
+-- Insert ( after select function or method item)
+local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+
+module.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })

@@ -18,10 +18,10 @@ vim.diagnostic.config {
 
 -- Redefine diagnostics signs
 vim.cmd [[
-	sign define DiagnosticSignError text=✗ texthl=DiagnosticSignError numhl=DiagnosticSignError
-	sign define DiagnosticSignWarn text=⚠ texthl=DiagnosticSignWarn numhl=DiagnosticSignWarn
-	sign define DiagnosticSignInfo text=ℹ texthl=DiagnosticSignInfo numhl=DiagnosticSignInfo
-	sign define DiagnosticSignHint text= texthl=DiagnosticSignHint numhl=DiagnosticSignHint
+	sign define DiagnosticSignError text= texthl=DiagnosticSignError numhl=DiagnosticSignError
+	sign define DiagnosticSignWarn text=  texthl=DiagnosticSignWarn numhl=DiagnosticSignWarn
+	sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo numhl=DiagnosticSignInfo
+	sign define DiagnosticSignHint text= texthl=DiagnosticSignHint numhl=DiagnosticSignHint
 ]]
 
 -- Format on save
@@ -29,6 +29,14 @@ vim.cmd [[
   augroup lsp_format
     autocmd!
     autocmd BufWritePre * lua vim.lsp.buf.formatting_seq_sync()
+  augroup END
+]]
+
+-- Custom colors
+vim.cmd [[
+  augroup lsp_theme
+    autocmd!
+    autocmd ColorScheme * highlight LspSignatureActiveParameter gui=undercurl
   augroup END
 ]]
 
@@ -101,6 +109,7 @@ null_ls.config {
   sources = {
     null_ls.builtins.diagnostics.selene,
     null_ls.builtins.diagnostics.vint,
+    null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.stylua,
   },
 }
@@ -142,9 +151,9 @@ module.on_server_ready(function(server)
     }
   end
 
-  if server.name == "eslint" then
+  if server.name == "eslint" or server.name == "ember" then
     opts.on_attach = function(client, bufnr)
-      -- Enable eslint formatting
+      -- Enable formatting
       client.resolved_capabilities.document_formatting = true
       common_on_attach(client, bufnr)
     end

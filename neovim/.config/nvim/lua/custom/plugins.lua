@@ -50,12 +50,12 @@ packer.startup {
 
     -- Statusbar
     use "hoob3rt/lualine.nvim"
+    use "arkav/lualine-lsp-progress"
 
     -- Search
     use { "windwp/nvim-spectre", module = "spectre" } -- Classic Search & Replace
     use "kevinhwang91/nvim-hlslens" -- Search Helper
     use "xtal8/traces.vim" -- Replace highlight as typing
-    use "ggandor/lightspeed.nvim" -- Quick search motions
     use "hauleth/sad.vim" -- Change and repeat
 
     -- Syntax

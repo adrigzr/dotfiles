@@ -22,5 +22,6 @@ vim.cmd [[
     autocmd!
     autocmd TabEnter,WinEnter,BufEnter,WinScrolled,VimResized * lua require('scrollbar').show()
     autocmd QuitPre,TabLeave,WinLeave,BufLeave                * lua require('scrollbar').clear()
+    autocmd ColorScheme * highlight def link Scrollbar Delimiter
   augroup END
 ]]

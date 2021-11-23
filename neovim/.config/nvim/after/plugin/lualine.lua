@@ -5,10 +5,34 @@ if not exists then
 end
 
 local gps = require "nvim-gps"
+local colors = require("custom.theme").colors
 
-local filename = { "filename", file_status = true, path = 1 }
+local filename = { "filename", file_status = true, path = 1, shorting_target = 80 }
 local treesitter = { gps.get_location, cond = gps.is_available }
-local diagnostics = { "diagnostics", sources = { "nvim_lsp" } }
+local diagnostics = {
+  "diagnostics",
+  sources = { "nvim_lsp" },
+  symbols = {
+    error = " ",
+    warn = " ",
+    info = " ",
+    hint = " ",
+  },
+}
+local diff = {
+  "diff",
+  diff_color = {
+    added = {
+      fg = colors.green,
+    },
+    modified = {
+      fg = colors.blue,
+    },
+    removed = {
+      fg = colors.red,
+    },
+  },
+}
 
 module.setup {
   options = {
@@ -20,8 +44,8 @@ module.setup {
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = { "branch", "diff", diagnostics },
-    lualine_c = { filename, treesitter },
+    lualine_b = { filename, diff, diagnostics },
+    lualine_c = { "branch", treesitter, "lsp_progress" },
     lualine_x = { "encoding" },
     lualine_y = { "fileformat", "filetype" },
     lualine_z = { "location" },
@@ -30,9 +54,9 @@ module.setup {
     lualine_a = {},
     lualine_b = {},
     lualine_c = { filename },
-    lualine_x = { "encoding" },
-    lualine_y = { "fileformat", "filetype" },
-    lualine_z = { "location" },
+    lualine_x = { "encoding", "fileformat", "filetype", "location" },
+    lualine_y = {},
+    lualine_z = {},
   },
   tabline = {},
   extensions = { "quickfix", "fugitive", "nvim-tree" },
