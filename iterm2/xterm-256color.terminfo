@@ -1,0 +1,6 @@
+#	Reconstructed via infocmp from file: /opt/local/share/terminfo/78/xterm-256color
+xterm-256color|xterm with 256 colors,
+  Smulx=\E[4\:%p1%dm,
+  rmxx=\E[29m,
+  smxx=\E[9m,
+  use=xterm-256color,

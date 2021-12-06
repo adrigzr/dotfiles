@@ -7,6 +7,7 @@ end
 local config = require "lspconfig"
 local util = require "lspconfig/util"
 local null_ls = require "null-ls"
+local aerial = require "aerial"
 
 -- Debugging
 -- vim.lsp.set_log_level("debug")
@@ -14,6 +15,7 @@ local null_ls = require "null-ls"
 -- Diagnostics
 vim.diagnostic.config {
   virtual_text = false,
+  severity_sort = true,
 }
 
 -- Redefine diagnostics signs
@@ -36,7 +38,8 @@ vim.cmd [[
 vim.cmd [[
   augroup lsp_theme
     autocmd!
-    autocmd ColorScheme * highlight LspSignatureActiveParameter gui=undercurl
+    autocmd ColorScheme * highlight LspSignatureActiveParameter gui=bold guifg=#61afef
+    autocmd ColorScheme * highlight DiagnosticStrikethroughDeprecated gui=strikethrough
   augroup END
 ]]
 
@@ -45,12 +48,16 @@ vim.cmd [[
   augroup lsp_diagnostics
     autocmd!
     autocmd CursorHold,CursorHoldI * lua require('custom.util.lsp').hover()
+    autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
   augroup END
 ]]
 
+-- Custom diagnostic handlers
+vim.diagnostic.handlers["strikethrough"] = require("custom.util.diagnostic").strikethrough_handler
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local function common_on_attach(_, bufnr)
+local function common_on_attach(client, bufnr)
   local function buf_set_keymap(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
@@ -75,18 +82,17 @@ local function common_on_attach(_, bufnr)
   buf_set_keymap("n", "]d", '<cmd>lua vim.lsp.diagnostic.goto_next({ float = { border = "rounded" }})<CR>', opts)
   buf_set_keymap("n", "<C-]>", '<cmd>lua require("custom.util.lsp").goto_definition()<CR>', opts)
   buf_set_keymap("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-  buf_set_keymap("n", "<leader>rn", '<cmd>lua require("renamer").rename()<CR>', opts)
-  buf_set_keymap("v", "<leader>rn", '<cmd>lua require("renamer").rename()<CR>', opts)
-  buf_set_keymap(
-    "n",
-    "<leader>ca",
-    '<cmd>lua require("telescope.builtin").lsp_code_actions(require("telescope.themes").get_cursor())<CR>',
-    opts
-  )
+  buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  buf_set_keymap("v", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  buf_set_keymap("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+  buf_set_keymap("n", "<leader>qf", "<cmd>lua vim.lsp.buf.code_action({ only = 'quickfix' })<CR>", opts)
   buf_set_keymap("n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
   buf_set_keymap("n", "<leader>cd", "<cmd>TroubleToggle lsp_document_diagnostics<CR>", opts)
   buf_set_keymap("n", "<leader>cw", "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>", opts)
-  buf_set_keymap("n", "<leader>cs", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+  buf_set_keymap("n", "<leader>cs", "<cmd>AerialToggle<CR>", opts)
+
+  -- Configure aerial
+  aerial.on_attach(client, bufnr)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -151,21 +157,24 @@ module.on_server_ready(function(server)
     }
   end
 
-  if server.name == "eslint" or server.name == "ember" then
+  -- Enable formatting
+  if vim.tbl_contains({ "eslint", "ember" }, server.name) then
     opts.on_attach = function(client, bufnr)
-      -- Enable formatting
       client.resolved_capabilities.document_formatting = true
+      common_on_attach(client, bufnr)
+    end
+  end
+
+  -- Disable formatting
+  if vim.tbl_contains({ "tsserver", "jsonls" }, server.name) then
+    opts.on_attach = function(client, bufnr)
+      client.resolved_capabilities.document_formatting = false
       common_on_attach(client, bufnr)
     end
   end
 
   if server.name == "tsserver" then
     opts.root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", ".git")
-    opts.on_attach = function(client, bufnr)
-      -- Disable tsserver formatting
-      client.resolved_capabilities.document_formatting = false
-      common_on_attach(client, bufnr)
-    end
   end
 
   if server.name == "jsonls" then

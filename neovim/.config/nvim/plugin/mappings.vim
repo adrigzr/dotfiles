@@ -11,8 +11,8 @@ nnoremap <Right> <NOP>
 " }}}
 
 " Speed up viewport scrolling {{{
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
+" nnoremap <C-e> 3<C-e>
+" nnoremap <C-y> 3<C-y>
 " }}}
 
 " Sudo write (,W) {{{

@@ -16,7 +16,7 @@ set.wrap = false
 set.breakindent = true
 set.showbreak = "⤷"
 set.number = true
-set.mouse = "n"
+set.mouse = "a"
 set.scrolloff = 6
 set.sidescrolloff = 3
 set.splitbelow = true
@@ -26,6 +26,8 @@ set.iskeyword:append "-"
 set.list = true
 set.listchars = "tab:→ ,extends:›,precedes:‹,nbsp:·,trail:·"
 set.termguicolors = true
+set.signcolumn = "yes"
+set.inccommand = "split"
 
 -- Diff
 set.diffopt = {
@@ -66,12 +68,13 @@ set.infercase = true
 set.wildmode = { "list:longest", "full" }
 set.wildignorecase = true
 set.completeopt = { "menu", "menuone", "noselect" }
+set.pumheight = 10
 
 -- Misc
 set.lazyredraw = true
 set.timeoutlen = 500
 set.ttimeoutlen = 10
-set.cmdheight = 2
+set.cmdheight = 1
 set.updatetime = 300
 set.pyxversion = 3
 set.shada = {

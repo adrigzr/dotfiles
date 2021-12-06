@@ -1,4 +1,4 @@
-local exists, module = pcall(require, "cmp")
+local exists, cmp = pcall(require, "cmp")
 
 if not exists then
   return
@@ -7,17 +7,25 @@ end
 local lspkind = require "lspkind"
 local util = require "custom.util"
 local cmp_buffer = require "cmp_buffer"
+local luasnip = require "luasnip"
 
-local feedkey = function(key, mode)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-end
+-- Load vscode snippets
+require("luasnip/loaders/from_vscode").lazy_load()
+
+-- Highlights
+vim.cmd [[
+  augroup cmp_theme
+    autocmd!
+    autocmd ColorScheme * highlight CmpItemAbbrDeprecated gui=strikethrough cterm=strikethrough
+  augroup END
+]]
 
 local sources = {
-  nvim_lsp = { name = "nvim_lsp", max_item_count = 10 },
+  nvim_lsp = { name = "nvim_lsp" },
   nvim_lua = { name = "nvim_lua" },
   buffer = {
     name = "buffer",
-    opts = {
+    option = {
       -- Add visible buffers to completion
       get_bufnrs = function()
         local bufs = {}
@@ -28,39 +36,41 @@ local sources = {
       end,
     },
   },
-  vsnip = { name = "vsnip", priority = 9999 },
+  luasnip = { name = "luasnip", priority = 9999 },
   path = { name = "path" },
   calc = { name = "calc" },
   treesitter = { name = "treesitter" },
   spell = { name = "spell" },
 }
 
-module.setup {
+cmp.setup {
   snippet = {
     expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      luasnip.lsp_expand(args.body)
     end,
   },
   mapping = {
-    ["<C-d>"] = module.mapping(module.mapping.scroll_docs(-4), { "i", "c" }),
-    ["<C-f>"] = module.mapping(module.mapping.scroll_docs(4), { "i", "c" }),
+    ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
+    ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
     -- ['<C-e>'] = module.mapping(module.mapping.close()),
-    ["<C-e>"] = module.mapping(function(fallback)
-      if module.visible() then
-        module.close()
+    ["<C-e>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.close()
+      elseif luasnip.choice_active() then
+        luasnip.change_choice()
       elseif vim.b._copilot_suggestion then
         vim.fn["copilot#Dismiss"]()
       else
         fallback()
       end
     end, { "i", "s" }),
-    ["<Tab>"] = module.mapping(function(fallback)
+    ["<Tab>"] = cmp.mapping(function(fallback)
       -- Go to next item if cmp is visible
-      if module.visible() then
-        module.select_next_item()
+      if cmp.visible() then
+        cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
         -- Expand snippet to next item
-      elseif vim.fn["vsnip#available"](1) == 1 then
-        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      elseif luasnip.jumpable(1) then
+        luasnip.expand_or_jump()
       else
         local copilot_keys = vim.fn["copilot#Accept"]()
 
@@ -68,28 +78,27 @@ module.setup {
         if copilot_keys ~= "" then
           vim.api.nvim_feedkeys(copilot_keys, "i", true)
           -- Insert tab if prev char is a space
-        elseif util.misc.check_backspace() then
-          fallback()
-          -- Otherwise open cmp
+        elseif util.misc.has_words_before() then
+          cmp.complete()
         else
-          module.complete()
+          fallback()
         end
       end
     end, { "i", "s" }),
-    ["<S-Tab>"] = module.mapping(function()
-      if module.visible() then
-        module.select_prev_item()
-      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-        feedkey("<Plug>(vsnip-jump-prev)", "")
+    ["<S-Tab>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item { behavior = cmp.SelectBehavior.Select }
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
       end
     end, { "i", "s" }),
-    ["<CR>"] = module.mapping.confirm { select = true },
+    ["<CR>"] = cmp.mapping.confirm(),
   },
-  sources = module.config.sources {
+  sources = cmp.config.sources {
     sources.nvim_lsp,
     sources.nvim_lua,
     sources.buffer,
-    sources.vsnip,
+    sources.luasnip,
     sources.path,
     sources.calc,
     sources.treesitter,
@@ -99,6 +108,7 @@ module.setup {
     border = "rounded",
   },
   formatting = {
+    deprecated = true,
     format = lspkind.cmp_format {
       with_text = true,
       maxwidth = 50,
@@ -106,7 +116,7 @@ module.setup {
         nvim_lsp = "[LSP]",
         nvim_lua = "[Lua]",
         buffer = "[Buffer]",
-        vsnip = "[Snip]",
+        luasnip = "[Snip]",
         path = "[Path]",
         cmdline = "[CMD]",
       },
@@ -114,16 +124,23 @@ module.setup {
   },
   sorting = {
     comparators = {
-      -- Distance based sorting
       function(...)
-        return cmp_buffer:compare_locality(...)
+        cmp_buffer:compare_locality(...)
       end,
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
     },
   },
 }
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-module.setup.cmdline("/", {
+cmp.setup.cmdline("/", {
   sources = {
     sources.buffer,
   },
@@ -132,4 +149,4 @@ module.setup.cmdline("/", {
 -- Insert ( after select function or method item)
 local cmp_autopairs = require "nvim-autopairs.completion.cmp"
 
-module.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })

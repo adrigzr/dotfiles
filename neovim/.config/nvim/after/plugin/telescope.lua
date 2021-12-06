@@ -34,7 +34,10 @@ module.setup {
       "--hidden",
     },
     file_ignore_patterns = {
-      "^%.lint%-todo/",
+      "/%.lint%-todo/",
+      "/%.git/",
+      "/recordings/",
+      "/node_modules/",
     },
   },
   pickers = {

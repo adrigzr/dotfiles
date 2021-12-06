@@ -27,7 +27,12 @@ module.setup {
 }
 
 -- Mappings
-vim.api.nvim_set_keymap("n", "<leader>t", "<cmd>NvimTreeFindFile<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>t",
+  "<cmd>lua if vim.api.nvim_buf_get_name(0) == '' then require('nvim-tree').open() else require('nvim-tree').find_file(true) end<CR>",
+  { noremap = true, silent = true }
+)
 
 -- Custom colors
 vim.cmd [[

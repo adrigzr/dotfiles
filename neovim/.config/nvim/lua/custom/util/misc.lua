@@ -38,13 +38,17 @@ function M.get_mode()
 end
 
 -- Check if prev character is a space
-function M.check_backspace()
-  local col = vim.fn.col "." - 1
-  if col == 0 or vim.fn.getline("."):sub(col, col):match "%s" then
-    return true
-  else
-    return false
-  end
+function M.has_space_before()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+
+  return col == 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s"
+end
+
+-- Check if previou character is not a space
+function M.has_words_before()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
 end
 
 -- Convert an array into a truth table

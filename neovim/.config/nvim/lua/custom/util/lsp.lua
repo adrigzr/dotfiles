@@ -62,10 +62,25 @@ function M.get_results(method)
   return flattened_results
 end
 
+local function document_highlight()
+  local results = M.get_results "textDocument/documentHighlight"
+
+  if #results ~= 0 then
+    vim.lsp.buf.document_highlight()
+  end
+end
+
 local function hover()
-  -- Abort when lsp is not ready or completion is visible
-  if not vim.lsp.buf.server_ready() or require("cmp").visible() then
+  -- Abort when lsp is not ready or completion is visible or copilot has suggestions
+  if not vim.lsp.buf.server_ready() or require("cmp").visible() or vim.b._copilot_suggestion then
     return
+  end
+
+  local mode = misc.get_mode()
+
+  -- Highlight current word when in normal mode
+  if mode == "n" then
+    document_highlight()
   end
 
   local any_floating_windows = misc.check_floating_windows()
@@ -74,8 +89,6 @@ local function hover()
   if any_floating_windows then
     return
   end
-
-  local mode = misc.get_mode()
 
   -- Only show diagnostics when in normal mode
   if mode == "n" then
@@ -130,7 +143,7 @@ local function show_info()
   end
 end
 
--- Hover handler
+-- Show info handler
 function M.show_info()
   async.run(show_info)
 end

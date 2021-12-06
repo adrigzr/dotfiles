@@ -17,8 +17,15 @@ local function setup()
     colorscheme onedark
 
     " [Native] Change float preview window border to match background
-    highlight def link FloatBorder NormalFloat
+    highlight def link FloatBorder TelescopeResultsBorder
+    highlight def link NormalFloat Normal
+
+    " [Native] Change match paren
+    highlight MatchParen gui=underline guifg=none guibg=none
   ]]
+
+  -- [Native] Folds
+  vim.cmd("highlight Folded gui=none guifg=none guibg=" .. colors.dark_cyan)
 
   -- [Rainbow] Change treesitter rainbow colors
   for i = 1, 7 do

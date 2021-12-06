@@ -55,7 +55,6 @@ packer.startup {
     -- Search
     use { "windwp/nvim-spectre", module = "spectre" } -- Classic Search & Replace
     use "kevinhwang91/nvim-hlslens" -- Search Helper
-    use "xtal8/traces.vim" -- Replace highlight as typing
     use "hauleth/sad.vim" -- Change and repeat
 
     -- Syntax
@@ -108,14 +107,14 @@ packer.startup {
     use "williamboman/nvim-lsp-installer"
     use "jose-elias-alvarez/null-ls.nvim"
     use "folke/trouble.nvim" -- Pretty diagnostics
-    use {
-      "filipdutescu/renamer.nvim",
-      branch = "master",
-      config = function()
-        require("renamer").setup {}
-      end,
-    } -- Pretty rename box
     use "b0o/schemastore.nvim" -- Schemas for jsonls
+    use "stevearc/aerial.nvim" -- Show symbols
+    use {
+      "simrat39/rust-tools.nvim",
+      config = function()
+        require("rust-tools").setup {}
+      end,
+    } -- Rust tools
 
     -- Completion
     use "hrsh7th/nvim-cmp"
@@ -123,14 +122,13 @@ packer.startup {
     use "hrsh7th/cmp-buffer"
     use "hrsh7th/cmp-path"
     use "hrsh7th/cmp-cmdline"
-    use "hrsh7th/cmp-vsnip"
     use "hrsh7th/cmp-nvim-lua"
     use "hrsh7th/cmp-calc"
     use "ray-x/cmp-treesitter"
     use "f3fora/cmp-spell"
     use "onsails/lspkind-nvim" -- Pretty completion items
-    use "hrsh7th/vim-vsnip"
-    use "hrsh7th/vim-vsnip-integ"
+    use "saadparwaiz1/cmp_luasnip"
+    use "L3MON4D3/LuaSnip"
     use "rafamadriz/friendly-snippets"
 
     -- Misc
@@ -157,6 +155,8 @@ packer.startup {
     use "tpope/vim-scriptease" -- Pretty debug messages
     use "folke/which-key.nvim" -- Pretty keybind hints
     use "Xuyuanp/scrollbar.nvim" -- Scrollbar
+    use "stevearc/dressing.nvim" -- Pretty vim.ui boxes
+    use "andymass/vim-matchup" -- Replaces matchit & matchparen builtins
 
     if packer_bootstrap then
       packer.sync()

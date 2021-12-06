@@ -48,10 +48,17 @@
     zsh ~/.zim/zimfw.zsh install
     ```
 
+1. Copy fonts
+
+    ```bash
+    cp -r "fonts/*" ~/Library/Fonts
+    ```
+
 1. Setup tmux & [tpm](https://github.com/tmux-plugins/tpm)
 
     ```bash
-    tic tmux/screen-256color.terminfo
+    tic -x iterm2/xterm-256color.terminfo
+    tic -x tmux/screen-256color.terminfo
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     ~/.tmux/plugins/tpm/bin/install_plugins
     ```

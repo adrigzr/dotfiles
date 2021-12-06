@@ -16,9 +16,9 @@ export LC_ALL=${LANG}
 # Android
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
-export PATH="$ANDROID_SDK_ROOT/emulator:${PATH}"
-export PATH="$ANDROID_SDK_ROOT/platform-tools:${PATH}"
-export PATH="$ANDROID_SDK_ROOT/tools:${PATH}"
+export PATH="${PATH}:$ANDROID_SDK_ROOT/emulator"
+export PATH="${PATH}:$ANDROID_SDK_ROOT/platform-tools"
+export PATH="${PATH}:$ANDROID_SDK_ROOT/tools"
 
 # Go
 export GOROOT=/usr/lib/go-1.9
