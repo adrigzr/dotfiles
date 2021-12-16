@@ -37,6 +37,16 @@ local function setup()
 
   -- [Theme] Change cursor line
   vim.cmd("highlight CursorLineNr guibg=" .. colors.bg1)
+
+  -- [LSP]
+  vim.cmd("highlight LspSignatureActiveParameter gui=bold guifg=" .. colors.blue)
+  vim.cmd("highlight DiagnosticUnnecessaryTag guifg=" .. colors.grey)
+
+  -- [Yank] Change yank highlight
+  vim.cmd("highlight Yank guifg=" .. colors.bg0 .. " guibg=" .. colors.cyan)
+
+  -- [TSContext]
+  vim.cmd("highlight TreesitterContext guibg=" .. colors.bg1)
 end
 
 vim.cmd [[

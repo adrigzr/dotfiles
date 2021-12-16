@@ -46,21 +46,6 @@ fi
 
 source ${ZIM_HOME}/init.zsh
 
-# Alias tips.
-[ -s "$HOME/.zsh/alias-tips/alias-tips.plugin.zsh" ] && source "$HOME/.zsh/alias-tips/alias-tips.plugin.zsh"
-
-# Fast Syntax Highlighting
-[ -s "$HOME/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh" ] && source "$HOME/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-
-# Quiet accept line.
-[ -s "$HOME/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh" ] && source "$HOME/.zsh/zsh-quiet-accept-line/quiet-accept-line.zsh"
-
-# PM2
-[ -s "$HOME/.zsh/pm2.zsh" ] && source "$HOME/.zsh/pm2.zsh"
-
-# Iterm2
-[ -s "${HOME}/.iterm2_shell_integration.zsh" ] && source "${HOME}/.iterm2_shell_integration.zsh"
-
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }
 zle -N zle-keymap-select
@@ -117,3 +102,7 @@ setopt HIST_IGNORE_ALL_DUPS
 
 # uncomment to finish profiling
 # zprof
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

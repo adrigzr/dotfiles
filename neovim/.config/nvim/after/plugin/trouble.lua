@@ -5,5 +5,5 @@ if not exists then
 end
 
 module.setup {
-  use_lsp_diagnostic_signs = true,
+  use_diagnostic_signs = true,
 }

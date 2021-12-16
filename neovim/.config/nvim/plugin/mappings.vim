@@ -50,7 +50,11 @@ nnoremap <silent> <leader>qs :noh<CR>
 " }}}
 
 " Edit near files {{{
-nnoremap gp :e %:h
+nnoremap ge :e %:h
+" }}}
+
+" Reselect pasted text {{{
+nnoremap gp `[v`]
 " }}}
 
 " Yank from cursor to end of line {{{
@@ -134,6 +138,15 @@ nnoremap <leader>ll :ll<CR>
 nnoremap <leader>pq :pclose<CR>
 nnoremap <leader>pj :ptnext<CR>
 nnoremap <leader>pk :ptprevious<CR>
+" }}}
+
+" Move lines {{{
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+inoremap <c-j> <Esc>:m .+1<CR>==gi
+inoremap <c-k> <Esc>:m .-2<CR>==gi
+nnoremap <leader>k :m .-2<CR>==
+nnoremap <leader>j :m .+1<CR>==
 " }}}
 
 " Text Objects {{{

@@ -64,3 +64,15 @@ zmodule zsh-users/zsh-autosuggestions
 # Fish-like history search (up arrow) for Zsh.
 # zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-history-substring-search
+
+#
+# Custom
+#
+# Alias tips
+zmodule djui/alias-tips
+
+# Fast syntax highlighting
+zmodule zdharma-continuum/fast-syntax-highlighting
+
+# Quiet accept line
+zmodule AdrieanKhisbe/zsh-quiet-accept-line --name quiet-accept-line

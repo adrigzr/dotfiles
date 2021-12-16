@@ -18,36 +18,47 @@ function M.format_message(diagnostic)
 end
 
 -- Strikethrough deprecated diagnostics
-M.strikethrough_handler = {
+-- Fade out unnecessary diagnostics
+M.lsp_tags_handler = {
   show = function(namespace, bufnr, diagnostics, _)
     local ns = vim.diagnostic.get_namespace(namespace)
 
-    if not ns.user_data.strikethrough_ns then
-      ns.user_data.strikethrough_ns = vim.api.nvim_create_namespace ""
+    if not ns.user_data.lsp_tags_ns then
+      ns.user_data.lsp_tags_ns = vim.api.nvim_create_namespace ""
     end
 
-    local higroup = "DiagnosticStrikethroughDeprecated"
-    local strikethrough_ns = ns.user_data.strikethrough_ns
+    local lsp_tags_ns = ns.user_data.lsp_tags_ns
 
     for _, diagnostic in ipairs(diagnostics) do
       local user_data = diagnostic.user_data
 
-      if user_data and user_data.lsp.tags and vim.tbl_contains(user_data.lsp.tags, 2) then
-        vim.highlight.range(
-          bufnr,
-          strikethrough_ns,
-          higroup,
-          { diagnostic.lnum, diagnostic.col },
-          { diagnostic.end_lnum, diagnostic.end_col }
-        )
+      if user_data and user_data.lsp.tags then
+        if vim.tbl_contains(user_data.lsp.tags, 1) then
+          vim.highlight.range(
+            bufnr,
+            lsp_tags_ns,
+            "DiagnosticUnnecessaryTag",
+            { diagnostic.lnum, diagnostic.col },
+            { diagnostic.end_lnum, diagnostic.end_col }
+          )
+        end
+        if vim.tbl_contains(user_data.lsp.tags, 2) then
+          vim.highlight.range(
+            bufnr,
+            lsp_tags_ns,
+            "DiagnosticDeprecatedTag",
+            { diagnostic.lnum, diagnostic.col },
+            { diagnostic.end_lnum, diagnostic.end_col }
+          )
+        end
       end
     end
   end,
   hide = function(namespace, bufnr)
     local ns = vim.diagnostic.get_namespace(namespace)
 
-    if ns.user_data.strikethrough_ns then
-      vim.api.nvim_buf_clear_namespace(bufnr, ns.user_data.strikethrough_ns, 0, -1)
+    if ns.user_data.lsp_tags_ns then
+      vim.api.nvim_buf_clear_namespace(bufnr, ns.user_data.lsp_tags_ns, 0, -1)
     end
   end,
 }

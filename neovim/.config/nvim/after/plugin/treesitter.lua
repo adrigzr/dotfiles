@@ -1,13 +1,13 @@
-if !exists('g:loaded_nvim_treesitter')
-  finish
-endif
+local exists, module = pcall(require, "nvim-treesitter.configs")
 
-lua << EOF
+if not exists then
+  return
+end
 
-require'nvim-treesitter.configs'.setup {
+module.setup {
   ensure_installed = "maintained",
   highlight = { enable = true },
-  incremental_selection = { enable = true, },
+  incremental_selection = { enable = true },
   textobjects = { enable = true },
   indent = { enable = true },
   rainbow = { enable = true },
@@ -16,11 +16,11 @@ require'nvim-treesitter.configs'.setup {
   autotag = { enable = true },
   matchup = {
     enable = true,
-    include_match_words = true
+    include_match_words = true,
   },
 }
 
-EOF
-
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+vim.cmd [[
+  set foldmethod=expr
+  set foldexpr=nvim_treesitter#foldexpr()
+]]

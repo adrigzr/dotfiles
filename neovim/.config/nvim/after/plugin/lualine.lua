@@ -11,7 +11,7 @@ local filename = { "filename", file_status = true, path = 1, shorting_target = 8
 local treesitter = { gps.get_location, cond = gps.is_available }
 local diagnostics = {
   "diagnostics",
-  sources = { "nvim_lsp" },
+  sources = { "nvim_diagnostic" },
   symbols = {
     error = " ",
     warn = " ",

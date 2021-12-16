@@ -1,2 +1,4 @@
 neovim
 yarn
+prettier
+eslint

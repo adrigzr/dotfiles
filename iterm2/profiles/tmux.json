@@ -373,11 +373,11 @@
   "Normal Font" : "LigalexMonoNerdFontComplete- 14",
   "Vertical Spacing" : 0.93999999999999995,
   "Ansi 7 Color" : {
-    "Red Component" : 0.67058825492858887,
+    "Red Component" : 0.51764705882352946,
     "Color Space" : "sRGB",
-    "Blue Component" : 0.74901962280273438,
+    "Blue Component" : 0.59607843137254901,
     "Alpha Component" : 1,
-    "Green Component" : 0.69803923368453979
+    "Green Component" : 0.54509803921568623
   },
   "Space" : 0,
   "Command" : "\/usr\/local\/bin\/tmux new-session -A -s base",

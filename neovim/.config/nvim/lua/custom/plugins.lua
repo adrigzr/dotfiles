@@ -35,6 +35,7 @@ packer.startup {
     use "lewis6991/impatient.nvim"
 
     -- Utils
+    use "nvim-lua/popup.nvim"
     use "nvim-lua/plenary.nvim"
 
     -- Icons
@@ -80,6 +81,7 @@ packer.startup {
     use "christoomey/vim-tmux-navigator"
     use { "nvim-telescope/telescope-fzf-native.nvim", run = "make" } -- FZF for telescope
     use "nvim-telescope/telescope.nvim" -- Fuzzy Finder
+    use "nvim-telescope/telescope-media-files.nvim"
 
     -- Comments
     use "tpope/vim-commentary"
@@ -115,6 +117,7 @@ packer.startup {
         require("rust-tools").setup {}
       end,
     } -- Rust tools
+    use "jose-elias-alvarez/nvim-lsp-ts-utils" -- TypeScript utils
 
     -- Completion
     use "hrsh7th/nvim-cmp"

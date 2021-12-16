@@ -45,7 +45,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # NPM
 export npm_config_progress=false
 export PATH="./node_modules/.bin:$PATH"
-# [ -f "$HOME/.asdf/shims/yarn" ] && export PATH="$(yarn global bin):$PATH"
 
 # Node
 export NODE_OPTIONS="--max-old-space-size=4096 --max-http-header-size=49152"

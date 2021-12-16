@@ -4,13 +4,13 @@ if not exists then
   return
 end
 
-local config = require "lspconfig"
 local util = require "lspconfig/util"
 local null_ls = require "null-ls"
 local aerial = require "aerial"
+local ts_utils = require "nvim-lsp-ts-utils"
 
 -- Debugging
--- vim.lsp.set_log_level("debug")
+-- vim.lsp.set_log_level "debug"
 
 -- Diagnostics
 vim.diagnostic.config {
@@ -38,8 +38,7 @@ vim.cmd [[
 vim.cmd [[
   augroup lsp_theme
     autocmd!
-    autocmd ColorScheme * highlight LspSignatureActiveParameter gui=bold guifg=#61afef
-    autocmd ColorScheme * highlight DiagnosticStrikethroughDeprecated gui=strikethrough
+    autocmd ColorScheme * highlight DiagnosticDeprecatedTag gui=strikethrough
   augroup END
 ]]
 
@@ -53,7 +52,7 @@ vim.cmd [[
 ]]
 
 -- Custom diagnostic handlers
-vim.diagnostic.handlers["strikethrough"] = require("custom.util.diagnostic").strikethrough_handler
+vim.diagnostic.handlers["lsp_tags"] = require("custom.util.diagnostic").lsp_tags_handler
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -110,7 +109,9 @@ local handlers = {
   ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, handler_opts),
 }
 
-null_ls.config {
+null_ls.setup {
+  on_attach = common_on_attach,
+  handlers = handlers,
   diagnostics_format = "#{s}: #{m} (#{c}",
   sources = {
     null_ls.builtins.diagnostics.selene,
@@ -118,11 +119,6 @@ null_ls.config {
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.stylua,
   },
-}
-
-config["null-ls"].setup {
-  on_attach = common_on_attach,
-  handlers = handlers,
 }
 
 module.on_server_ready(function(server)
@@ -166,7 +162,7 @@ module.on_server_ready(function(server)
   end
 
   -- Disable formatting
-  if vim.tbl_contains({ "tsserver", "jsonls" }, server.name) then
+  if vim.tbl_contains({ "jsonls" }, server.name) then
     opts.on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
       common_on_attach(client, bufnr)
@@ -175,6 +171,29 @@ module.on_server_ready(function(server)
 
   if server.name == "tsserver" then
     opts.root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", ".git")
+    opts.init_options = vim.tbl_deep_extend("force", ts_utils.init_options, {
+      preferences = {
+        includeInlayParameterNameHints = "none",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        includeInlayFunctionParameterTypeHints = false,
+      },
+    })
+    opts.settings = {
+      completions = {
+        completeFunctionCalls = true,
+      },
+    }
+    opts.on_attach = function(client, bufnr)
+      client.resolved_capabilities.document_formatting = false
+      ts_utils.setup {
+        enable_import_on_completion = true,
+        filter_out_diagnostics_by_code = { 80001 },
+        update_imports_on_move = true,
+      }
+      ts_utils.setup_client(client)
+      vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rf", ":TSLspRenameFile<CR>", {})
+      common_on_attach(client, bufnr)
+    end
   end
 
   if server.name == "jsonls" then

@@ -24,7 +24,7 @@ SPACESHIP_PROMPT_ORDER=(
   # rust          # Rust section
   # haskell       # Haskell Stack section
   # julia         # Julia section
-  docker        # Docker section
+  # docker        # Docker section
   # aws           # Amazon Web Services section
   venv          # virtualenv section
   # conda         # conda virtualenv section
@@ -61,5 +61,5 @@ SPACESHIP_GIT_STATUS_DELETED="✘ "
 SPACESHIP_GIT_STATUS_AHEAD="⇡ "
 SPACESHIP_GIT_STATUS_BEHIND="⇣ "
 SPACESHIP_GIT_STATUS_DIVERGED="⇕ "
-# SPACESHIP_NODE_DEFAULT_VERSION=$(awk '{ print "v" $0 ".0" }' $NVM_DIR/alias/default)
+SPACESHIP_NODE_DEFAULT_VERSION=$(nvm version default)
 SPACESHIP_DOCKER_SHOW=false
