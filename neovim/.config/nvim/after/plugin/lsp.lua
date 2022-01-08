@@ -48,6 +48,7 @@ vim.cmd [[
     autocmd!
     autocmd CursorHold,CursorHoldI * lua require('custom.util.lsp').hover()
     autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
+    autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb({ sign = { enabled = false }, virtual_text = { enabled = true, text = "", hl_mode = "combine" } })
   augroup END
 ]]
 
@@ -57,38 +58,39 @@ vim.diagnostic.handlers["lsp_tags"] = require("custom.util.diagnostic").lsp_tags
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local function common_on_attach(client, bufnr)
-  local function buf_set_keymap(...)
-    vim.api.nvim_buf_set_keymap(bufnr, ...)
-  end
-  local function buf_set_option(...)
-    vim.api.nvim_buf_set_option(bufnr, ...)
-  end
-
   -- Enable completion triggered by <c-x><c-o>
-  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+  vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
 
   -- Mappings.
-  local opts = { noremap = true }
+  local opts = { buffer = true }
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-  buf_set_keymap("n", "gd", '<cmd>lua require("custom.util.lsp").goto_definition()<CR>', opts)
-  buf_set_keymap("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts)
-  buf_set_keymap("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
-  buf_set_keymap("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
-  buf_set_keymap("n", "K", '<cmd>lua require("custom.util.lsp").show_info()<CR>', opts)
-  buf_set_keymap("n", "[d", '<cmd>lua vim.lsp.diagnostic.goto_prev({ float = { border = "rounded" }})<CR>', opts)
-  buf_set_keymap("n", "]d", '<cmd>lua vim.lsp.diagnostic.goto_next({ float = { border = "rounded" }})<CR>', opts)
-  buf_set_keymap("n", "<C-]>", '<cmd>lua require("custom.util.lsp").goto_definition()<CR>', opts)
-  buf_set_keymap("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-  buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  buf_set_keymap("v", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  buf_set_keymap("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-  buf_set_keymap("n", "<leader>qf", "<cmd>lua vim.lsp.buf.code_action({ only = 'quickfix' })<CR>", opts)
-  buf_set_keymap("n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-  buf_set_keymap("n", "<leader>cd", "<cmd>TroubleToggle lsp_document_diagnostics<CR>", opts)
-  buf_set_keymap("n", "<leader>cw", "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>", opts)
-  buf_set_keymap("n", "<leader>cs", "<cmd>AerialToggle<CR>", opts)
+  vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+  vim.keymap.set("n", "gd", "<cmd>lua require('custom.util.lsp').goto_definition()<CR>", opts)
+  vim.keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts)
+  vim.keymap.set("n", "gm", "<cmd>Telescope lsp_implementations<CR>", opts)
+  vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
+  vim.keymap.set("n", "K", "<cmd>lua require('custom.util.lsp').show_info()<CR>", opts)
+  vim.keymap.set("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev({ float = { border = 'rounded' }})<CR>", opts)
+  vim.keymap.set("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next({ float = { border = 'rounded' }})<CR>", opts)
+  vim.keymap.set("n", "<C-]>", "<cmd>lua require('custom.util.lsp').goto_definition()<CR>", opts)
+  vim.keymap.set("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+  vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  vim.keymap.set("v", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+  vim.keymap.set("n", "<leader>qf", "<cmd>lua vim.lsp.buf.code_action({ only = 'quickfix' })<CR>", opts)
+  vim.keymap.set("n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  vim.keymap.set("n", "<leader>cd", "<cmd>TroubleToggle lsp_document_diagnostics<CR>", opts)
+  vim.keymap.set("n", "<leader>cw", "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>", opts)
+  vim.keymap.set("n", "<leader>cs", "<cmd>AerialToggle<CR>", opts)
+
+  if client.resolved_capabilities.goto_definition == true then
+    vim.bo.tagfunc = "v:lua.vim.lsp.tagfunc"
+  end
+
+  if client.resolved_capabilities.document_formatting == true then
+    vim.bo.formatexpr = "v:lua.vim.lsp.formatexpr()"
+  end
 
   -- Configure aerial
   aerial.on_attach(client, bufnr)
@@ -191,7 +193,7 @@ module.on_server_ready(function(server)
         update_imports_on_move = true,
       }
       ts_utils.setup_client(client)
-      vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rf", ":TSLspRenameFile<CR>", {})
+      vim.keymap.set("n", "<leader>rf", "<cmd>TSLspRenameFile<CR>", { buffer = bufnr })
       common_on_attach(client, bufnr)
     end
   end

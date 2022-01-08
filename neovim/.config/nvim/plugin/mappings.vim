@@ -36,10 +36,6 @@ nnoremap ' `
 " nnoremap <silent> <leader>v :set nolist!<CR>
 " }}}
 
-" Disable space behaviour {{{
-nnoremap <space> <NOP>
-" }}}
-
 " Clear last search (,qs) {{{
 nnoremap <silent> <leader>qs :noh<CR>
 " map <silent> <leader>qs <Esc>:let @/ = ""<CR>

@@ -41,12 +41,16 @@ local function setup()
   -- [LSP]
   vim.cmd("highlight LspSignatureActiveParameter gui=bold guifg=" .. colors.blue)
   vim.cmd("highlight DiagnosticUnnecessaryTag guifg=" .. colors.grey)
+  vim.cmd("highlight LightBulbVirtualText guifg=" .. colors.blue)
 
   -- [Yank] Change yank highlight
   vim.cmd("highlight Yank guifg=" .. colors.bg0 .. " guibg=" .. colors.cyan)
 
   -- [TSContext]
   vim.cmd("highlight TreesitterContext guibg=" .. colors.bg1)
+
+  -- [Ultest]
+  vim.cmd("highlight UltestPass guifg=" .. colors.green)
 end
 
 vim.cmd [[

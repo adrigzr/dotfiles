@@ -27,12 +27,13 @@ module.setup {
 }
 
 -- Mappings
-vim.api.nvim_set_keymap(
-  "n",
-  "<leader>t",
-  "<cmd>lua if vim.api.nvim_buf_get_name(0) == '' then require('nvim-tree').open() else require('nvim-tree').find_file(true) end<CR>",
-  { noremap = true, silent = true }
-)
+vim.keymap.set("n", "<leader>t", function()
+  if vim.api.nvim_buf_get_name(0) == "" then
+    module.open()
+  else
+    module.find_file(true)
+  end
+end, { silent = true })
 
 -- Custom colors
 vim.cmd [[

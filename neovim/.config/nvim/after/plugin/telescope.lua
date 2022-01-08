@@ -73,4 +73,3 @@ module.setup {
 }
 
 module.load_extension "fzf"
-module.load_extension "media_files"

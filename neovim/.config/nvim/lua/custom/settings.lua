@@ -1,7 +1,7 @@
 local set = vim.opt
 
 --Remap space as leader key
-vim.api.nvim_set_keymap("", "<Space>", "<Nop>", { noremap = true, silent = true })
+vim.keymap.set("", "<Space>", "<Nop>", { silent = true })
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -45,7 +45,7 @@ set.foldmethod = "syntax"
 
 -- Format
 set.softtabstop = 2
-set.shiftwidth = 4
+set.shiftwidth = 2
 set.formatoptions = ""
 set.formatoptions:append "c"
 set.formatoptions:append "r"

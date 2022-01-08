@@ -1,15 +1,17 @@
 [push]
   default = current
-	followTags = true
+  followTags = true
 
 [diff]
   tool = fugitive
+  colorMoved = default
 
 [difftool]
   prompt = false
 
 [merge]
   tool = fugitive
+  conflictstyle = diff3
 
 [mergetool "vimdiff"]
   cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
@@ -82,7 +84,7 @@
   current-commit = rev-parse HEAD
   cb = current-branch
   cc = current-commit
-	identity = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; git config user.signingkey \"$(git config user.$1.signingkey)\"; :"
+  identity = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; git config user.signingkey \"$(git config user.$1.signingkey)\"; :"
   mv-index = "!f() { \
     old=\"$1\"; \
     new=\"$2\"; \
@@ -95,14 +97,40 @@
   editor = nvim
   excludesfile = ~/.gitignore
   attributesfile = ~/.gitattributes
-	preloadIndex = true
+  preloadIndex = true
+  pager = delta
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true
+  syntax-theme = Visual Studio Dark+
+  dark = true
+  file-style = omit
+  hunk-header-decoration-style = overline brightblack
+  hunk-header-file-style = magenta
+  hunk-header-line-number-style = dim magenta
+  hunk-header-style = file line-number dim syntax
+  line-numbers = false
+  minus-emph-style = bold red 52
+  minus-empty-line-marker-style = normal "#3f0001"
+  minus-non-emph-style = dim red
+  minus-style = bold red
+  plus-emph-style = bold green 22
+  plus-empty-line-marker-style = normal "#002800"
+  plus-non-emph-style = dim green
+  plus-style = bold green
+  whitespace-error-style = reverse red
+  zero-style = dim syntax
+  side-by-side = true
 
 [credential]
   helper = cache --timeout=3600
 
 [init]
-	templatedir = ~/.gittemplate
-	defaultBranch = master
+  templatedir = ~/.gittemplate
+  defaultBranch = master
 
 [fetch]
   prune = true
@@ -156,10 +184,10 @@
   insteadOf = git://github.com
 
 [commit]
-	gpgsign = false
+  gpgsign = false
 
 [gpg]
-	program = gpg
+  program = gpg
 
 [include]
   path = ~/.gitconfig.extra

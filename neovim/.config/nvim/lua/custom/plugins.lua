@@ -81,7 +81,7 @@ packer.startup {
     use "christoomey/vim-tmux-navigator"
     use { "nvim-telescope/telescope-fzf-native.nvim", run = "make" } -- FZF for telescope
     use "nvim-telescope/telescope.nvim" -- Fuzzy Finder
-    use "nvim-telescope/telescope-media-files.nvim"
+    use "nvim-telescope/telescope-symbols.nvim" -- For symbols
 
     -- Comments
     use "tpope/vim-commentary"
@@ -101,7 +101,7 @@ packer.startup {
     } -- Diff view
 
     -- Formatter
-    use "editorconfig/editorconfig-vim"
+    use "tpope/vim-sleuth"
     use "ntpeters/vim-better-whitespace"
 
     -- LSP
@@ -118,6 +118,7 @@ packer.startup {
       end,
     } -- Rust tools
     use "jose-elias-alvarez/nvim-lsp-ts-utils" -- TypeScript utils
+    use "kosayoda/nvim-lightbulb" -- Code actions lightbulb
 
     -- Completion
     use "hrsh7th/nvim-cmp"
@@ -160,6 +161,8 @@ packer.startup {
     use "Xuyuanp/scrollbar.nvim" -- Scrollbar
     use "stevearc/dressing.nvim" -- Pretty vim.ui boxes
     use "andymass/vim-matchup" -- Replaces matchit & matchparen builtins
+    use "vim-test/vim-test" -- Test files
+    use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
 
     if packer_bootstrap then
       packer.sync()
