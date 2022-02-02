@@ -18,4 +18,11 @@ require'hlslens'.setup {
     nearest_only = true,
 }
 
+-- Setup hlslens for scrollbar
+local exists, module = pcall(require, "scrollbar.handlers.search")
+
+if exists then
+  module.setup()
+end
+
 EOF

@@ -1,27 +1,16 @@
-local exists = pcall(require, "scrollbar")
+local exists, module = pcall(require, "scrollbar")
 
 if not exists then
   return
 end
 
-vim.g.scrollbar_winblend = 100
-vim.g.scrollbar_excluded_filetypes = { "NvimTree" }
-vim.g.scrollbar_highlight = {
-  head = "Scrollbar",
-  body = "Scrollbar",
-  tail = "Scrollbar",
-}
-vim.g.scrollbar_shape = {
-  head = "▎",
-  body = "▎",
-  tail = "▎",
-}
+local colors = require("custom.theme").colors
 
-vim.cmd [[
-  augroup scrollbar
-    autocmd!
-    autocmd TabEnter,WinEnter,BufEnter,WinScrolled,VimResized * lua require('scrollbar').show()
-    autocmd QuitPre,TabLeave,WinLeave,BufLeave                * lua require('scrollbar').clear()
-    autocmd ColorScheme * highlight def link Scrollbar Delimiter
-  augroup END
-]]
+module.setup {
+  handle = {
+    color = colors.light_grey,
+  },
+  excluded_filetypes = {
+    "NvimTree",
+  },
+}

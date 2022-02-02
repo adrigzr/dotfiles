@@ -4,11 +4,17 @@ if not exists then
   return
 end
 
-vim.g.onedark_style = "dark"
-vim.g.onedark_terminal_italics = 1
-vim.g.onedark_toggle_style_keymap = "<nop>"
-
-module.setup {}
+module.setup {
+  style = "dark",
+  toggle_style_key = "<nop>",
+  code_style = {
+    comments = "italic",
+    keywords = "none",
+    functions = "none",
+    strings = "none",
+    variables = "none",
+  },
+}
 
 local colors = require "onedark.colors"
 

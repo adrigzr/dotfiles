@@ -1,7 +1,7 @@
 {
 "Profiles": [
 {
-  "Non-ASCII Anti Aliased" : true,
+  "Close Sessions On End" : true,
   "Ansi 15 Color (Dark)" : {
     "Red Component" : 1,
     "Color Space" : "sRGB",
@@ -9,13 +9,7 @@
     "Alpha Component" : 1,
     "Green Component" : 1
   },
-  "Foreground Color (Dark)" : {
-    "Red Component" : 0.67058825492858887,
-    "Color Space" : "sRGB",
-    "Blue Component" : 0.74901962280273438,
-    "Alpha Component" : 1,
-    "Green Component" : 0.69803923368453979
-  },
+  "Non-ASCII Anti Aliased" : true,
   "Cursor Text Color" : {
     "Red Component" : 0.074509803921568654,
     "Color Space" : "sRGB",
@@ -824,23 +818,12 @@
     "Alpha Component" : 1,
     "Green Component" : 0.68627452850341797
   },
-  "Close Sessions On End" : true,
   "Ansi 0 Color" : {
     "Red Component" : 0.074509806931018829,
     "Color Space" : "sRGB",
     "Blue Component" : 0.074509806931018829,
     "Alpha Component" : 1,
     "Green Component" : 0.086274512112140656
-  }
-},
-{
-  "Non-ASCII Anti Aliased" : true,
-  "Ansi 15 Color (Dark)" : {
-    "Red Component" : 1,
-    "Color Space" : "sRGB",
-    "Blue Component" : 1,
-    "Alpha Component" : 1,
-    "Green Component" : 1
   },
   "Foreground Color (Dark)" : {
     "Red Component" : 0.67058825492858887,
@@ -848,7 +831,18 @@
     "Blue Component" : 0.74901962280273438,
     "Alpha Component" : 1,
     "Green Component" : 0.69803923368453979
+  }
+},
+{
+  "Close Sessions On End" : true,
+  "Ansi 15 Color (Dark)" : {
+    "Red Component" : 1,
+    "Color Space" : "sRGB",
+    "Blue Component" : 1,
+    "Alpha Component" : 1,
+    "Green Component" : 1
   },
+  "Non-ASCII Anti Aliased" : true,
   "Cursor Text Color" : {
     "Red Component" : 0.074509803921568654,
     "Color Space" : "sRGB",
@@ -1658,13 +1652,19 @@
     "Alpha Component" : 1,
     "Green Component" : 0.68627452850341797
   },
-  "Close Sessions On End" : true,
   "Ansi 0 Color" : {
     "Red Component" : 0.074509806931018829,
     "Color Space" : "sRGB",
     "Blue Component" : 0.074509806931018829,
     "Alpha Component" : 1,
     "Green Component" : 0.086274512112140656
+  },
+  "Foreground Color (Dark)" : {
+    "Red Component" : 0.67058825492858887,
+    "Color Space" : "sRGB",
+    "Blue Component" : 0.74901962280273438,
+    "Alpha Component" : 1,
+    "Green Component" : 0.69803923368453979
   }
 }
 ]

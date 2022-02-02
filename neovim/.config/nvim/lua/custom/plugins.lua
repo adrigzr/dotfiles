@@ -141,7 +141,6 @@ packer.startup {
     use "tpope/vim-unimpaired" -- Pair aliases and toggling options
     use "mjbrownie/swapit" -- <c-a> increments
     use "kopischke/vim-fetch" -- Handle line number on filename
-    use "vim-scripts/Spiffy-Foldtext" -- Pretty folds
     use { "tpope/vim-dispatch", cmd = { "Dispatch", "Make", "Focus", "Start" } } -- Async shell commands
     use {
       "norcalli/nvim-colorizer.lua",
@@ -158,11 +157,12 @@ packer.startup {
     use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
     use "tpope/vim-scriptease" -- Pretty debug messages
     use "folke/which-key.nvim" -- Pretty keybind hints
-    use "Xuyuanp/scrollbar.nvim" -- Scrollbar
+    use "petertriho/nvim-scrollbar" -- Scrollbar
     use "stevearc/dressing.nvim" -- Pretty vim.ui boxes
     use "andymass/vim-matchup" -- Replaces matchit & matchparen builtins
     use "vim-test/vim-test" -- Test files
     use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
+    use "anuvyklack/pretty-fold.nvim"
 
     if packer_bootstrap then
       packer.sync()
