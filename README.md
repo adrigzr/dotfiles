@@ -15,7 +15,7 @@
 
    ```bash
    brew tap homebrew/cask-versions
-   brew install git ripgrep fzf stow gnu-sed editorconfig bat asdf gpg gawk htop ffmpeg jq fd moreutils
+   brew install git wget ripgrep fzf stow gnu-sed editorconfig bat asdf gpg gawk htop ffmpeg jq fd moreutils
    brew install iterm2-beta
    brew install tmux --HEAD
    brew install neovim --HEAD
@@ -26,7 +26,7 @@
    ```bash
    nvm install --lts
    nvm alias default "$(nvm version-remote --lts)"
-   npm install -g yarn bash-language-server
+   npm install -g neovim yarn prettier bash-language-server
    ```
 
 1. Install [rust](https://www.rust-lang.org/tools/install)
@@ -38,12 +38,25 @@
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
+1. Setup python packages
+
+   ```bash
+   pip3 install --upgrade pip
+   pip3 install neovim vim-vint
+   ```
+
 1. Setup [asdf](https://github.com/asdf-vm/asdf)
 
    ```bash
    asdf plugin-add java https://github.com/halcyon/asdf-java.git
    asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
    asdf install
+   ```
+
+1. Setup ruby
+
+   ```bash
+   gem install --user neovim
    ```
 
 1. Clone repository and stow packages.
@@ -95,7 +108,7 @@
 1. Setup neovim
 
    ```text
-   :PackerSync
-   :LspInstall pyright graphql dotls dockerls tsserver html bashls jsonls vimls rust_analyzer yamlls eslint sumneko_lua cssls
-   :checkhealth
+   PackerSync
+   LspInstall pyright graphql dotls dockerls tsserver html bashls jsonls vimls rust_analyzer yamlls eslint sumneko_lua cssls
+   checkhealth
    ```
