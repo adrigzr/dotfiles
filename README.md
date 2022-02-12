@@ -14,7 +14,9 @@
 1. Install [brew](https://brew.sh/index_es) and useful packages.
 
    ```bash
-   brew install item2-beta git ripgrep fzf stow gnu-sed editorconfig bat asdf gpg gawk htop ffmpeg jq fd moreutils
+   brew tap homebrew/cask-versions
+   brew install git ripgrep fzf stow gnu-sed editorconfig bat asdf gpg gawk htop ffmpeg jq fd moreutils
+   brew install iterm2-beta
    brew install tmux --HEAD
    brew install neovim --HEAD
    ```
