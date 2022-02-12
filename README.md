@@ -26,7 +26,7 @@
    ```bash
    nvm install --lts
    nvm alias default "$(nvm version-remote --lts)"
-   npm install -g bash-language-server
+   npm install -g yarn bash-language-server
    ```
 
 1. Install [rust](https://www.rust-lang.org/tools/install)
@@ -35,6 +35,8 @@
    cargo install stylua
    cargo install selene
    ```
+
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
 1. Setup [asdf](https://github.com/asdf-vm/asdf)
 
@@ -51,7 +53,7 @@
    stow asdf git neovim ssh system tmux zsh
    ```
 
-1. Copy fonts
+1. Copy fonts (restart may be required)
 
    ```bash
    cp -r fonts/* ~/Library/Fonts
@@ -73,8 +75,6 @@
    ~/.tmux/plugins/tpm/bin/install_plugins
    ```
 
-1. Open iterm2 and setup profile
-
 1. Tweak Mac OS default settings
 
    Reduce key repeat delay:
@@ -90,8 +90,12 @@
    defaults write com.apple.notificationcenterui bannerTime -int 1
    ```
 
+1. Open iterm2 and setup profile
+
 1. Setup neovim
 
-   ```bash
-   nvim -c "checkhealth"
+   ```text
+   :PackerSync
+   :LspInstall pyright graphql dotls dockerls tsserver html bashls jsonls vimls rust_analyzer yamlls eslint sumneko_lua cssls
+   :checkhealth
    ```
