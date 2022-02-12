@@ -68,15 +68,15 @@ cmp.setup {
       -- Go to next item if cmp is visible
       if cmp.visible() then
         cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
-        -- Expand snippet to next item
-      elseif luasnip.jumpable(1) then
-        luasnip.expand_or_jump()
       else
         local copilot_keys = vim.fn["copilot#Accept"]()
 
         -- Complete with copilot if there is any suggestion
         if copilot_keys ~= "" then
           vim.api.nvim_feedkeys(copilot_keys, "i", true)
+          -- Expand snippet to next item
+        elseif luasnip.jumpable(1) then
+          luasnip.expand_or_jump()
           -- Insert tab if prev char is a space
         elseif util.misc.has_words_before() then
           cmp.complete()
