@@ -135,10 +135,6 @@
 [fetch]
   prune = true
 
-; [pager]
-; 	diff = diff-so-fancy | less --tabs=4 -RFX
-; 	show = diff-so-fancy | less --tabs=4 -RFX
-
 [color "diff"]
   meta = yellow bold
   commit = green bold
@@ -166,25 +162,16 @@
 [help]
   autocorrect = 1
 
-[include]
-  path = ~/.gitconfig.local
-
 [filter "lfs"]
   clean = git-lfs clean %f
   smudge = git-lfs smudge %f
   required = true
 
-; [http]
-;   proxy = http://localhost:3128
-
-; [https]
-;   proxy = http://localhost:3128
-
 [url "https://github.com"]
   insteadOf = git://github.com
 
 [commit]
-  gpgsign = false
+  gpgsign = true
 
 [gpg]
   program = gpg
