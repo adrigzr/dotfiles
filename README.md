@@ -15,7 +15,7 @@
 
    ```bash
    brew tap homebrew/cask-versions
-   brew install git wget ripgrep fzf stow gnu-sed editorconfig bat asdf gpg gawk htop ffmpeg jq fd moreutils
+   brew install git wget ripgrep fzf stow gnu-sed editorconfig bat asdf gpg gawk htop ffmpeg jq fd moreutils git-delta
    brew install iterm2-beta
    brew install tmux --HEAD
    brew install neovim --HEAD
@@ -57,6 +57,12 @@
 
    ```bash
    gem install --user neovim
+   ```
+
+1. Create default files and directories to prevent stow from colliding
+
+   ```bash
+   mkdir -p ~/.config ~/.ssh/control
    ```
 
 1. Clone repository and stow packages.

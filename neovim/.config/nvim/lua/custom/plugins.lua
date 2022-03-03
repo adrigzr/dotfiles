@@ -169,6 +169,7 @@ packer.startup {
     end
   end,
   config = {
+    max_jobs = 8,
     compile_path = vim.fn.stdpath "config" .. "/lua/packer_compiled.lua",
     display = {
       open_fn = function()
