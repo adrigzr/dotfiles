@@ -54,7 +54,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 # NPM
 export npm_config_progress=false
-export PATH="./node_modules/.bin:$PATH"
 
 # Node
 export NODE_OPTIONS="--max-old-space-size=4096 --max-http-header-size=49152"
@@ -77,43 +76,6 @@ export GPG_TTY=$(tty)
 # Get python user package path.
 # export PYTHON_PACKAGES="$HOME/Library/Python/2.7/lib/python/site-packages"
 # export PYTHON3_PACKAGES="$HOME/Library/Python/3.7/lib/python/site-packages"
-
-# Proxy.
-proxy_enable() {
-  proxy=${1:-localhost:3128}
-
-  export http_proxy=http://$proxy/
-  export https_proxy=$http_proxy
-  export ftp_proxy=$http_proxy
-  export rsync_proxy=$http_proxy
-  export rvm_proxy=$http_proxy
-  export socks_proxy=socks://$proxy/
-  export HTTP_PROXY=$http_proxy
-  export HTTPS_PROXY=$http_proxy
-  export FTP_PROXY=$http_proxy
-  export RSYNC_PROXY=$http_proxy
-  export RVM_PROXY=$http_proxy
-  export SOCKS_PROXY=$socks_proxy
-  export no_proxy=localhost,127.0.0.0/8,::1
-}
-
-proxy_disable() {
-  unset http_proxy
-  unset https_proxy
-  unset ftp_proxy
-  unset rsync_proxy
-  unset rvm_proxy
-  unset socks_proxy
-  unset HTTP_PROXY
-  unset HTTPS_PROXY
-  unset FTP_PROXY
-  unset RSYNC_PROXY
-  unset RVM_PROXY
-  unset SOCKS_PROXY
-  unset no_proxy
-}
-
-proxy_disable
 
 # here's LS_COLORS
 # github.com/trapd00r/LS_COLORS

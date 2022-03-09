@@ -20,10 +20,10 @@ vim.diagnostic.config {
 
 -- Redefine diagnostics signs
 vim.cmd [[
-	sign define DiagnosticSignError text= texthl=DiagnosticSignError numhl=DiagnosticSignError
-	sign define DiagnosticSignWarn text=  texthl=DiagnosticSignWarn numhl=DiagnosticSignWarn
-	sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo numhl=DiagnosticSignInfo
-	sign define DiagnosticSignHint text= texthl=DiagnosticSignHint numhl=DiagnosticSignHint
+  sign define DiagnosticSignError text= texthl=DiagnosticSignError numhl=DiagnosticSignError
+  sign define DiagnosticSignWarn text=  texthl=DiagnosticSignWarn numhl=DiagnosticSignWarn
+  sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo numhl=DiagnosticSignInfo
+  sign define DiagnosticSignHint text= texthl=DiagnosticSignHint numhl=DiagnosticSignHint
 ]]
 
 -- Format on save
@@ -202,6 +202,29 @@ module.on_server_ready(function(server)
     opts.settings = {
       json = {
         schemas = require("schemastore").json.schemas(),
+      },
+    }
+  end
+
+  if server.name == "yamlls" then
+    opts.settings = {
+      yaml = {
+        trace = {
+          server = "verbose",
+        },
+        schemas = {
+          ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+          ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = "/.gitlab/ci/*.yml",
+          ["https://raw.githubusercontent.com/awslabs/goformation/master/schema/sam.schema.json"] = "template.yaml",
+        },
+        customTags = {
+          "!Equals sequence",
+          "!GetAtt scalar",
+          "!If sequence",
+          "!Or sequence",
+          "!Ref scalar",
+          "!Sub scalar",
+        },
       },
     }
   end

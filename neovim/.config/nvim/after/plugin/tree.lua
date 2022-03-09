@@ -1,8 +1,6 @@
 -- Defined before require
-vim.g.nvim_tree_gitignore = 1
 vim.g.nvim_tree_indent_markers = 1
 vim.g.nvim_tree_git_hl = 1
-vim.g.nvim_tree_disable_window_picker = 1
 vim.g.nvim_tree_show_icons = {
   git = 0,
   folders = 1,
@@ -23,6 +21,16 @@ module.setup {
   },
   update_focused_file = {
     enable = true,
+  },
+  git = {
+    ignore = true,
+  },
+  actions = {
+    open_file = {
+      window_picker = {
+        enable = false,
+      },
+    },
   },
 }
 

@@ -8,6 +8,7 @@ local actions = require "telescope.actions"
 
 vim.cmd [[
   nnoremap <C-p> <cmd>Telescope find_files<cr>
+  nnoremap <C-g> <cmd>Telescope live_grep<cr>
   nnoremap gb    <cmd>Telescope buffers<cr>
 ]]
 
