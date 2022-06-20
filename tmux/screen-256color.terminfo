@@ -9,6 +9,7 @@
 #   export TERM=screen-256color
 #
 screen-256color|screen with 256 colors and italic,
+  sitm=\E[3m,
   smul=\E[4m,
   Smulx=\E[4\:%p1%dm,
   Setulc=\E[58\:2\:%p1%{65536}%/%d\:%p1%{256}%/%{255}%&%d\:%p1%{255}%&%d%;m,

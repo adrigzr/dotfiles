@@ -17,21 +17,22 @@ module.setup {
 }
 
 local colors = require "onedark.colors"
+local util = require "onedark.util"
 
 local function setup()
   vim.cmd [[
     colorscheme onedark
 
     " [Native] Change float preview window border to match background
-    highlight def link FloatBorder TelescopeResultsBorder
-    highlight def link NormalFloat Normal
+    highlight! def link FloatBorder TelescopeResultsBorder
+    highlight! def link NormalFloat Normal
+
+    " [Native] WinBar
+    highlight WinBarNC gui=none
 
     " [Native] Change match paren
     highlight MatchParen gui=underline guifg=none guibg=none
   ]]
-
-  -- [Native] Folds
-  vim.cmd("highlight Folded gui=none guifg=none guibg=" .. colors.dark_cyan)
 
   -- [Rainbow] Change treesitter rainbow colors
   for i = 1, 7 do
@@ -48,6 +49,10 @@ local function setup()
   vim.cmd("highlight LspSignatureActiveParameter gui=bold guifg=" .. colors.blue)
   vim.cmd("highlight DiagnosticUnnecessaryTag guifg=" .. colors.grey)
   vim.cmd("highlight LightBulbVirtualText guifg=" .. colors.blue)
+  vim.cmd("highlight DiagnosticVirtualTextError gui=italic guifg=" .. colors.red .. " guibg=none")
+  vim.cmd("highlight DiagnosticVirtualTextWarn gui=italic guifg=" .. colors.yellow .. " guibg=none")
+  vim.cmd("highlight DiagnosticVirtualTextInfo gui=italic guifg=" .. colors.cyan .. " guibg=none")
+  vim.cmd("highlight DiagnosticVirtualTextHint gui=italic guifg=" .. colors.purple .. " guibg=none")
 
   -- [Yank] Change yank highlight
   vim.cmd("highlight Yank guifg=" .. colors.bg0 .. " guibg=" .. colors.cyan)
@@ -57,6 +62,11 @@ local function setup()
 
   -- [Ultest]
   vim.cmd("highlight UltestPass guifg=" .. colors.green)
+
+  -- [Ufo]
+  vim.cmd("highlight Folded gui=none guifg=none guibg=" .. util.darken(colors.dark_cyan, 0.25, colors.bg0))
+  vim.cmd("highlight FoldColumn guifg=" .. colors.grey .. " guibg=none")
+  vim.cmd("highlight UfoFoldedFg guifg=" .. colors.green)
 end
 
 vim.cmd [[

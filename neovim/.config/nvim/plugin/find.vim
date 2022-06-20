@@ -12,7 +12,7 @@ let g:loaded_find = 1
 scriptencoding utf-8
 
 " Note we extract the column as well as the file and line number
-set grepprg=rg\ --no-heading\ --vimgrep\ --smart-case\ --color=never\ --ignore-case\ --hidden
+set grepprg=rg\ --no-heading\ --vimgrep\ --smart-case\ --color=never\ --ignore-case\ --hidden\ --glob\ \!.git
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 
 " Make the command.

@@ -9,8 +9,6 @@ module.setup {
     default_prompt = "➜ ",
   },
   select = {
-    telescope = {
-      theme = "cursor",
-    },
+    telescope = require("telescope.themes").get_cursor(),
   },
 }

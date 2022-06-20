@@ -11,6 +11,8 @@ set.writebackup = false
 set.undofile = true
 
 -- View
+set.laststatus = 3 -- single status line
+set.winbar = "%f %m%r"
 set.cursorline = true
 set.wrap = false
 set.breakindent = true
@@ -21,13 +23,14 @@ set.scrolloff = 6
 set.sidescrolloff = 3
 set.splitbelow = true
 set.splitright = true
-set.fillchars = "fold:-"
+set.fillchars = "eob: ,fold: ,foldopen:,foldsep: ,foldclose:"
 set.iskeyword:append "-"
 set.list = true
 set.listchars = "tab:→ ,extends:›,precedes:‹,nbsp:·,trail:·"
 set.termguicolors = true
 set.signcolumn = "yes"
 set.inccommand = "split"
+set.colorcolumn = "81,101,121"
 
 -- Diff
 set.diffopt = {
@@ -39,10 +42,11 @@ set.diffopt = {
 }
 
 -- Folds
-set.foldenable = false
-set.foldlevel = 0
-set.foldmethod = "syntax"
-set.foldminlines = 2
+set.foldenable = true
+set.foldlevel = 99
+set.foldcolumn = "1"
+-- set.foldmethod = "syntax"
+-- set.foldminlines = 2
 
 -- Format
 set.softtabstop = 2

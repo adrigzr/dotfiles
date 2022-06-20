@@ -2,6 +2,9 @@
   default = current
   followTags = true
 
+[rerere]
+  enabled = true
+
 [diff]
   tool = fugitive
   colorMoved = default
@@ -79,11 +82,13 @@
   last = "!git for-each-ref --sort='-committerdate' --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' refs/heads/ | head -n 15"
   lb = list-bamboo
   rb = run-bamboo
-  current-branch = rev-parse --abbrev-ref HEAD
   conflicts = diff --name-only --diff-filter=U
+  current-branch = rev-parse --abbrev-ref HEAD
   current-commit = rev-parse HEAD
+  current-commit-msg = log -1 --pretty=%B
   cb = current-branch
   cc = current-commit
+  ccm = current-commit-msg
   identity = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; git config user.signingkey \"$(git config user.$1.signingkey)\"; :"
   mv-index = "!f() { \
     old=\"$1\"; \

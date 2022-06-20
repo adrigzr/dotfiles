@@ -72,7 +72,10 @@ end
 
 local function hover()
   -- Abort when lsp is not ready or completion is visible or copilot has suggestions
-  if not vim.lsp.buf.server_ready() or require("cmp").visible() or vim.b._copilot_suggestion then
+  if not vim.lsp.buf.server_ready()
+      or require("cmp").visible()
+      or vim.api.nvim_eval 'exists("b:_copilot.suggestions")' == 1
+  then
     return
   end
 
@@ -122,7 +125,7 @@ end
 
 -- Hover handler
 function M.hover()
-  async.run(hover)
+  async.run(hover, nil)
 end
 
 -- Show hover or signature help
@@ -145,7 +148,7 @@ end
 
 -- Show info handler
 function M.show_info()
-  async.run(show_info)
+  async.run(show_info, nil)
 end
 
 local function goto_definition()
@@ -169,7 +172,16 @@ end
 
 -- Goto definition handler
 function M.goto_definition()
-  async.run(goto_definition)
+  async.run(goto_definition, nil)
+end
+
+-- Format
+function M.format()
+  vim.lsp.buf.format {
+    filter = function(client)
+      return not vim.tbl_contains({ "jsonls", "tsserver" }, client.name)
+    end,
+  }
 end
 
 return M

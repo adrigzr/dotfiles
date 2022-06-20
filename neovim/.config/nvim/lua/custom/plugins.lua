@@ -37,6 +37,7 @@ packer.startup {
     -- Utils
     use "nvim-lua/popup.nvim"
     use "nvim-lua/plenary.nvim"
+    use "kevinhwang91/promise-async"
 
     -- Icons
     use {
@@ -82,6 +83,7 @@ packer.startup {
     use { "nvim-telescope/telescope-fzf-native.nvim", run = "make" } -- FZF for telescope
     use "nvim-telescope/telescope.nvim" -- Fuzzy Finder
     use "nvim-telescope/telescope-symbols.nvim" -- For symbols
+    use "nvim-telescope/telescope-dap.nvim"
 
     -- Comments
     use "tpope/vim-commentary"
@@ -110,7 +112,7 @@ packer.startup {
     use "jose-elias-alvarez/null-ls.nvim"
     use "folke/trouble.nvim" -- Pretty diagnostics
     use "b0o/schemastore.nvim" -- Schemas for jsonls
-    use "stevearc/aerial.nvim" -- Show symbols
+    -- use "stevearc/aerial.nvim" -- Show symbols
     use {
       "simrat39/rust-tools.nvim",
       config = function()
@@ -132,6 +134,7 @@ packer.startup {
     use "f3fora/cmp-spell"
     use "onsails/lspkind-nvim" -- Pretty completion items
     use "saadparwaiz1/cmp_luasnip"
+    use "petertriho/cmp-git"
     use "L3MON4D3/LuaSnip"
     use "rafamadriz/friendly-snippets"
 
@@ -141,7 +144,8 @@ packer.startup {
     use "tpope/vim-unimpaired" -- Pair aliases and toggling options
     use "mjbrownie/swapit" -- <c-a> increments
     use "kopischke/vim-fetch" -- Handle line number on filename
-    use { "tpope/vim-dispatch", cmd = { "Dispatch", "Make", "Focus", "Start" } } -- Async shell commands
+    use "tpope/vim-dispatch"
+    use "skywind3000/asyncrun.vim" -- Async make
     use {
       "norcalli/nvim-colorizer.lua",
       config = function()
@@ -162,7 +166,13 @@ packer.startup {
     use "andymass/vim-matchup" -- Replaces matchit & matchparen builtins
     use "vim-test/vim-test" -- Test files
     use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
-    use "anuvyklack/pretty-fold.nvim"
+    use "mfussenegger/nvim-dap" -- Debugger
+    use "theHamsta/nvim-dap-virtual-text"
+    use "rcarriga/nvim-dap-ui"
+    -- use "anuvyklack/pretty-fold.nvim"
+    -- use "stevearc/stickybuf.nvim" -- Prevent special windows to be switched to other buffer
+    use "kevinhwang91/nvim-ufo" -- Pretty folds
+    use "ThePrimeagen/refactoring.nvim" -- Refactoring tools
 
     if packer_bootstrap then
       packer.sync()

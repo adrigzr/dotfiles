@@ -65,4 +65,42 @@ function M.array_to_table(a)
   return t
 end
 
+--- Show a prompt to select a process pid
+function M.pick_process()
+  local separator = " \\+"
+  local command = "ps a | sed 1d"
+  -- output format for ps ah
+  --    " 107021 pts/4    Ss     0:00 /bin/zsh <args>"
+  local get_pid = function(parts)
+    return parts[1]
+  end
+
+  local get_process_name = function(parts)
+    return table.concat({ unpack(parts, 5) }, " ")
+  end
+
+  local output = vim.fn.system(command)
+  local lines = vim.split(output, "\n")
+  local procs = {}
+
+  for _, line in pairs(lines) do
+    if line ~= "" then -- tasklist command outputs additional empty line in the end
+      local parts = vim.fn.split(vim.fn.trim(line), separator)
+      local pid, name = get_pid(parts), get_process_name(parts)
+      pid = tonumber(pid)
+      if pid ~= vim.fn.getpid() then
+        table.insert(procs, { pid = pid, name = name })
+      end
+    end
+  end
+
+  local label_fn = function(proc)
+    return string.format("id=%d name=%s", proc.pid, proc.name)
+  end
+
+  local result = require("dap.ui").pick_one_sync(procs, "Select process", label_fn)
+
+  return result and result.pid or nil
+end
+
 return M

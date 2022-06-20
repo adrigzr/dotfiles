@@ -12,6 +12,12 @@ if [ -d "/opt/homebrew" ]; then
   export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
 fi
 
+# Skip puppeteer on M1
+if [[ "$(arch)" == "arm64" && -s "$(which chromium)" ]]; then
+  export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+  export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+fi
+
 # Don’t clear the screen after quitting a manual page
 export MANPAGER="less -X"
 export PAGER="less"

@@ -85,11 +85,11 @@ imap <PageDown> <C-O><C-D>
 " }}}
 
 " Vimdiff {{{
-map <leader>dn ]c
-map <leader>dp [c
-map <leader>dr :diffget RE<CR>
-map <leader>db :diffget BA<CR>
-map <leader>dl :diffget LO<CR>
+" map <leader>dn ]c
+" map <leader>dp [c
+" map <leader>dr :diffget RE<CR>
+" map <leader>db :diffget BA<CR>
+" map <leader>dl :diffget LO<CR>
 " }}}
 
 " Search current selection {{{

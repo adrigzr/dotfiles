@@ -1,13 +1,3 @@
--- Defined before require
-vim.g.nvim_tree_indent_markers = 1
-vim.g.nvim_tree_git_hl = 1
-vim.g.nvim_tree_show_icons = {
-  git = 0,
-  folders = 1,
-  files = 1,
-  folder_arrows = 1,
-}
-
 local exists, module = pcall(require, "nvim-tree")
 
 if not exists then
@@ -27,8 +17,23 @@ module.setup {
   },
   actions = {
     open_file = {
+      resize_window = false,
       window_picker = {
         enable = false,
+      },
+    },
+  },
+  renderer = {
+    highlight_git = true,
+    indent_markers = {
+      enable = true,
+    },
+    icons = {
+      show = {
+        git = false,
+        file = true,
+        folder = true,
+        folder_arrow = true,
       },
     },
   },

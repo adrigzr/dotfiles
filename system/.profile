@@ -25,9 +25,15 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export PATH="./node_modules/.bin:$PATH" # This prevents nvm to override local path
+if which npm >/dev/null; then
+  export NODE_PATH="${NODE_PATH}:$(npm config get prefix)/lib/node_modules"
+fi
 
 # Load rvm.
-# [ -f "$HOME/.rvm/scripts/rvm" ] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+if [ -f "$HOME/.rvm/scripts/rvm" ]; then
+  export PATH="$PATH:$HOME/.rvm/bin"
+  source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+fi
 
 # Load rust.
 # [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"

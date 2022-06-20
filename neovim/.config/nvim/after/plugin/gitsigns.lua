@@ -33,12 +33,12 @@ module.setup {
     map("n", "<leader>hb", function()
       module.blame_line { full = true }
     end)
-    map("n", "<leader>tb", module.toggle_current_line_blame)
+    -- map("n", "<leader>tb", module.toggle_current_line_blame)
     map("n", "<leader>hd", module.diffthis)
     map("n", "<leader>hD", function()
       module.diffthis "~"
     end)
-    map("n", "<leader>td", module.toggle_deleted)
+    map("n", "<leader>ht", module.toggle_deleted)
 
     -- Text object
     map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")

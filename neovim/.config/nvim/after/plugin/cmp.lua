@@ -9,9 +9,6 @@ local util = require "custom.util"
 local cmp_buffer = require "cmp_buffer"
 local luasnip = require "luasnip"
 
--- Load vscode snippets
-require("luasnip/loaders/from_vscode").lazy_load()
-
 -- Highlights
 vim.cmd [[
   augroup cmp_theme
@@ -21,8 +18,14 @@ vim.cmd [[
 ]]
 
 local sources = {
+  luasnip = { name = "luasnip", priority = 9999 },
   nvim_lsp = { name = "nvim_lsp" },
   nvim_lua = { name = "nvim_lua" },
+  path = { name = "path" },
+  calc = { name = "calc" },
+  treesitter = { name = "treesitter" },
+  spell = { name = "spell" },
+  git = { name = "git" },
   buffer = {
     name = "buffer",
     option = {
@@ -36,12 +39,29 @@ local sources = {
       end,
     },
   },
-  luasnip = { name = "luasnip", priority = 9999 },
-  path = { name = "path" },
-  calc = { name = "calc" },
-  treesitter = { name = "treesitter" },
-  spell = { name = "spell" },
 }
+
+local tab_is = function(fallback)
+  -- Go to next item if cmp is visible
+  if cmp.visible() then
+    cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
+  else
+    local copilot_keys = vim.fn["copilot#Accept"]()
+
+    -- Complete with copilot if there is any suggestion
+    if copilot_keys ~= "" then
+      vim.api.nvim_feedkeys(copilot_keys, "i", true)
+      -- Expand snippet to next item
+    elseif luasnip.jumpable(1) then
+      luasnip.expand_or_jump()
+      -- Insert tab if prev char is a space
+    elseif util.misc.has_words_before() then
+      cmp.complete()
+    else
+      fallback()
+    end
+  end
+end
 
 cmp.setup {
   snippet = {
@@ -58,33 +78,24 @@ cmp.setup {
         cmp.close()
       elseif luasnip.choice_active() then
         luasnip.change_choice()
-      elseif vim.b._copilot_suggestion then
+      elseif vim.api.nvim_eval 'exists("b:_copilot.suggestions")' then
         vim.fn["copilot#Dismiss"]()
       else
         fallback()
       end
     end, { "i", "s" }),
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      -- Go to next item if cmp is visible
-      if cmp.visible() then
-        cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
-      else
-        local copilot_keys = vim.fn["copilot#Accept"]()
-
-        -- Complete with copilot if there is any suggestion
-        if copilot_keys ~= "" then
-          vim.api.nvim_feedkeys(copilot_keys, "i", true)
-          -- Expand snippet to next item
-        elseif luasnip.jumpable(1) then
+    ["<Tab>"] = cmp.mapping {
+      i = tab_is,
+      s = tab_is,
+      n = function(fallback)
+        -- Expand snippet to next item
+        if luasnip.jumpable(1) then
           luasnip.expand_or_jump()
-          -- Insert tab if prev char is a space
-        elseif util.misc.has_words_before() then
-          cmp.complete()
         else
           fallback()
         end
-      end
-    end, { "i", "s" }),
+      end,
+    },
     ["<S-Tab>"] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item { behavior = cmp.SelectBehavior.Select }
@@ -95,17 +106,18 @@ cmp.setup {
     ["<CR>"] = cmp.mapping.confirm(),
   },
   sources = cmp.config.sources {
+    sources.luasnip,
     sources.nvim_lsp,
     sources.nvim_lua,
+    sources.git,
     sources.buffer,
-    sources.luasnip,
     sources.path,
     sources.calc,
-    sources.treesitter,
     sources.spell,
+    sources.treesitter,
   },
-  documentation = {
-    border = "rounded",
+  window = {
+    documentation = cmp.config.window.bordered(),
   },
   formatting = {
     deprecated = true,
@@ -113,11 +125,15 @@ cmp.setup {
       with_text = true,
       maxwidth = 50,
       menu = {
+        luasnip = "[Snip]",
         nvim_lsp = "[LSP]",
         nvim_lua = "[Lua]",
+        git = "[Git]",
         buffer = "[Buffer]",
-        luasnip = "[Snip]",
         path = "[Path]",
+        calc = "[Calc]",
+        spell = "[Spell]",
+        treesitter = "[Treesitter]",
         cmdline = "[CMD]",
       },
     },
@@ -140,11 +156,13 @@ cmp.setup {
 }
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline("/", {
-  sources = {
-    sources.buffer,
-  },
-})
+-- cmp.setup.cmdline("/", {
+--   sources = {
+--     sources.buffer,
+--   },
+-- })
+
+require("cmp_git").setup()
 
 -- Insert ( after select function or method item)
 local cmp_autopairs = require "nvim-autopairs.completion.cmp"

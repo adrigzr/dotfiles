@@ -1,63 +1,74 @@
-local exists, module = pcall(require, "nvim-lsp-installer")
-
-if not exists then
-  return
-end
-
+local lspinstaller = require "nvim-lsp-installer"
+local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
 local null_ls = require "null-ls"
-local aerial = require "aerial"
+-- local aerial = require "aerial"
 local ts_utils = require "nvim-lsp-ts-utils"
+local sign_define = vim.fn.sign_define
+local custom_lsp_group = vim.api.nvim_create_augroup("custom_lsp", {})
 
 -- Debugging
 -- vim.lsp.set_log_level "debug"
 
 -- Diagnostics
 vim.diagnostic.config {
-  virtual_text = false,
+  virtual_text = true,
   severity_sort = true,
 }
 
+-- aerial.setup {
+--   default_direction = "float",
+--   close_on_select = true,
+-- }
+
 -- Redefine diagnostics signs
-vim.cmd [[
-  sign define DiagnosticSignError text= texthl=DiagnosticSignError numhl=DiagnosticSignError
-  sign define DiagnosticSignWarn text=  texthl=DiagnosticSignWarn numhl=DiagnosticSignWarn
-  sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo numhl=DiagnosticSignInfo
-  sign define DiagnosticSignHint text= texthl=DiagnosticSignHint numhl=DiagnosticSignHint
-]]
+sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError", numhl = "DiagnosticSignError" })
+sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn", numhl = "DiagnosticSignWarn" })
+sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo", numhl = "DiagnosticSignInfo" })
+sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint", numhl = "DiagnosticSignHint" })
 
 -- Format on save
-vim.cmd [[
-  augroup lsp_format
-    autocmd!
-    autocmd BufWritePre * lua vim.lsp.buf.formatting_seq_sync()
-  augroup END
-]]
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = custom_lsp_group,
+  callback = function()
+    require("custom.util.lsp").format()
+  end,
+})
 
 -- Custom colors
-vim.cmd [[
-  augroup lsp_theme
-    autocmd!
-    autocmd ColorScheme * highlight DiagnosticDeprecatedTag gui=strikethrough
-  augroup END
-]]
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = custom_lsp_group,
+  callback = function()
+    vim.cmd "highlight DiagnosticDeprecatedTag gui=strikethrough"
+  end,
+})
 
 -- Show diagnostics when hovering over an error
-vim.cmd [[
-  augroup lsp_diagnostics
-    autocmd!
-    autocmd CursorHold,CursorHoldI * lua require('custom.util.lsp').hover()
-    autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
-    autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb({ sign = { enabled = false }, virtual_text = { enabled = true, text = "", hl_mode = "combine" } })
-  augroup END
-]]
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+  group = custom_lsp_group,
+  callback = function()
+    require("custom.util.lsp").hover()
+    require("nvim-lightbulb").update_lightbulb {
+      sign = { enabled = false },
+      virtual_text = { enabled = true, text = "", hl_mode = "combine" },
+    }
+  end,
+})
+
+-- Clear references when cursor moved
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+  group = custom_lsp_group,
+  callback = function()
+    vim.lsp.buf.clear_references()
+  end,
+})
 
 -- Custom diagnostic handlers
 vim.diagnostic.handlers["lsp_tags"] = require("custom.util.diagnostic").lsp_tags_handler
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local function common_on_attach(client, bufnr)
+local function common_on_attach(client, _)
   -- Enable completion triggered by <c-x><c-o>
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
 
@@ -79,26 +90,37 @@ local function common_on_attach(client, bufnr)
   vim.keymap.set("v", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
   vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
   vim.keymap.set("n", "<leader>qf", "<cmd>lua vim.lsp.buf.code_action({ only = 'quickfix' })<CR>", opts)
-  vim.keymap.set("n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  vim.keymap.set("n", "<leader>cf", "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
   vim.keymap.set("n", "<leader>cd", "<cmd>TroubleToggle document_diagnostics<CR>", opts)
   vim.keymap.set("n", "<leader>cw", "<cmd>TroubleToggle workspace_diagnostics<CR>", opts)
-  vim.keymap.set("n", "<leader>cs", "<cmd>AerialToggle<CR>", opts)
+  -- vim.keymap.set("n", "<leader>cs", "<cmd>AerialToggle<CR>", opts)
+  -- vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", opts)
+  -- vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", opts)
+  -- vim.keymap.set("n", "[[", "<cmd>AerialPrevUp<CR>", opts)
+  -- vim.keymap.set("n", "]]", "<cmd>AerialNextUp<CR>", opts)
 
-  if client.resolved_capabilities.goto_definition == true then
+  if client.server_capabilities.goto_definition == true then
     vim.bo.tagfunc = "v:lua.vim.lsp.tagfunc"
   end
 
-  if client.resolved_capabilities.document_formatting == true then
+  if client.server_capabilities.documentFormattingProvider == true then
     vim.bo.formatexpr = "v:lua.vim.lsp.formatexpr()"
   end
 
   -- Configure aerial
-  aerial.on_attach(client, bufnr)
+  -- aerial.on_attach(client, bufnr)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
+-- CMP
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+
+-- Pretty folds (ufo)
+capabilities.textDocument.foldingRange = {
+  dynamicRegistration = false,
+  lineFoldingOnly = true,
+}
 
 local handler_opts = {
   border = "rounded",
@@ -118,12 +140,37 @@ null_ls.setup {
   sources = {
     null_ls.builtins.diagnostics.selene,
     null_ls.builtins.diagnostics.vint,
+    null_ls.builtins.diagnostics.vale,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.stylua,
+    -- null_ls.builtins.diagnostics.rubocop,
+    -- null_ls.builtins.formatting.rubocop,
   },
 }
 
-module.on_server_ready(function(server)
+lspinstaller.setup {
+  automatic_installation = true,
+}
+
+local servers = {
+  "bashls",
+  "cssls",
+  "dockerls",
+  "dotls",
+  "eslint",
+  "graphql",
+  "html",
+  "jsonls",
+  "pyright",
+  "rust_analyzer",
+  "solargraph",
+  "sumneko_lua",
+  "tsserver",
+  "vimls",
+  "yamlls",
+}
+
+for _, server in pairs(servers) do
   -- LSP Options: https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
   local opts = {
     on_attach = common_on_attach,
@@ -131,7 +178,7 @@ module.on_server_ready(function(server)
     handlers = handlers,
   }
 
-  if server.name == "sumneko_lua" then
+  if server == "sumneko_lua" then
     local runtime_path = vim.split(package.path, ";")
 
     table.insert(runtime_path, "lua/?.lua")
@@ -156,22 +203,24 @@ module.on_server_ready(function(server)
   end
 
   -- Enable formatting
-  if vim.tbl_contains({ "eslint", "ember" }, server.name) then
+  if vim.tbl_contains({ "eslint", "ember" }, server) then
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = true
+      client.server_capabilities.documentFormattingProvider = true
+      client.server_capabilities.documentRangeFormattingProvider = true
       common_on_attach(client, bufnr)
     end
   end
 
   -- Disable formatting
-  if vim.tbl_contains({ "jsonls" }, server.name) then
+  if vim.tbl_contains({ "jsonls" }, server) then
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
       common_on_attach(client, bufnr)
     end
   end
 
-  if server.name == "tsserver" then
+  if server == "tsserver" then
     opts.root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", ".git")
     opts.init_options = vim.tbl_deep_extend("force", ts_utils.init_options, {
       preferences = {
@@ -186,7 +235,8 @@ module.on_server_ready(function(server)
       },
     }
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
       ts_utils.setup {
         enable_import_on_completion = true,
         filter_out_diagnostics_by_code = { 80001 },
@@ -198,15 +248,16 @@ module.on_server_ready(function(server)
     end
   end
 
-  if server.name == "jsonls" then
+  if server == "jsonls" then
     opts.settings = {
       json = {
         schemas = require("schemastore").json.schemas(),
+        validate = { enable = true },
       },
     }
   end
 
-  if server.name == "yamlls" then
+  if server == "yamlls" then
     opts.settings = {
       yaml = {
         trace = {
@@ -222,12 +273,14 @@ module.on_server_ready(function(server)
           "!GetAtt scalar",
           "!If sequence",
           "!Or sequence",
+          "!Join sequence",
           "!Ref scalar",
           "!Sub scalar",
+          "!Not sequence",
         },
       },
     }
   end
 
-  server:setup(opts)
-end)
+  lspconfig[server].setup(opts)
+end

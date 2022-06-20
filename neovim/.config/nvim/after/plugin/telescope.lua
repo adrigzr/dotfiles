@@ -1,10 +1,11 @@
-local exists, module = pcall(require, "telescope")
+local exists, telescope = pcall(require, "telescope")
 
 if not exists then
   return
 end
 
 local actions = require "telescope.actions"
+local trouble = require "trouble"
 
 vim.cmd [[
   nnoremap <C-p> <cmd>Telescope find_files<cr>
@@ -12,7 +13,7 @@ vim.cmd [[
   nnoremap gb    <cmd>Telescope buffers<cr>
 ]]
 
-module.setup {
+telescope.setup {
   defaults = {
     prompt_prefix = "➜ ",
     selection_caret = "➜ ",
@@ -22,6 +23,7 @@ module.setup {
         ["<esc>"] = actions.close,
         ["<c-n>"] = actions.cycle_history_next,
         ["<c-p>"] = actions.cycle_history_prev,
+        ["<c-t>"] = trouble.open_with_trouble,
       },
     },
     vimgrep_arguments = {
@@ -73,4 +75,5 @@ module.setup {
   },
 }
 
-module.load_extension "fzf"
+telescope.load_extension "fzf"
+telescope.load_extension "dap"

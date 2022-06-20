@@ -5,11 +5,12 @@ if not exists then
 end
 
 module.setup {
-  ensure_installed = "maintained",
+  ensure_installed = "all",
+  ignore_install = { "phpdoc", "swift" },
   highlight = { enable = true },
   incremental_selection = { enable = true },
   textobjects = { enable = true },
-  indent = { enable = true },
+  indent = { enable = true, disable = { "yaml" } },
   rainbow = { enable = true },
   playground = { enable = true },
   query_linter = { enable = true },
