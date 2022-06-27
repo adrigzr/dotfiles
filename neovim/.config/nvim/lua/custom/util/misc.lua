@@ -103,4 +103,16 @@ function M.pick_process()
   return result and result.pid or nil
 end
 
+--- Bind a function with args
+--- @param fn function
+--- @param args table
+--- @return function
+function M.bind(fn, args)
+  args = args or {}
+
+  return function()
+    fn(unpack(args))
+  end
+end
+
 return M

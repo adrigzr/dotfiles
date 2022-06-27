@@ -175,8 +175,24 @@ function M.goto_definition()
   async.run(goto_definition, nil)
 end
 
+--- Check if any attached server has a capability
+--- @param capability string
+--- @return boolean
+local function hasServerWithCapability(capability)
+  local servers = vim.lsp.buf_get_clients()
+  local serversWithFormat = vim.tbl_filter(function(server)
+    return server.server_capabilities[capability]
+  end, vim.tbl_values(servers))
+
+  return not vim.tbl_isempty(serversWithFormat)
+end
+
 -- Format
 function M.format()
+  if not hasServerWithCapability "documentFormattingProvider" then
+    return
+  end
+
   vim.lsp.buf.format {
     filter = function(client)
       return not vim.tbl_contains({ "jsonls", "tsserver" }, client.name)

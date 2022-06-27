@@ -38,6 +38,7 @@ packer.startup {
     use "nvim-lua/popup.nvim"
     use "nvim-lua/plenary.nvim"
     use "kevinhwang91/promise-async"
+    use "antoinemadec/FixCursorHold.nvim"
 
     -- Icons
     use {
@@ -164,8 +165,13 @@ packer.startup {
     use "petertriho/nvim-scrollbar" -- Scrollbar
     use "stevearc/dressing.nvim" -- Pretty vim.ui boxes
     use "andymass/vim-matchup" -- Replaces matchit & matchparen builtins
-    use "vim-test/vim-test" -- Test files
-    use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
+    -- use "vim-test/vim-test" -- Test files
+    use "nvim-neotest/neotest"
+    use "~/Repositories/neotest-jest"
+    use "olimorris/neotest-rspec"
+    use "nvim-neotest/neotest-python"
+    -- use "nvim-neotest/neotest-vim-test"
+    -- use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
     use "mfussenegger/nvim-dap" -- Debugger
     use "theHamsta/nvim-dap-virtual-text"
     use "rcarriga/nvim-dap-ui"
@@ -173,6 +179,8 @@ packer.startup {
     -- use "stevearc/stickybuf.nvim" -- Prevent special windows to be switched to other buffer
     use "kevinhwang91/nvim-ufo" -- Pretty folds
     use "ThePrimeagen/refactoring.nvim" -- Refactoring tools
+    use "rcarriga/nvim-notify" -- Notifications and messages
+    use "anuvyklack/hydra.nvim" -- Hydra
 
     if packer_bootstrap then
       packer.sync()

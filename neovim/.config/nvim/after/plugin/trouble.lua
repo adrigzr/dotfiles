@@ -8,8 +8,11 @@ module.setup {
   use_diagnostic_signs = true,
 }
 
-vim.keymap.set("n", "<leader>xx", "<cmd>Trouble<cr>", { silent = true })
-vim.keymap.set("n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<cr>", { silent = true })
-vim.keymap.set("n", "<leader>xd", "<cmd>Trouble document_diagnostics<cr>", { silent = true })
-vim.keymap.set("n", "<leader>xl", "<cmd>Trouble loclist<cr>", { silent = true })
-vim.keymap.set("n", "<leader>xq", "<cmd>Trouble quickfix<cr>", { silent = true })
+require("which-key").register({
+  name = "Trouble",
+  x = { "<cmd>Trouble<cr>", "Open trouble" },
+  w = { "<cmd>Trouble workspace_diagnostics<cr>", "Open workspace diagnostics" },
+  d = { "<cmd>Trouble document_diagnostics<cr>", "Open document diagnostics" },
+  l = { "<cmd>Trouble loclist<cr>", "Open location list" },
+  q = { "<cmd>Trouble quickfix<cr>", "Open quickfix list" },
+}, { prefix = "<leader>x" })

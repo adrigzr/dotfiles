@@ -6,7 +6,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Backup files
-set.swapfile = false
+set.swapfile = true
 set.writebackup = false
 set.undofile = true
 

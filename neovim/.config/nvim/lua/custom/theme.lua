@@ -32,6 +32,15 @@ local function setup()
 
     " [Native] Change match paren
     highlight MatchParen gui=underline guifg=none guibg=none
+
+    " [Tree]
+    highlight NvimTreeNormal guibg=none
+    highlight NvimTreeEndOfBuffer guibg=none
+    highlight NvimTreeVertSplit guibg=none
+    highlight def link NvimTreeLspDiagnosticsError DiagnosticSignError
+    highlight def link NvimTreeLspDiagnosticsWarning DiagnosticSignWarn
+    highlight def link NvimTreeLspDiagnosticsInformation DiagnosticSignInfo
+    highlight def link NvimTreeLspDiagnosticsHint DiagnosticSignHint
   ]]
 
   -- [Rainbow] Change treesitter rainbow colors
@@ -60,13 +69,58 @@ local function setup()
   -- [TSContext]
   vim.cmd("highlight TreesitterContext guibg=" .. colors.bg1)
 
-  -- [Ultest]
-  vim.cmd("highlight UltestPass guifg=" .. colors.green)
+  -- [Neotest]
+  vim.cmd("highlight NeotestPassed guifg=" .. colors.green)
+  vim.cmd("highlight NeotestRunning guifg=" .. colors.cyan)
+  vim.cmd("highlight NeotestSkipped guifg=" .. colors.yellow)
+  vim.cmd("highlight NeotestFailed guifg=" .. colors.red)
 
   -- [Ufo]
   vim.cmd("highlight Folded gui=none guifg=none guibg=" .. util.darken(colors.dark_cyan, 0.25, colors.bg0))
   vim.cmd("highlight FoldColumn guifg=" .. colors.grey .. " guibg=none")
   vim.cmd("highlight UfoFoldedFg guifg=" .. colors.green)
+
+  -- [Hydra]
+  vim.cmd("highligh HydraRed guifg=" .. colors.red)
+  vim.cmd("highligh HydraBlue guifg=" .. colors.blue)
+  vim.cmd("highligh HydraAmaranth guifg=" .. colors.cyan)
+  vim.cmd("highligh HydraTeal guifg=" .. colors.green)
+  vim.cmd("highligh HydraPink guifg=" .. colors.orange)
+
+  -- [Notify]
+  local levels = {
+    error = {
+      Border = colors.dark_red,
+      Icon = colors.red,
+      Title = colors.red,
+    },
+    warn = {
+      Border = colors.dark_yellow,
+      Icon = colors.yellow,
+      Title = colors.yellow,
+    },
+    info = {
+      Border = colors.dark_cyan,
+      Icon = colors.cyan,
+      Title = colors.cyan,
+    },
+    debug = {
+      Border = colors.dark_purple,
+      Icon = colors.purple,
+      Title = colors.purple,
+    },
+    trace = {
+      Border = colors.dark_purple,
+      Icon = colors.purple,
+      Title = colors.purple,
+    },
+  }
+
+  for level, parts in pairs(levels) do
+    for part, color in pairs(parts) do
+      vim.cmd("highlight Notify" .. level:upper() .. part .. " guifg=" .. color)
+    end
+  end
 end
 
 vim.cmd [[

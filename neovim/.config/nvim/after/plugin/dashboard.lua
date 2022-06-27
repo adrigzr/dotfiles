@@ -4,8 +4,6 @@ if not exists then
   return
 end
 
-local home = os.getenv "HOME"
-
 dashboard.custom_header = {
   " █████╗ ██████╗ ██████╗ ██╗ ██████╗ ███████╗██████╗ ",
   "██╔══██╗██╔══██╗██╔══██╗██║██╔════╝ ╚══███╔╝██╔══██╗",

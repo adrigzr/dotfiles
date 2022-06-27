@@ -60,14 +60,21 @@ dap.configurations.javascript = {
 
 dap.configurations.typescript = dap.configurations.javascript
 
-vim.keymap.set("n", "<leader>dc", "<cmd>lua require'dap'.continue()<CR>")
-vim.keymap.set("n", "<leader>do", "<cmd>lua require'dap'.step_over()<CR>")
-vim.keymap.set("n", "<leader>di", "<cmd>lua require'dap'.step_into()<CR>")
-vim.keymap.set("n", "<leader>dO", "<cmd>lua require'dap'.step_out()<CR>")
-vim.keymap.set("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<CR>")
-vim.keymap.set("n", "<leader>dB", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
-vim.keymap.set(
-  "n",
-  "<leader>dl",
-  "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>"
-)
+local function setConditionalBreakpoint()
+  dap.set_breakpoint(vim.fn.input "Breakpoint condition: ")
+end
+
+local function setLogPoint()
+  dap.set_breakpoint(nil, nil, vim.fn.input "Log point message: ")
+end
+
+require("which-key").register({
+  name = "DAP",
+  c = { dap.continue, "Continue the debugger" },
+  o = { dap.step_over, "Step over the current line" },
+  i = { dap.step_into, "Step into the current line" },
+  O = { dap.step_out, "Step out the current line" },
+  b = { dap.toggle_breakpoint, "Toggle breakpoint" },
+  B = { setConditionalBreakpoint, "Set conditional breakpoint" },
+  l = { setLogPoint, "Set log point" },
+}, { prefix = "<leader>d" })

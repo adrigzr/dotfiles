@@ -70,9 +70,8 @@ cmp.setup {
     end,
   },
   mapping = {
-    ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-    ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-    -- ['<C-e>'] = module.mapping(module.mapping.close()),
+    ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
+    ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
     ["<C-e>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.close()

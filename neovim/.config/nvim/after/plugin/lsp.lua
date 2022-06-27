@@ -1,5 +1,10 @@
+local exists, lspconfig = pcall(require, "lspconfig")
+
+if not exists then
+  return
+end
+
 local lspinstaller = require "nvim-lsp-installer"
-local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
 local null_ls = require "null-ls"
 -- local aerial = require "aerial"
@@ -143,8 +148,9 @@ null_ls.setup {
     null_ls.builtins.diagnostics.vale,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.stylua,
-    -- null_ls.builtins.diagnostics.rubocop,
-    -- null_ls.builtins.formatting.rubocop,
+    require "custom.diagnostics.rubocop",
+    null_ls.builtins.formatting.rubocop,
+    null_ls.builtins.formatting.terraform_fmt,
   },
 }
 
@@ -200,6 +206,13 @@ for _, server in pairs(servers) do
         },
       },
     }
+
+    opts.on_attach = function(client, bufnr)
+      -- Delegate on stylua
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+      common_on_attach(client, bufnr)
+    end
   end
 
   -- Enable formatting
@@ -235,6 +248,7 @@ for _, server in pairs(servers) do
       },
     }
     opts.on_attach = function(client, bufnr)
+      -- Delegate on eslint
       client.server_capabilities.documentFormattingProvider = false
       client.server_capabilities.documentRangeFormattingProvider = false
       ts_utils.setup {

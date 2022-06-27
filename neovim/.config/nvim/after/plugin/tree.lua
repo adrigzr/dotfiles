@@ -47,17 +47,3 @@ vim.keymap.set("n", "<leader>t", function()
     module.find_file(true)
   end
 end, { silent = true })
-
--- Custom colors
-vim.cmd [[
-  augroup tree_theme
-  autocmd!
-  autocmd ColorScheme * highlight NvimTreeNormal guibg=none
-  autocmd ColorScheme * highlight NvimTreeEndOfBuffer guibg=none
-  autocmd ColorScheme * highlight NvimTreeVertSplit guibg=none
-  autocmd ColorScheme * highlight def link NvimTreeLspDiagnosticsError DiagnosticSignError
-  autocmd ColorScheme * highlight def link NvimTreeLspDiagnosticsWarning DiagnosticSignWarn
-  autocmd ColorScheme * highlight def link NvimTreeLspDiagnosticsInformation DiagnosticSignInfo
-  autocmd ColorScheme * highlight def link NvimTreeLspDiagnosticsHint DiagnosticSignHint
-  augroup END
-]]

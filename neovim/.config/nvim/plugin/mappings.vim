@@ -80,8 +80,8 @@ nnoremap gk k
 " Fix page up and down {{{
 map <PageUp> <C-U>
 map <PageDown> <C-D>
-imap <PageUp> <C-O><C-U>
-imap <PageDown> <C-O><C-D>
+" imap <PageUp> <C-O><C-U>
+" imap <PageDown> <C-O><C-D>
 " }}}
 
 " Vimdiff {{{

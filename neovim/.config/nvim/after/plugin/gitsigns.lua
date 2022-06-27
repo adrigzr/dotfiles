@@ -1,10 +1,13 @@
-local exists, module = pcall(require, "gitsigns")
+local exists, gitsigns = pcall(require, "gitsigns")
 
 if not exists then
   return
 end
 
-module.setup {
+local wk = require "which-key"
+local misc = require "custom.util.misc"
+
+gitsigns.setup {
   current_line_blame = true,
   current_line_blame_formatter_opts = {
     relative_time = true,
@@ -19,26 +22,31 @@ module.setup {
       vim.keymap.set(mode, l, r, opts)
     end
 
+    -- Visual mode
+    wk.register({
+      name = "GitSigns",
+      s = { gitsigns.stage_hunk, "Stage the current hunk" },
+      r = { gitsigns.reset_hunk, "Reset the current hunk" },
+    }, { prefix = "<leader>h", buffer = bufnr, mode = "v" })
+
+    -- Normal mode
+    wk.register({
+      name = "GitSigns",
+      s = { gitsigns.stage_hunk, "Stage the current hunk" },
+      r = { gitsigns.reset_hunk, "Reset the current hunk" },
+      S = { gitsigns.stage_buffer, "Stage the current buffer" },
+      u = { gitsigns.undo_stage_hunk, "Undo staging the current hunk" },
+      R = { gitsigns.reset_buffer, "Reset the current buffer" },
+      p = { gitsigns.preview_hunk, "Preview the current hunk" },
+      b = { misc.bind(gitsigns.blame_line, { { full = true } }), "Blame the current line" },
+      d = { gitsigns.diffthis, "Diff the current file against the index" },
+      D = { misc.bind(gitsigns.diffthis, { "~" }), "Diff the current file against the last commit" },
+      t = { gitsigns.toggle_deleted, "Toggle deleted lines" },
+    }, { prefix = "<leader>h", buffer = bufnr })
+
     -- Navigation
     map("n", "]c", "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
     map("n", "[c", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
-
-    -- Actions
-    map({ "n", "v" }, "<leader>hs", module.stage_hunk)
-    map({ "n", "v" }, "<leader>hr", module.reset_hunk)
-    map("n", "<leader>hS", module.stage_buffer)
-    map("n", "<leader>hu", module.undo_stage_hunk)
-    map("n", "<leader>hR", module.reset_buffer)
-    map("n", "<leader>hp", module.preview_hunk)
-    map("n", "<leader>hb", function()
-      module.blame_line { full = true }
-    end)
-    -- map("n", "<leader>tb", module.toggle_current_line_blame)
-    map("n", "<leader>hd", module.diffthis)
-    map("n", "<leader>hD", function()
-      module.diffthis "~"
-    end)
-    map("n", "<leader>ht", module.toggle_deleted)
 
     -- Text object
     map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
