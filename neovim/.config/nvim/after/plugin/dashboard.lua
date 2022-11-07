@@ -4,6 +4,7 @@ if not exists then
   return
 end
 
+dashboard.hide_winbar = false
 dashboard.custom_header = {
   " █████╗ ██████╗ ██████╗ ██╗ ██████╗ ███████╗██████╗ ",
   "██╔══██╗██╔══██╗██╔══██╗██║██╔════╝ ╚══███╔╝██╔══██╗",

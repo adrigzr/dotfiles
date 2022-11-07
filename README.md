@@ -90,6 +90,8 @@
    ```bash
    tic -x iterm2/xterm-256color.terminfo
    tic -x tmux/screen-256color.terminfo
+   # Restart tmux & iterm and check infos
+   infocmp -x $TERM
    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
    ~/.tmux/plugins/tpm/bin/install_plugins
    ```

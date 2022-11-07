@@ -4,7 +4,6 @@ if not exists then
   return
 end
 
-local wk = require "which-key"
 local misc = require "custom.util.misc"
 
 gitsigns.setup {
@@ -15,6 +14,9 @@ gitsigns.setup {
   preview_config = {
     border = "rounded",
   },
+  watch_gitdir = {
+    enabled = false,
+  },
   on_attach = function(bufnr)
     local function map(mode, l, r, opts)
       opts = opts or {}
@@ -22,33 +24,28 @@ gitsigns.setup {
       vim.keymap.set(mode, l, r, opts)
     end
 
-    -- Visual mode
-    wk.register({
-      name = "GitSigns",
-      s = { gitsigns.stage_hunk, "Stage the current hunk" },
-      r = { gitsigns.reset_hunk, "Reset the current hunk" },
-    }, { prefix = "<leader>h", buffer = bufnr, mode = "v" })
-
-    -- Normal mode
-    wk.register({
-      name = "GitSigns",
-      s = { gitsigns.stage_hunk, "Stage the current hunk" },
-      r = { gitsigns.reset_hunk, "Reset the current hunk" },
-      S = { gitsigns.stage_buffer, "Stage the current buffer" },
-      u = { gitsigns.undo_stage_hunk, "Undo staging the current hunk" },
-      R = { gitsigns.reset_buffer, "Reset the current buffer" },
-      p = { gitsigns.preview_hunk, "Preview the current hunk" },
-      b = { misc.bind(gitsigns.blame_line, { { full = true } }), "Blame the current line" },
-      d = { gitsigns.diffthis, "Diff the current file against the index" },
-      D = { misc.bind(gitsigns.diffthis, { "~" }), "Diff the current file against the last commit" },
-      t = { gitsigns.toggle_deleted, "Toggle deleted lines" },
-    }, { prefix = "<leader>h", buffer = bufnr })
+    -- Commands
+    map({ "n", "v" }, "<leader>hs", gitsigns.stage_hunk, { desc = "Stage the current hunk" })
+    map({ "n", "v" }, "<leader>hr", gitsigns.reset_hunk, { desc = "Reset the current hunk" })
+    map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "Stage the current buffer" })
+    map("n", "<leader>hu", gitsigns.undo_stage_hunk, { desc = "Undo staging the current hunk" })
+    map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "Reset the current buffer" })
+    map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview the current hunk" })
+    map("n", "<leader>hb", misc.bind(gitsigns.blame_line, { { full = true } }), { desc = "Blame the current line" })
+    map("n", "<leader>hd", gitsigns.diffthis, { desc = "Diff the current file against the index" })
+    map("n", "<leader>ht", gitsigns.toggle_deleted, { desc = "Toggle deleted lines" })
+    map(
+      "n",
+      "<leader>hD",
+      misc.bind(gitsigns.diffthis, { "~" }),
+      { desc = "Diff the current file against the last commit" }
+    )
 
     -- Navigation
-    map("n", "]c", "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
-    map("n", "[c", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
+    map("n", "]c", "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true, desc = "Go to next hunk" })
+    map("n", "[c", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true, desc = "Go to previous hunk" })
 
     -- Text object
-    map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+    map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select hunk" })
   end,
 }

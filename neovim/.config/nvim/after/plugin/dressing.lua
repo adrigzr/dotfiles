@@ -7,6 +7,10 @@ end
 module.setup {
   input = {
     default_prompt = "➜ ",
+    insert_only = false,
+    prefer_width = 80,
+    max_width = 120,
+    min_width = 120,
   },
   select = {
     telescope = require("telescope.themes").get_cursor(),

@@ -41,6 +41,9 @@ local function setup()
     highlight def link NvimTreeLspDiagnosticsWarning DiagnosticSignWarn
     highlight def link NvimTreeLspDiagnosticsInformation DiagnosticSignInfo
     highlight def link NvimTreeLspDiagnosticsHint DiagnosticSignHint
+
+    " [InlayHints]
+    highlight! def link LspInlayHint Comment
   ]]
 
   -- [Rainbow] Change treesitter rainbow colors
@@ -49,43 +52,46 @@ local function setup()
   end
 
   -- [GitSigns] Change blame line signs
-  vim.cmd("highlight GitSignsCurrentLineBlame gui=italic guifg=" .. colors.grey)
+  vim.api.nvim_set_hl(0, "GitSignsCurrentLineBlame", { italic = true, fg = colors.grey })
 
   -- [Theme] Change cursor line
-  vim.cmd("highlight CursorLineNr guibg=" .. colors.bg1)
+  vim.api.nvim_set_hl(0, "CursorLineNr", { bg = colors.bg1 })
 
   -- [LSP]
-  vim.cmd("highlight LspSignatureActiveParameter gui=bold guifg=" .. colors.blue)
-  vim.cmd("highlight DiagnosticUnnecessaryTag guifg=" .. colors.grey)
-  vim.cmd("highlight LightBulbVirtualText guifg=" .. colors.blue)
-  vim.cmd("highlight DiagnosticVirtualTextError gui=italic guifg=" .. colors.red .. " guibg=none")
-  vim.cmd("highlight DiagnosticVirtualTextWarn gui=italic guifg=" .. colors.yellow .. " guibg=none")
-  vim.cmd("highlight DiagnosticVirtualTextInfo gui=italic guifg=" .. colors.cyan .. " guibg=none")
-  vim.cmd("highlight DiagnosticVirtualTextHint gui=italic guifg=" .. colors.purple .. " guibg=none")
+  vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { bold = true, fg = colors.blue })
+  vim.api.nvim_set_hl(0, "DiagnosticUnnecessaryTag", { fg = colors.grey })
+  vim.api.nvim_set_hl(0, "LightBulbVirtualText", { fg = colors.blue })
+  vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { italic = true, fg = colors.red })
+  vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { italic = true, fg = colors.yellow })
+  vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { italic = true, fg = colors.cyan })
+  vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { italic = true, fg = colors.purple })
 
   -- [Yank] Change yank highlight
-  vim.cmd("highlight Yank guifg=" .. colors.bg0 .. " guibg=" .. colors.cyan)
+  vim.api.nvim_set_hl(0, "Yank", { fg = colors.bg0, bg = colors.cyan })
 
   -- [TSContext]
-  vim.cmd("highlight TreesitterContext guibg=" .. colors.bg1)
+  vim.api.nvim_set_hl(0, "TreesitterContext", { bg = colors.bg1 })
 
   -- [Neotest]
-  vim.cmd("highlight NeotestPassed guifg=" .. colors.green)
-  vim.cmd("highlight NeotestRunning guifg=" .. colors.cyan)
-  vim.cmd("highlight NeotestSkipped guifg=" .. colors.yellow)
-  vim.cmd("highlight NeotestFailed guifg=" .. colors.red)
+  vim.api.nvim_set_hl(0, "NeotestPassed", { fg = colors.green })
+  vim.api.nvim_set_hl(0, "NeotestRunning", { fg = colors.cyan })
+  vim.api.nvim_set_hl(0, "NeotestSkipped", { fg = colors.yellow })
+  vim.api.nvim_set_hl(0, "NeotestFailed", { fg = colors.red })
+
+  -- [Coverage]
+  require("coverage.highlight").setup()
 
   -- [Ufo]
-  vim.cmd("highlight Folded gui=none guifg=none guibg=" .. util.darken(colors.dark_cyan, 0.25, colors.bg0))
-  vim.cmd("highlight FoldColumn guifg=" .. colors.grey .. " guibg=none")
-  vim.cmd("highlight UfoFoldedFg guifg=" .. colors.green)
+  vim.api.nvim_set_hl(0, "Folded", { bg = util.darken(colors.dark_cyan, 0.25, colors.bg0) })
+  vim.api.nvim_set_hl(0, "FoldColumn", { fg = colors.grey })
+  vim.api.nvim_set_hl(0, "UfoFoldedFg", { fg = colors.green })
 
   -- [Hydra]
-  vim.cmd("highligh HydraRed guifg=" .. colors.red)
-  vim.cmd("highligh HydraBlue guifg=" .. colors.blue)
-  vim.cmd("highligh HydraAmaranth guifg=" .. colors.cyan)
-  vim.cmd("highligh HydraTeal guifg=" .. colors.green)
-  vim.cmd("highligh HydraPink guifg=" .. colors.orange)
+  vim.api.nvim_set_hl(0, "HydraRed", { fg = colors.red })
+  vim.api.nvim_set_hl(0, "HydraBlue", { fg = colors.blue })
+  vim.api.nvim_set_hl(0, "HydraAmaranth", { fg = colors.cyan })
+  vim.api.nvim_set_hl(0, "HydraTeal", { fg = colors.green })
+  vim.api.nvim_set_hl(0, "HydraPink", { fg = colors.orange })
 
   -- [Notify]
   local levels = {
@@ -118,7 +124,7 @@ local function setup()
 
   for level, parts in pairs(levels) do
     for part, color in pairs(parts) do
-      vim.cmd("highlight Notify" .. level:upper() .. part .. " guifg=" .. color)
+      vim.api.nvim_set_hl(0, "Notify" .. level:upper() .. part, { fg = color })
     end
   end
 end

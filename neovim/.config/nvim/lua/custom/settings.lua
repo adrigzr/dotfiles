@@ -1,7 +1,6 @@
 local set = vim.opt
 
 --Remap space as leader key
-vim.keymap.set("", "<Space>", "<Nop>", { silent = true })
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -19,6 +18,7 @@ set.breakindent = true
 set.showbreak = "⤷"
 set.number = true
 set.mouse = "a"
+set.mousescroll = "ver:2,hor:2"
 set.scrolloff = 6
 set.sidescrolloff = 3
 set.splitbelow = true
@@ -31,6 +31,8 @@ set.termguicolors = true
 set.signcolumn = "yes"
 set.inccommand = "split"
 set.colorcolumn = "81,101,121"
+-- Enable this when available
+-- set.splitkeep = "cursor"
 
 -- Diff
 set.diffopt = {
@@ -76,6 +78,7 @@ set.completeopt = { "menu", "menuone", "noselect" }
 set.pumheight = 10
 
 -- Misc
+set.spelllang = { "en", "programming" }
 set.lazyredraw = true
 set.timeoutlen = 500
 set.ttimeoutlen = 10

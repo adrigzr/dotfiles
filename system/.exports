@@ -4,18 +4,18 @@ export VISUAL="nvim"
 
 # Homebrew for M1
 if [ -d "/opt/homebrew" ]; then
-  export HOMEBREW_PREFIX="/opt/homebrew";
-  export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
-  export HOMEBREW_REPOSITORY="/opt/homebrew";
-  export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
-  export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
-  export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+  export HOMEBREW_PREFIX="/opt/homebrew"
+  export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+  export HOMEBREW_REPOSITORY="/opt/homebrew"
+  export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}"
+  export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:"
+  export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
 fi
 
 # Skip puppeteer on M1
 if [[ "$(arch)" == "arm64" && -s "$(which chromium)" ]]; then
   export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-  export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+  export PUPPETEER_EXECUTABLE_PATH=$(which chromium)
 fi
 
 # Don’t clear the screen after quitting a manual page
@@ -60,6 +60,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 # NPM
 export npm_config_progress=false
+export PATH="${PATH}:~/.yarn/bin"
 
 # Node
 export NODE_OPTIONS="--max-old-space-size=4096 --max-http-header-size=49152"

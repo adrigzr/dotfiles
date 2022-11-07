@@ -64,7 +64,6 @@ packer.startup {
     use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" } -- We recommend updating the parsers on update
     use "nvim-treesitter/playground" -- Playground for treesitter
     use "romgrk/nvim-treesitter-context" -- Add function context while scrolling
-    use "SmiteshP/nvim-gps" -- Add context to the status line
     use "windwp/nvim-ts-autotag" -- Autocloses html tags
     use "p00f/nvim-ts-rainbow" -- Colorize parens
     use { "tpope/vim-markdown", ft = "markdown" }
@@ -77,6 +76,7 @@ packer.startup {
     use { "junegunn/vader.vim", ft = "vim" } -- Vim script tester
     use { "posva/vim-vue", ft = { "javascript", "typescript" } }
     use { "Quramy/vim-js-pretty-template", ft = { "javascript", "typescript" } }
+    use { "psliwka/vim-dirtytalk", run = ":DirtytalkUpdate" } -- Developer spell dict
 
     -- Navigation
     use { "kyazdani42/nvim-tree.lua", module = "nvim-tree" }
@@ -85,6 +85,7 @@ packer.startup {
     use "nvim-telescope/telescope.nvim" -- Fuzzy Finder
     use "nvim-telescope/telescope-symbols.nvim" -- For symbols
     use "nvim-telescope/telescope-dap.nvim"
+    use "rgroli/other.nvim" -- Switch to alternate file
 
     -- Comments
     use "tpope/vim-commentary"
@@ -114,14 +115,11 @@ packer.startup {
     use "folke/trouble.nvim" -- Pretty diagnostics
     use "b0o/schemastore.nvim" -- Schemas for jsonls
     -- use "stevearc/aerial.nvim" -- Show symbols
-    use {
-      "simrat39/rust-tools.nvim",
-      config = function()
-        require("rust-tools").setup {}
-      end,
-    } -- Rust tools
-    use "jose-elias-alvarez/nvim-lsp-ts-utils" -- TypeScript utils
+    use "simrat39/rust-tools.nvim" -- Rust tools
     use "kosayoda/nvim-lightbulb" -- Code actions lightbulb
+    use "https://git.sr.ht/~whynothugo/lsp_lines.nvim" -- LSP lines
+    use "lvimuser/lsp-inlayhints.nvim" -- Inlay hints
+    use "jose-elias-alvarez/typescript.nvim" -- Typescript commands
 
     -- Completion
     use "hrsh7th/nvim-cmp"
@@ -156,20 +154,32 @@ packer.startup {
     use "moll/vim-bbye" -- BufferClose commands
     use "github/copilot.vim" -- Github copilot
     use "lukas-reineke/indent-blankline.nvim" -- Indentation guides
-    use "tpope/vim-surround" -- Surround wrappers
+    -- use "tpope/vim-surround" -- Surround wrappers
+    use {
+      "kylechui/nvim-surround",
+      config = function()
+        require("nvim-surround").setup {}
+      end,
+    } -- Surround wrappers
     use "windwp/nvim-autopairs" -- Auto-pairs
     use { "dhruvasagar/vim-table-mode", ft = "markdown" } -- Handle tables in markdown
-    use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
+    -- use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
     use "tpope/vim-scriptease" -- Pretty debug messages
     use "folke/which-key.nvim" -- Pretty keybind hints
     use "petertriho/nvim-scrollbar" -- Scrollbar
     use "stevearc/dressing.nvim" -- Pretty vim.ui boxes
     use "andymass/vim-matchup" -- Replaces matchit & matchparen builtins
     -- use "vim-test/vim-test" -- Test files
+    -- use "~/Repositories/neotest"
     use "nvim-neotest/neotest"
-    use "~/Repositories/neotest-jest"
+    -- use "~/Repositories/neotest-jest"
+    use "haydenmeade/neotest-jest"
+    use "~/Repositories/neotest-mocha"
+    use "nvim-neotest/neotest-plenary"
+    use "rouge8/neotest-rust"
     use "olimorris/neotest-rspec"
     use "nvim-neotest/neotest-python"
+    use "andythigpen/nvim-coverage"
     -- use "nvim-neotest/neotest-vim-test"
     -- use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
     use "mfussenegger/nvim-dap" -- Debugger
@@ -181,6 +191,14 @@ packer.startup {
     use "ThePrimeagen/refactoring.nvim" -- Refactoring tools
     use "rcarriga/nvim-notify" -- Notifications and messages
     use "anuvyklack/hydra.nvim" -- Hydra
+    use "neomake/neomake" -- Make presets
+    use {
+      "vuki656/package-info.nvim",
+      requires = "MunifTanjim/nui.nvim",
+      config = function()
+        require("package-info").setup { hide_up_to_date = true }
+      end,
+    } -- Show package info as virtual text in the package.json
 
     if packer_bootstrap then
       packer.sync()

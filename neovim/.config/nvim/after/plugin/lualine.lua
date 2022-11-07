@@ -4,11 +4,6 @@ if not exists then
   return
 end
 
-local gps = require "nvim-gps"
-local colors = require("custom.theme").colors
-
-local filename = { "filename", file_status = true, path = 1, shorting_target = 80 }
-local treesitter = { gps.get_location, cond = gps.is_available }
 local diagnostics = {
   "diagnostics",
   sources = { "nvim_diagnostic" },
@@ -17,20 +12,6 @@ local diagnostics = {
     warn = " ",
     info = " ",
     hint = " ",
-  },
-}
-local diff = {
-  "diff",
-  diff_color = {
-    added = {
-      fg = colors.green,
-    },
-    modified = {
-      fg = colors.blue,
-    },
-    removed = {
-      fg = colors.red,
-    },
   },
 }
 
@@ -44,8 +25,8 @@ module.setup {
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = { filename, diff, diagnostics },
-    lualine_c = { "branch", treesitter, "lsp_progress" },
+    lualine_b = { "branch", diagnostics },
+    lualine_c = { "lsp_progress" },
     lualine_x = { "encoding" },
     lualine_y = { "fileformat", "filetype" },
     lualine_z = { "location" },
@@ -53,11 +34,11 @@ module.setup {
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = { filename },
+    lualine_c = {},
     lualine_x = { "encoding", "fileformat", "filetype", "location" },
     lualine_y = {},
     lualine_z = {},
   },
   tabline = {},
-  extensions = { "quickfix", "fugitive", "nvim-tree" },
+  extensions = { "quickfix", "fugitive", "nvim-tree", "nvim-dap-ui", "man" },
 }

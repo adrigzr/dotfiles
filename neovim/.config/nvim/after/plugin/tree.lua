@@ -1,10 +1,10 @@
-local exists, module = pcall(require, "nvim-tree")
+local exists, tree = pcall(require, "nvim-tree")
 
 if not exists then
   return
 end
 
-module.setup {
+tree.setup {
   disable_netrw = false,
   diagnostics = {
     enable = true,
@@ -42,8 +42,8 @@ module.setup {
 -- Mappings
 vim.keymap.set("n", "<leader>t", function()
   if vim.api.nvim_buf_get_name(0) == "" then
-    module.open()
+    tree.open()
   else
-    module.find_file(true)
+    tree.find_file(true)
   end
-end, { silent = true })
+end, { silent = true, desc = "Open tree sidebar" })

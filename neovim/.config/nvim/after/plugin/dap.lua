@@ -21,15 +21,15 @@ dapui.setup {
 }
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open(nil)
+  dapui.open {}
 end
 
 dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close(nil)
+  dapui.close {}
 end
 
 dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close(nil)
+  dapui.close {}
 end
 
 dap.adapters.node2 = {
@@ -68,13 +68,10 @@ local function setLogPoint()
   dap.set_breakpoint(nil, nil, vim.fn.input "Log point message: ")
 end
 
-require("which-key").register({
-  name = "DAP",
-  c = { dap.continue, "Continue the debugger" },
-  o = { dap.step_over, "Step over the current line" },
-  i = { dap.step_into, "Step into the current line" },
-  O = { dap.step_out, "Step out the current line" },
-  b = { dap.toggle_breakpoint, "Toggle breakpoint" },
-  B = { setConditionalBreakpoint, "Set conditional breakpoint" },
-  l = { setLogPoint, "Set log point" },
-}, { prefix = "<leader>d" })
+vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue the debugger" })
+vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "Step over the current line" })
+vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step into the current line" })
+vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "Step out the current line" })
+vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
+vim.keymap.set("n", "<leader>dB", setConditionalBreakpoint, { desc = "Set conditional breakpoint" })
+vim.keymap.set("n", "<leader>dl", setLogPoint, { desc = "Set log point" })

@@ -13,9 +13,10 @@ M.close_events = {
   -- "InsertCharPre",
   -- Custom
   "InsertEnter",
-  "BufEnter",
-  "BufLeave",
-  "TextChangedI",
+  "InsertLeave",
+  -- "BufEnter",
+  -- "BufLeave",
+  -- "TextChangedI",
   "WinScrolled",
 }
 
@@ -63,6 +64,11 @@ function M.get_results(method)
 end
 
 local function document_highlight()
+  -- Abort when lsp is not ready
+  if not vim.lsp.buf.server_ready() then
+    return
+  end
+
   local results = M.get_results "textDocument/documentHighlight"
 
   if #results ~= 0 then
@@ -70,20 +76,16 @@ local function document_highlight()
   end
 end
 
-local function hover()
-  -- Abort when lsp is not ready or completion is visible or copilot has suggestions
-  if not vim.lsp.buf.server_ready()
-      or require("cmp").visible()
-      or vim.api.nvim_eval 'exists("b:_copilot.suggestions")' == 1
-  then
+local function show_line_diagnostics()
+  -- Abort when lsp is not ready
+  if not vim.lsp.buf.server_ready() or not vim.diagnostic.config().virtual_text then
     return
   end
 
   local mode = misc.get_mode()
 
-  -- Highlight current word when in normal mode
-  if mode == "n" then
-    document_highlight()
+  if mode ~= "n" then
+    return
   end
 
   local any_floating_windows = misc.check_floating_windows()
@@ -93,39 +95,70 @@ local function hover()
     return
   end
 
-  -- Only show diagnostics when in normal mode
-  if mode == "n" then
-    local line_diagnostics = diagnostic.get_line_diagnostics()
+  local line_diagnostics = diagnostic.get_line_diagnostics()
 
-    -- Show diagnostics when there are at least one in current line
-    if #line_diagnostics ~= 0 then
-      return vim.diagnostic.open_float(nil, {
-        scope = "line",
-        border = "rounded",
-        focusable = false,
-        source = "always",
-        format = diagnostic.format_message,
-        close_events = M.close_events,
-      })
-    end
-  end
-
-  local results
-
-  -- Show signature help first when in insert mode
-  if mode == "i" then
-    results = M.get_results "textDocument/signatureHelp"
-
-    -- Show signature help when available
-    if #results ~= 0 then
-      return vim.lsp.buf.signature_help()
-    end
+  -- Show diagnostics when there are at least one in current line
+  if #line_diagnostics ~= 0 then
+    return vim.diagnostic.open_float(nil, {
+      scope = "line",
+      border = "rounded",
+      focusable = true,
+      source = "always",
+      format = diagnostic.format_message,
+      close_events = M.close_events,
+    })
   end
 end
 
--- Hover handler
-function M.hover()
-  async.run(hover, nil)
+local currentSignature = nil
+
+local function show_signature_help()
+  -- Abort when lsp is not ready or completion is visible or copilot has suggestions
+  if
+    not vim.lsp.buf.server_ready()
+    -- or require("cmp").visible()
+    -- or vim.api.nvim_eval 'exists("b:_copilot.suggestions")' == 1
+  then
+    return
+  end
+
+  local mode = misc.get_mode()
+
+  -- Show signature help first when in insert mode
+  if mode ~= "i" then
+    return
+  end
+
+  local results = M.get_results "textDocument/signatureHelp"
+
+  -- Show signature help when available
+  if #results ~= 0 then
+    local signature = ""
+
+    if not vim.tbl_isempty(results[1].signatures) then
+      if results[1].activeParameter ~= nil then
+        signature = signature .. results[1].activeParameter
+      end
+
+      if results[1].activeSignature ~= nil then
+        signature = signature .. results[1].signatures[results[1].activeSignature + 1].label
+      else
+        signature = signature .. results[1].signatures[1].label
+      end
+    end
+
+    if signature ~= currentSignature then
+      currentSignature = signature
+
+      misc.close_floating_windows()
+
+      vim.lsp.buf.signature_help()
+    end
+  else
+    currentSignature = nil
+
+    misc.close_floating_windows()
+  end
 end
 
 -- Show hover or signature help
@@ -144,11 +177,6 @@ local function show_info()
   if #results ~= 0 then
     return vim.lsp.buf.signature_help()
   end
-end
-
--- Show info handler
-function M.show_info()
-  async.run(show_info, nil)
 end
 
 local function goto_definition()
@@ -170,11 +198,6 @@ local function goto_definition()
   vim.api.nvim_command(vim.o.keywordprg .. " " .. vim.fn.expand "<cword>")
 end
 
--- Goto definition handler
-function M.goto_definition()
-  async.run(goto_definition, nil)
-end
-
 --- Check if any attached server has a capability
 --- @param capability string
 --- @return boolean
@@ -188,16 +211,97 @@ local function hasServerWithCapability(capability)
 end
 
 -- Format
-function M.format()
+function M.format(opts)
+  opts = opts or {}
+
   if not hasServerWithCapability "documentFormattingProvider" then
     return
   end
 
-  vim.lsp.buf.format {
+  vim.lsp.buf.format(vim.tbl_deep_extend("force", {
     filter = function(client)
-      return not vim.tbl_contains({ "jsonls", "tsserver" }, client.name)
+      local filetype = vim.bo.filetype
+
+      if vim.tbl_contains({ "typescript", "javascript" }, filetype) then
+        return client.name == "eslint"
+      end
+
+      return not vim.tbl_contains({ "jsonls" }, client.name)
     end,
-  }
+  }, opts))
 end
+
+function M.get_client(bufnr, client_name)
+  for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
+    if client.name == client_name then
+      return client
+    end
+  end
+end
+
+function M.make_command(source_action)
+  return function(opts)
+    opts = opts or {}
+
+    local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
+    local client = M.get_client(bufnr, "tsserver")
+
+    if not client then
+      return
+    end
+
+    local params = vim.tbl_deep_extend("force", vim.lsp.util.make_range_params(), {
+      context = {
+        only = { source_action },
+        diagnostics = vim.diagnostic.get(bufnr),
+      },
+    })
+
+    local function apply_edits(err, res)
+      -- vim.pretty_print("apply_edits", err, res)
+
+      if
+        err
+        or not (
+          res[1]
+          and res[1].edit
+          and res[1].edit.documentChanges
+          and res[1].edit.documentChanges[1]
+          and res[1].edit.documentChanges[1].edits
+        )
+      then
+        return
+      end
+
+      vim.lsp.util.apply_text_edits(res[1].edit.documentChanges[1].edits, bufnr, client.offset_encoding)
+    end
+
+    -- vim.pretty_print("sending source action request for action " .. source_action .. " with params", params)
+
+    if opts.sync == true then
+      local res, err = client.request_sync("textDocument/codeAction", params, nil, bufnr)
+
+      apply_edits(res and res.err or err, res and res.result)
+    else
+      client.request("textDocument/codeAction", params, apply_edits, bufnr)
+    end
+  end
+end
+
+function M.test()
+  -- local ft = vim.bo.filetype
+  -- local lang = require("nvim-treesitter.parsers").ft_to_lang(ft)
+  --   local content = require("neotest.lib").files.read(file_path)
+end
+
+M.add_missing_imports = M.make_command "source.addMissingImports.ts"
+M.fix_all = M.make_command "source.fixAll.ts"
+M.remove_unused = M.make_command "source.removeUnused.ts"
+M.organize_imports = M.make_command "source.organizeImports.ts"
+M.show_line_diagnostics = async.void(show_line_diagnostics)
+M.show_signature_help = async.void(show_signature_help)
+M.document_highlight = async.void(document_highlight)
+M.show_info = async.void(show_info)
+M.goto_definition = async.void(goto_definition)
 
 return M

@@ -4,14 +4,15 @@ if not exists then
   return
 end
 
-local misc = require "custom.util.misc"
+local bind = require("custom.util.misc").bind
+local map = vim.keymap.set
 
 -- Open spectre
-vim.keymap.set("n", "<leader>ss", spectre.open)
+map("n", "<leader>ss", spectre.open, { desc = "Open spectre" })
 
 -- Search current word
-vim.keymap.set("n", "<leader>sw", misc.bind(spectre.open_visual, { { select_word = true } }))
-vim.keymap.set("v", "<leader>s", spectre.open_visual)
+map("n", "<leader>sw", bind(spectre.open_visual, { { select_word = true } }), { desc = "Search current word" })
+map("v", "<leader>s", spectre.open_visual, { desc = "Search current word" })
 
 -- Search in current file
-vim.keymap.set("n", "<leader>sp", "viw:lua require('spectre').open_file_search()<cr>")
+map("n", "<leader>sp", "viw:lua require('spectre').open_file_search()<cr>", { desc = "Search in current file" })

@@ -49,8 +49,8 @@ source ${ZIM_HOME}/init.zsh
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }
 zle -N zle-keymap-select
-# bindkey -v
-bindkey -e
+bindkey -v
+# bindkey -e
 export KEYTIMEOUT=1
 
 # Edit command line on vim.

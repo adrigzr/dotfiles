@@ -41,7 +41,7 @@ local sources = {
   },
 }
 
-local tab_is = function(fallback)
+local tab_callback = function(fallback)
   -- Go to next item if cmp is visible
   if cmp.visible() then
     cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
@@ -77,15 +77,36 @@ cmp.setup {
         cmp.close()
       elseif luasnip.choice_active() then
         luasnip.change_choice()
+      elseif util.misc.check_floating_windows() then
+        util.misc.close_floating_windows()
       elseif vim.api.nvim_eval 'exists("b:_copilot.suggestions")' then
         vim.fn["copilot#Dismiss"]()
       else
         fallback()
       end
     end, { "i", "s" }),
+    ["<C-s>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        if cmp.get_selected_entry() then
+          cmp.confirm()
+        else
+          fallback()
+        end
+      else
+        cmp.complete {
+          config = {
+            sources = {
+              sources.nvim_lsp,
+              sources.buffer,
+              sources.treesitter,
+            },
+          },
+        }
+      end
+    end, { "i", "s" }),
     ["<Tab>"] = cmp.mapping {
-      i = tab_is,
-      s = tab_is,
+      i = tab_callback,
+      s = tab_callback,
       n = function(fallback)
         -- Expand snippet to next item
         if luasnip.jumpable(1) then

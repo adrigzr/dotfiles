@@ -20,8 +20,6 @@ let b:undo_ftplugin .= '|setlocal wrap<'
 
 if has('spell') && &modifiable && !&readonly
   setlocal spell
-  setlocal spelllang=en
   let b:undo_ftplugin .= '|setlocal spell<'
-      \ . '|setlocal spelllang<'
 endif
 

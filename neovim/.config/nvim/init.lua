@@ -13,5 +13,8 @@ vim.api.nvim_command "runtime! config/*.vim"
 -- Load packer
 require "custom.plugins"
 
+-- Load globals
+require "custom.globals"
+
 -- Load theme
 require "custom.theme"

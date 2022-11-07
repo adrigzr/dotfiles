@@ -30,6 +30,15 @@ function M.check_floating_windows()
   return ok and vim.api.nvim_win_is_valid(existing_float)
 end
 
+-- Close all floating windows attached to current buffer
+function M.close_floating_windows()
+  local ok, existing_float = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_preview")
+
+  if ok and vim.api.nvim_win_is_valid(existing_float) then
+    vim.api.nvim_win_close(existing_float, true)
+  end
+end
+
 -- Get current mode
 function M.get_mode()
   local tbl = vim.api.nvim_get_mode()
