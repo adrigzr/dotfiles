@@ -32,33 +32,33 @@ dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close {}
 end
 
-dap.adapters.node2 = {
-  type = "executable",
-  command = "node",
-  args = { os.getenv "HOME" .. "/Repositories/vscode-node-debug2/out/src/nodeDebug.js" },
-}
+-- dap.adapters.node2 = {
+--   type = "executable",
+--   command = "node",
+--   args = { os.getenv "HOME" .. "/Repositories/vscode-node-debug2/out/src/nodeDebug.js" },
+-- }
 
-dap.configurations.javascript = {
-  {
-    name = "Launch",
-    type = "node2",
-    request = "launch",
-    program = "${file}",
-    cwd = vim.fn.getcwd(),
-    sourceMaps = true,
-    protocol = "inspector",
-    console = "integratedTerminal",
-  },
-  {
-    -- For this to work you need to make sure the node process is started with the `--inspect` flag.
-    name = "Attach to process",
-    type = "node2",
-    request = "attach",
-    processId = require("custom.util.misc").pick_process,
-  },
-}
+-- dap.configurations.javascript = {
+--   {
+--     name = "Launch",
+--     type = "node2",
+--     request = "launch",
+--     program = "${file}",
+--     cwd = vim.fn.getcwd(),
+--     sourceMaps = true,
+--     protocol = "inspector",
+--     console = "integratedTerminal",
+--   },
+--   {
+--     -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+--     name = "Attach to process",
+--     type = "node2",
+--     request = "attach",
+--     processId = require("custom.util.misc").pick_process,
+--   },
+-- }
 
-dap.configurations.typescript = dap.configurations.javascript
+-- dap.configurations.typescript = dap.configurations.javascript
 
 local function setConditionalBreakpoint()
   dap.set_breakpoint(vim.fn.input "Breakpoint condition: ")

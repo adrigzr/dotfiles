@@ -86,6 +86,9 @@ set.cmdheight = 1
 set.updatetime = 300
 set.pyxversion = 3
 set.shada = {
+  "!",
   "'9999",
+  "<500",
   "s512",
+  "h",
 }

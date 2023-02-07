@@ -23,6 +23,7 @@ map("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", { desc = "Find commits"
 map("n", "<leader>gd", "<cmd>Telescope git_bcommits<cr>", { desc = "Find commits in current branch" })
 map("n", "<leader>gs", "<cmd>Telescope git_status<cr>", { desc = "Find in staged files" })
 map("n", "<leader>gl", "<cmd>G log<cr>", { desc = "Show git log" })
+map("n", "<leader>gu", "<cmd>Telescope undo<cr>", { desc = "Show undo list" })
 
 local results_with_preview = {
   layout_strategy = "vertical",
@@ -100,3 +101,4 @@ telescope.setup {
 
 telescope.load_extension "fzf"
 telescope.load_extension "dap"
+telescope.load_extension "undo"

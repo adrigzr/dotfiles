@@ -4,10 +4,33 @@ if not exists then
   return
 end
 
+-- require("neotest-jest").getStrategyConfig = function(strategy, args)
+--   vim.pretty_print(strategy, args)
+--   return strategy
+-- end
+
 neotest.setup {
   adapters = {
-    -- require "neotest-mocha" {},
-    require "neotest-jest" {},
+    require "neotest-mocha" {},
+    -- require "neotest-jest" {
+    --   strategy_config = function(strategy)
+    --     strategy.type = "node2"
+
+    --     vim.pretty_print(strategy)
+
+    --     return {
+    --       name = "Debug Jest Tests",
+    --       type = "node2",
+    --       args = strategy.args,
+    --       console = "integratedTerminal",
+    --       cwd = "${workspaceFolder}",
+    --       internalConsoleOptions = "neverOpen",
+    --       request = "launch",
+    --       rootPath = "${workspaceFolder}",
+    --       runtimeExecutable = strategy.runtimeExecutable,
+    --     }
+    --   end,
+    -- },
     require "neotest-rspec" {},
     require "neotest-python" {},
     require "neotest-rust" {},

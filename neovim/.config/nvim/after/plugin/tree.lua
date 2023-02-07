@@ -42,8 +42,8 @@ tree.setup {
 -- Mappings
 vim.keymap.set("n", "<leader>t", function()
   if vim.api.nvim_buf_get_name(0) == "" then
-    tree.open()
+    vim.cmd "NvimTreeOpen"
   else
-    tree.find_file(true)
+    vim.cmd "NvimTreeFindFile"
   end
 end, { silent = true, desc = "Open tree sidebar" })

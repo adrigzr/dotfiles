@@ -85,6 +85,7 @@ packer.startup {
     use "nvim-telescope/telescope.nvim" -- Fuzzy Finder
     use "nvim-telescope/telescope-symbols.nvim" -- For symbols
     use "nvim-telescope/telescope-dap.nvim"
+    use "debugloop/telescope-undo.nvim"
     use "rgroli/other.nvim" -- Switch to alternate file
 
     -- Comments
@@ -109,8 +110,10 @@ packer.startup {
     use "ntpeters/vim-better-whitespace"
 
     -- LSP
-    use "neovim/nvim-lspconfig"
-    use "williamboman/nvim-lsp-installer"
+    use "williamboman/mason.nvim" -- Package client
+    use "williamboman/mason-lspconfig.nvim" -- Mason lspconfig extension
+    use "jay-babu/mason-nvim-dap.nvim" -- Mason dap extension
+    use "neovim/nvim-lspconfig" -- LSP config
     use "jose-elias-alvarez/null-ls.nvim"
     use "folke/trouble.nvim" -- Pretty diagnostics
     use "b0o/schemastore.nvim" -- Schemas for jsonls
@@ -153,6 +156,7 @@ packer.startup {
     } -- Colorize hex codes
     use "moll/vim-bbye" -- BufferClose commands
     use "github/copilot.vim" -- Github copilot
+    use "aduros/ai.vim" -- ChatGPT
     use "lukas-reineke/indent-blankline.nvim" -- Indentation guides
     -- use "tpope/vim-surround" -- Surround wrappers
     use {
@@ -162,11 +166,11 @@ packer.startup {
       end,
     } -- Surround wrappers
     use "windwp/nvim-autopairs" -- Auto-pairs
-    use { "dhruvasagar/vim-table-mode", ft = "markdown" } -- Handle tables in markdown
+    use { "dhruvasagar/vim-table-mode", ft = { "markdown", "cucumber" } } -- Handle tables in markdown
     -- use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
     use "tpope/vim-scriptease" -- Pretty debug messages
     use "folke/which-key.nvim" -- Pretty keybind hints
-    use "petertriho/nvim-scrollbar" -- Scrollbar
+    -- use "petertriho/nvim-scrollbar" -- Scrollbar
     use "stevearc/dressing.nvim" -- Pretty vim.ui boxes
     use "andymass/vim-matchup" -- Replaces matchit & matchparen builtins
     -- use "vim-test/vim-test" -- Test files

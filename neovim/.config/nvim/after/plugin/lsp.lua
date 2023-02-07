@@ -4,7 +4,6 @@ if not exists then
   return
 end
 
-local lspinstaller = require "nvim-lsp-installer"
 local util = require "lspconfig/util"
 local null_ls = require "null-ls"
 local sign_define = vim.fn.sign_define
@@ -13,7 +12,6 @@ local custom_lsp = require "custom.util.lsp"
 local bind = require("custom.util.misc").bind
 local inlayHints = require "lsp-inlayhints"
 local rustTools = require "rust-tools"
-local lspLines = require "lsp_lines"
 local telescope_builtin = require "telescope.builtin"
 local typescript = require "typescript"
 
@@ -187,7 +185,7 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 -- CMP
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 -- Pretty folds (ufo)
 capabilities.textDocument.foldingRange = {
@@ -234,13 +232,9 @@ null_ls.setup {
   },
 }
 
-lspinstaller.setup {
-  automatic_installation = true,
-}
-
 inlayHints.setup {}
 
-lspLines.setup()
+require("lsp_lines").setup()
 
 local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.3/"
 local codelldb_path = extension_path .. "adapter/codelldb"
@@ -299,9 +293,29 @@ typescript.setup {
   },
 }
 
+require("mason").setup()
+require("mason-lspconfig").setup {
+  automatic_installation = true,
+  ensure_installed = {
+    "tsserver",
+  },
+}
+
+require("mason-nvim-dap").setup {
+  automatic_installation = true,
+  ensure_installed = {
+    "node2",
+    "bash",
+  },
+  automatic_setup = true,
+}
+
+require("mason-nvim-dap").setup_handlers()
+
 local servers = {
   "bashls",
   "cssls",
+  "cucumber_language_server",
   "dockerls",
   "dotls",
   "eslint",
@@ -322,6 +336,15 @@ for _, server in pairs(servers) do
     capabilities = capabilities,
     handlers = handlers,
   }
+
+  if server == "cucumber_language_server" then
+    opts.settings = {
+      cucumber = {
+        features = { "test/**/*.feature" },
+        glue = { "test/**/*.ts" },
+      },
+    }
+  end
 
   if server == "sumneko_lua" then
     local runtime_path = vim.split(package.path, ";")

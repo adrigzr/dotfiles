@@ -4,41 +4,40 @@ if not exists then
   return
 end
 
-dashboard.hide_winbar = false
-dashboard.custom_header = {
-  " █████╗ ██████╗ ██████╗ ██╗ ██████╗ ███████╗██████╗ ",
-  "██╔══██╗██╔══██╗██╔══██╗██║██╔════╝ ╚══███╔╝██╔══██╗",
-  "███████║██║  ██║██████╔╝██║██║  ███╗  ███╔╝ ██████╔╝",
-  "██╔══██║██║  ██║██╔══██╗██║██║   ██║ ███╔╝  ██╔══██╗",
-  "██║  ██║██████╔╝██║  ██║██║╚██████╔╝███████╗██║  ██║",
-  "╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝",
-  "",
-  "",
-}
-
-dashboard.custom_center = {
-  {
-    icon = "  ",
-    desc = "Recently opened files                   ",
-    action = "Telescope oldfiles",
-    shortcut = "         ",
+dashboard.setup {
+  theme = "hyper",
+  config = {
+    header = {
+      " █████╗ ██████╗ ██████╗ ██╗ ██████╗ ███████╗██████╗ ",
+      "██╔══██╗██╔══██╗██╔══██╗██║██╔════╝ ╚══███╔╝██╔══██╗",
+      "███████║██║  ██║██████╔╝██║██║  ███╗  ███╔╝ ██████╔╝",
+      "██╔══██║██║  ██║██╔══██╗██║██║   ██║ ███╔╝  ██╔══██╗",
+      "██║  ██║██████╔╝██║  ██║██║╚██████╔╝███████╗██║  ██║",
+      "╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝",
+      "",
+      "",
+    },
+    shortcut = {
+      {
+        desc = " New file",
+        action = "enew",
+        shortcut = "<space>bt",
+      },
+      {
+        desc = " Find file",
+        action = "Telescope find_files",
+        shortcut = "<ctrl-p>",
+      },
+      {
+        desc = " Find word",
+        action = "Telescope live_grep",
+        shortcut = "<ctrl-g>",
+      },
+    },
   },
-  {
-    icon = "  ",
-    desc = "New file                                ",
-    action = "enew",
-    shortcut = "<space>bt",
-  },
-  {
-    icon = "  ",
-    desc = "Find file                               ",
-    action = "Telescope find_files",
-    shortcut = " <ctrl-p>",
-  },
-  {
-    icon = "  ",
-    desc = "Find word                               ",
-    action = "Telescope live_grep",
-    shortcut = " <ctrl-g>",
+  hide = {
+    statusline = false,
+    tabline = false,
+    winbar = false,
   },
 }
