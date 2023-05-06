@@ -79,7 +79,7 @@ local function setup()
   vim.api.nvim_set_hl(0, "NeotestFailed", { fg = colors.red })
 
   -- [Coverage]
-  require("coverage.highlight").setup()
+  -- require("coverage.highlight").setup()
 
   -- [Ufo]
   vim.api.nvim_set_hl(0, "Folded", { bg = util.darken(colors.dark_cyan, 0.25, colors.bg0) })

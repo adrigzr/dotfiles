@@ -40,7 +40,7 @@ SPACESHIP_PROMPT_ORDER=(
 )
 
 SPACESHIP_RPROMPT_ORDER=(
-  vi_mode       # Vi-mode indicator
+  # vi_mode       # Vi-mode indicator
   exit_code     # Exit code section
   time          # Time stampts section
 )

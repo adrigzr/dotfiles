@@ -152,8 +152,8 @@ local function common_on_attach(client, bufnr)
   map("n", "<C-]>", custom_lsp.goto_definition, { desc = "Go to definition" })
   map({ "n", "v" }, "<leader>rn", vim.lsp.buf.rename, { desc = "Rename" })
   map("n", "<leader>cf", bind(custom_lsp.format, { { async = true } }), { desc = "Format document" })
-  map("n", "<leader>ca", bind(vim.lsp.buf.code_action, { { apply = true } }), { desc = "Apply code action" })
-  map("v", "<leader>ca", bind(vim.lsp.buf.code_action, { { apply = true } }), { desc = "Apply range code action" })
+  map("n", "<leader>ca", bind(vim.lsp.buf.code_action, { { apply = false } }), { desc = "Apply code action" })
+  map("v", "<leader>ca", bind(vim.lsp.buf.code_action, { { apply = false } }), { desc = "Apply range code action" })
   map(
     "n",
     "<leader>qf",
@@ -211,9 +211,9 @@ null_ls.setup {
   handlers = handlers,
   diagnostics_format = "#{s}: #{m} (#{c}",
   sources = {
-    null_ls.builtins.code_actions.gitsigns,
+    -- null_ls.builtins.code_actions.gitsigns,
     null_ls.builtins.code_actions.proselint,
-    null_ls.builtins.code_actions.refactoring,
+    -- null_ls.builtins.code_actions.refactoring,
     null_ls.builtins.code_actions.shellcheck,
     null_ls.builtins.diagnostics.alex,
     null_ls.builtins.diagnostics.cfn_lint,
@@ -310,8 +310,6 @@ require("mason-nvim-dap").setup {
   automatic_setup = true,
 }
 
-require("mason-nvim-dap").setup_handlers()
-
 local servers = {
   "bashls",
   "cssls",
@@ -324,7 +322,7 @@ local servers = {
   "jsonls",
   "pyright",
   "solargraph",
-  "sumneko_lua",
+  "lua_ls",
   "vimls",
   "yamlls",
 }
@@ -346,7 +344,7 @@ for _, server in pairs(servers) do
     }
   end
 
-  if server == "sumneko_lua" then
+  if server == "lua_ls" then
     local runtime_path = vim.split(package.path, ";")
 
     table.insert(runtime_path, "lua/?.lua")
@@ -365,6 +363,7 @@ for _, server in pairs(servers) do
         },
         workspace = {
           library = vim.api.nvim_get_runtime_file("", true),
+          checkThirdParty = false,
         },
       },
     }

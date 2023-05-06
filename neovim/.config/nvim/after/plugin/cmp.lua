@@ -98,7 +98,7 @@ cmp.setup {
             sources = {
               sources.nvim_lsp,
               sources.buffer,
-              sources.treesitter,
+              -- sources.treesitter,
             },
           },
         }
@@ -134,7 +134,7 @@ cmp.setup {
     sources.path,
     sources.calc,
     sources.spell,
-    sources.treesitter,
+    -- sources.treesitter,
   },
   window = {
     documentation = cmp.config.window.bordered(),

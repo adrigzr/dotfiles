@@ -1,220 +1,192 @@
--- Install packer
-local fn = vim.fn
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
-local packer_bootstrap
+local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
-if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system {
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system {
     "git",
     "clone",
-    "--depth",
-    "1",
-    "https://github.com/wbthomason/packer.nvim",
-    install_path,
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
   }
 end
 
-vim.cmd [[
-  augroup packer
-    autocmd!
-    autocmd BufWritePost init.lua PackerCompile
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end
-]]
+vim.opt.rtp:prepend(lazypath)
 
--- Plugins
-local packer = require "packer"
-local use = packer.use
+require("lazy").setup({
+  -- Meta
+  "wbthomason/packer.nvim",
 
-packer.startup {
-  function()
-    -- Meta
-    use "wbthomason/packer.nvim"
+  -- Performance
+  "lewis6991/impatient.nvim",
 
-    -- Performance
-    use "lewis6991/impatient.nvim"
+  -- Utils
+  "nvim-lua/popup.nvim",
+  "nvim-lua/plenary.nvim",
+  "kevinhwang91/promise-async",
+  "antoinemadec/FixCursorHold.nvim",
 
-    -- Utils
-    use "nvim-lua/popup.nvim"
-    use "nvim-lua/plenary.nvim"
-    use "kevinhwang91/promise-async"
-    use "antoinemadec/FixCursorHold.nvim"
+  -- Icons
+  "kyazdani42/nvim-web-devicons",
 
-    -- Icons
-    use {
-      "kyazdani42/nvim-web-devicons",
-      config = function()
-        require("nvim-web-devicons").setup {}
-      end,
-    }
-
-    -- Theme
-    use "navarasu/onedark.nvim"
-
-    -- Statusbar
-    use "hoob3rt/lualine.nvim"
-    use "arkav/lualine-lsp-progress"
-
-    -- Search
-    use { "windwp/nvim-spectre", module = "spectre" } -- Classic Search & Replace
-    use "kevinhwang91/nvim-hlslens" -- Search Helper
-    use "hauleth/sad.vim" -- Change and repeat
-
-    -- Syntax
-    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" } -- We recommend updating the parsers on update
-    use "nvim-treesitter/playground" -- Playground for treesitter
-    use "romgrk/nvim-treesitter-context" -- Add function context while scrolling
-    use "windwp/nvim-ts-autotag" -- Autocloses html tags
-    use "p00f/nvim-ts-rainbow" -- Colorize parens
-    use { "tpope/vim-markdown", ft = "markdown" }
-    use { "joukevandermaas/vim-ember-hbs", ft = { "handlebars", "javascript", "typescript" } }
-    use { "chrisbra/vim-zsh", ft = "zsh" }
-    use { "vim-scripts/bats.vim", ft = "bash" } -- Bash Test Runner
-    use { "pantharshit00/vim-prisma", ft = "prisma" }
-    use { "sukima/vim-ember-imports", requires = "sukima/vim-javascript-imports", ft = { "javascript", "typescript" } } -- Ember Imports
-    use { "wannesm/wmgraphviz.vim", ft = "dot" } -- Graphviz plugin
-    use { "junegunn/vader.vim", ft = "vim" } -- Vim script tester
-    use { "posva/vim-vue", ft = { "javascript", "typescript" } }
-    use { "Quramy/vim-js-pretty-template", ft = { "javascript", "typescript" } }
-    use { "psliwka/vim-dirtytalk", run = ":DirtytalkUpdate" } -- Developer spell dict
-
-    -- Navigation
-    use { "kyazdani42/nvim-tree.lua", module = "nvim-tree" }
-    use "christoomey/vim-tmux-navigator"
-    use { "nvim-telescope/telescope-fzf-native.nvim", run = "make" } -- FZF for telescope
-    use "nvim-telescope/telescope.nvim" -- Fuzzy Finder
-    use "nvim-telescope/telescope-symbols.nvim" -- For symbols
-    use "nvim-telescope/telescope-dap.nvim"
-    use "debugloop/telescope-undo.nvim"
-    use "rgroli/other.nvim" -- Switch to alternate file
-
-    -- Comments
-    use "tpope/vim-commentary"
-
-    -- Start screen
-    use "glepnir/dashboard-nvim"
-
-    -- Git
-    use "tpope/vim-fugitive" -- Git commands
-    use "lewis6991/gitsigns.nvim" -- Git gutter signs
-    use "rhysd/conflict-marker.vim" -- Mappings for conflicts
-    use {
-      "sindrets/diffview.nvim",
-      config = function()
-        require("diffview").setup {}
-      end,
-    } -- Diff view
-
-    -- Formatter
-    use "tpope/vim-sleuth"
-    use "ntpeters/vim-better-whitespace"
-
-    -- LSP
-    use "williamboman/mason.nvim" -- Package client
-    use "williamboman/mason-lspconfig.nvim" -- Mason lspconfig extension
-    use "jay-babu/mason-nvim-dap.nvim" -- Mason dap extension
-    use "neovim/nvim-lspconfig" -- LSP config
-    use "jose-elias-alvarez/null-ls.nvim"
-    use "folke/trouble.nvim" -- Pretty diagnostics
-    use "b0o/schemastore.nvim" -- Schemas for jsonls
-    -- use "stevearc/aerial.nvim" -- Show symbols
-    use "simrat39/rust-tools.nvim" -- Rust tools
-    use "kosayoda/nvim-lightbulb" -- Code actions lightbulb
-    use "https://git.sr.ht/~whynothugo/lsp_lines.nvim" -- LSP lines
-    use "lvimuser/lsp-inlayhints.nvim" -- Inlay hints
-    use "jose-elias-alvarez/typescript.nvim" -- Typescript commands
-
-    -- Completion
-    use "hrsh7th/nvim-cmp"
-    use "hrsh7th/cmp-nvim-lsp"
-    use "hrsh7th/cmp-buffer"
-    use "hrsh7th/cmp-path"
-    use "hrsh7th/cmp-cmdline"
-    use "hrsh7th/cmp-nvim-lua"
-    use "hrsh7th/cmp-calc"
-    use "ray-x/cmp-treesitter"
-    use "f3fora/cmp-spell"
-    use "onsails/lspkind-nvim" -- Pretty completion items
-    use "saadparwaiz1/cmp_luasnip"
-    use "petertriho/cmp-git"
-    use "L3MON4D3/LuaSnip"
-    use "rafamadriz/friendly-snippets"
-
-    -- Misc
-    use "tpope/vim-repeat" -- Repeat everything
-    use "tpope/vim-abolish" -- Camelcase, snakecase, mixedcase coercion
-    use "tpope/vim-unimpaired" -- Pair aliases and toggling options
-    use "mjbrownie/swapit" -- <c-a> increments
-    use "kopischke/vim-fetch" -- Handle line number on filename
-    use "tpope/vim-dispatch"
-    use "skywind3000/asyncrun.vim" -- Async make
-    use {
-      "norcalli/nvim-colorizer.lua",
-      config = function()
-        require("colorizer").setup {}
-      end,
-    } -- Colorize hex codes
-    use "moll/vim-bbye" -- BufferClose commands
-    use "github/copilot.vim" -- Github copilot
-    use "aduros/ai.vim" -- ChatGPT
-    use "lukas-reineke/indent-blankline.nvim" -- Indentation guides
-    -- use "tpope/vim-surround" -- Surround wrappers
-    use {
-      "kylechui/nvim-surround",
-      config = function()
-        require("nvim-surround").setup {}
-      end,
-    } -- Surround wrappers
-    use "windwp/nvim-autopairs" -- Auto-pairs
-    use { "dhruvasagar/vim-table-mode", ft = { "markdown", "cucumber" } } -- Handle tables in markdown
-    -- use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
-    use "tpope/vim-scriptease" -- Pretty debug messages
-    use "folke/which-key.nvim" -- Pretty keybind hints
-    -- use "petertriho/nvim-scrollbar" -- Scrollbar
-    use "stevearc/dressing.nvim" -- Pretty vim.ui boxes
-    use "andymass/vim-matchup" -- Replaces matchit & matchparen builtins
-    -- use "vim-test/vim-test" -- Test files
-    -- use "~/Repositories/neotest"
-    use "nvim-neotest/neotest"
-    -- use "~/Repositories/neotest-jest"
-    use "haydenmeade/neotest-jest"
-    use "~/Repositories/neotest-mocha"
-    use "nvim-neotest/neotest-plenary"
-    use "rouge8/neotest-rust"
-    use "olimorris/neotest-rspec"
-    use "nvim-neotest/neotest-python"
-    use "andythigpen/nvim-coverage"
-    -- use "nvim-neotest/neotest-vim-test"
-    -- use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
-    use "mfussenegger/nvim-dap" -- Debugger
-    use "theHamsta/nvim-dap-virtual-text"
-    use "rcarriga/nvim-dap-ui"
-    -- use "anuvyklack/pretty-fold.nvim"
-    -- use "stevearc/stickybuf.nvim" -- Prevent special windows to be switched to other buffer
-    use "kevinhwang91/nvim-ufo" -- Pretty folds
-    use "ThePrimeagen/refactoring.nvim" -- Refactoring tools
-    use "rcarriga/nvim-notify" -- Notifications and messages
-    use "anuvyklack/hydra.nvim" -- Hydra
-    use "neomake/neomake" -- Make presets
-    use {
-      "vuki656/package-info.nvim",
-      requires = "MunifTanjim/nui.nvim",
-      config = function()
-        require("package-info").setup { hide_up_to_date = true }
-      end,
-    } -- Show package info as virtual text in the package.json
-
-    if packer_bootstrap then
-      packer.sync()
-    end
-  end,
-  config = {
-    max_jobs = 8,
-    compile_path = vim.fn.stdpath "config" .. "/lua/packer_compiled.lua",
-    display = {
-      open_fn = function()
-        return require("packer.util").float { border = "rounded" }
-      end,
-    },
+  -- Theme
+  {
+    "navarasu/onedark.nvim",
+    lazy = false,
+    config = function()
+      require "custom.theme"
+    end,
   },
-}
+
+  -- Statusbar
+  "hoob3rt/lualine.nvim",
+  "arkav/lualine-lsp-progress",
+
+  -- Search
+  "windwp/nvim-spectre",
+  "kevinhwang91/nvim-hlslens", -- Search Helper,
+  "hauleth/sad.vim", -- Change and repeat
+
+  -- Syntax
+  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" }, -- We recommend updating the parsers on update
+  "nvim-treesitter/playground", -- Playground for treesitter
+  "romgrk/nvim-treesitter-context", -- Add function context while scrolling
+  "windwp/nvim-ts-autotag", -- Autocloses html tags
+  "p00f/nvim-ts-rainbow", -- Colorize parens
+  { "tpope/vim-markdown", ft = "markdown" },
+  -- { "joukevandermaas/vim-ember-hbs", ft = { "handlebars", "javascript", "typescript" } },
+  { "chrisbra/vim-zsh", ft = "zsh" },
+  { "vim-scripts/bats.vim", ft = "bash" }, -- Bash Test Runner
+  { "pantharshit00/vim-prisma", ft = "prisma" },
+  -- { "sukima/vim-ember-imports", requires = "sukima/vim-javascript-imports", ft = { "javascript", "typescript" } } -- Ember Imports
+  { "wannesm/wmgraphviz.vim", ft = "dot" }, -- Graphviz plugin
+  { "junegunn/vader.vim", ft = "vim" }, -- Vim script tester
+  { "posva/vim-vue", ft = { "javascript", "typescript" } },
+  { "Quramy/vim-js-pretty-template", ft = { "javascript", "typescript" } },
+  {
+    "psliwka/vim-dirtytalk",
+    build = ":DirtytalkUpdate",
+    config = function()
+      vim.opt.spelllang = { "en", "programming" }
+      vim.opt.rtp:append(vim.fn.stdpath "data" .. "/site")
+    end,
+  }, -- Developer spell dict
+
+  -- Navigation
+  "kyazdani42/nvim-tree.lua",
+  "christoomey/vim-tmux-navigator",
+  { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }, -- FZF for telescope
+  "nvim-telescope/telescope.nvim", -- Fuzzy Finder
+  "nvim-telescope/telescope-symbols.nvim", -- For symbols
+  "nvim-telescope/telescope-dap.nvim",
+  "debugloop/telescope-undo.nvim",
+  "rgroli/other.nvim", -- Switch to alternate file
+
+  -- Comments
+  "tpope/vim-commentary",
+
+  -- Start screen
+  "glepnir/dashboard-nvim",
+
+  -- Git
+  "tpope/vim-fugitive", -- Git commands
+  "lewis6991/gitsigns.nvim", -- Git gutter signs
+  "rhysd/conflict-marker.vim", -- Mappings for conflicts
+  "sindrets/diffview.nvim", -- Diff view
+
+  -- Formatter
+  "tpope/vim-sleuth",
+  "ntpeters/vim-better-whitespace",
+
+  -- LSP
+  "williamboman/mason.nvim", -- Package client
+  "williamboman/mason-lspconfig.nvim", -- Mason lspconfig extension
+  "jay-babu/mason-nvim-dap.nvim", -- Mason dap extension
+  "neovim/nvim-lspconfig", -- LSP config
+  "jose-elias-alvarez/null-ls.nvim",
+  "folke/trouble.nvim", -- Pretty diagnostics
+  "b0o/schemastore.nvim", -- Schemas for jsonls
+  -- use "stevearc/aerial.nvim" -- Show symbols
+  "simrat39/rust-tools.nvim", -- Rust tools
+  "kosayoda/nvim-lightbulb", -- Code actions lightbulb
+  "https://git.sr.ht/~whynothugo/lsp_lines.nvim", -- LSP lines
+  "lvimuser/lsp-inlayhints.nvim", -- Inlay hints
+  "jose-elias-alvarez/typescript.nvim", -- Typescript commands
+
+  -- Completion
+  "hrsh7th/nvim-cmp",
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-buffer",
+  "hrsh7th/cmp-path",
+  "hrsh7th/cmp-cmdline",
+  "hrsh7th/cmp-nvim-lua",
+  "hrsh7th/cmp-calc",
+  "ray-x/cmp-treesitter",
+  "f3fora/cmp-spell",
+  "onsails/lspkind-nvim", -- Pretty completion items
+  "saadparwaiz1/cmp_luasnip",
+  "petertriho/cmp-git",
+  "L3MON4D3/LuaSnip",
+  "rafamadriz/friendly-snippets",
+
+  -- Misc
+  "tpope/vim-repeat", -- Repeat everything
+  "tpope/vim-abolish", -- Camelcase, snakecase, mixedcase coercion
+  "tpope/vim-unimpaired", -- Pair aliases and toggling options
+  "mjbrownie/swapit", -- <c-a> increments
+  "kopischke/vim-fetch", -- Handle line number on filename
+  "tpope/vim-dispatch",
+  "skywind3000/asyncrun.vim", -- Async make
+  "norcalli/nvim-colorizer.lua", -- Colorize hex codes
+  "moll/vim-bbye", -- BufferClose commands
+  "github/copilot.vim", -- Github copilot
+  -- "aduros/ai.vim", -- ChatGPT
+  "lukas-reineke/indent-blankline.nvim", -- Indentation guides
+  -- use "tpope/vim-surround" -- Surround wrappers
+  { "kylechui/nvim-surround", config = true }, -- Surround wrappers
+  "windwp/nvim-autopairs", -- Auto-pairs
+  { "dhruvasagar/vim-table-mode", ft = { "markdown", "cucumber" } }, -- Handle tables in markdown
+  -- use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
+  { "tpope/vim-scriptease", lazy = false }, -- Pretty debug messages
+  "folke/which-key.nvim", -- Pretty keybind hints
+  -- use "petertriho/nvim-scrollbar" -- Scrollbar
+  "stevearc/dressing.nvim", -- Pretty vim.ui boxes
+  "andymass/vim-matchup", -- Replaces matchit & matchparen builtins
+  -- use "vim-test/vim-test" -- Test files
+  -- use "~/Repositories/neotest"
+  "nvim-neotest/neotest",
+  -- use "~/Repositories/neotest-jest"
+  "haydenmeade/neotest-jest",
+  -- { dir = "~/Repositories/neotest-jest" },
+  { dir = "~/Repositories/neotest-mocha" },
+  "nvim-neotest/neotest-plenary",
+  "rouge8/neotest-rust",
+  "olimorris/neotest-rspec",
+  "nvim-neotest/neotest-python",
+  -- "andythigpen/nvim-coverage",
+  -- use "nvim-neotest/neotest-vim-test"
+  -- use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
+  "mfussenegger/nvim-dap", -- Debugger
+  "theHamsta/nvim-dap-virtual-text",
+  "rcarriga/nvim-dap-ui",
+  -- use "anuvyklack/pretty-fold.nvim"
+  -- use "stevearc/stickybuf.nvim" -- Prevent special windows to be switched to other buffer
+  "kevinhwang91/nvim-ufo", -- Pretty folds
+  -- "ThePrimeagen/refactoring.nvim", -- Refactoring tools
+  "rcarriga/nvim-notify", -- Notifications and messages
+  "anuvyklack/hydra.nvim", -- Hydra
+  { "neomake/neomake", lazy = false }, -- Make presets
+  {
+    "vuki656/package-info.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    opts = { hide_up_to_date = true },
+  }, -- Show package info as virtual text in the package.json
+}, {
+  defaults = {
+    lazy = false,
+  },
+  concurrency = 8,
+  ui = {
+    border = "rounded",
+  },
+})
