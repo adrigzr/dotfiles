@@ -1,18 +1,18 @@
-local exists, module = pcall(require, "indent_blankline")
+local exists, module = pcall(require, "ibl")
 
 if not exists then
   return
 end
 
 module.setup {
-  show_end_of_line = true,
-  show_current_context = true,
-  filetype_exclude = {
-    "dashboard",
-    "lsp-installer",
-    "lspinfo",
-    "NvimTree",
-    "packer",
-    "help",
+  exclude = {
+    filetypes = {
+      "dashboard",
+      "lsp-installer",
+      "lspinfo",
+      "NvimTree",
+      "packer",
+      "help",
+    },
   },
 }

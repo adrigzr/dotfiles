@@ -46,11 +46,11 @@ local tab_callback = function(fallback)
   if cmp.visible() then
     cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
   else
-    local copilot_keys = vim.fn["copilot#Accept"]()
+    local suggestion = require "copilot.suggestion"
 
     -- Complete with copilot if there is any suggestion
-    if copilot_keys ~= "" then
-      vim.api.nvim_feedkeys(copilot_keys, "i", true)
+    if suggestion.is_visible() then
+      suggestion.accept()
       -- Expand snippet to next item
     elseif luasnip.jumpable(1) then
       luasnip.expand_or_jump()

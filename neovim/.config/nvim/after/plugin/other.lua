@@ -5,6 +5,7 @@ if not exists then
 end
 
 other.setup {
+  showMissingFiles = false,
   mappings = {
     {
       pattern = "/(.*)/(.*)%.(.*)$",

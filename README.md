@@ -103,6 +103,7 @@
    ```bash
    defaults write -g InitialKeyRepeat -int 10
    defaults write -g KeyRepeat -int 1
+   defaults write -g ApplePressAndHoldEnabled -bool false
    ```
 
    Increase duration of notifications:
@@ -117,6 +118,6 @@
 
    ```text
    PackerSync
-   LspInstall pyright graphql dotls dockerls tsserver html bashls jsonls vimls rust_analyzer yamlls eslint sumneko_lua cssls
+   LspInstall pyright graphql dotls dockerls ts_ls html bashls jsonls vimls rust_analyzer yamlls eslint sumneko_lua cssls
    checkhealth
    ```

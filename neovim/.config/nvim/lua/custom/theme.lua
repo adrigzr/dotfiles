@@ -28,7 +28,8 @@ local function setup()
     highlight! def link NormalFloat Normal
 
     " [Native] WinBar
-    highlight WinBarNC gui=none
+    highlight WinBarNC gui=none guibg=none
+    highlight WinBar gui=none guibg=none
 
     " [Native] Change match paren
     highlight MatchParen gui=underline guifg=none guibg=none

@@ -111,7 +111,8 @@ require("lazy").setup({
   "kosayoda/nvim-lightbulb", -- Code actions lightbulb
   "https://git.sr.ht/~whynothugo/lsp_lines.nvim", -- LSP lines
   "lvimuser/lsp-inlayhints.nvim", -- Inlay hints
-  "jose-elias-alvarez/typescript.nvim", -- Typescript commands
+  -- "jose-elias-alvarez/typescript.nvim", -- Typescript commands
+  { "pmizio/typescript-tools.nvim", dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" } }, -- Typescript tools
 
   -- Completion
   "hrsh7th/nvim-cmp",
@@ -126,7 +127,7 @@ require("lazy").setup({
   "onsails/lspkind-nvim", -- Pretty completion items
   "saadparwaiz1/cmp_luasnip",
   "petertriho/cmp-git",
-  "L3MON4D3/LuaSnip",
+  { "L3MON4D3/LuaSnip", version = "v2.1.1", build = "make install_jsregexp" },
   "rafamadriz/friendly-snippets",
 
   -- Misc
@@ -139,9 +140,9 @@ require("lazy").setup({
   "skywind3000/asyncrun.vim", -- Async make
   "norcalli/nvim-colorizer.lua", -- Colorize hex codes
   "moll/vim-bbye", -- BufferClose commands
-  "github/copilot.vim", -- Github copilot
+  -- "github/copilot.vim", -- Github copilot
   -- "aduros/ai.vim", -- ChatGPT
-  "lukas-reineke/indent-blankline.nvim", -- Indentation guides
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
   -- use "tpope/vim-surround" -- Surround wrappers
   { "kylechui/nvim-surround", config = true }, -- Surround wrappers
   "windwp/nvim-autopairs", -- Auto-pairs
@@ -157,8 +158,9 @@ require("lazy").setup({
   "nvim-neotest/neotest",
   -- use "~/Repositories/neotest-jest"
   "haydenmeade/neotest-jest",
+  "adrigzr/neotest-mocha",
   -- { dir = "~/Repositories/neotest-jest" },
-  { dir = "~/Repositories/neotest-mocha" },
+  -- { dir = "~/Repositories/neotest-mocha" },
   "nvim-neotest/neotest-plenary",
   "rouge8/neotest-rust",
   "olimorris/neotest-rspec",
@@ -167,6 +169,7 @@ require("lazy").setup({
   -- use "nvim-neotest/neotest-vim-test"
   -- use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
   "mfussenegger/nvim-dap", -- Debugger
+  "nvim-neotest/nvim-nio", -- Dependency for nvim-dap-ui
   "theHamsta/nvim-dap-virtual-text",
   "rcarriga/nvim-dap-ui",
   -- use "anuvyklack/pretty-fold.nvim"
@@ -181,6 +184,18 @@ require("lazy").setup({
     dependencies = { "MunifTanjim/nui.nvim" },
     opts = { hide_up_to_date = true },
   }, -- Show package info as virtual text in the package.json
+  "axelvc/template-string.nvim",
+  "zbirenbaum/copilot.lua",
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "main",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+    },
+    build = "make tiktoken", -- Only on MacOS or Linux
+    opts = { debug = true }, -- Enable debugging
+  },
 }, {
   defaults = {
     lazy = false,

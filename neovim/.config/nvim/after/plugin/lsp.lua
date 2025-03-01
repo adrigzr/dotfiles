@@ -13,7 +13,8 @@ local bind = require("custom.util.misc").bind
 local inlayHints = require "lsp-inlayhints"
 local rustTools = require "rust-tools"
 local telescope_builtin = require "telescope.builtin"
-local typescript = require "typescript"
+-- local typescript = require "typescript"
+local ts_tools = require "typescript-tools"
 
 -- Debugging
 -- vim.lsp.set_log_level "debug"
@@ -161,7 +162,7 @@ local function common_on_attach(client, bufnr)
     { desc = "Apply quickfix code action" }
   )
   map("n", "<leader>ch", inlayHints.toggle, { desc = "Toggle inlay hints" })
-  map("n", "<leader>cc", function()
+  map("n", "<leader>cd", function()
     local config = vim.diagnostic.config()
 
     vim.diagnostic.config {
@@ -169,7 +170,7 @@ local function common_on_attach(client, bufnr)
       virtual_lines = not config.virtual_lines,
     }
   end, { desc = "Toggle diagnostics" })
-  map("n", "<leader>cd", custom_lsp.remove_unused, { desc = "Remove unused code" })
+  map("n", "<leader>cu", custom_lsp.remove_unused, { desc = "Remove unused code" })
 
   if client.server_capabilities.goto_definition == true then
     vim.bo.tagfunc = "v:lua.vim.lsp.tagfunc"
@@ -261,43 +262,69 @@ rustTools.setup {
   },
 }
 
-typescript.setup {
-  server = {
-    root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", ".git"),
-    init_options = {
-      preferences = {
-        includeInlayEnumMemberValueHints = true,
-        includeInlayFunctionLikeReturnTypeHints = true,
-        includeInlayFunctionParameterTypeHints = true,
-        includeInlayParameterNameHints = "none",
-        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-        includeInlayPropertyDeclarationTypeHints = false,
-        includeInlayVariableTypeHints = true,
-      },
-    },
-    settings = {
-      completions = {
-        completeFunctionCalls = true,
-      },
-    },
-    on_attach = function(client, bufnr)
-      -- Delegate on eslint
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
-      vim.keymap.set("n", "<leader>rf", "<cmd>TypescriptRenameFile<CR>", { buffer = bufnr })
+-- typescript.setup {
+--   server = {
+--     root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", ".git"),
+--     init_options = {
+--       preferences = {
+--         includeInlayEnumMemberValueHints = true,
+--         includeInlayFunctionLikeReturnTypeHints = true,
+--         includeInlayFunctionParameterTypeHints = true,
+--         includeInlayParameterNameHints = "none",
+--         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+--         includeInlayPropertyDeclarationTypeHints = false,
+--         includeInlayVariableTypeHints = true,
+--       },
+--     },
+--     settings = {
+--       completions = {
+--         completeFunctionCalls = true,
+--       },
+--     },
+--     on_attach = function(client, bufnr)
+--       -- Delegate on eslint
+--       client.server_capabilities.documentFormattingProvider = false
+--       client.server_capabilities.documentRangeFormattingProvider = false
+--       vim.keymap.set("n", "<leader>rf", "<cmd>TypescriptRenameFile<CR>", { buffer = bufnr })
 
-      common_on_attach(client, bufnr)
-    end,
-    capabilities = capabilities,
-    handlers = handlers,
+--       common_on_attach(client, bufnr)
+--     end,
+--     capabilities = capabilities,
+--     handlers = handlers,
+--   },
+-- }
+
+require("typescript-tools").setup {
+  settings = {
+    complete_function_calls = false,
+    tsserver_file_preferences = {
+      includeInlayEnumMemberValueHints = true,
+      includeInlayFunctionLikeReturnTypeHints = true,
+      includeInlayFunctionParameterTypeHints = true,
+      includeInlayParameterNameHints = "none",
+      includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+      includeInlayPropertyDeclarationTypeHints = false,
+      includeInlayVariableTypeHints = true,
+    },
   },
+  on_attach = function(client, bufnr)
+    -- Delegate on eslint
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+
+    vim.keymap.set("n", "<leader>rf", "<cmd>TSToolsRenameFile<CR>", { buffer = bufnr, desc = "Rename file (TSTools)" })
+
+    common_on_attach(client, bufnr)
+  end,
+  capabilities = capabilities,
+  handlers = handlers,
 }
 
 require("mason").setup()
 require("mason-lspconfig").setup {
   automatic_installation = true,
   ensure_installed = {
-    "tsserver",
+    "ts_ls",
   },
 }
 
@@ -415,12 +442,16 @@ for _, server in pairs(servers) do
           "!Equals sequence",
           "!GetAtt scalar",
           "!If sequence",
+          "!Split sequence",
+          "!Select sequence",
+          "!And sequence",
           "!Or sequence",
           "!Join sequence",
           "!Ref scalar",
           "!Sub scalar",
           "!Not sequence",
           "!Condition scalar",
+          "!reference sequence",
         },
       },
     }

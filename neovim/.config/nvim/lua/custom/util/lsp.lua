@@ -65,9 +65,9 @@ end
 
 local function document_highlight()
   -- Abort when lsp is not ready
-  if not vim.lsp.buf.server_ready() then
-    return
-  end
+  -- if not vim.lsp.buf.server_ready() then
+  --   return
+  -- end
 
   local results = M.get_results "textDocument/documentHighlight"
 
@@ -78,7 +78,7 @@ end
 
 local function show_line_diagnostics()
   -- Abort when lsp is not ready
-  if not vim.lsp.buf.server_ready() or not vim.diagnostic.config().virtual_text then
+  if not vim.diagnostic.config().virtual_text then
     return
   end
 
@@ -114,13 +114,13 @@ local currentSignature = nil
 
 local function show_signature_help()
   -- Abort when lsp is not ready or completion is visible or copilot has suggestions
-  if
-    not vim.lsp.buf.server_ready()
-    -- or require("cmp").visible()
-    -- or vim.api.nvim_eval 'exists("b:_copilot.suggestions")' == 1
-  then
-    return
-  end
+  -- if
+  --   not vim.lsp.buf.server_ready()
+  --   -- or require("cmp").visible()
+  --   -- or vim.api.nvim_eval 'exists("b:_copilot.suggestions")' == 1
+  -- then
+  --   return
+  -- end
 
   local mode = misc.get_mode()
 
@@ -244,7 +244,7 @@ function M.make_command(source_action)
     opts = opts or {}
 
     local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
-    local client = M.get_client(bufnr, "tsserver")
+    local client = M.get_client(bufnr, "ts_ls")
 
     if not client then
       return
@@ -294,10 +294,10 @@ function M.test()
   --   local content = require("neotest.lib").files.read(file_path)
 end
 
-M.add_missing_imports = M.make_command "source.addMissingImports.ts"
-M.fix_all = M.make_command "source.fixAll.ts"
-M.remove_unused = M.make_command "source.removeUnused.ts"
-M.organize_imports = M.make_command "source.organizeImports.ts"
+M.add_missing_imports = require("typescript-tools/api").add_missing_imports
+-- M.fix_all = M.make_command "source.fixAll.ts"
+M.remove_unused = require("typescript-tools/api").remove_unused
+-- M.organize_imports = M.make_command "source.organizeImports.ts"
 M.show_line_diagnostics = async.void(show_line_diagnostics)
 M.show_signature_help = async.void(show_signature_help)
 M.document_highlight = async.void(document_highlight)
