@@ -1,0 +1,71 @@
+# Starship prompt configuration
+# https://starship.rs/config/
+
+add_newline = false
+
+format = """
+$username\
+$directory\
+$hostname\
+$git_branch\
+$git_status\
+$package\
+$nodejs\
+$python\
+$cmd_duration\
+$line_break\
+$battery\
+$jobs\
+$character"""
+
+right_format = """
+$status\
+$time"""
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[>](bold red)"
+vimcmd_symbol = "[<](bold green)"
+vimcmd_replace_one_symbol = "[<](bold purple)"
+vimcmd_replace_symbol = "[<](bold purple)"
+vimcmd_visual_symbol = "[<](bold yellow)"
+
+[directory]
+truncation_length = 2
+truncate_to_repo = false
+
+[git_branch]
+format = "on [$symbol$branch(:$remote_branch)]($style) "
+
+[git_status]
+deleted = "[x](red) "
+ahead = "[up](green) "
+behind = "[down](red) "
+diverged = "[updown](red) "
+
+[nodejs]
+format = "via [$symbol($version )]($style)"
+
+[python]
+format = "via [${symbol}${pyenv_prefix}(${version} )(($virtualenv) )]($style)"
+
+[cmd_duration]
+min_time = 2_000
+
+[jobs]
+style = "bold magenta"
+
+[status]
+disabled = false
+format = "with [$symbol$status]($style) "
+
+[time]
+disabled = false
+format = "at [$time]($style) "
+
+[battery]
+disabled = false
+
+[[battery.display]]
+threshold = 30
+style = "bold red"

@@ -29,21 +29,6 @@ zmodule ssh
 # Adds aliases for Homebrew.
 zmodule homebrew
 
-#
-# Prompt
-#
-# Exposes to prompts how long the last command took to execute, used by asciiship.
-zmodule duration-info
-
-# Exposes git repository status information to prompts.
-zmodule git-info
-
-# Spaceship prompt
-zmodule spaceship-prompt/spaceship-prompt --name spaceship
-
-# A customizable version of steeef's prompt theme.
-# zmodule steeef
-
 # Additional completion definitions for Zsh.
 zmodule zsh-users/zsh-completions
 

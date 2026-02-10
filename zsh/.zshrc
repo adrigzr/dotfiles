@@ -32,9 +32,6 @@ WORDCHARS=${WORDCHARS//[\/]}
 # Setup fzf (fuzzy-finder).
 [ -s "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
-# Spaceship prompt.
-[ -s "$HOME/.zsh/spaceship-prompt/spaceship.zsh" ] && source "$HOME/.zsh/spaceship-prompt/spaceship.zsh"
-
 # Fix git aliases
 zstyle ':zim:git' aliases-prefix 'g'
 
@@ -45,6 +42,9 @@ if [[ ${ZIM_HOME}/init.zsh -ot ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
 fi
 
 source ${ZIM_HOME}/init.zsh
+
+# Starship prompt.
+eval "$(starship init zsh)"
 
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }
