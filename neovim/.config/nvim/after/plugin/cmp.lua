@@ -141,7 +141,7 @@ cmp.setup {
   formatting = {
     deprecated = true,
     format = lspkind.cmp_format {
-      with_text = true,
+      mode = "symbol_text",
       maxwidth = 50,
       menu = {
         luasnip = "[Snip]",

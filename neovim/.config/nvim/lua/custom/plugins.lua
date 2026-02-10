@@ -43,7 +43,7 @@ require("lazy").setup({
 
   -- Syntax
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" }, -- We recommend updating the parsers on update
-  "romgrk/nvim-treesitter-context", -- Add function context while scrolling
+  "nvim-treesitter/nvim-treesitter-context", -- Add function context while scrolling
   "windwp/nvim-ts-autotag", -- Autocloses html tags
   "HiPhish/rainbow-delimiters.nvim", -- Colorize matching delimiters
   { "tpope/vim-markdown", ft = "markdown" },
@@ -95,9 +95,9 @@ require("lazy").setup({
 
   -- LSP
   "williamboman/mason.nvim", -- Package client
-  "williamboman/mason-lspconfig.nvim", -- Mason lspconfig extension
   -- "jay-babu/mason-nvim-dap.nvim", -- Mason dap extension
   "neovim/nvim-lspconfig", -- LSP config
+  { "folke/lazydev.nvim", ft = "lua", opts = {} }, -- Lua LSP workspace
   -- "jose-elias-alvarez/null-ls.nvim",
   "folke/trouble.nvim", -- Pretty diagnostics
   "b0o/schemastore.nvim", -- Schemas for jsonls
@@ -128,7 +128,7 @@ require("lazy").setup({
   "onsails/lspkind-nvim", -- Pretty completion items
   "saadparwaiz1/cmp_luasnip",
   "petertriho/cmp-git",
-  { "L3MON4D3/LuaSnip", version = "v2.1.1", build = "make install_jsregexp" },
+  { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
   "rafamadriz/friendly-snippets",
 
   -- Misc
@@ -139,7 +139,7 @@ require("lazy").setup({
   "kopischke/vim-fetch", -- Handle line number on filename
   "tpope/vim-dispatch",
   "skywind3000/asyncrun.vim", -- Async make
-  "norcalli/nvim-colorizer.lua", -- Colorize hex codes
+  "NvChad/nvim-colorizer.lua", -- Colorize hex codes
   "moll/vim-bbye", -- BufferClose commands
   -- "github/copilot.vim", -- Github copilot
   -- "aduros/ai.vim", -- ChatGPT
@@ -195,7 +195,7 @@ require("lazy").setup({
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
     },
     build = "make tiktoken", -- Only on MacOS or Linux
-    opts = { debug = true }, -- Enable debugging
+    opts = { debug = false },
   },
 }, {
   defaults = {
