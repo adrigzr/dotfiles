@@ -97,18 +97,12 @@ local function common_on_attach(client, bufnr)
   )
   map("n", "gR", telescope_builtin.lsp_references, { desc = "Go to all references" })
   map("n", "K", custom_lsp.show_info, { desc = "Show info" })
-  map(
-    "n",
-    "[d",
-    bind(vim.diagnostic.goto_prev, { { float = { border = "rounded" } } }),
-    { desc = "Go to previous diagnostic" }
-  )
-  map(
-    "n",
-    "]d",
-    bind(vim.diagnostic.goto_next, { { float = { border = "rounded" } } }),
-    { desc = "Go to next diagnostic" }
-  )
+  map("n", "[d", function()
+    vim.diagnostic.jump { count = -1, float = { border = "rounded" } }
+  end, { desc = "Go to previous diagnostic" })
+  map("n", "]d", function()
+    vim.diagnostic.jump { count = 1, float = { border = "rounded" } }
+  end, { desc = "Go to next diagnostic" })
   map("n", "<C-]>", custom_lsp.goto_definition, { desc = "Go to definition" })
   map({ "n", "v" }, "<leader>rn", vim.lsp.buf.rename, { desc = "Rename" })
   map("n", "<leader>cf", bind(custom_lsp.format, { { async = true } }), { desc = "Format document" })
