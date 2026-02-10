@@ -1,10 +1,15 @@
-local custom_lsp_group = vim.api.nvim_create_augroup("custom_lsp", {})
-local custom_lsp = require "custom.util.lsp"
+local ok, custom_lsp = pcall(require, "custom.util.lsp")
+
+if not ok then
+  return
+end
+
 local bind = require("custom.util.misc").bind
 local telescope_builtin = require "telescope.builtin"
+local custom_lsp_group = vim.api.nvim_create_augroup("custom_lsp", {})
 
 -- Mappings
-vim.keymap.set("n", "<leader>vi", "<cmd>LspInstallInfo<cr>", { desc = "Show lsp install info" })
+vim.keymap.set("n", "<leader>vi", "<cmd>Mason<cr>", { desc = "Open Mason" })
 
 -- Diagnostics
 vim.diagnostic.config {
@@ -17,7 +22,12 @@ vim.diagnostic.config {
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = custom_lsp_group,
   callback = function()
-    custom_lsp.add_missing_imports { sync = true }
+    local ft = vim.bo.filetype
+
+    if vim.tbl_contains({ "typescript", "typescriptreact", "javascript", "javascriptreact" }, ft) then
+      custom_lsp.add_missing_imports { sync = true }
+    end
+
     custom_lsp.format()
   end,
 })
@@ -124,7 +134,7 @@ local function common_on_attach(client, bufnr)
   end, { desc = "Toggle diagnostics" })
   map("n", "<leader>cu", custom_lsp.remove_unused, { desc = "Remove unused code" })
 
-  if client.server_capabilities.goto_definition == true then
+  if client.server_capabilities.definitionProvider == true then
     vim.bo.tagfunc = "v:lua.vim.lsp.tagfunc"
   end
 

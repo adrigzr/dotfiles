@@ -40,7 +40,6 @@ neotest.setup {
     require "neotest-rspec" {},
     require "neotest-python" {},
     require "neotest-rust" {},
-    require "neotest-plenary" {},
     -- require "neotest-vim-test" { ignore_filetypes = { "ruby", "python" } },
   },
   icons = {
@@ -66,7 +65,7 @@ local function runFile()
 end
 
 map("n", "<leader>uu", neotest.run.run, { desc = "Run the nearest test" })
-map("n", "<leader>ue", bind(neotest.run.run, { { suite = true } }), { desc = "Run the nearest test" })
+map("n", "<leader>ue", bind(neotest.run.run, { { suite = true } }), { desc = "Run the test suite" })
 map("n", "<leader>ul", neotest.run.run_last, { desc = "Run the last test" })
 map("n", "<leader>ut", neotest.run.stop, { desc = "Stop the test" })
 map("n", "<leader>ua", neotest.run.attach, { desc = "Attach to the nearest test" })

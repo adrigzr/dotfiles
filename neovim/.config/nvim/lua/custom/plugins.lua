@@ -39,23 +39,23 @@ require("lazy").setup({
   -- Search
   "MagicDuck/grug-far.nvim",
   "kevinhwang91/nvim-hlslens", -- Search Helper,
-  "hauleth/sad.vim",           -- Change and repeat
+  "hauleth/sad.vim", -- Change and repeat
 
   -- Syntax
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" }, -- We recommend updating the parsers on update
-  "romgrk/nvim-treesitter-context",                           -- Add function context while scrolling
-  "windwp/nvim-ts-autotag",                                   -- Autocloses html tags
+  "romgrk/nvim-treesitter-context", -- Add function context while scrolling
+  "windwp/nvim-ts-autotag", -- Autocloses html tags
   "HiPhish/rainbow-delimiters.nvim", -- Colorize matching delimiters
-  { "tpope/vim-markdown",              ft = "markdown" },
+  { "tpope/vim-markdown", ft = "markdown" },
   -- { "joukevandermaas/vim-ember-hbs", ft = { "handlebars", "javascript", "typescript" } },
-  { "chrisbra/vim-zsh",                ft = "zsh" },
-  { "vim-scripts/bats.vim",            ft = "bash" }, -- Bash Test Runner
-  { "pantharshit00/vim-prisma",        ft = "prisma" },
+  { "chrisbra/vim-zsh", ft = "zsh" },
+  { "vim-scripts/bats.vim", ft = "bash" }, -- Bash Test Runner
+  { "pantharshit00/vim-prisma", ft = "prisma" },
   -- { "sukima/vim-ember-imports", requires = "sukima/vim-javascript-imports", ft = { "javascript", "typescript" } } -- Ember Imports
-  { "wannesm/wmgraphviz.vim",          ft = "dot" }, -- Graphviz plugin
-  { "junegunn/vader.vim",              ft = "vim" }, -- Vim script tester
-  { "posva/vim-vue",                   ft = { "javascript", "typescript" } },
-  { "Quramy/vim-js-pretty-template",   ft = { "javascript", "typescript" } },
+  { "wannesm/wmgraphviz.vim", ft = "dot" }, -- Graphviz plugin
+  { "junegunn/vader.vim", ft = "vim" }, -- Vim script tester
+  { "posva/vim-vue", ft = { "javascript", "typescript" } },
+  { "Quramy/vim-js-pretty-template", ft = { "javascript", "typescript" } },
   -- {
   --   "psliwka/vim-dirtytalk",
   --   build = ":DirtytalkUpdate",
@@ -70,8 +70,8 @@ require("lazy").setup({
   "nvim-tree/nvim-tree.lua",
   "christoomey/vim-tmux-navigator",
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }, -- FZF for telescope
-  "nvim-telescope/telescope.nvim",                                -- Fuzzy Finder
-  "nvim-telescope/telescope-symbols.nvim",                        -- For symbols
+  "nvim-telescope/telescope.nvim", -- Fuzzy Finder
+  "nvim-telescope/telescope-symbols.nvim", -- For symbols
   -- "nvim-telescope/telescope-dap.nvim",
   "debugloop/telescope-undo.nvim",
   "rgroli/other.nvim", -- Switch to alternate file
@@ -84,29 +84,29 @@ require("lazy").setup({
   },
 
   -- Git
-  "tpope/vim-fugitive",        -- Git commands
-  "lewis6991/gitsigns.nvim",   -- Git gutter signs
+  "tpope/vim-fugitive", -- Git commands
+  "lewis6991/gitsigns.nvim", -- Git gutter signs
   "rhysd/conflict-marker.vim", -- Mappings for conflicts
-  "sindrets/diffview.nvim",    -- Diff view
+  "sindrets/diffview.nvim", -- Diff view
 
   -- Formatter
   "tpope/vim-sleuth",
   "ntpeters/vim-better-whitespace",
 
   -- LSP
-  "williamboman/mason.nvim",                      -- Package client
-  "williamboman/mason-lspconfig.nvim",            -- Mason lspconfig extension
+  "williamboman/mason.nvim", -- Package client
+  "williamboman/mason-lspconfig.nvim", -- Mason lspconfig extension
   -- "jay-babu/mason-nvim-dap.nvim", -- Mason dap extension
-  "neovim/nvim-lspconfig",                        -- LSP config
+  "neovim/nvim-lspconfig", -- LSP config
   -- "jose-elias-alvarez/null-ls.nvim",
-  "folke/trouble.nvim",                           -- Pretty diagnostics
-  "b0o/schemastore.nvim",                         -- Schemas for jsonls
+  "folke/trouble.nvim", -- Pretty diagnostics
+  "b0o/schemastore.nvim", -- Schemas for jsonls
   -- use "stevearc/aerial.nvim" -- Show symbols
 
   "https://git.sr.ht/~whynothugo/lsp_lines.nvim", -- LSP lines
   -- "lvimuser/lsp-inlayhints.nvim", -- Inlay hints
   -- "jose-elias-alvarez/typescript.nvim", -- Typescript commands
-  { "pmizio/typescript-tools.nvim",             dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" } }, -- Typescript tools
+  { "pmizio/typescript-tools.nvim", dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" } }, -- Typescript tools
   {
     "antosha417/nvim-lsp-file-operations",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-tree.lua" },
@@ -128,32 +128,32 @@ require("lazy").setup({
   "onsails/lspkind-nvim", -- Pretty completion items
   "saadparwaiz1/cmp_luasnip",
   "petertriho/cmp-git",
-  { "L3MON4D3/LuaSnip",                    version = "v2.1.1", build = "make install_jsregexp" },
+  { "L3MON4D3/LuaSnip", version = "v2.1.1", build = "make install_jsregexp" },
   "rafamadriz/friendly-snippets",
 
   -- Misc
-  "tpope/vim-repeat",            -- Repeat everything
-  "tpope/vim-abolish",           -- Camelcase, snakecase, mixedcase coercion
-  "tpope/vim-unimpaired",        -- Pair aliases and toggling options
-  "mjbrownie/swapit",            -- <c-a> increments
-  "kopischke/vim-fetch",         -- Handle line number on filename
+  "tpope/vim-repeat", -- Repeat everything
+  "tpope/vim-abolish", -- Camelcase, snakecase, mixedcase coercion
+  "tpope/vim-unimpaired", -- Pair aliases and toggling options
+  "mjbrownie/swapit", -- <c-a> increments
+  "kopischke/vim-fetch", -- Handle line number on filename
   "tpope/vim-dispatch",
-  "skywind3000/asyncrun.vim",    -- Async make
+  "skywind3000/asyncrun.vim", -- Async make
   "norcalli/nvim-colorizer.lua", -- Colorize hex codes
-  "moll/vim-bbye",               -- BufferClose commands
+  "moll/vim-bbye", -- BufferClose commands
   -- "github/copilot.vim", -- Github copilot
   -- "aduros/ai.vim", -- ChatGPT
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl",       opts = {} },
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
   -- use "tpope/vim-surround" -- Surround wrappers
-  { "kylechui/nvim-surround",              config = true },          -- Surround wrappers
-  "windwp/nvim-autopairs",                                           -- Auto-pairs
+  { "kylechui/nvim-surround", config = true }, -- Surround wrappers
+  "windwp/nvim-autopairs", -- Auto-pairs
   { "dhruvasagar/vim-table-mode", ft = { "markdown", "cucumber" } }, -- Handle tables in markdown
   -- use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
-  { "tpope/vim-scriptease",       lazy = false },                    -- Pretty debug messages
-  "folke/which-key.nvim",                                            -- Pretty keybind hints
+  { "tpope/vim-scriptease", lazy = false }, -- Pretty debug messages
+  "folke/which-key.nvim", -- Pretty keybind hints
   -- use "petertriho/nvim-scrollbar" -- Scrollbar
-  "stevearc/dressing.nvim",                                          -- Pretty vim.ui boxes
-  "andymass/vim-matchup",                                            -- Replaces matchit & matchparen builtins
+  "stevearc/dressing.nvim", -- Pretty vim.ui boxes
+  "andymass/vim-matchup", -- Replaces matchit & matchparen builtins
   -- use "vim-test/vim-test" -- Test files
   -- use "~/Repositories/neotest"
   "nvim-neotest/neotest",
@@ -192,10 +192,10 @@ require("lazy").setup({
     branch = "main",
     dependencies = {
       { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-      { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
     },
-    build = "make tiktoken",        -- Only on MacOS or Linux
-    opts = { debug = true },        -- Enable debugging
+    build = "make tiktoken", -- Only on MacOS or Linux
+    opts = { debug = true }, -- Enable debugging
   },
 }, {
   defaults = {

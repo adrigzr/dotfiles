@@ -17,9 +17,9 @@ ls.add_snippets("lua", {
         end
       ]],
       {
-      rep(1),
-      i(1, "module"),
-    }
+        rep(1),
+        i(1, "module"),
+      }
     )
   ),
 })

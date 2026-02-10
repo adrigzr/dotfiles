@@ -24,7 +24,7 @@ M.close_events = {
 function M.buf_request_supported(method)
   local method_supported = false
 
-  for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
+  for _, client in pairs(vim.lsp.get_clients { bufnr = 0 }) do
     if client:supports_method(method) then
       method_supported = true
     end
@@ -38,7 +38,7 @@ function M.get_results(method)
   local flattened_results = {}
 
   if M.buf_request_supported(method) then
-    local params = vim.lsp.util.make_position_params(0, 'utf-8')
+    local params = vim.lsp.util.make_position_params(0, "utf-8")
     local result = async.lsp.buf_request_all(0, method, params)
 
     for _, server_results in pairs(result) do
@@ -103,7 +103,7 @@ local function show_line_diagnostics()
       scope = "line",
       border = "rounded",
       focusable = true,
-      source = "always",
+      source = true,
       format = diagnostic.format_message,
       close_events = M.close_events,
     })
@@ -201,20 +201,20 @@ end
 --- Check if any attached server has a capability
 --- @param capability string
 --- @return boolean
-local function hasServerWithCapability(capability)
+local function has_server_with_capability(capability)
   local servers = vim.lsp.get_clients()
-  local serversWithFormat = vim.tbl_filter(function(server)
+  local matching = vim.tbl_filter(function(server)
     return server.server_capabilities[capability]
   end, vim.tbl_values(servers))
 
-  return not vim.tbl_isempty(serversWithFormat)
+  return not vim.tbl_isempty(matching)
 end
 
 -- Format
 function M.format(opts)
   opts = opts or {}
 
-  if not hasServerWithCapability "documentFormattingProvider" then
+  if not has_server_with_capability "documentFormattingProvider" then
     return
   end
 
@@ -232,7 +232,7 @@ function M.format(opts)
 end
 
 function M.get_client(bufnr, client_name)
-  for _, client in pairs(vim.lsp.get_clients(bufnr)) do
+  for _, client in pairs(vim.lsp.get_clients { bufnr = bufnr }) do
     if client.name == client_name then
       return client
     end
@@ -288,16 +288,10 @@ function M.make_command(source_action)
   end
 end
 
-function M.test()
-  -- local ft = vim.bo.filetype
-  -- local lang = require("nvim-treesitter.parsers").ft_to_lang(ft)
-  --   local content = require("neotest.lib").files.read(file_path)
-end
+local ts_tools_ok, ts_tools_api = pcall(require, "typescript-tools.api")
 
-M.add_missing_imports = require("typescript-tools/api").add_missing_imports
--- M.fix_all = M.make_command "source.fixAll.ts"
-M.remove_unused = require("typescript-tools/api").remove_unused
--- M.organize_imports = M.make_command "source.organizeImports.ts"
+M.add_missing_imports = ts_tools_ok and ts_tools_api.add_missing_imports or function() end
+M.remove_unused = ts_tools_ok and ts_tools_api.remove_unused or function() end
 M.show_line_diagnostics = async.void(show_line_diagnostics)
 M.show_signature_help = async.void(show_signature_help)
 M.document_highlight = async.void(document_highlight)
