@@ -20,32 +20,30 @@ local colors = require "onedark.colors"
 local util = require "onedark.util"
 
 local function setup()
-  vim.cmd [[
-    colorscheme onedark
+  vim.cmd.colorscheme "onedark"
 
-    " [Native] Change float preview window border to match background
-    highlight! def link FloatBorder TelescopeResultsBorder
-    highlight! def link NormalFloat Normal
+  -- [Native] Change float preview window border to match background
+  vim.api.nvim_set_hl(0, "FloatBorder", { link = "TelescopeResultsBorder" })
+  vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
 
-    " [Native] WinBar
-    highlight WinBarNC gui=none guibg=none
-    highlight WinBar gui=none guibg=none
+  -- [Native] WinBar
+  vim.api.nvim_set_hl(0, "WinBarNC", {})
+  vim.api.nvim_set_hl(0, "WinBar", {})
 
-    " [Native] Change match paren
-    highlight MatchParen gui=underline guifg=none guibg=none
+  -- [Native] Change match paren
+  vim.api.nvim_set_hl(0, "MatchParen", { underline = true })
 
-    " [Tree]
-    highlight NvimTreeNormal guibg=none
-    highlight NvimTreeEndOfBuffer guibg=none
-    highlight NvimTreeVertSplit guibg=none
-    highlight def link NvimTreeLspDiagnosticsError DiagnosticSignError
-    highlight def link NvimTreeLspDiagnosticsWarning DiagnosticSignWarn
-    highlight def link NvimTreeLspDiagnosticsInformation DiagnosticSignInfo
-    highlight def link NvimTreeLspDiagnosticsHint DiagnosticSignHint
+  -- [Tree]
+  vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "NONE" })
+  vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "NONE" })
+  vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { bg = "NONE" })
+  vim.api.nvim_set_hl(0, "NvimTreeLspDiagnosticsError", { link = "DiagnosticSignError" })
+  vim.api.nvim_set_hl(0, "NvimTreeLspDiagnosticsWarning", { link = "DiagnosticSignWarn" })
+  vim.api.nvim_set_hl(0, "NvimTreeLspDiagnosticsInformation", { link = "DiagnosticSignInfo" })
+  vim.api.nvim_set_hl(0, "NvimTreeLspDiagnosticsHint", { link = "DiagnosticSignHint" })
 
-    " [InlayHints]
-    highlight! def link LspInlayHint Comment
-  ]]
+  -- [InlayHints]
+  vim.api.nvim_set_hl(0, "LspInlayHint", { link = "Comment" })
 
   -- [Rainbow] Change rainbow-delimiters colors
   for i = 1, 7 do
@@ -78,21 +76,21 @@ local function setup()
   vim.api.nvim_set_hl(0, "NeotestSkipped", { fg = colors.yellow })
   vim.api.nvim_set_hl(0, "NeotestFailed", { fg = colors.red })
 
-  -- [Coverage]
-  -- require("coverage.highlight").setup()
-
   -- [Ufo]
   vim.api.nvim_set_hl(0, "Folded", { bg = util.darken(colors.dark_cyan, 0.25, colors.bg0) })
   vim.api.nvim_set_hl(0, "FoldColumn", { fg = colors.grey })
   vim.api.nvim_set_hl(0, "UfoFoldedFg", { fg = colors.green })
 end
 
-vim.cmd [[
-  augroup custom_theme
-  autocmd!
-  autocmd VimEnter * ++nested lua require "custom.theme".setup()
-  augroup END
-]]
+local custom_theme_group = vim.api.nvim_create_augroup("custom_theme", {})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = custom_theme_group,
+  nested = true,
+  callback = function()
+    require("custom.theme").setup()
+  end,
+})
 
 return {
   colors = colors,
