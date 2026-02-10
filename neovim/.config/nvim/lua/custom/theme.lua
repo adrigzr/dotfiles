@@ -85,13 +85,6 @@ local function setup()
   vim.api.nvim_set_hl(0, "Folded", { bg = util.darken(colors.dark_cyan, 0.25, colors.bg0) })
   vim.api.nvim_set_hl(0, "FoldColumn", { fg = colors.grey })
   vim.api.nvim_set_hl(0, "UfoFoldedFg", { fg = colors.green })
-
-  -- [Hydra]
-  vim.api.nvim_set_hl(0, "HydraRed", { fg = colors.red })
-  vim.api.nvim_set_hl(0, "HydraBlue", { fg = colors.blue })
-  vim.api.nvim_set_hl(0, "HydraAmaranth", { fg = colors.cyan })
-  vim.api.nvim_set_hl(0, "HydraTeal", { fg = colors.green })
-  vim.api.nvim_set_hl(0, "HydraPink", { fg = colors.orange })
 end
 
 vim.cmd [[
