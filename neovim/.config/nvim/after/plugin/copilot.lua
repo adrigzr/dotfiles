@@ -5,6 +5,9 @@ if not exists then
 end
 
 module.setup {
+  filetypes = {
+    yaml = true,
+  },
   suggestion = {
     auto_trigger = true,
     keymap = {
@@ -14,8 +17,7 @@ module.setup {
       next = "<C-]>",
       prev = "<C-}>",
       dismiss = false,
-
-    }
+    },
   },
 }
 
