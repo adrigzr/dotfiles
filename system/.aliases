@@ -37,9 +37,6 @@ alias g='git'
 alias v='nvim'
 alias vim='nvim'
 
-# Wifi
-alias wifi='wicd-curses'
-
 # File size
 alias fs='stat -f "%z bytes"'
 
@@ -48,25 +45,5 @@ alias gfa='git fetch --all'
 alias gcn='git clean'
 alias gcz='git cz'
 alias lg='lazygit'
-
-# notifications - dunst
-alias notifications_disable='pkill -u "$USER" -USR1 dunst'
-alias notifications_enable='pkill -u "$USER" -USR2 dunst'
-
-# autolock
-alias lock_enable='xautolock -enable'
-alias lock_disable='xautolock -disable'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# TaskWarrior
-alias tn='task next'
-alias ta='task add'
-alias td='task done'
-alias t='task'
-alias tt='task modified:today completed'
-alias ty='task modified:yesterday completed'
 
 # vim: ft=sh
