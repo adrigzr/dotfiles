@@ -10,7 +10,7 @@ eslint/      - Global ESLint config
 fonts/       - Nerd Font patched fonts
 git/         - Git config, custom git subcommands (git/bin/)
 i3/          - i3 window manager config + scripts (Linux)
-iterm2/      - iTerm2 terminfo overrides
+ghostty/     - Ghostty terminal config
 neovim/      - Full Neovim config (Lua, lazy.nvim)
 ruby/        - Ruby config
 ssh/         - SSH client config

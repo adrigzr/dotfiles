@@ -20,7 +20,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
    brew install starship fnm zoxide
    brew install stylua selene
    brew install lazygit gh ast-grep imagemagick
-   brew install iterm2
+   brew install --cask ghostty
    brew install tmux
    brew install neovim
    ```
@@ -51,7 +51,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
    ```bash
    git clone --recurse-submodules -j8 https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
-   stow git neovim ssh system tmux zsh iterm2 ruby
+   stow git neovim ssh system tmux zsh ghostty ruby
    ```
 
 1. Copy fonts (restart may be required).
@@ -71,9 +71,8 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 1. Setup tmux & [tpm](https://github.com/tmux-plugins/tpm).
 
    ```bash
-   tic -x iterm2/xterm-256color.terminfo
    tic -x tmux/screen-256color.terminfo
-   # Restart tmux & iterm and check infos
+   # Restart tmux & Ghostty and check infos
    infocmp -x $TERM
    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
    ~/.tmux/plugins/tpm/bin/install_plugins
@@ -95,7 +94,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
    defaults write com.apple.notificationcenterui bannerTime -int 1
    ```
 
-1. Open iterm2 and setup profile.
+1. Open Ghostty (config is already stowed).
 
 1. Setup neovim.
 
@@ -113,7 +112,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | `fonts`   | Nerd Font patched fonts                              |
 | `git`     | Git config, custom git subcommands (`git/bin/`)      |
 | `i3`      | i3 window manager config + scripts (Linux)           |
-| `iterm2`  | iTerm2 terminfo overrides                            |
+| `ghostty` | Ghostty terminal config                              |
 | `neovim`  | Full Neovim config (Lua, lazy.nvim)                  |
 | `ruby`    | Ruby config                                          |
 | `ssh`     | SSH client config                                    |

@@ -1,0 +1,128 @@
+# ==============================================================================
+# Font
+# ==============================================================================
+
+font-family = "LigalexMono Nerd Font"
+font-style = Normal
+font-style-bold = Bold
+font-style-italic = Italic
+font-style-bold-italic = Bold Italic
+font-size = 14
+
+# Enable ligatures (contextual alternates).
+font-feature = calt
+
+# Cell spacing.
+adjust-cell-width = -8%
+adjust-cell-height = -2%
+
+# Push underline down to add separation from text.
+adjust-underline-position = 4
+
+# ==============================================================================
+# Cursor
+# ==============================================================================
+
+cursor-style = bar
+cursor-style-blink = true
+cursor-color = #5c6370
+cursor-text = #131613
+
+# ==============================================================================
+# Terminal
+# ==============================================================================
+
+# xterm-ghostty has native support for:
+#   - true color (24-bit RGB)
+#   - italics (sitm/ritm)
+#   - curly/styled underlines (Smulx)
+#   - colored underlines (Setulc)
+#   - strikethrough (smxx)
+#   - overline (Smol)
+# No custom terminfo file needed.
+term = xterm-ghostty
+
+# ==============================================================================
+# Command
+# ==============================================================================
+
+command = /opt/homebrew/bin/tmux new-session -A -s editor
+
+# ==============================================================================
+# Window
+# ==============================================================================
+
+fullscreen = true
+window-save-state = always
+window-decoration = true
+macos-titlebar-style = hidden
+
+# ==============================================================================
+# Scrollback
+# ==============================================================================
+
+scrollback-limit = 5000
+
+# ==============================================================================
+# Mouse
+# ==============================================================================
+
+mouse-hide-while-typing = true
+
+# ==============================================================================
+# Bell
+# ==============================================================================
+
+# Silent bell.
+bell-features = no-attention,no-title
+
+# ==============================================================================
+# Clipboard
+# ==============================================================================
+
+copy-on-select = clipboard
+clipboard-read = allow
+clipboard-write = allow
+
+# ==============================================================================
+# macOS
+# ==============================================================================
+
+# Option key sends raw characters (not Esc+).
+macos-option-as-alt = false
+
+# ==============================================================================
+# Shell Integration
+# ==============================================================================
+
+# tmux is the launch command; shell integration is handled by the shell inside tmux.
+shell-integration = none
+
+# ==============================================================================
+# One Dark Color Scheme
+# ==============================================================================
+
+background = #282c34
+foreground = #abb2bf
+selection-background = #5c6370
+selection-foreground = #abb2bf
+
+# Normal colors (0-7)
+palette = 0=#131613
+palette = 1=#e06c75
+palette = 2=#98c379
+palette = 3=#d19a66
+palette = 4=#61afef
+palette = 5=#c678dd
+palette = 6=#56b6c2
+palette = 7=#848b98
+
+# Bright colors (8-15)
+palette = 8=#5c6370
+palette = 9=#e06c75
+palette = 10=#98c379
+palette = 11=#d19a66
+palette = 12=#61afef
+palette = 13=#c678dd
+palette = 14=#56b6c2
+palette = 15=#ffffff
