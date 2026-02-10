@@ -5,14 +5,8 @@ if not exists then
 end
 
 local actions = require "telescope.actions"
-local trouble = require "trouble"
+local open_with_trouble = require("trouble.sources.telescope").open
 local map = vim.keymap.set
-
-vim.cmd [[
-  nnoremap <C-p> <cmd>Telescope find_files<cr>
-  nnoremap <C-g> <cmd>Telescope live_grep<cr>
-  nnoremap gb    <cmd>Telescope buffers<cr>
-]]
 
 -- Mappings
 map("n", "<C-p>", "<cmd>Telescope find_files<cr>", { desc = "Find files" })
@@ -42,7 +36,7 @@ telescope.setup {
         ["<esc>"] = actions.close,
         ["<c-n>"] = actions.cycle_history_next,
         ["<c-p>"] = actions.cycle_history_prev,
-        ["<c-t>"] = trouble.open_with_trouble,
+        ["<c-t>"] = open_with_trouble,
       },
     },
     vimgrep_arguments = {

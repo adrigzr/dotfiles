@@ -5,11 +5,13 @@ if not exists then
 end
 
 wk.setup {
-  enable = true,
+  win = {
+    height = { min = 4, max = 15 },
+    width = { min = 20, max = 50 },
+    padding = { 1, 2 },
+  },
   layout = {
-    height = { min = 4, max = 15 }, -- min and max height of the columns
-    width = { min = 20, max = 50 }, -- min and max width of the columns
-    spacing = 3, -- spacing between columns
-    align = "left", -- align columns left, center or right
+    spacing = 3,
+    align = "left",
   },
 }
