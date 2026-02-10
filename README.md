@@ -14,26 +14,18 @@
 1. Install [brew](https://brew.sh/index_es) and useful packages.
 
    ```bash
-   brew tap homebrew/cask-versions
-   brew install git wget ripgrep fzf stow gnu-sed editorconfig bat asdf gpg gawk htop ffmpeg jq fd moreutils git-delta
-   brew install iterm2-beta
+   brew install git wget ripgrep fzf stow gnu-sed editorconfig bat gpg gawk htop ffmpeg jq fd moreutils git-delta
+   brew install starship fnm zoxide
+   brew install iterm2
    brew install tmux --HEAD
    brew install neovim --HEAD
    ```
 
-1. Install [nvm](https://github.com/nvm-sh/nvm)
+1. Install [fnm](https://github.com/Schniz/fnm) (fast node manager)
 
    ```bash
-   nvm install --lts
-   nvm alias default "$(nvm version-remote --lts)"
+   fnm install --lts
    npm install -g neovim yarn prettier bash-language-server
-   ```
-
-1. Install [rust](https://www.rust-lang.org/tools/install)
-
-   ```bash
-   cargo install stylua
-   cargo install selene
    ```
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
@@ -43,14 +35,6 @@
    ```bash
    pip3 install --upgrade pip
    pip3 install neovim vim-vint
-   ```
-
-1. Setup [asdf](https://github.com/asdf-vm/asdf)
-
-   ```bash
-   asdf plugin-add java https://github.com/halcyon/asdf-java.git
-   asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
-   asdf install
    ```
 
 1. Setup ruby
@@ -69,7 +53,7 @@
 
    ```bash
    git clone --recurse-submodules -j8 https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
-   stow asdf git neovim ssh system tmux zsh
+   stow git neovim ssh system tmux zsh
    ```
 
 1. Copy fonts (restart may be required)
@@ -80,9 +64,10 @@
 
 1. Setup zsh & [zim](https://github.com/zimfw/zimfw)
 
+   zimfw is auto-downloaded on first shell start. Just open a new zsh session, then:
+
    ```bash
-   curl -s -L --create-dirs -o ~/.zim/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-   zsh ~/.zim/zimfw.zsh install
+   zimfw install
    ```
 
 1. Setup tmux & [tpm](https://github.com/tmux-plugins/tpm)
@@ -117,7 +102,6 @@
 1. Setup neovim
 
    ```text
-   PackerSync
-   LspInstall pyright graphql dotls dockerls ts_ls html bashls jsonls vimls rust_analyzer yamlls eslint sumneko_lua cssls
+   Lazy sync
    checkhealth
    ```
