@@ -64,6 +64,12 @@ local function setup()
   vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { italic = true, fg = colors.cyan })
   vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { italic = true, fg = colors.purple })
 
+  -- [Diagnostics] Curly underlines with colored underlines (requires Smulx + Setulc support).
+  vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = colors.red })
+  vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { undercurl = true, sp = colors.yellow })
+  vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { undercurl = true, sp = colors.cyan })
+  vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { undercurl = true, sp = colors.purple })
+
   -- [Yank] Change yank highlight
   vim.api.nvim_set_hl(0, "Yank", { fg = colors.bg0, bg = colors.cyan })
 

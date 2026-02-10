@@ -23,7 +23,7 @@ adjust-underline-position = 4
 # Cursor
 # ==============================================================================
 
-cursor-style = bar
+cursor-style = block
 cursor-style-blink = true
 cursor-color = #5c6370
 cursor-text = #131613
@@ -56,6 +56,7 @@ fullscreen = true
 window-save-state = always
 window-decoration = true
 macos-titlebar-style = hidden
+confirm-close-surface = false
 
 # ==============================================================================
 # Scrollback
