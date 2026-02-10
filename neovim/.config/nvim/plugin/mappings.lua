@@ -34,9 +34,6 @@ map("n", "ge", ":e %:h", { desc = "Edit near files" })
 -- Reselect pasted text
 map("n", "gp", "`[v`]", { desc = "Reselect pasted text" })
 
--- Yank from cursor to end of line
-map("n", "Y", "y$", { desc = "Yank to end of line" })
-
 -- Insert newline
 map("n", "<leader><Enter>", "o<ESC>", { desc = "Insert newline below" })
 

@@ -27,7 +27,6 @@ set.fillchars = "eob: ,fold: ,foldopen:,foldsep: ,foldclose:"
 set.iskeyword:append "-"
 set.list = true
 set.listchars = "tab:→ ,extends:›,precedes:‹,nbsp:·,trail:·"
-set.termguicolors = true
 set.signcolumn = "yes"
 set.inccommand = "split"
 set.colorcolumn = "81,101,121"
