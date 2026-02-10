@@ -37,7 +37,7 @@ require("lazy").setup({
   "nvim-lualine/lualine.nvim",
 
   -- Search
-  "windwp/nvim-spectre",
+  "MagicDuck/grug-far.nvim",
   "kevinhwang91/nvim-hlslens", -- Search Helper,
   "hauleth/sad.vim",           -- Change and repeat
 
