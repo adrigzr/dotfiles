@@ -31,8 +31,7 @@ set.termguicolors = true
 set.signcolumn = "yes"
 set.inccommand = "split"
 set.colorcolumn = "81,101,121"
--- Enable this when available
--- set.splitkeep = "cursor"
+set.splitkeep = "cursor"
 
 -- Diff
 set.diffopt = {
@@ -84,10 +83,9 @@ set.timeoutlen = 500
 set.ttimeoutlen = 10
 set.cmdheight = 1
 set.updatetime = 300
-set.pyxversion = 3
 set.shada = {
   "!",
-  "'9999",
+  "'500",
   "<500",
   "s512",
   "h",
