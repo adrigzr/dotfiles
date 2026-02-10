@@ -19,13 +19,9 @@ fi
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# Load nvm.
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-export PATH="./node_modules/.bin:$PATH"                            # This prevents nvm to override local path
-if which npm >/dev/null; then
-	export NODE_PATH="${NODE_PATH}:$(npm config get prefix)/lib/node_modules"
+# Load fnm (fast node manager).
+if command -v fnm >/dev/null 2>&1; then
+	eval "$(fnm env --use-on-cd)"
 fi
 
 # Load rvm.

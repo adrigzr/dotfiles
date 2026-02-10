@@ -20,9 +20,6 @@ zmodule utility
 # Provides archive and unarchive functions for easy archive manipulation.
 zmodule archive
 
-# Asdf
-zmodule asdf
-
 # Fasd
 zmodule fasd
 
