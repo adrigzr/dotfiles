@@ -5,23 +5,58 @@ if not exists then
 end
 
 module.setup {
-  ensure_installed = "all",
-  ignore_install = { "phpdoc", "swift" },
+  ensure_installed = {
+    "bash",
+    "c",
+    "cmake",
+    "comment",
+    "css",
+    "csv",
+    "diff",
+    "dockerfile",
+    "git_config",
+    "git_rebase",
+    "gitcommit",
+    "gitignore",
+    "graphql",
+    "html",
+    "http",
+    "javascript",
+    "jsdoc",
+    "json",
+    "jsonc",
+    "lua",
+    "luadoc",
+    "luap",
+    "make",
+    "markdown",
+    "markdown_inline",
+    "prisma",
+    "python",
+    "query",
+    "regex",
+    "ruby",
+    "rust",
+    "scss",
+    "sql",
+    "toml",
+    "tsx",
+    "typescript",
+    "vim",
+    "vimdoc",
+    "vue",
+    "xml",
+    "yaml",
+  },
   highlight = { enable = true },
   incremental_selection = { enable = true },
   textobjects = { enable = true },
   indent = { enable = true, disable = { "yaml" } },
-  rainbow = { enable = true },
-  playground = { enable = true },
-  query_linter = { enable = true },
-  autotag = { enable = true },
   matchup = {
     enable = true,
     include_match_words = true,
   },
 }
 
-vim.cmd [[
-  set foldmethod=expr
-  set foldexpr=nvim_treesitter#foldexpr()
-]]
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"

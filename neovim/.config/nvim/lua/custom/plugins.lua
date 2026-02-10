@@ -43,7 +43,6 @@ require("lazy").setup({
 
   -- Syntax
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" }, -- We recommend updating the parsers on update
-  "nvim-treesitter/playground",                               -- Playground for treesitter
   "romgrk/nvim-treesitter-context",                           -- Add function context while scrolling
   "windwp/nvim-ts-autotag",                                   -- Autocloses html tags
   "HiPhish/rainbow-delimiters.nvim", -- Colorize matching delimiters
