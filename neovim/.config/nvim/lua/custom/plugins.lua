@@ -17,14 +17,9 @@ require("lazy").setup({
   -- Meta
   -- "wbthomason/packer.nvim",
 
-  -- Performance
-  "lewis6991/impatient.nvim",
-
   -- Utils
-  "nvim-lua/popup.nvim",
   "nvim-lua/plenary.nvim",
   "kevinhwang91/promise-async",
-  "antoinemadec/FixCursorHold.nvim",
 
   -- Icons
   "nvim-tree/nvim-web-devicons",
@@ -83,9 +78,6 @@ require("lazy").setup({
   "debugloop/telescope-undo.nvim",
   "rgroli/other.nvim", -- Switch to alternate file
 
-  -- Comments
-  "tpope/vim-commentary",
-
   -- Start screen
   "glepnir/dashboard-nvim",
 
@@ -108,8 +100,7 @@ require("lazy").setup({
   "folke/trouble.nvim",                           -- Pretty diagnostics
   "b0o/schemastore.nvim",                         -- Schemas for jsonls
   -- use "stevearc/aerial.nvim" -- Show symbols
-  "simrat39/rust-tools.nvim",                     -- Rust tools
-  "kosayoda/nvim-lightbulb",                      -- Code actions lightbulb
+
   "https://git.sr.ht/~whynothugo/lsp_lines.nvim", -- LSP lines
   -- "lvimuser/lsp-inlayhints.nvim", -- Inlay hints
   -- "jose-elias-alvarez/typescript.nvim", -- Typescript commands
@@ -169,7 +160,7 @@ require("lazy").setup({
   "adrigzr/neotest-mocha",
   -- { dir = "~/Repositories/neotest-jest" },
   -- { dir = "~/Repositories/neotest-mocha" },
-  "nvim-neotest/neotest-plenary",
+
   "rouge8/neotest-rust",
   "olimorris/neotest-rspec",
   "nvim-neotest/neotest-python",
