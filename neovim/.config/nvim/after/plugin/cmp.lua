@@ -8,6 +8,7 @@ local lspkind = require "lspkind"
 local util = require "custom.util"
 local cmp_buffer = require "cmp_buffer"
 local luasnip = require "luasnip"
+local copilot_suggestion = require "copilot.suggestion"
 
 -- Highlights
 vim.cmd [[
@@ -46,11 +47,9 @@ local tab_callback = function(fallback)
   if cmp.visible() then
     cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
   else
-    local suggestion = require "copilot.suggestion"
-
     -- Complete with copilot if there is any suggestion
-    if suggestion.is_visible() then
-      suggestion.accept()
+    if copilot_suggestion.is_visible() then
+      copilot_suggestion.accept()
       -- Expand snippet to next item
     elseif luasnip.jumpable(1) then
       luasnip.expand_or_jump()
@@ -79,8 +78,8 @@ cmp.setup {
         luasnip.change_choice()
       elseif util.misc.check_floating_windows() then
         util.misc.close_floating_windows()
-      elseif vim.api.nvim_eval 'exists("b:_copilot.suggestions")' then
-        vim.fn["copilot#Dismiss"]()
+      elseif copilot_suggestion.is_visible() then
+        copilot_suggestion.dismiss()
       else
         fallback()
       end

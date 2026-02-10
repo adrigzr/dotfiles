@@ -24,11 +24,11 @@ M.close_events = {
 function M.buf_request_supported(method)
   local method_supported = false
 
-  vim.lsp.for_each_buffer_client(0, function(client)
-    if client.supports_method(method) then
+  for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
+    if client:supports_method(method) then
       method_supported = true
     end
-  end)
+  end
 
   return method_supported
 end
@@ -38,17 +38,17 @@ function M.get_results(method)
   local flattened_results = {}
 
   if M.buf_request_supported(method) then
-    local params = vim.lsp.util.make_position_params()
+    local params = vim.lsp.util.make_position_params(0, 'utf-8')
     local result = async.lsp.buf_request_all(0, method, params)
 
     for _, server_results in pairs(result) do
       if server_results.result then
         -- textDocument/definition can return Location or Location[]
-        if vim.tbl_islist(server_results.result) then
+        if vim.islist(server_results.result) then
           vim.list_extend(flattened_results, server_results.result)
           -- textDocument/hover can return { result = { contents[] }}
         elseif server_results.result.contents then
-          if vim.tbl_islist(server_results.result.contents) then
+          if vim.islist(server_results.result.contents) then
             vim.list_extend(flattened_results, server_results.result.contents)
           else
             flattened_results = { server_results.result.contents }
@@ -202,7 +202,7 @@ end
 --- @param capability string
 --- @return boolean
 local function hasServerWithCapability(capability)
-  local servers = vim.lsp.buf_get_clients()
+  local servers = vim.lsp.get_clients()
   local serversWithFormat = vim.tbl_filter(function(server)
     return server.server_capabilities[capability]
   end, vim.tbl_values(servers))
@@ -232,7 +232,7 @@ function M.format(opts)
 end
 
 function M.get_client(bufnr, client_name)
-  for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
+  for _, client in pairs(vim.lsp.get_clients(bufnr)) do
     if client.name == client_name then
       return client
     end

@@ -4,11 +4,11 @@ if not exists then
   return
 end
 
-vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-vim.fn.sign_define("DapBreakpointCondition", { text = "⊜", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-vim.fn.sign_define("DapLogPoint", { text = "✦", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-vim.fn.sign_define("DapStopped", { text = "→", texthl = "", linehl = "", numhl = "" })
-vim.fn.sign_define("DapBreakpointRejected", { text = "⊗", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+-- vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+-- vim.fn.sign_define("DapBreakpointCondition", { text = "⊜", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+-- vim.fn.sign_define("DapLogPoint", { text = "✦", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+-- vim.fn.sign_define("DapStopped", { text = "→", texthl = "", linehl = "", numhl = "" })
+-- vim.fn.sign_define("DapBreakpointRejected", { text = "⊗", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
 
 require("nvim-dap-virtual-text").setup {}
 

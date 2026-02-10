@@ -1,17 +1,10 @@
-local exists, lspconfig = pcall(require, "lspconfig")
-
-if not exists then
-  return
-end
-
-local util = require "lspconfig/util"
-local null_ls = require "null-ls"
-local sign_define = vim.fn.sign_define
+-- local null_ls = require "null-ls"
+-- local sign_define = vim.fn.sign_define
 local custom_lsp_group = vim.api.nvim_create_augroup("custom_lsp", {})
 local custom_lsp = require "custom.util.lsp"
 local bind = require("custom.util.misc").bind
-local inlayHints = require "lsp-inlayhints"
-local rustTools = require "rust-tools"
+-- local inlayHints = require "lsp-inlayhints"
+-- local rustTools = require "rust-tools"
 local telescope_builtin = require "telescope.builtin"
 -- local typescript = require "typescript"
 local ts_tools = require "typescript-tools"
@@ -30,10 +23,10 @@ vim.diagnostic.config {
 }
 
 -- Redefine diagnostics signs
-sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError", numhl = "DiagnosticSignError" })
-sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn", numhl = "DiagnosticSignWarn" })
-sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo", numhl = "DiagnosticSignInfo" })
-sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint", numhl = "DiagnosticSignHint" })
+-- sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError", numhl = "DiagnosticSignError" })
+-- sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn", numhl = "DiagnosticSignWarn" })
+-- sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo", numhl = "DiagnosticSignInfo" })
+-- sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint", numhl = "DiagnosticSignHint" })
 
 -- Format on save
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -161,7 +154,7 @@ local function common_on_attach(client, bufnr)
     bind(vim.lsp.buf.code_action, { { context = { only = "quickfix" }, apply = true } }),
     { desc = "Apply quickfix code action" }
   )
-  map("n", "<leader>ch", inlayHints.toggle, { desc = "Toggle inlay hints" })
+  -- map("n", "<leader>ch", inlayHints.toggle, { desc = "Toggle inlay hints" })
   map("n", "<leader>cd", function()
     local config = vim.diagnostic.config()
 
@@ -180,7 +173,7 @@ local function common_on_attach(client, bufnr)
     vim.bo.formatexpr = "v:lua.vim.lsp.formatexpr()"
   end
 
-  inlayHints.on_attach(client, bufnr, false)
+  -- inlayHints.on_attach(client, bufnr, false)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -207,33 +200,33 @@ local handlers = {
   }),
 }
 
-null_ls.setup {
-  on_attach = common_on_attach,
-  handlers = handlers,
-  diagnostics_format = "#{s}: #{m} (#{c}",
-  sources = {
-    -- null_ls.builtins.code_actions.gitsigns,
-    null_ls.builtins.code_actions.proselint,
-    -- null_ls.builtins.code_actions.refactoring,
-    null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.diagnostics.alex,
-    null_ls.builtins.diagnostics.cfn_lint,
-    null_ls.builtins.diagnostics.proselint,
-    require "custom.diagnostics.rubocop",
-    -- null_ls.builtins.diagnostics.selene,
-    null_ls.builtins.diagnostics.vale,
-    null_ls.builtins.diagnostics.vint,
-    -- null_ls.builtins.diagnostics.yamllint,
-    null_ls.builtins.formatting.prettier,
-    null_ls.builtins.formatting.rubocop,
-    null_ls.builtins.formatting.shfmt,
-    null_ls.builtins.formatting.stylua,
-    null_ls.builtins.formatting.terraform_fmt,
-    null_ls.builtins.hover.dictionary,
-  },
-}
+-- null_ls.setup {
+--   on_attach = common_on_attach,
+--   handlers = handlers,
+--   diagnostics_format = "#{s}: #{m} (#{c}",
+--   sources = {
+--     -- null_ls.builtins.code_actions.gitsigns,
+--     null_ls.builtins.code_actions.proselint,
+--     -- null_ls.builtins.code_actions.refactoring,
+--     null_ls.builtins.code_actions.shellcheck,
+--     null_ls.builtins.diagnostics.alex,
+--     null_ls.builtins.diagnostics.cfn_lint,
+--     null_ls.builtins.diagnostics.proselint,
+--     require "custom.diagnostics.rubocop",
+--     -- null_ls.builtins.diagnostics.selene,
+--     null_ls.builtins.diagnostics.vale,
+--     null_ls.builtins.diagnostics.vint,
+--     -- null_ls.builtins.diagnostics.yamllint,
+--     null_ls.builtins.formatting.prettier,
+--     null_ls.builtins.formatting.rubocop,
+--     null_ls.builtins.formatting.shfmt,
+--     null_ls.builtins.formatting.stylua,
+--     null_ls.builtins.formatting.terraform_fmt,
+--     null_ls.builtins.hover.dictionary,
+--   },
+-- }
 
-inlayHints.setup {}
+-- inlayHints.setup {}
 
 require("lsp_lines").setup()
 
@@ -241,26 +234,26 @@ local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-
 local codelldb_path = extension_path .. "adapter/codelldb"
 local liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
 
-rustTools.setup {
-  server = {
-    on_attach = function(client, bufnr)
-      local function map(mode, l, r, opts)
-        opts = opts or {}
-        opts.buffer = bufnr
-        vim.keymap.set(mode, l, r, opts)
-      end
+-- rustTools.setup {
+--   server = {
+--     on_attach = function(client, bufnr)
+--       local function map(mode, l, r, opts)
+--         opts = opts or {}
+--         opts.buffer = bufnr
+--         vim.keymap.set(mode, l, r, opts)
+--       end
 
-      common_on_attach(client, bufnr)
+--       common_on_attach(client, bufnr)
 
-      map("n", "K", rustTools.hover_actions.hover_actions, { desc = "Hover actions" })
-      map("n", "<leader>cg", rustTools.code_action_group.code_action_group, { desc = "Code action group" })
-    end,
-    handlers = handlers,
-  },
-  dap = {
-    adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-  },
-}
+--       map("n", "K", rustTools.hover_actions.hover_actions, { desc = "Hover actions" })
+--       map("n", "<leader>cg", rustTools.code_action_group.code_action_group, { desc = "Code action group" })
+--     end,
+--     handlers = handlers,
+--   },
+--   -- dap = {
+--   --   adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+--   -- },
+-- }
 
 -- typescript.setup {
 --   server = {
@@ -305,6 +298,7 @@ require("typescript-tools").setup {
       includeInlayParameterNameHintsWhenArgumentMatchesName = false,
       includeInlayPropertyDeclarationTypeHints = false,
       includeInlayVariableTypeHints = true,
+      importModuleSpecifierPreference = "relative",
     },
   },
   on_attach = function(client, bufnr)
@@ -321,23 +315,24 @@ require("typescript-tools").setup {
 }
 
 require("mason").setup()
-require("mason-lspconfig").setup {
-  automatic_installation = true,
-  ensure_installed = {
-    "ts_ls",
-  },
-}
+-- require("mason-lspconfig").setup {
+--   automatic_installation = true,
+--   ensure_installed = {
+--     "ts_ls",
+--   },
+-- }
 
-require("mason-nvim-dap").setup {
-  automatic_installation = true,
-  ensure_installed = {
-    "node2",
-    "bash",
-  },
-  automatic_setup = true,
-}
+-- require("mason-nvim-dap").setup {
+--   automatic_installation = true,
+--   ensure_installed = {
+--     "node2",
+--     "bash",
+--   },
+--   automatic_setup = true,
+-- }
 
 local servers = {
+  "ansiblels",
   "bashls",
   "cssls",
   "cucumber_language_server",
@@ -347,9 +342,10 @@ local servers = {
   "graphql",
   "html",
   "jsonls",
+  "lua_ls",
   "pyright",
   "solargraph",
-  "lua_ls",
+  "terraform_lsp",
   "vimls",
   "yamlls",
 }
@@ -361,6 +357,40 @@ for _, server in pairs(servers) do
     capabilities = capabilities,
     handlers = handlers,
   }
+
+  -- if server == "ts_ls" then
+  --   opts.root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", ".git")
+  --   opts.init_options = {
+  --     preferences = {
+  --       includeInlayEnumMemberValueHints = true,
+  --       includeInlayFunctionLikeReturnTypeHints = true,
+  --       includeInlayFunctionParameterTypeHints = true,
+  --       includeInlayParameterNameHints = "none",
+  --       includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+  --       includeInlayPropertyDeclarationTypeHints = false,
+  --       includeInlayVariableTypeHints = true,
+  --     },
+  --   }
+  --   opts.settings = {
+  --     completions = {
+  --       completeFunctionCalls = true,
+  --     },
+  --     typescript = {
+  --       preferences = {
+  --         importModuleSpecifier = "relative",
+  --       },
+  --     },
+  --   }
+  --   opts.on_attach = function(client, bufnr)
+  --     -- Delegate on eslint
+  --     client.server_capabilities.documentFormattingProvider = false
+  --     client.server_capabilities.documentRangeFormattingProvider = false
+
+  --     vim.keymap.set("n", "<leader>rf", "<cmd>TypescriptRenameFile<CR>", { buffer = bufnr, desc = "Rename file" })
+
+  --     common_on_attach(client, bufnr)
+  --   end
+  -- end
 
   if server == "cucumber_language_server" then
     opts.settings = {
@@ -435,7 +465,8 @@ for _, server in pairs(servers) do
       yaml = {
         schemas = {
           ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-          ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = "/.gitlab/ci/*.yml",
+          ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] =
+          "/.gitlab/ci/*.yml",
           ["https://raw.githubusercontent.com/awslabs/goformation/master/schema/sam.schema.json"] = "template.yaml",
         },
         customTags = {
@@ -453,9 +484,13 @@ for _, server in pairs(servers) do
           "!Condition scalar",
           "!reference sequence",
         },
+        format = {
+          enable = true,
+        },
       },
     }
   end
 
-  lspconfig[server].setup(opts)
+  vim.lsp.config(server, opts)
+  vim.lsp.enable(server)
 end

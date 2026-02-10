@@ -34,7 +34,7 @@ M.lsp_tags_handler = {
 
       if user_data and user_data.lsp.tags then
         if vim.tbl_contains(user_data.lsp.tags, 1) then
-          vim.highlight.range(
+          vim.hl.range(
             bufnr,
             lsp_tags_ns,
             "DiagnosticUnnecessaryTag",
@@ -43,7 +43,7 @@ M.lsp_tags_handler = {
           )
         end
         if vim.tbl_contains(user_data.lsp.tags, 2) then
-          vim.highlight.range(
+          vim.hl.range(
             bufnr,
             lsp_tags_ns,
             "DiagnosticDeprecatedTag",

@@ -7,6 +7,15 @@ end
 module.setup {
   suggestion = {
     auto_trigger = true,
+    keymap = {
+      accept = false,
+      accept_word = false,
+      accept_line = false,
+      next = "<C-]>",
+      prev = "<C-}>",
+      dismiss = false,
+
+    }
   },
 }
 
