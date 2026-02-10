@@ -1,15 +1,6 @@
-[submodule "zsh/.zsh/alias-tips"]
-	path = zsh/.zsh/alias-tips
-	url = https://github.com/djui/alias-tips.git
 [submodule "submodules/i3status-rust"]
 	path = submodules/i3status-rust
 	url = https://github.com/XYunknown/i3status-rust.git
-[submodule "zsh/.zsh/zsh-quiet-accept-line"]
-	path = zsh/.zsh/zsh-quiet-accept-line
-	url = https://github.com/AdrieanKhisbe/zsh-quiet-accept-line.git
-[submodule "zsh/.zsh/fast-syntax-highlighting"]
-	path = zsh/.zsh/fast-syntax-highlighting
-	url = https://github.com/zdharma/fast-syntax-highlighting.git
 [submodule "tmux/.tmux/plugins/tpm"]
 	path = tmux/.tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
