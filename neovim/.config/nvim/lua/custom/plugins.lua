@@ -46,7 +46,7 @@ require("lazy").setup({
   "nvim-treesitter/playground",                               -- Playground for treesitter
   "romgrk/nvim-treesitter-context",                           -- Add function context while scrolling
   "windwp/nvim-ts-autotag",                                   -- Autocloses html tags
-  -- "p00f/nvim-ts-rainbow", -- Colorize parens
+  "HiPhish/rainbow-delimiters.nvim", -- Colorize matching delimiters
   { "tpope/vim-markdown",              ft = "markdown" },
   -- { "joukevandermaas/vim-ember-hbs", ft = { "handlebars", "javascript", "typescript" } },
   { "chrisbra/vim-zsh",                ft = "zsh" },

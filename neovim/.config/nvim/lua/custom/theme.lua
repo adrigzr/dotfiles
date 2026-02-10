@@ -47,9 +47,9 @@ local function setup()
     highlight! def link LspInlayHint Comment
   ]]
 
-  -- [Rainbow] Change treesitter rainbow colors
+  -- [Rainbow] Change rainbow-delimiters colors
   for i = 1, 7 do
-    vim.cmd("highlight rainbowcol" .. i .. " guifg=" .. vim.g["terminal_color_" .. i])
+    vim.api.nvim_set_hl(0, "RainbowDelimiter" .. i, { fg = vim.g["terminal_color_" .. i] })
   end
 
   -- [GitSigns] Change blame line signs
