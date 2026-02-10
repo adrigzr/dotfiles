@@ -27,7 +27,7 @@ require("lazy").setup({
   "antoinemadec/FixCursorHold.nvim",
 
   -- Icons
-  "kyazdani42/nvim-web-devicons",
+  "nvim-tree/nvim-web-devicons",
 
   -- Theme
   {
@@ -39,7 +39,7 @@ require("lazy").setup({
   },
 
   -- Statusbar
-  "hoob3rt/lualine.nvim",
+  "nvim-lualine/lualine.nvim",
   "arkav/lualine-lsp-progress",
 
   -- Search
@@ -74,7 +74,7 @@ require("lazy").setup({
   "mfussenegger/nvim-ansible",
 
   -- Navigation
-  "kyazdani42/nvim-tree.lua",
+  "nvim-tree/nvim-tree.lua",
   "christoomey/vim-tmux-navigator",
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }, -- FZF for telescope
   "nvim-telescope/telescope.nvim",                                -- Fuzzy Finder
