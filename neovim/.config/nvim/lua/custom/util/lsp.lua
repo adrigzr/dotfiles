@@ -77,8 +77,8 @@ local function document_highlight()
 end
 
 local function show_line_diagnostics()
-  -- Abort when lsp is not ready
-  if not vim.diagnostic.config().virtual_text then
+  -- Abort when virtual lines are active (they show details inline)
+  if vim.diagnostic.config().virtual_lines then
     return
   end
 
@@ -101,7 +101,6 @@ local function show_line_diagnostics()
   if #line_diagnostics ~= 0 then
     return vim.diagnostic.open_float(nil, {
       scope = "line",
-      border = "rounded",
       focusable = true,
       source = true,
       format = diagnostic.format_message,
@@ -250,7 +249,7 @@ function M.make_command(source_action)
       return
     end
 
-    local params = vim.tbl_deep_extend("force", vim.lsp.util.make_range_params(), {
+    local params = vim.tbl_deep_extend("force", vim.lsp.util.make_range_params(0, client.offset_encoding), {
       context = {
         only = { source_action },
         diagnostics = vim.diagnostic.get(bufnr),
@@ -279,11 +278,11 @@ function M.make_command(source_action)
     -- vim.pretty_print("sending source action request for action " .. source_action .. " with params", params)
 
     if opts.sync == true then
-      local res, err = client.request_sync("textDocument/codeAction", params, nil, bufnr)
+      local res, err = client:request_sync("textDocument/codeAction", params, nil, bufnr)
 
       apply_edits(res and res.err or err, res and res.result)
     else
-      client.request("textDocument/codeAction", params, apply_edits, bufnr)
+      client:request("textDocument/codeAction", params, apply_edits, bufnr)
     end
   end
 end

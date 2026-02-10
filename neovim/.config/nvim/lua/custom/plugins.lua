@@ -103,7 +103,6 @@ require("lazy").setup({
   "b0o/schemastore.nvim", -- Schemas for jsonls
   -- use "stevearc/aerial.nvim" -- Show symbols
 
-  "https://git.sr.ht/~whynothugo/lsp_lines.nvim", -- LSP lines
   -- "lvimuser/lsp-inlayhints.nvim", -- Inlay hints
   -- "jose-elias-alvarez/typescript.nvim", -- Typescript commands
   { "pmizio/typescript-tools.nvim", dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" } }, -- Typescript tools
@@ -134,7 +133,6 @@ require("lazy").setup({
   -- Misc
   "tpope/vim-repeat", -- Repeat everything
   "tpope/vim-abolish", -- Camelcase, snakecase, mixedcase coercion
-  "tpope/vim-unimpaired", -- Pair aliases and toggling options
   "mjbrownie/swapit", -- <c-a> increments
   "kopischke/vim-fetch", -- Handle line number on filename
   "tpope/vim-dispatch",

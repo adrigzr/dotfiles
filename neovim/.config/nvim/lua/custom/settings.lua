@@ -10,6 +10,7 @@ set.writebackup = false
 set.undofile = true
 
 -- View
+vim.o.winborder = "rounded"
 set.laststatus = 3 -- single status line
 set.winbar = "%f %m%r"
 set.cursorline = true
