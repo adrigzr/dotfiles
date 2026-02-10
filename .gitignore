@@ -15,4 +15,4 @@ packer_compiled.lua
 .DS_Store
 ssh/.ssh/*
 !ssh/.ssh/config
-.luarc.json
+/.luarc.json

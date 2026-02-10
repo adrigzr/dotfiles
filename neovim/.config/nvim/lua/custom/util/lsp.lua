@@ -289,7 +289,9 @@ end
 
 local ts_tools_ok, ts_tools_api = pcall(require, "typescript-tools.api")
 
+--- @type fun(opts?: table)
 M.add_missing_imports = ts_tools_ok and ts_tools_api.add_missing_imports or function() end
+--- @type fun(opts?: table)
 M.remove_unused = ts_tools_ok and ts_tools_api.remove_unused or function() end
 M.show_line_diagnostics = async.void(show_line_diagnostics)
 M.show_signature_help = async.void(show_signature_help)

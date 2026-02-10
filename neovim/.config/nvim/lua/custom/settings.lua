@@ -52,16 +52,7 @@ set.foldcolumn = "1"
 -- Format
 set.softtabstop = 2
 set.shiftwidth = 2
-set.formatoptions = ""
-set.formatoptions:append "c"
-set.formatoptions:append "r"
-set.formatoptions:append "o"
-set.formatoptions:append "q"
-set.formatoptions:append "n"
-set.formatoptions:append "2"
-set.formatoptions:append "l"
-set.formatoptions:append "1"
-set.formatoptions:append "j"
+set.formatoptions = "croqn21lj"
 
 -- Search
 set.gdefault = true

@@ -162,7 +162,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
       { desc = "Apply quickfix code action" }
     )
     map("n", "<leader>cd", function()
-      local config = vim.diagnostic.config()
+      local config = vim.diagnostic.config() or {}
 
       vim.diagnostic.config {
         virtual_lines = not config.virtual_lines,

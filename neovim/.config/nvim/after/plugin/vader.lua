@@ -9,7 +9,7 @@ local function exercism_tests()
     local testfile = string.format("%s/%s.vader", vim.fn.expand "%:p:h", vim.fn.expand("%:p:h:t"):gsub("-", "_"))
 
     if vim.fn.filereadable(testfile) == 0 then
-      vim.api.nvim_err_writeln("File does not exist: " .. testfile)
+      vim.notify("File does not exist: " .. testfile, vim.log.levels.ERROR)
       return
     end
 
@@ -19,7 +19,7 @@ local function exercism_tests()
     local sourcefile = string.format("%s/%s.vim", vim.fn.expand "%:p:h", vim.fn.expand("%:p:h:t"):gsub("-", "_"))
 
     if vim.fn.filereadable(sourcefile) == 0 then
-      vim.api.nvim_err_writeln("File does not exist: " .. sourcefile)
+      vim.notify("File does not exist: " .. sourcefile, vim.log.levels.ERROR)
       return
     end
 
