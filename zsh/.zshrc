@@ -45,11 +45,24 @@ fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
+# Cache and source a tool's init output (regenerates when binary changes).
+_cached_eval() {
+  local cmd=$1; shift
+  local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+  local cache_file="$cache_dir/$cmd.zsh"
+  local bin_path="${commands[$cmd]}"
+  if [[ ! -f "$cache_file" || "$bin_path" -nt "$cache_file" ]]; then
+    mkdir -p "$cache_dir"
+    "$cmd" "$@" > "$cache_file"
+  fi
+  source "$cache_file"
+}
+
 # Starship prompt.
-(( $+commands[starship] )) && eval "$(starship init zsh)"
+(( $+commands[starship] )) && _cached_eval starship init zsh
 
 # Zoxide (smart cd).
-(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+(( $+commands[zoxide] )) && _cached_eval zoxide init zsh
 
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }

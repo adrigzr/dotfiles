@@ -56,22 +56,6 @@ export NOTE_DIR="$HOME/Dropbox/Texts"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob \!.git --follow 2> /dev/null"
 export FZF_DEFAULT_OPTS="--reverse --ansi "
 
-# Ruby (cached gem path to avoid slow subprocess on every shell start).
-if command -v ruby >/dev/null 2>&1 && command -v gem >/dev/null 2>&1; then
-  _ruby_version="$(ruby -e 'print RUBY_VERSION')"
-  _gem_cache="${XDG_CONFIG_HOME:-$HOME/.config}/gem_path_cache"
-  if [ -f "$_gem_cache" ] && [ "$(head -1 "$_gem_cache")" = "$_ruby_version" ]; then
-    PATH="$(tail -1 "$_gem_cache")/bin:$PATH"
-  else
-    _gem_dir="$(ruby -r rubygems -e 'puts Gem.user_dir')"
-    mkdir -p "$(dirname "$_gem_cache")"
-    printf '%s\n%s\n' "$_ruby_version" "$_gem_dir" > "$_gem_cache"
-    PATH="$_gem_dir/bin:$PATH"
-    unset _gem_dir
-  fi
-  unset _ruby_version _gem_cache
-fi
-
 # Fix GPG
 export GPG_TTY=$(tty)
 

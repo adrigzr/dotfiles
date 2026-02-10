@@ -16,18 +16,24 @@ if [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
 	done
 fi
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
 # Load fnm (fast node manager).
 if command -v fnm >/dev/null 2>&1; then
 	eval "$(fnm env --use-on-cd)"
 fi
 
-# Load rvm.
+# Lazy-load rvm: add bin to PATH now, defer heavy init until first use.
 if [ -f "$HOME/.rvm/scripts/rvm" ]; then
 	export PATH="$PATH:$HOME/.rvm/bin"
-	source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+	_load_rvm() {
+		unset -f _load_rvm ruby gem rvm irb bundle rake 2>/dev/null
+		source "$HOME/.rvm/scripts/rvm"
+	}
+	ruby()   { _load_rvm; ruby "$@"; }
+	gem()    { _load_rvm; gem "$@"; }
+	rvm()    { _load_rvm; rvm "$@"; }
+	irb()    { _load_rvm; irb "$@"; }
+	bundle() { _load_rvm; bundle "$@"; }
+	rake()   { _load_rvm; rake "$@"; }
 fi
 
 # vim: ft=sh
