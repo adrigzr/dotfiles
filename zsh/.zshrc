@@ -6,6 +6,9 @@ HISTFILE=~/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
 
+# Deduplicate PATH and fpath entries.
+typeset -U path fpath
+
 # Custom functions.
 fpath=( "$HOME/.zfunctions" $fpath )
 
@@ -43,10 +46,10 @@ fi
 source ${ZIM_HOME}/init.zsh
 
 # Starship prompt.
-eval "$(starship init zsh)"
+(( $+commands[starship] )) && eval "$(starship init zsh)"
 
 # Zoxide (smart cd).
-eval "$(zoxide init zsh)"
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }

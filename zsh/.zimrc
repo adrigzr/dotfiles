@@ -43,5 +43,5 @@ zmodule djui/alias-tips
 # Fast syntax highlighting
 zmodule zdharma-continuum/fast-syntax-highlighting
 
-# Quiet accept line
-zmodule AdrieanKhisbe/zsh-quiet-accept-line --name quiet-accept-line
+# Quiet accept line (--source avoids zcompile hitting shpec test files).
+zmodule AdrieanKhisbe/zsh-quiet-accept-line --name quiet-accept-line --source quiet-accept-line.plugin.zsh
