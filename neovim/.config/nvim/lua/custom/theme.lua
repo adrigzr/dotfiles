@@ -61,7 +61,6 @@ local function setup()
   -- [LSP]
   vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { bold = true, fg = colors.blue })
   vim.api.nvim_set_hl(0, "DiagnosticUnnecessaryTag", { fg = colors.grey })
-  vim.api.nvim_set_hl(0, "LightBulbVirtualText", { fg = colors.blue })
   vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { italic = true, fg = colors.red })
   vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { italic = true, fg = colors.yellow })
   vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { italic = true, fg = colors.cyan })
@@ -93,41 +92,6 @@ local function setup()
   vim.api.nvim_set_hl(0, "HydraAmaranth", { fg = colors.cyan })
   vim.api.nvim_set_hl(0, "HydraTeal", { fg = colors.green })
   vim.api.nvim_set_hl(0, "HydraPink", { fg = colors.orange })
-
-  -- [Notify]
-  local levels = {
-    error = {
-      Border = colors.dark_red,
-      Icon = colors.red,
-      Title = colors.red,
-    },
-    warn = {
-      Border = colors.dark_yellow,
-      Icon = colors.yellow,
-      Title = colors.yellow,
-    },
-    info = {
-      Border = colors.dark_cyan,
-      Icon = colors.cyan,
-      Title = colors.cyan,
-    },
-    debug = {
-      Border = colors.dark_purple,
-      Icon = colors.purple,
-      Title = colors.purple,
-    },
-    trace = {
-      Border = colors.dark_purple,
-      Icon = colors.purple,
-      Title = colors.purple,
-    },
-  }
-
-  for level, parts in pairs(levels) do
-    for part, color in pairs(parts) do
-      vim.api.nvim_set_hl(0, "Notify" .. level:upper() .. part, { fg = color })
-    end
-  end
 end
 
 vim.cmd [[

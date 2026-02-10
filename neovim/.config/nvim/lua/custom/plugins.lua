@@ -35,7 +35,6 @@ require("lazy").setup({
 
   -- Statusbar
   "nvim-lualine/lualine.nvim",
-  "arkav/lualine-lsp-progress",
 
   -- Search
   "windwp/nvim-spectre",
@@ -78,8 +77,12 @@ require("lazy").setup({
   "debugloop/telescope-undo.nvim",
   "rgroli/other.nvim", -- Switch to alternate file
 
-  -- Start screen
-  "glepnir/dashboard-nvim",
+  -- Snacks (dashboard, notifier, LSP progress)
+  {
+    "folke/snacks.nvim",
+    lazy = false,
+    priority = 1000,
+  },
 
   -- Git
   "tpope/vim-fugitive",        -- Git commands
@@ -175,7 +178,7 @@ require("lazy").setup({
   -- use "stevearc/stickybuf.nvim" -- Prevent special windows to be switched to other buffer
   "kevinhwang91/nvim-ufo", -- Pretty folds
   -- "ThePrimeagen/refactoring.nvim", -- Refactoring tools
-  "rcarriga/nvim-notify",  -- Notifications and messages
+
   -- "anuvyklack/hydra.nvim", -- Hydra
   -- { "neomake/neomake", lazy = false }, -- Make presets
   {

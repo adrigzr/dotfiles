@@ -26,7 +26,7 @@ module.setup {
   sections = {
     lualine_a = { "mode" },
     lualine_b = { "branch", diagnostics },
-    lualine_c = { "lsp_progress" },
+    lualine_c = {},
     lualine_x = { "encoding" },
     lualine_y = { "fileformat", "filetype" },
     lualine_z = { "location" },
