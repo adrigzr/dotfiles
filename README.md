@@ -19,6 +19,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
    brew install git wget ripgrep fzf stow gnu-sed editorconfig bat gpg gawk htop ffmpeg jq fd moreutils git-delta
    brew install starship fnm zoxide
    brew install stylua selene
+   brew install lazygit gh ast-grep imagemagick
    brew install iterm2
    brew install tmux
    brew install neovim
@@ -130,3 +131,20 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 - **[fd](https://github.com/sharkdp/fd)** -- Fast find
 - **[bat](https://github.com/sharkdp/bat)** -- cat with syntax highlighting
 - **[delta](https://github.com/dandavella/delta)** -- Git diff pager
+
+## Neovim Dependencies
+
+External tools required by Neovim plugins. All installed via `brew install`.
+
+| Package | Required by | Purpose |
+|---------|-------------|---------|
+| `ripgrep` | telescope, grug-far, Snacks.picker | Live grep and search |
+| `fd` | telescope, Snacks.picker | File finder |
+| `git` | diffview, CopilotChat, telescope | VCS integration |
+| `node` | copilot.lua, nvim-treesitter | Copilot LSP, parser builds |
+| `lazygit` | Snacks.lazygit | Terminal UI for git |
+| `gh` | CopilotChat | GitHub CLI for improved auth |
+| `ast-grep` | grug-far | Structural code search |
+| `imagemagick` | Snacks.image | Image conversion and display |
+| `stylua` | CI, formatting | Lua code formatter |
+| `selene` | linting | Lua linter |
