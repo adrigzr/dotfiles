@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-source $HOME/.config/i3/scripts/wallpaper
-

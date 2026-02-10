@@ -1,6 +1,3 @@
-[submodule "submodules/i3status-rust"]
-	path = submodules/i3status-rust
-	url = https://github.com/XYunknown/i3status-rust.git
 [submodule "tmux/.tmux/plugins/tpm"]
 	path = tmux/.tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm

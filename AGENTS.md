@@ -1,17 +1,18 @@
 # AGENTS.md
 
-Personal dotfiles repository managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory is a stow package that mirrors `$HOME`. The heaviest component is the Neovim configuration (~59 Lua files under `neovim/.config/nvim/`, 100% Lua -- no VimScript).
+Personal dotfiles repository managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory is a stow package that mirrors `$HOME`. The heaviest component is the Neovim configuration (~70 Lua files under `neovim/.config/nvim/`, 100% Lua -- no VimScript).
 
 ## Repository Structure
 
 ```
-asdf/        - asdf version manager config
 bash/        - Bash shell config
 eslint/      - Global ESLint config
 fonts/       - Nerd Font patched fonts
 git/         - Git config, custom git subcommands (git/bin/)
-i3/          - i3 window manager config + scripts
+i3/          - i3 window manager config + scripts (Linux)
+iterm2/      - iTerm2 terminfo overrides
 neovim/      - Full Neovim config (Lua, lazy.nvim)
+ruby/        - Ruby config
 ssh/         - SSH client config
 system/      - Shared shell config (.profile, .exports, .aliases, .functions)
 tmux/        - tmux config with TPM plugins
@@ -44,7 +45,7 @@ selene neovim/.config/nvim/lua/
 selene neovim/.config/nvim/lua/custom/settings.lua   # single file
 ```
 
-Config: `selene.toml` (std=vim, lua51 base) + `vim.toml` (vim globals).
+Config: `selene.toml` (std=vim) + `vim.toml` (lua51 base, vim globals).
 
 ### Deploying Changes
 
@@ -96,6 +97,8 @@ return M
 
 Plugin configuration lives in `after/plugin/*.lua` (side-effect files, no return).
 
+LSP server configurations live in `lsp/*.lua` (Neovim 0.11+ `vim.lsp.config` style, one file per server).
+
 Early-load settings live in `plugin/*.lua` (vim.g variables, autocmds, user commands).
 
 ### Error Handling
@@ -145,7 +148,7 @@ General keymaps live in `plugin/mappings.lua`. Plugin-specific keymaps live in t
 - Interactive functions (`.functions`): `function name() { ... }` with explicit keyword
 - Standalone scripts: POSIX-style `name() { ... }` without keyword
 - **`local`** + `lowercase_snake_case` for function-scoped: `local port="${1:-9000}"`
-- **`UPPER_SNAKE_CASE`** for exports: `export VOLTA_HOME="${HOME}/.volta"`
+- **`UPPER_SNAKE_CASE`** for exports: `export XDG_CONFIG_HOME="$HOME/.config"`
 - **Double-quote** variables: `"$HOME"`, `"$1"`, `"$file"`; use `${var:-default}` for defaults
 - Source guard: `[ -s "$HOME/.profile" ] && source "$HOME/.profile"`
 - Aliases organized by category in `system/.aliases`; single-letter shortcuts: `g`=git, `v`=nvim
@@ -159,14 +162,13 @@ General keymaps live in `plugin/mappings.lua`. Plugin-specific keymaps live in t
 
 ## Editor / Tooling Config Summary
 
-| Tool       | Config File       | Purpose                                    |
-|------------|-------------------|--------------------------------------------|
-| StyLua     | `stylua.toml`     | Lua formatter (spaces, 2-width, no parens) |
-| Selene     | `selene.toml`     | Lua linter (vim std, lua51)                |
-| Vint       | `.vintrc.yaml`    | Vim script linter (neovim, style severity) |
-| ESLint     | `eslint/.eslintrc`| JS linter (ES6, single quotes, 2-space)    |
-| EditorConfig| `.editorconfig`  | Universal: LF, 2-space, trim whitespace    |
-| Lua LSP    | `.luarc.json`     | Disable third-party workspace checking     |
+| Tool       | Config File                          | Purpose                                    |
+|------------|--------------------------------------|--------------------------------------------|
+| StyLua     | `stylua.toml`                        | Lua formatter (spaces, 2-width, no parens) |
+| Selene     | `selene.toml` + `vim.toml`           | Lua linter (vim std, lua51 base)           |
+| ESLint     | `eslint/.eslintrc`                   | JS linter (ES6, single quotes, 2-space)    |
+| EditorConfig| `.editorconfig`                     | Universal: LF, 2-space, trim whitespace    |
+| Lua LSP    | `neovim/.config/nvim/.luarc.json`    | Disable third-party workspace checking     |
 
 ## CI
 

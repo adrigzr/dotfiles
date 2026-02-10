@@ -1,5 +1,7 @@
 # dotfiles
 
+Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
+
 ## Installation
 
 ### Mac OS
@@ -11,39 +13,34 @@
    sudo xcode-select --install
    ```
 
-1. Install [brew](https://brew.sh/index_es) and useful packages.
+1. Install [brew](https://brew.sh) and useful packages.
 
    ```bash
    brew install git wget ripgrep fzf stow gnu-sed editorconfig bat gpg gawk htop ffmpeg jq fd moreutils git-delta
    brew install starship fnm zoxide
+   brew install stylua selene
    brew install iterm2
-   brew install tmux --HEAD
-   brew install neovim --HEAD
+   brew install tmux
+   brew install neovim
    ```
 
-1. Install [fnm](https://github.com/Schniz/fnm) (fast node manager)
+1. Install latest LTS Node via [fnm](https://github.com/Schniz/fnm) (installed above).
 
    ```bash
    fnm install --lts
-   npm install -g neovim yarn prettier bash-language-server
+   npm install -g prettier
    ```
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
-1. Setup python packages
+1. Setup python packages.
 
    ```bash
    pip3 install --upgrade pip
-   pip3 install neovim vim-vint
+   pip3 install pynvim
    ```
 
-1. Setup ruby
-
-   ```bash
-   gem install --user neovim
-   ```
-
-1. Create default files and directories to prevent stow from colliding
+1. Create default files and directories to prevent stow from colliding.
 
    ```bash
    mkdir -p ~/.config ~/.ssh/control
@@ -53,16 +50,16 @@
 
    ```bash
    git clone --recurse-submodules -j8 https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
-   stow git neovim ssh system tmux zsh
+   stow git neovim ssh system tmux zsh iterm2 ruby
    ```
 
-1. Copy fonts (restart may be required)
+1. Copy fonts (restart may be required).
 
    ```bash
    cp -r fonts/* ~/Library/Fonts
    ```
 
-1. Setup zsh & [zim](https://github.com/zimfw/zimfw)
+1. Setup zsh & [zim](https://github.com/zimfw/zimfw).
 
    zimfw is auto-downloaded on first shell start. Just open a new zsh session, then:
 
@@ -70,7 +67,7 @@
    zimfw install
    ```
 
-1. Setup tmux & [tpm](https://github.com/tmux-plugins/tpm)
+1. Setup tmux & [tpm](https://github.com/tmux-plugins/tpm).
 
    ```bash
    tic -x iterm2/xterm-256color.terminfo
@@ -81,7 +78,7 @@
    ~/.tmux/plugins/tpm/bin/install_plugins
    ```
 
-1. Tweak Mac OS default settings
+1. Tweak Mac OS default settings.
 
    Reduce key repeat delay:
 
@@ -97,11 +94,39 @@
    defaults write com.apple.notificationcenterui bannerTime -int 1
    ```
 
-1. Open iterm2 and setup profile
+1. Open iterm2 and setup profile.
 
-1. Setup neovim
+1. Setup neovim.
 
    ```text
-   Lazy sync
-   checkhealth
+   :Lazy sync
+   :checkhealth
    ```
+
+## Packages
+
+| Package   | Description                                          |
+|-----------|------------------------------------------------------|
+| `bash`    | Bash shell config                                    |
+| `eslint`  | Global ESLint config                                 |
+| `fonts`   | Nerd Font patched fonts                              |
+| `git`     | Git config, custom git subcommands (`git/bin/`)      |
+| `i3`      | i3 window manager config + scripts (Linux)           |
+| `iterm2`  | iTerm2 terminfo overrides                            |
+| `neovim`  | Full Neovim config (Lua, lazy.nvim)                  |
+| `ruby`    | Ruby config                                          |
+| `ssh`     | SSH client config                                    |
+| `system`  | Shared shell config (`.profile`, `.exports`, `.aliases`, `.functions`) |
+| `tmux`    | tmux config with TPM plugins                         |
+| `zsh`     | Zsh config with Zim framework                        |
+
+## Shell Tools
+
+- **[starship](https://starship.rs)** -- Cross-shell prompt
+- **[zoxide](https://github.com/ajeetdsouza/zoxide)** -- Smart `cd` replacement
+- **[fnm](https://github.com/Schniz/fnm)** -- Fast Node version manager
+- **[fzf](https://github.com/junegunn/fzf)** -- Fuzzy finder
+- **[ripgrep](https://github.com/BurntSushi/ripgrep)** -- Fast grep
+- **[fd](https://github.com/sharkdp/fd)** -- Fast find
+- **[bat](https://github.com/sharkdp/bat)** -- cat with syntax highlighting
+- **[delta](https://github.com/dandavella/delta)** -- Git diff pager
