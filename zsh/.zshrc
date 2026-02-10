@@ -46,6 +46,9 @@ source ${ZIM_HOME}/init.zsh
 # Starship prompt.
 eval "$(starship init zsh)"
 
+# Zoxide (smart cd).
+eval "$(zoxide init zsh)"
+
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }
 zle -N zle-keymap-select

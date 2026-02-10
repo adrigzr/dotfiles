@@ -20,9 +20,6 @@ zmodule utility
 # Provides archive and unarchive functions for easy archive manipulation.
 zmodule archive
 
-# Fasd
-zmodule fasd
-
 # Provides a convenient way to load ssh-agent.
 zmodule ssh
 
