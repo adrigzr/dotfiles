@@ -7,7 +7,7 @@ done
 unset file
 
 # generic colouriser
-GRC=$(which grc)
+GRC=$(command -v grc)
 if [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
 	alias colourify="$GRC -es --colour=auto"
 	alias configure='colourify ./configure'
@@ -29,14 +29,5 @@ if [ -f "$HOME/.rvm/scripts/rvm" ]; then
 	export PATH="$PATH:$HOME/.rvm/bin"
 	source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
-
-# Load rust.
-# [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-
-# Load travis.
-# [ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
-
-# Load jabba.
-# [ -f "$HOME/.jabba/jabba.sh" ] && source "$HOME/.jabba/jabba.sh" >/dev/null
 
 # vim: ft=sh

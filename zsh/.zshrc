@@ -1,27 +1,17 @@
 # uncomment to profile prompt startup with zprof
 # zmodload zsh/zprof
 
-# history
+# History.
+HISTFILE=~/.zsh_history
+HISTSIZE=100000
 SAVEHIST=100000
 
 # Custom functions.
-fpath=( "$HOME/.zfunctions" "$HOME/.ripgrep/complete" "/usr/local/share/doc/task/scripts/zsh" $fpath )
-
-# Termite support.
-# Tell Termite what the current directory is.
-if [[ $TERM == xterm-termite ]]; then
-  source /etc/profile.d/vte.sh
-  __vte_osc7
-  export TERM='xterm-256color'
-fi
+fpath=( "$HOME/.zfunctions" $fpath )
 
 # Config autosuggestions.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=59"
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-ZSH_AUTOSUGGEST_USE_ASYNC=true
-
-# zsh-syntax-highlighting
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
 # Remove path separator from WORDCHARS.
 WORDCHARS=${WORDCHARS//[\/]}
@@ -62,30 +52,28 @@ eval "$(zoxide init zsh)"
 function zle-keymap-select { zle reset-prompt ; zle -R }
 zle -N zle-keymap-select
 bindkey -v
-# bindkey -e
-export KEYTIMEOUT=1
+KEYTIMEOUT=1
 
 # Edit command line on vim.
 autoload edit-command-line; zle -N edit-command-line
 bindkey -M vicmd '^e' edit-command-line
 bindkey '^x^e' edit-command-line
 
-# bind UP and DOWN arrow keys for history search plugin
+# Keybindings (terminfo-based, guarded against missing keys).
 zmodload zsh/terminfo
-bindkey "$terminfo[khome]" beginning-of-line # Home
-bindkey "$terminfo[kend]" end-of-line # End
-bindkey "$terminfo[kdch1]" delete-char # Delete
-bindkey "$terminfo[kich1]" overwrite-mode # Insert
-bindkey "$terminfo[kbs]" backward-delete-char # Backspace
-bindkey "$terminfo[kpp]" beginning-of-buffer-or-history # PageUp
-bindkey "$terminfo[knp]" end-of-buffer-or-history # PageDown
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
+[[ -n "$terminfo[khome]" ]] && bindkey "$terminfo[khome]" beginning-of-line
+[[ -n "$terminfo[kend]"  ]] && bindkey "$terminfo[kend]"  end-of-line
+[[ -n "$terminfo[kdch1]" ]] && bindkey "$terminfo[kdch1]" delete-char
+[[ -n "$terminfo[kich1]" ]] && bindkey "$terminfo[kich1]" overwrite-mode
+[[ -n "$terminfo[kbs]"   ]] && bindkey "$terminfo[kbs]"   backward-delete-char
+[[ -n "$terminfo[kpp]"   ]] && bindkey "$terminfo[kpp]"   beginning-of-buffer-or-history
+[[ -n "$terminfo[knp]"   ]] && bindkey "$terminfo[knp]"   end-of-buffer-or-history
+[[ -n "$terminfo[kcuu1]" ]] && bindkey "$terminfo[kcuu1]" history-substring-search-up
+[[ -n "$terminfo[kcud1]" ]] && bindkey "$terminfo[kcud1]" history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
 # Autoload functions.
-autoload -U vim
 autoload -U zle-select-branch; zle -N zle-select-branch; bindkey '^B' zle-select-branch
 autoload -U zle-select-tag; zle -N zle-select-tag; bindkey '^G' zle-select-tag
 
