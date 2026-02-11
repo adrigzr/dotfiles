@@ -32,5 +32,6 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "SnacksDashboardOpened",
   callback = function()
     vim.b.minitrailspace_disable = true
+    trailspace.unhighlight()
   end,
 })
