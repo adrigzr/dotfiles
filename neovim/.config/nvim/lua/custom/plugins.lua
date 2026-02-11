@@ -115,20 +115,14 @@ require("lazy").setup({
   },
 
   -- Completion
-  "hrsh7th/nvim-cmp",
-  "hrsh7th/cmp-nvim-lsp",
-  "hrsh7th/cmp-buffer",
-  "hrsh7th/cmp-path",
-  "hrsh7th/cmp-cmdline",
-  "hrsh7th/cmp-nvim-lua",
-  "hrsh7th/cmp-calc",
-  "ray-x/cmp-treesitter",
-  "f3fora/cmp-spell",
-  "onsails/lspkind-nvim", -- Pretty completion items
-  "saadparwaiz1/cmp_luasnip",
-  "petertriho/cmp-git",
-  { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
-  "rafamadriz/friendly-snippets",
+  {
+    "saghen/blink.cmp",
+    version = "1.*",
+    dependencies = {
+      { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
+      "rafamadriz/friendly-snippets",
+    },
+  },
 
   -- Misc
   -- "tpope/vim-repeat", -- Removed: modern Lua plugins handle dot-repeat natively
