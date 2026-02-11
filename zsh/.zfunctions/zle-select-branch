@@ -1,6 +1,20 @@
 print -n '…'
-LBUFFER+="$(select_branch)"
+
+local branches=$(git branch --all --sort=-committerdate 2>/dev/null)
+if [ -z "$branches" ]; then
+  zle reset-prompt
+  return 1
+fi
+
+local branch=$(echo "$branches" | awk '{ if ($1 != "*") { print $1 } }' |
+  sed -e 's/remotes\///' -e 's/origin\///' | awk '!x[$0]++' |
+  _fzf_tmux_popup --pipe --no-sort --tiebreak=index --toggle-sort=\` --select-1 --exit-0)
 local ret=$?
+
+if [ $ret -eq 0 ] && [ -n "$branch" ]; then
+  LBUFFER+="$branch"
+fi
+
 zle redisplay
 typeset -f zle-line-init >/dev/null && zle zle-line-init
 _zsh_autosuggest_clear

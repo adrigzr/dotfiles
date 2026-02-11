@@ -25,7 +25,7 @@ function la() {
 function log() {
   git log --graph --color=always \
     --format="%C(auto)%h%d %s %C(black)%C(bold)%C(white)%cr %Creset(%C(green)%cn <%ce>)" "$@" |
-  fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` \
+  fzf --tmux center,80%,60% --no-sort --tiebreak=index --toggle-sort=\` \
       --bind "ctrl-m:execute:
                 echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
                 xargs -I % sh -c 'git show --color=always % | less -R'"
@@ -100,8 +100,7 @@ function select_branch() {
 
   local branch=$(echo "$branches" | awk '{ if ($1 != "*") { print $1 } }' |
     sed -e 's/remotes\///' -e 's/origin\///' | awk '!x[$0]++' |
-    fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
-    --exit-0 --height=10 --query="$@")
+    fzf --tmux center,80%,60% --no-sort --tiebreak=index --toggle-sort=\` --select-1 --exit-0 --query="$@")
 
   if [ -z "$branch" ]; then
     return 1
@@ -121,8 +120,7 @@ function select_tag() {
   fi
 
   local tag=$(echo "$tags" | awk '!x[$0]++' |
-    fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --select-1 --inline-info \
-    --exit-0 --height=10 --query="$@")
+    fzf --tmux center,80%,60% --no-sort --tiebreak=index --toggle-sort=\` --select-1 --exit-0 --query="$@")
 
   if [ -z "$tag" ]; then
     return 1
@@ -135,8 +133,9 @@ function select_tag() {
 
 # Fuzzy vim
 function fvim() {
-  local files=$(fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` --multi --select-1 --inline-info \
-    --exit-0 --height=10 --query="$@")
+  local files=$(fzf --tmux center,80%,60% --multi --select-1 --exit-0 --query="$@" \
+    --preview 'bat --color=always --style=numbers --line-range :500 --theme=TwoDark {}' \
+    --preview-window 'right:60%:wrap')
 
   if [ -z "$files" ]; then
     return 1
@@ -206,12 +205,9 @@ function n() {
     file=$(find "${NOTE_DIR}" -name "*.md" | \
       sed -e "s|${NOTE_DIR}/||" | \
       sed -e 's/\.md$//' | \
-      fzf \
-        --multi \
-        --select-1 \
-        --exit-0 \
-        --preview="cat ${NOTE_DIR}/{}.md" \
-        --preview-window=right:70%:wrap)
+      fzf --tmux center,80%,60% --multi --select-1 --exit-0 \
+        --preview="bat --color=always --style=numbers --theme=TwoDark ${NOTE_DIR}/{}.md" \
+        --preview-window=right:60%:wrap)
     [[ -n $file ]] && \
       ${EDITOR:-vim} "${NOTE_DIR}/${file}.md"
   else
@@ -263,6 +259,75 @@ function killport() {
   local port="${1}"
 
   kill $(lsof -t -i:$port)
+}
+
+# Helper for running fzf in tmux popup from ZLE widgets.
+# Handles piped input and argument quoting across the tmux popup boundary.
+# Pass --pipe as the FIRST argument when piping data into fzf.
+# Usage: echo "items" | _fzf_tmux_popup --pipe [fzf-args...]
+#   or:  _fzf_tmux_popup [fzf-args...]  (uses FZF_DEFAULT_COMMAND)
+function _fzf_tmux_popup() {
+  setopt localoptions clobber
+
+  local tmpdir="${TMPDIR:-/tmp}/fzf-popup-$$"
+  mkdir -p "$tmpdir"
+
+  local has_input=0
+  if [ "$1" = "--pipe" ]; then
+    shift
+    cat > "$tmpdir/input"
+    has_input=1
+  fi
+
+  if [ -n "$TMUX" ]; then
+    # Dump env vars for the popup's bash subprocess.
+    export -p | grep -E '^export (FZF_DEFAULT_COMMAND|FZF_DEFAULT_OPTS|PATH)=' > "$tmpdir/env"
+
+    # Build a self-contained bash script to avoid quoting issues.
+    {
+      echo '#!/usr/bin/env bash'
+      echo "source '$tmpdir/env'"
+      if [ "$has_input" -eq 1 ]; then
+        echo "cat '$tmpdir/input' | fzf ${(j: :)${(qq)@}} > '$tmpdir/output'"
+      else
+        echo "fzf ${(j: :)${(qq)@}} > '$tmpdir/output'"
+      fi
+    } > "$tmpdir/run.sh"
+    chmod +x "$tmpdir/run.sh"
+
+    tmux popup -d "$PWD" -w 80% -h 60% -E "$tmpdir/run.sh"
+  else
+    if [ "$has_input" -eq 1 ]; then
+      fzf "$@" < "$tmpdir/input" > "$tmpdir/output"
+    else
+      fzf "$@" > "$tmpdir/output"
+    fi
+  fi
+
+  local ret=1
+  if [ -s "$tmpdir/output" ]; then
+    cat "$tmpdir/output"
+    ret=0
+  fi
+
+  command rm -rf "$tmpdir"
+  return $ret
+}
+
+# Directory jump with fzf.
+function select_directory() {
+  local dir=$(fd --type d --hidden --exclude .git --exclude node_modules 2>/dev/null |
+    fzf --tmux center,80%,60% --select-1 --exit-0 --query="$@" \
+      --preview 'ls -lah {}' \
+      --preview-window 'right:60%:wrap')
+
+  if [ -z "$dir" ]; then
+    return 1
+  fi
+
+  echo -n "$dir"
+
+  return 0
 }
 
 # vim: ft=zsh

@@ -54,7 +54,15 @@ export NOTE_DIR="$HOME/Dropbox/Texts"
 
 # Fzf
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob \!.git --follow 2> /dev/null"
-export FZF_DEFAULT_OPTS="--reverse --ansi "
+export FZF_DEFAULT_OPTS="
+  --reverse
+  --ansi
+  --bind ctrl-d:half-page-down,ctrl-u:half-page-up
+  --color fg:#abb2bf,bg:#282c34,hl:#61afef
+  --color fg+:#ffffff,bg+:#3e4452,hl+:#61afef
+  --color info:#98c379,prompt:#61afef,pointer:#e06c75
+  --color marker:#e5c07b,spinner:#61afef,header:#98c379
+"
 
 # Fix GPG
 export GPG_TTY=$(tty)

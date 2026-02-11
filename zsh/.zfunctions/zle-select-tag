@@ -1,6 +1,19 @@
 print -n '…'
-LBUFFER+="$(select_tag)"
+
+local tags=$(git tag --sort=-committerdate 2>/dev/null)
+if [ -z "$tags" ]; then
+  zle reset-prompt
+  return 1
+fi
+
+local tag=$(echo "$tags" | awk '!x[$0]++' |
+  _fzf_tmux_popup --pipe --no-sort --tiebreak=index --toggle-sort=\` --select-1 --exit-0)
 local ret=$?
+
+if [ $ret -eq 0 ] && [ -n "$tag" ]; then
+  LBUFFER+="$tag"
+fi
+
 zle redisplay
 typeset -f zle-line-init >/dev/null && zle zle-line-init
 _zsh_autosuggest_clear

@@ -92,12 +92,9 @@ bindkey -M vicmd 'j' history-substring-search-down
 # Autoload functions.
 autoload -U zle-select-branch; zle -N zle-select-branch; bindkey '^B' zle-select-branch
 autoload -U zle-select-tag; zle -N zle-select-tag; bindkey '^G' zle-select-tag
-
-# Custom bindings.
-bindkey -s '^P' "fvim\n"
-
-# History backwards
-bindkey '^r' history-incremental-search-backward
+autoload -U zle-fvim; zle -N zle-fvim; bindkey '^P' zle-fvim
+autoload -U zle-history-search; zle -N zle-history-search; bindkey '^R' zle-history-search
+autoload -U zle-select-directory; zle -N zle-select-directory; bindkey '^F' zle-select-directory
 
 # Bind autosuggestions.
 bindkey '^A' autosuggest-accept

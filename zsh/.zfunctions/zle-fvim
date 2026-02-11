@@ -1,0 +1,14 @@
+local output=$(_fzf_tmux_popup --multi \
+  --preview 'bat --color=always --style=numbers --line-range :500 --theme=TwoDark {}' \
+  --preview-window 'right:60%:wrap')
+local ret=$?
+
+if [ $ret -eq 0 ] && [ -n "$output" ]; then
+  local -a files=("${(f)output}")
+  ${EDITOR:-vim} "${files[@]}"
+fi
+
+zle reset-prompt
+return $ret
+
+# vim: ft=zsh
