@@ -4,11 +4,35 @@ if not exists then
   return
 end
 
+local trouble_ok, trouble_sources = pcall(require, "trouble.sources.snacks")
+
 snacks.setup {
   input = {},
   terminal = {},
   indent = {
     animate = { enabled = false },
+  },
+  picker = {
+    ui_select = true,
+    sources = {
+      files = {
+        hidden = true,
+        exclude = { ".git", "node_modules" },
+      },
+      grep = {
+        hidden = true,
+        exclude = { ".git", "node_modules", "yarn.lock" },
+      },
+    },
+    actions = trouble_ok and trouble_sources.actions or {},
+    win = {
+      input = {
+        keys = {
+          ["<Esc>"] = { "close", mode = { "n", "i" } },
+          ["<c-t>"] = trouble_ok and { "trouble_open", mode = { "n", "i" } } or nil,
+        },
+      },
+    },
   },
   dashboard = {
     preset = {
@@ -22,9 +46,30 @@ snacks.setup {
       }, "\n"),
       keys = {
         { icon = " ", key = "n", desc = "New file", action = ":enew" },
-        { icon = " ", key = "f", desc = "Find file", action = ":Telescope find_files" },
-        { icon = " ", key = "g", desc = "Find word", action = ":Telescope live_grep" },
-        { icon = " ", key = "r", desc = "Recent files", action = ":Telescope oldfiles" },
+        {
+          icon = " ",
+          key = "f",
+          desc = "Find file",
+          action = function()
+            Snacks.picker.files()
+          end,
+        },
+        {
+          icon = " ",
+          key = "g",
+          desc = "Find word",
+          action = function()
+            Snacks.picker.grep()
+          end,
+        },
+        {
+          icon = " ",
+          key = "r",
+          desc = "Recent files",
+          action = function()
+            Snacks.picker.recent()
+          end,
+        },
         { icon = " ", key = "q", desc = "Quit", action = ":qa" },
       },
     },

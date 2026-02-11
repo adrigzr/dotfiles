@@ -5,7 +5,6 @@ if not ok then
 end
 
 local bind = require("custom.util.misc").bind
-local telescope_builtin = require "telescope.builtin"
 local custom_lsp_group = vim.api.nvim_create_augroup("custom_lsp", {})
 
 -- Mappings
@@ -132,31 +131,38 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.keymap.set(mode, l, r, opts)
     end
 
-    local file_ignore_patterns = { "test", "mock" }
+    local ignore_patterns = { "test", "mock" }
+
+    local function filter_ignored(item)
+      if item.file then
+        for _, pat in ipairs(ignore_patterns) do
+          if item.file:find(pat) then
+            return false
+          end
+        end
+      end
+    end
 
     map("n", "gd", custom_lsp.goto_definition, { desc = "Go to definition" })
     map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declarations" })
-    map(
-      "n",
-      "gt",
-      bind(telescope_builtin.lsp_type_definitions, { { file_ignore_patterns = file_ignore_patterns } }),
-      { desc = "Go to productive type definitions" }
-    )
-    map("n", "gT", telescope_builtin.lsp_type_definitions, { desc = "Go to all type definitions" })
-    map(
-      "n",
-      "gm",
-      bind(telescope_builtin.lsp_implementations, { { file_ignore_patterns = file_ignore_patterns } }),
-      { desc = "Go to productive implementations" }
-    )
-    map("n", "gM", telescope_builtin.lsp_implementations, { desc = "Go to all implementations" })
-    map(
-      "n",
-      "gr",
-      bind(telescope_builtin.lsp_references, { { file_ignore_patterns = file_ignore_patterns } }),
-      { desc = "Go to productive references" }
-    )
-    map("n", "gR", telescope_builtin.lsp_references, { desc = "Go to all references" })
+    map("n", "gt", function()
+      Snacks.picker.lsp_type_definitions { transform = filter_ignored }
+    end, { desc = "Go to productive type definitions" })
+    map("n", "gT", function()
+      Snacks.picker.lsp_type_definitions()
+    end, { desc = "Go to all type definitions" })
+    map("n", "gm", function()
+      Snacks.picker.lsp_implementations { transform = filter_ignored }
+    end, { desc = "Go to productive implementations" })
+    map("n", "gM", function()
+      Snacks.picker.lsp_implementations()
+    end, { desc = "Go to all implementations" })
+    map("n", "gr", function()
+      Snacks.picker.lsp_references { transform = filter_ignored }
+    end, { desc = "Go to productive references" })
+    map("n", "gR", function()
+      Snacks.picker.lsp_references()
+    end, { desc = "Go to all references" })
     map("n", "K", custom_lsp.show_info, { desc = "Show info" })
     map("n", "<C-]>", custom_lsp.goto_definition, { desc = "Go to definition" })
     map({ "n", "v" }, "<leader>rn", vim.lsp.buf.rename, { desc = "Rename" })

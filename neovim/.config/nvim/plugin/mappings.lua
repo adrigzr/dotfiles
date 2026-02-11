@@ -71,7 +71,9 @@ map("v", "[1;5A", ":'<,'>m'<-2<CR>gv=`>my`<mzgv`yo`z")
 map("v", "[1;5B", ":'<,'>m'>+<CR>gv=`<my`>mzgv`yo`z")
 
 -- Buffers
-map("n", "<leader>bs", ":Telescope buffers<CR>", { desc = "List buffers" })
+map("n", "<leader>bs", function()
+  Snacks.picker.buffers()
+end, { desc = "List buffers" })
 map("n", "<leader>bt", ":enew<CR>", { desc = "New buffer" })
 map("n", "<leader>bd", function()
   Snacks.bufdelete()

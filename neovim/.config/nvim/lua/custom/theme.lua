@@ -23,7 +23,7 @@ local function setup()
   vim.cmd.colorscheme "onedark"
 
   -- [Native] Change float preview window border to match background
-  vim.api.nvim_set_hl(0, "FloatBorder", { link = "TelescopeResultsBorder" })
+  vim.api.nvim_set_hl(0, "FloatBorder", { fg = colors.grey, bg = "NONE" })
   vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
 
   -- [Native] WinBar

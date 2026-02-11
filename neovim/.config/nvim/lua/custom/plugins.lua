@@ -69,11 +69,11 @@ require("lazy").setup({
   -- Navigation
   "nvim-tree/nvim-tree.lua",
   "christoomey/vim-tmux-navigator",
-  { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }, -- FZF for telescope
-  "nvim-telescope/telescope.nvim", -- Fuzzy Finder
-  "nvim-telescope/telescope-symbols.nvim", -- For symbols
+  -- { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }, -- Removed: replaced by snacks.picker
+  -- "nvim-telescope/telescope.nvim", -- Removed: replaced by snacks.picker
+  -- "nvim-telescope/telescope-symbols.nvim", -- Removed: replaced by snacks.picker.icons
   -- "nvim-telescope/telescope-dap.nvim",
-  "debugloop/telescope-undo.nvim",
+  -- "debugloop/telescope-undo.nvim", -- Removed: replaced by snacks.picker.undo
   "rgroli/other.nvim", -- Switch to alternate file
 
   -- Snacks (dashboard, notifier, LSP progress)

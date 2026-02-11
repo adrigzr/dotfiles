@@ -183,7 +183,7 @@ local function goto_definition()
 
   -- Show definition when has some result
   if #results ~= 0 then
-    return vim.api.nvim_command "Telescope lsp_definitions"
+    return Snacks.picker.lsp_definitions()
   end
 
   local ft = vim.bo.filetype
