@@ -1,13 +1,32 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+
 jobs:
-  lint:
+  stylua:
     runs-on: ubuntu-latest
-    name: Lint
+    name: StyLua
     steps:
-      - uses: actions/checkout@v2
-      - name: Stylua
-        uses: JohnnyMorganz/stylua-action@1.0.0
+      - uses: actions/checkout@v6
+      - uses: JohnnyMorganz/stylua-action@v4
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
           args: --check neovim/.config
+
+  selene:
+    runs-on: ubuntu-latest
+    name: Selene
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Selene
+        run: |
+          SELENE_VERSION="0.30.0"
+          curl -fsSL "https://github.com/Kampfkarren/selene/releases/download/${SELENE_VERSION}/selene-${SELENE_VERSION}-linux.zip" -o selene.zip
+          unzip selene.zip
+          chmod +x selene
+          sudo mv selene /usr/local/bin/
+      - name: Run Selene
+        run: selene neovim/.config/nvim/lua/
