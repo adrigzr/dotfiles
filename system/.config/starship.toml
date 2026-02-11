@@ -24,10 +24,10 @@ $container\
 $cmd_duration\
 $fill\
 $status\
-$jobs\
 $time\
 $battery\
 $line_break\
+$jobs\
 $character"""
 
 # -- Palette ---------------------------------------------------------------
@@ -171,8 +171,10 @@ format = '[$symbol$status]($style) '
 
 [jobs]
 style = 'fg:magenta'
-symbol = ' '
+symbol = '✦'
 format = '[$symbol$number]($style) '
+number_threshold = 2
+symbol_threshold = 1
 
 [time]
 disabled = false
