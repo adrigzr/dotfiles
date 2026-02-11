@@ -91,7 +91,7 @@ require("lazy").setup({
 
   -- Formatter
   "tpope/vim-sleuth",
-  "ntpeters/vim-better-whitespace",
+  { "echasnovski/mini.trailspace", version = false },
 
   -- LSP
   "williamboman/mason.nvim", -- Package client
