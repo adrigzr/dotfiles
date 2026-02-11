@@ -11,38 +11,67 @@ hlslens.setup {
 
 local map = vim.keymap.set
 
+local function search_err(err)
+  local msg = err:match "Vim%(.-%):(.+)" or err
+  vim.api.nvim_echo({ { msg, "ErrorMsg" } }, false, {})
+end
+
 map("n", "n", function()
-  vim.cmd("normal! " .. vim.v.count1 .. "n")
+  local ok, err = pcall(vim.cmd, "normal! " .. vim.v.count1 .. "n")
+  if not ok then
+    search_err(err)
+    return
+  end
   hlslens.start()
   vim.cmd "normal! zzzv"
 end, { desc = "Next search result" })
 
 map("n", "N", function()
-  vim.cmd("normal! " .. vim.v.count1 .. "N")
+  local ok, err = pcall(vim.cmd, "normal! " .. vim.v.count1 .. "N")
+  if not ok then
+    search_err(err)
+    return
+  end
   hlslens.start()
   vim.cmd "normal! zzzv"
 end, { desc = "Previous search result" })
 
 map("n", "*", function()
-  vim.cmd "normal! *"
+  local ok, err = pcall(vim.cmd, "normal! *")
+  if not ok then
+    search_err(err)
+    return
+  end
   hlslens.start()
   vim.cmd "normal! zzzv"
 end, { desc = "Search word under cursor forward" })
 
 map("n", "#", function()
-  vim.cmd "normal! #"
+  local ok, err = pcall(vim.cmd, "normal! #")
+  if not ok then
+    search_err(err)
+    return
+  end
   hlslens.start()
   vim.cmd "normal! zzzv"
 end, { desc = "Search word under cursor backward" })
 
 map("n", "g*", function()
-  vim.cmd "normal! g*"
+  local ok, err = pcall(vim.cmd, "normal! g*")
+  if not ok then
+    search_err(err)
+    return
+  end
   hlslens.start()
   vim.cmd "normal! zzzv"
 end, { desc = "Search word forward (partial)" })
 
 map("n", "g#", function()
-  vim.cmd "normal! g#"
+  local ok, err = pcall(vim.cmd, "normal! g#")
+  if not ok then
+    search_err(err)
+    return
+  end
   hlslens.start()
   vim.cmd "normal! zzzv"
 end, { desc = "Search word backward (partial)" })
