@@ -131,12 +131,12 @@ require("lazy").setup({
   "rafamadriz/friendly-snippets",
 
   -- Misc
-  "tpope/vim-repeat", -- Repeat everything
+  -- "tpope/vim-repeat", -- Removed: modern Lua plugins handle dot-repeat natively
   "tpope/vim-abolish", -- Camelcase, snakecase, mixedcase coercion
   "mjbrownie/swapit", -- <c-a> increments
   "kopischke/vim-fetch", -- Handle line number on filename
-  "tpope/vim-dispatch",
-  "skywind3000/asyncrun.vim", -- Async make
+  -- "tpope/vim-dispatch", -- Removed: Neovim has built-in async jobs and terminal
+  -- "skywind3000/asyncrun.vim", -- Removed: Neovim has built-in async jobs and terminal
   "NvChad/nvim-colorizer.lua", -- Colorize hex codes
   "moll/vim-bbye", -- BufferClose commands
   -- "github/copilot.vim", -- Github copilot
@@ -147,10 +147,10 @@ require("lazy").setup({
   "windwp/nvim-autopairs", -- Auto-pairs
   { "dhruvasagar/vim-table-mode", ft = { "markdown", "cucumber" } }, -- Handle tables in markdown
   -- use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
-  { "tpope/vim-scriptease", lazy = false }, -- Pretty debug messages
+  -- { "tpope/vim-scriptease", lazy = false }, -- Removed: :Inspect replaces zS, Lua REPL covers the rest
   "folke/which-key.nvim", -- Pretty keybind hints
   -- use "petertriho/nvim-scrollbar" -- Scrollbar
-  "stevearc/dressing.nvim", -- Pretty vim.ui boxes
+  -- "stevearc/dressing.nvim", -- Removed: archived by author, snacks.nvim handles vim.ui
   "andymass/vim-matchup", -- Replaces matchit & matchparen builtins
   -- use "vim-test/vim-test" -- Test files
   -- use "~/Repositories/neotest"
