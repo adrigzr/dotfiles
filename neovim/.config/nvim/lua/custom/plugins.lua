@@ -137,7 +137,7 @@ require("lazy").setup({
   "kopischke/vim-fetch", -- Handle line number on filename
   -- "tpope/vim-dispatch", -- Removed: Neovim has built-in async jobs and terminal
   -- "skywind3000/asyncrun.vim", -- Removed: Neovim has built-in async jobs and terminal
-  "NvChad/nvim-colorizer.lua", -- Colorize hex codes
+  -- "catgoose/nvim-colorizer.lua", -- Removed: not needed
   "moll/vim-bbye", -- BufferClose commands
   -- "github/copilot.vim", -- Github copilot
   -- "aduros/ai.vim", -- ChatGPT
