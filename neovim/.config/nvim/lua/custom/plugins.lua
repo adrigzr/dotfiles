@@ -46,16 +46,16 @@ require("lazy").setup({
   "nvim-treesitter/nvim-treesitter-context", -- Add function context while scrolling
   "windwp/nvim-ts-autotag", -- Autocloses html tags
   "HiPhish/rainbow-delimiters.nvim", -- Colorize matching delimiters
-  { "tpope/vim-markdown", ft = "markdown" },
+  -- { "tpope/vim-markdown", ft = "markdown" }, -- Removed: treesitter markdown parser
   -- { "joukevandermaas/vim-ember-hbs", ft = { "handlebars", "javascript", "typescript" } },
-  { "chrisbra/vim-zsh", ft = "zsh" },
-  { "vim-scripts/bats.vim", ft = "bash" }, -- Bash Test Runner
-  { "pantharshit00/vim-prisma", ft = "prisma" },
+  -- { "chrisbra/vim-zsh", ft = "zsh" }, -- Removed: treesitter bash parser
+  -- { "vim-scripts/bats.vim", ft = "bash" }, -- Removed: treesitter bash parser
+  -- { "pantharshit00/vim-prisma", ft = "prisma" }, -- Removed: treesitter prisma parser
   -- { "sukima/vim-ember-imports", requires = "sukima/vim-javascript-imports", ft = { "javascript", "typescript" } } -- Ember Imports
   { "wannesm/wmgraphviz.vim", ft = "dot" }, -- Graphviz plugin
   { "junegunn/vader.vim", ft = "vim" }, -- Vim script tester
-  { "posva/vim-vue", ft = { "javascript", "typescript" } },
-  { "Quramy/vim-js-pretty-template", ft = { "javascript", "typescript" } },
+  -- { "posva/vim-vue", ft = { "javascript", "typescript" } }, -- Removed: treesitter vue parser
+  -- { "Quramy/vim-js-pretty-template", ft = { "javascript", "typescript" } }, -- Removed: treesitter handles template literals
   -- {
   --   "psliwka/vim-dirtytalk",
   --   build = ":DirtytalkUpdate",
