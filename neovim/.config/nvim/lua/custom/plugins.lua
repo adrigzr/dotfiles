@@ -86,7 +86,7 @@ require("lazy").setup({
   -- Git
   "tpope/vim-fugitive", -- Git commands
   "lewis6991/gitsigns.nvim", -- Git gutter signs
-  "rhysd/conflict-marker.vim", -- Mappings for conflicts
+  { "akinsho/git-conflict.nvim", version = "2.*", config = true }, -- Git conflict resolution
   "sindrets/diffview.nvim", -- Diff view
 
   -- Formatter
