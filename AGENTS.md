@@ -8,9 +8,8 @@ Personal dotfiles repository managed with [GNU Stow](https://www.gnu.org/softwar
 bash/        - Bash shell config
 eslint/      - Global ESLint config
 fonts/       - Nerd Font patched fonts
-git/         - Git config, custom git subcommands (git/bin/)
-i3/          - i3 window manager config + scripts (Linux)
 ghostty/     - Ghostty terminal config
+git/         - Git config, custom git subcommands (git/bin/)
 neovim/      - Full Neovim config (Lua, lazy.nvim)
 ruby/        - Ruby config
 ssh/         - SSH client config
