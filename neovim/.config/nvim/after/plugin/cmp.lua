@@ -183,7 +183,4 @@ cmp.setup {
 
 require("cmp_git").setup()
 
--- Insert ( after select function or method item)
-local cmp_autopairs = require "nvim-autopairs.completion.cmp"
-
-cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
+-- Auto-bracket insertion after completion is handled by mini.pairs

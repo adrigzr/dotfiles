@@ -144,7 +144,7 @@ require("lazy").setup({
   -- { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} }, -- Removed: replaced by snacks.indent
   -- use "tpope/vim-surround" -- Surround wrappers
   { "kylechui/nvim-surround", config = true }, -- Surround wrappers
-  "windwp/nvim-autopairs", -- Auto-pairs
+  { "echasnovski/mini.pairs", version = false }, -- Auto-pairs
   { "dhruvasagar/vim-table-mode", ft = { "markdown", "cucumber" } }, -- Handle tables in markdown
   -- use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
   -- { "tpope/vim-scriptease", lazy = false }, -- Removed: :Inspect replaces zS, Lua REPL covers the rest
