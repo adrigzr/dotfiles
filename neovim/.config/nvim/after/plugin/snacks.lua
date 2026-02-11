@@ -5,6 +5,8 @@ if not exists then
 end
 
 snacks.setup {
+  input = {},
+  terminal = {},
   dashboard = {
     preset = {
       header = table.concat({

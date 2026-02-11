@@ -185,6 +185,7 @@ require("lazy").setup({
   }, -- Show package info as virtual text in the package.json
   "axelvc/template-string.nvim",
   "zbirenbaum/copilot.lua",
+  "nickjvandyke/opencode.nvim",
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "main",

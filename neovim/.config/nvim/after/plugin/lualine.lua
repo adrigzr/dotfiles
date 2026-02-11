@@ -27,7 +27,22 @@ module.setup {
     lualine_a = { "mode" },
     lualine_b = { "branch", diagnostics },
     lualine_c = {},
-    lualine_x = { "encoding" },
+    lualine_x = {
+      {
+        function()
+          local ok, opencode = pcall(require, "opencode")
+          if ok then
+            return opencode.statusline()
+          end
+          return ""
+        end,
+        cond = function()
+          local ok, opencode = pcall(require, "opencode")
+          return ok and opencode.statusline() ~= ""
+        end,
+      },
+      "encoding",
+    },
     lualine_y = { "fileformat", "filetype" },
     lualine_z = { "location" },
   },
