@@ -133,7 +133,7 @@ require("lazy").setup({
   -- Misc
   -- "tpope/vim-repeat", -- Removed: modern Lua plugins handle dot-repeat natively
   "tpope/vim-abolish", -- Camelcase, snakecase, mixedcase coercion
-  "mjbrownie/swapit", -- <c-a> increments
+  "monaqa/dial.nvim", -- Enhanced <C-a>/<C-x> increments
   "kopischke/vim-fetch", -- Handle line number on filename
   -- "tpope/vim-dispatch", -- Removed: Neovim has built-in async jobs and terminal
   -- "skywind3000/asyncrun.vim", -- Removed: Neovim has built-in async jobs and terminal
