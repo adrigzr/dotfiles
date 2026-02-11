@@ -76,5 +76,8 @@ snacks.setup {
   },
   notifier = {
     enabled = true,
+    win = {
+      wo = { wrap = true },
+    },
   },
 }
