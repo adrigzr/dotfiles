@@ -140,6 +140,41 @@ Always use `vim.keymap.set` with a `desc`: `map("n", "<leader>vi", "<cmd>LspInst
 
 General keymaps live in `plugin/mappings.lua`. Plugin-specific keymaps live in the corresponding `after/plugin/*.lua` file.
 
+## ZSH Keybindings & ZLE Widgets
+
+Custom keybindings use fzf inside tmux popups (centered, 80%x60%, rounded borders) for a modal UI. All popups gracefully fall back to inline fzf when not inside tmux.
+
+### Architecture
+
+- **Interactive functions** (`system/.functions`): `fvim`, `select_branch`, `select_tag`, `select_directory`, `log`, `n` -- use `fzf --tmux center,80%,60%` directly. Called from the command line.
+- **ZLE widgets** (`zsh/.zfunctions/zle-*`): Autoloaded widgets bound to keys. Cannot use `fzf --tmux` (breaks in ZLE subshell context). Instead use `_fzf_tmux_popup` helper.
+- **`_fzf_tmux_popup`** (`system/.functions`): Helper that bridges ZLE widgets and tmux popups. Generates a self-contained bash script, writes it to a temp directory, and runs it via `tmux popup -E`. Handles piped input (`--pipe` flag), env var forwarding, `noclobber` safety (`setopt localoptions clobber`), and alias-safe cleanup (`command rm`).
+
+### Keybinding Reference
+
+| Key | Widget / Function | Action |
+|-----|-------------------|--------|
+| `Ctrl-P` | `zle-fvim` | Fuzzy file picker (bat preview, TwoDark theme), opens in `$EDITOR` |
+| `Ctrl-R` | `zle-history-search` | Fuzzy shell history search with command preview |
+| `Ctrl-B` | `zle-select-branch` | Git branch picker, inserts branch name into command line |
+| `Ctrl-G` | `zle-select-tag` | Git tag picker, inserts tag name into command line |
+| `Ctrl-F` | `zle-select-directory` | Directory picker (`fd`), cd into selection |
+| `Ctrl-A` | `autosuggest-accept` | Accept zsh-autosuggestion |
+| `Ctrl-E` | `edit-command-line` | Edit current command in `$EDITOR` (vi command mode) |
+| `Ctrl-X Ctrl-E` | `edit-command-line` | Edit current command in `$EDITOR` (insert mode) |
+
+### FZF Theme
+
+`FZF_DEFAULT_OPTS` (`system/.exports`) sets One Dark colors globally. Bat previews use `--theme=TwoDark`. The tmux `popup-border-lines` is set to `rounded` in `tmux/.tmux.conf`.
+
+### Caveats When Editing ZLE Widgets
+
+- **No `fzf --tmux` inside widgets**: The `--tmux` flag spawns a subprocess that can't communicate back through the ZLE subshell. Use `_fzf_tmux_popup` instead.
+- **`noclobber`**: Zim's environment module sets `NO_CLOBBER`. Any function that writes to `mktemp`-created files must use `setopt localoptions clobber` or `>|`.
+- **`rm` alias**: `rm` is aliased to `rm -i -v`. The `-v` flag leaks file paths to stdout. Always use `command rm` inside functions whose stdout is captured by `$()`.
+- **Piped vs non-piped input**: When piping data into `_fzf_tmux_popup`, pass `--pipe` as the first argument. Without it, the helper uses `FZF_DEFAULT_COMMAND` to list files.
+- **Autoload caching**: ZLE widgets are cached after first invocation. To reload after editing: `unfunction zle-fvim; autoload -U zle-fvim` (or open a new shell).
+
 ## Code Style -- Shell Scripts
 
 - **2-space indentation** (matches .editorconfig); shebang `#!/usr/bin/env bash` for originals
