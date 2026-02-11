@@ -4,11 +4,6 @@ if not exists then
   return
 end
 
--- require("neotest-jest").getStrategyConfig = function(strategy, args)
---   vim.pretty_print(strategy, args)
---   return strategy
--- end
-
 local is_test_file = require("neotest-mocha.util").create_test_file_extensions_matcher({ "test" }, { "ts" })
 local match_root_pattern = require("neotest.lib").files.match_root_pattern
 
@@ -18,29 +13,9 @@ neotest.setup {
       is_test_file = is_test_file,
       cwd = match_root_pattern(".mocharc.js", ".mocharc.json", ".mocharc.jsonc", ".mocharc.yaml", ".mocharc.yml"),
     },
-    -- require "neotest-jest" {
-    -- strategy_config = function(strategy)
-    --   strategy.type = "node2"
-
-    --   vim.pretty_print(strategy)
-
-    --   return {
-    --     name = "Debug Jest Tests",
-    --     type = "node2",
-    --     args = strategy.args,
-    --     console = "integratedTerminal",
-    --     cwd = "${workspaceFolder}",
-    --     internalConsoleOptions = "neverOpen",
-    --     request = "launch",
-    --     rootPath = "${workspaceFolder}",
-    --     runtimeExecutable = strategy.runtimeExecutable,
-    --   }
-    -- end,
-    -- },
     require "neotest-rspec" {},
     require "neotest-python" {},
     require "neotest-rust" {},
-    -- require "neotest-vim-test" { ignore_filetypes = { "ruby", "python" } },
   },
   icons = {
     failed = "",

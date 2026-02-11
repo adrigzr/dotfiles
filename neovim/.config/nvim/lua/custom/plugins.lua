@@ -14,9 +14,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  -- Meta
-  -- "wbthomason/packer.nvim",
-
   -- Utils
   "nvim-lua/plenary.nvim",
   "kevinhwang91/promise-async",
@@ -46,34 +43,13 @@ require("lazy").setup({
   "nvim-treesitter/nvim-treesitter-context", -- Add function context while scrolling
   "windwp/nvim-ts-autotag", -- Autocloses html tags
   "HiPhish/rainbow-delimiters.nvim", -- Colorize matching delimiters
-  -- { "tpope/vim-markdown", ft = "markdown" }, -- Removed: treesitter markdown parser
-  -- { "joukevandermaas/vim-ember-hbs", ft = { "handlebars", "javascript", "typescript" } },
-  -- { "chrisbra/vim-zsh", ft = "zsh" }, -- Removed: treesitter bash parser
-  -- { "vim-scripts/bats.vim", ft = "bash" }, -- Removed: treesitter bash parser
-  -- { "pantharshit00/vim-prisma", ft = "prisma" }, -- Removed: treesitter prisma parser
-  -- { "sukima/vim-ember-imports", requires = "sukima/vim-javascript-imports", ft = { "javascript", "typescript" } } -- Ember Imports
   { "wannesm/wmgraphviz.vim", ft = "dot" }, -- Graphviz plugin
   { "junegunn/vader.vim", ft = "vim" }, -- Vim script tester
-  -- { "posva/vim-vue", ft = { "javascript", "typescript" } }, -- Removed: treesitter vue parser
-  -- { "Quramy/vim-js-pretty-template", ft = { "javascript", "typescript" } }, -- Removed: treesitter handles template literals
-  -- {
-  --   "psliwka/vim-dirtytalk",
-  --   build = ":DirtytalkUpdate",
-  --   config = function()
-  --     vim.opt.spelllang = { "en", "programming" }
-  --     vim.opt.rtp:append(vim.fn.stdpath "data" .. "/site")
-  --   end,
-  -- }, -- Developer spell dict
   "mfussenegger/nvim-ansible",
 
   -- Navigation
   "nvim-tree/nvim-tree.lua",
   "christoomey/vim-tmux-navigator",
-  -- { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }, -- Removed: replaced by snacks.picker
-  -- "nvim-telescope/telescope.nvim", -- Removed: replaced by snacks.picker
-  -- "nvim-telescope/telescope-symbols.nvim", -- Removed: replaced by snacks.picker.icons
-  -- "nvim-telescope/telescope-dap.nvim",
-  -- "debugloop/telescope-undo.nvim", -- Removed: replaced by snacks.picker.undo
   "rgroli/other.nvim", -- Switch to alternate file
 
   -- Snacks (dashboard, notifier, LSP progress)
@@ -95,16 +71,10 @@ require("lazy").setup({
 
   -- LSP
   "williamboman/mason.nvim", -- Package client
-  -- "jay-babu/mason-nvim-dap.nvim", -- Mason dap extension
   "neovim/nvim-lspconfig", -- LSP config
   { "folke/lazydev.nvim", ft = "lua", opts = {} }, -- Lua LSP workspace
-  -- "jose-elias-alvarez/null-ls.nvim",
   "folke/trouble.nvim", -- Pretty diagnostics
   "b0o/schemastore.nvim", -- Schemas for jsonls
-  -- use "stevearc/aerial.nvim" -- Show symbols
-
-  -- "lvimuser/lsp-inlayhints.nvim", -- Inlay hints
-  -- "jose-elias-alvarez/typescript.nvim", -- Typescript commands
   { "pmizio/typescript-tools.nvim", dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" } }, -- Typescript tools
   {
     "antosha417/nvim-lsp-file-operations",
@@ -125,53 +95,21 @@ require("lazy").setup({
   },
 
   -- Misc
-  -- "tpope/vim-repeat", -- Removed: modern Lua plugins handle dot-repeat natively
   "tpope/vim-abolish", -- Camelcase, snakecase, mixedcase coercion
   "monaqa/dial.nvim", -- Enhanced <C-a>/<C-x> increments
   "kopischke/vim-fetch", -- Handle line number on filename
-  -- "tpope/vim-dispatch", -- Removed: Neovim has built-in async jobs and terminal
-  -- "skywind3000/asyncrun.vim", -- Removed: Neovim has built-in async jobs and terminal
-  -- "catgoose/nvim-colorizer.lua", -- Removed: not needed
-  -- "moll/vim-bbye", -- Removed: replaced by Snacks.bufdelete
-  -- "github/copilot.vim", -- Github copilot
-  -- "aduros/ai.vim", -- ChatGPT
-  -- { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} }, -- Removed: replaced by snacks.indent
-  -- use "tpope/vim-surround" -- Surround wrappers
   { "kylechui/nvim-surround", config = true }, -- Surround wrappers
   { "echasnovski/mini.pairs", version = false }, -- Auto-pairs
   { "dhruvasagar/vim-table-mode", ft = { "markdown", "cucumber" } }, -- Handle tables in markdown
-  -- use { "iamcco/markdown-preview.nvim", run = "cd app && yarn install" } -- Markdown previewer
-  -- { "tpope/vim-scriptease", lazy = false }, -- Removed: :Inspect replaces zS, Lua REPL covers the rest
   "folke/which-key.nvim", -- Pretty keybind hints
-  -- use "petertriho/nvim-scrollbar" -- Scrollbar
-  -- "stevearc/dressing.nvim", -- Removed: archived by author, snacks.nvim handles vim.ui
   "andymass/vim-matchup", -- Replaces matchit & matchparen builtins
-  -- use "vim-test/vim-test" -- Test files
-  -- use "~/Repositories/neotest"
   "nvim-neotest/neotest",
-  -- use "~/Repositories/neotest-jest"
   "haydenmeade/neotest-jest",
   "adrigzr/neotest-mocha",
-  -- { dir = "~/Repositories/neotest-jest" },
-  -- { dir = "~/Repositories/neotest-mocha" },
-
   "rouge8/neotest-rust",
   "olimorris/neotest-rspec",
   "nvim-neotest/neotest-python",
-  -- "andythigpen/nvim-coverage",
-  -- use "nvim-neotest/neotest-vim-test"
-  -- use { "rcarriga/vim-ultest", run = ":UpdateRemotePlugins" } -- Test output in file
-  -- "mfussenegger/nvim-dap", -- Debugger
-  -- "nvim-neotest/nvim-nio", -- Dependency for nvim-dap-ui
-  -- "theHamsta/nvim-dap-virtual-text",
-  -- "rcarriga/nvim-dap-ui",
-  -- use "anuvyklack/pretty-fold.nvim"
-  -- use "stevearc/stickybuf.nvim" -- Prevent special windows to be switched to other buffer
   "kevinhwang91/nvim-ufo", -- Pretty folds
-  -- "ThePrimeagen/refactoring.nvim", -- Refactoring tools
-
-  -- "anuvyklack/hydra.nvim", -- Hydra
-  -- { "neomake/neomake", lazy = false }, -- Make presets
   {
     "vuki656/package-info.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },

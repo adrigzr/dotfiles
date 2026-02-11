@@ -46,8 +46,6 @@ set.diffopt = {
 set.foldenable = true
 set.foldlevel = 99
 set.foldcolumn = "1"
--- set.foldmethod = "syntax"
--- set.foldminlines = 2
 
 -- Format
 set.softtabstop = 2

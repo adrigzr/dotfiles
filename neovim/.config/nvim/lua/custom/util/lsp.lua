@@ -6,17 +6,10 @@ local M = {}
 -- Floating preview close events
 -- Ref: https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/util.lua#L1409
 M.close_events = {
-  -- Defaults
   "CursorMoved",
-  -- "CursorMovedI",
   "BufHidden",
-  -- "InsertCharPre",
-  -- Custom
   "InsertEnter",
   "InsertLeave",
-  -- "BufEnter",
-  -- "BufLeave",
-  -- "TextChangedI",
   "WinScrolled",
 }
 
@@ -64,11 +57,6 @@ function M.get_results(method)
 end
 
 local function document_highlight()
-  -- Abort when lsp is not ready
-  -- if not vim.lsp.buf.server_ready() then
-  --   return
-  -- end
-
   local results = M.get_results "textDocument/documentHighlight"
 
   if #results ~= 0 then
@@ -112,15 +100,6 @@ end
 local currentSignature = nil
 
 local function show_signature_help()
-  -- Abort when lsp is not ready or completion is visible or copilot has suggestions
-  -- if
-  --   not vim.lsp.buf.server_ready()
-  --   -- or require("cmp").visible()
-  --   -- or vim.api.nvim_eval 'exists("b:_copilot.suggestions")' == 1
-  -- then
-  --   return
-  -- end
-
   local mode = misc.get_mode()
 
   -- Show signature help first when in insert mode
@@ -257,8 +236,6 @@ function M.make_command(source_action)
     })
 
     local function apply_edits(err, res)
-      -- vim.pretty_print("apply_edits", err, res)
-
       if
         err
         or not (
@@ -274,8 +251,6 @@ function M.make_command(source_action)
 
       vim.lsp.util.apply_text_edits(res[1].edit.documentChanges[1].edits, bufnr, client.offset_encoding)
     end
-
-    -- vim.pretty_print("sending source action request for action " .. source_action .. " with params", params)
 
     if opts.sync == true then
       local res, err = client:request_sync("textDocument/codeAction", params, nil, bufnr)
