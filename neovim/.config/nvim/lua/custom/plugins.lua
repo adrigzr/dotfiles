@@ -138,7 +138,7 @@ require("lazy").setup({
   -- "tpope/vim-dispatch", -- Removed: Neovim has built-in async jobs and terminal
   -- "skywind3000/asyncrun.vim", -- Removed: Neovim has built-in async jobs and terminal
   -- "catgoose/nvim-colorizer.lua", -- Removed: not needed
-  "moll/vim-bbye", -- BufferClose commands
+  -- "moll/vim-bbye", -- Removed: replaced by Snacks.bufdelete
   -- "github/copilot.vim", -- Github copilot
   -- "aduros/ai.vim", -- ChatGPT
   { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },

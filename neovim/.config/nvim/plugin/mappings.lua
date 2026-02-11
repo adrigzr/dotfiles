@@ -73,8 +73,12 @@ map("v", "[1;5B", ":'<,'>m'>+<CR>gv=`<my`>mzgv`yo`z")
 -- Buffers
 map("n", "<leader>bs", ":Telescope buffers<CR>", { desc = "List buffers" })
 map("n", "<leader>bt", ":enew<CR>", { desc = "New buffer" })
-map("n", "<leader>bd", ":Bdelete<CR>", { desc = "Delete buffer" })
-map("n", "<leader>bD", ":bufdo :Bdelete<CR>", { desc = "Delete all buffers" })
+map("n", "<leader>bd", function()
+  Snacks.bufdelete()
+end, { desc = "Delete buffer" })
+map("n", "<leader>bD", function()
+  Snacks.bufdelete.other()
+end, { desc = "Delete other buffers" })
 map("n", "<leader><leader>", "<c-^>", { desc = "Alternate buffer" })
 
 -- Quickfix window
