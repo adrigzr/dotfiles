@@ -141,7 +141,7 @@ require("lazy").setup({
   -- "moll/vim-bbye", -- Removed: replaced by Snacks.bufdelete
   -- "github/copilot.vim", -- Github copilot
   -- "aduros/ai.vim", -- ChatGPT
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+  -- { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} }, -- Removed: replaced by snacks.indent
   -- use "tpope/vim-surround" -- Surround wrappers
   { "kylechui/nvim-surround", config = true }, -- Surround wrappers
   "windwp/nvim-autopairs", -- Auto-pairs

@@ -7,6 +7,9 @@ end
 snacks.setup {
   input = {},
   terminal = {},
+  indent = {
+    animate = { enabled = false },
+  },
   dashboard = {
     preset = {
       header = table.concat({
