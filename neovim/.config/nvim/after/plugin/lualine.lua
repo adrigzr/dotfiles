@@ -8,11 +8,68 @@ local diagnostics = {
   "diagnostics",
   sources = { "nvim_diagnostic" },
   symbols = {
-    error = " ",
-    warn = " ",
-    info = " ",
-    hint = " ",
+    error = "",
+    warn = "",
+    info = "",
+    hint = "",
   },
+}
+
+local diff = {
+  "diff",
+  source = function()
+    local gitsigns = vim.b.gitsigns_status_dict
+    if gitsigns then
+      return {
+        added = gitsigns.added,
+        modified = gitsigns.changed,
+        removed = gitsigns.removed,
+      }
+    end
+  end,
+}
+
+local encoding = {
+  "encoding",
+  cond = function()
+    return vim.bo.fileencoding ~= "utf-8"
+  end,
+}
+
+local fileformat = {
+  "fileformat",
+  cond = function()
+    return vim.bo.fileformat ~= "unix"
+  end,
+}
+
+local lsp_clients = {
+  function()
+    local clients = vim.lsp.get_clients { bufnr = 0 }
+    if #clients == 0 then
+      return ""
+    end
+    local names = {}
+    for _, c in ipairs(clients) do
+      table.insert(names, c.name)
+    end
+    return table.concat(names, ", ")
+  end,
+  icon = " ",
+}
+
+local opencode_status = {
+  function()
+    local ok, opencode = pcall(require, "opencode")
+    if ok then
+      return opencode.statusline()
+    end
+    return ""
+  end,
+  cond = function()
+    local ok, opencode = pcall(require, "opencode")
+    return ok and opencode.statusline() ~= ""
+  end,
 }
 
 module.setup {
@@ -25,25 +82,14 @@ module.setup {
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = { "branch", diagnostics },
+    lualine_b = { "branch", diagnostics, diff },
     lualine_c = {},
     lualine_x = {
-      {
-        function()
-          local ok, opencode = pcall(require, "opencode")
-          if ok then
-            return opencode.statusline()
-          end
-          return ""
-        end,
-        cond = function()
-          local ok, opencode = pcall(require, "opencode")
-          return ok and opencode.statusline() ~= ""
-        end,
-      },
-      "encoding",
+      opencode_status,
+      lsp_clients,
+      encoding,
     },
-    lualine_y = { "fileformat", "filetype" },
+    lualine_y = { fileformat, "filetype" },
     lualine_z = { "location" },
   },
   inactive_sections = {
@@ -55,5 +101,5 @@ module.setup {
     lualine_z = {},
   },
   tabline = {},
-  extensions = { "quickfix", "fugitive", "nvim-tree", "nvim-dap-ui", "man" },
+  extensions = { "quickfix", "fugitive", "nvim-tree", "nvim-dap-ui", "man", "lazy", "trouble" },
 }
