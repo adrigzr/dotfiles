@@ -74,11 +74,13 @@ snacks.setup {
       },
     },
   },
+  styles = {
+    notification = {
+      wo = { wrap = true },
+    }
+  },
   notifier = {
     enabled = true,
-    win = {
-      wo = { wrap = true },
-    },
   },
 }
 
