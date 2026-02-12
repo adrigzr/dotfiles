@@ -4,6 +4,8 @@ if not exists then
   return
 end
 
+require("custom.copilot_actions").setup()
+
 vim.keymap.set("n", "<leader>cce", "<cmd>CopilotChatExplain<cr>", { desc = "Copilot Chat Explain" })
 vim.keymap.set("n", "<leader>ccr", "<cmd>CopilotChatReview<cr>", { desc = "Copilot Chat Review" })
 vim.keymap.set("n", "<leader>ccf", "<cmd>CopilotChatFix<cr>", { desc = "Copilot Chat Fix" })
