@@ -81,3 +81,13 @@ snacks.setup {
     },
   },
 }
+
+local map = vim.keymap.set
+
+map("n", "<leader>nh", function()
+  Snacks.notifier.show_history()
+end, { desc = "Show notification history" })
+
+map("n", "<leader>nd", function()
+  Snacks.notifier.hide()
+end, { desc = "Dismiss current notification" })
