@@ -69,7 +69,7 @@ repo_root_style = 'bold fg:blue'
 repo_root_format = '[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '
 
 [git_branch]
-symbol = ' '
+symbol = ' '
 style = 'fg:magenta'
 format = '[$symbol$branch(:$remote_branch)]($style) '
 truncation_length = 24
@@ -105,14 +105,14 @@ style = 'fg:orange'
 format = '[$symbol$version]($style) '
 
 [nodejs]
-symbol = ' '
+symbol = ' '
 style = 'fg:green'
 format = '[$symbol$version]($style) '
 detect_files = ['package.json', '.node-version', '.nvmrc']
 detect_folders = []
 
 [python]
-symbol = ' '
+symbol = ' '
 style = 'fg:yellow'
 format = '[$symbol$version( \($virtualenv\))]($style) '
 
@@ -122,22 +122,22 @@ style = 'fg:orange'
 format = '[$symbol$version]($style) '
 
 [golang]
-symbol = ' '
+symbol = ' '
 style = 'fg:cyan'
 format = '[$symbol$version]($style) '
 
 [lua]
-symbol = ' '
+symbol = ' '
 style = 'fg:blue'
 format = '[$symbol$version]($style) '
 
 [docker_context]
-symbol = ' '
+symbol = ' '
 style = 'fg:cyan'
 format = '[$symbol$context]($style) '
 
 [aws]
-symbol = ' '
+symbol = ' '
 style = 'fg:yellow'
 format = '[$symbol($profile )(\($region\))]($style) '
 
@@ -149,7 +149,7 @@ format = '[$symbol$name]($style) '
 [cmd_duration]
 min_time = 2_000
 style = 'fg:dimmed'
-format = '[ $duration]($style) '
+format = '[$duration]($style) '
 
 # -- Line 1: Spacer --------------------------------------------------------
 
@@ -161,7 +161,7 @@ symbol = ' '
 [status]
 disabled = false
 style = 'fg:red'
-symbol = ' '
+symbol = ' '
 format = '[$symbol$status]($style) '
 
 [jobs]
