@@ -12,7 +12,7 @@ vim.keymap.set("n", "<leader>vi", "<cmd>Mason<cr>", { desc = "Open Mason" })
 
 -- Diagnostics
 vim.diagnostic.config {
-  virtual_text = false,
+  virtual_text = true,
   virtual_lines = false,
   severity_sort = true,
   signs = {
