@@ -1,14 +1,10 @@
 local M = {}
 
+-- Select the current line and run a prompt library command.
+-- This ensures context.code is populated even from normal mode.
 local function run_prompt(alias)
-  local ok, codecompanion = pcall(require, "codecompanion")
-
-  if not ok then
-    vim.notify("CodeCompanion is not available", vim.log.levels.ERROR)
-    return
-  end
-
-  codecompanion.prompt(alias)
+  local lnum = vim.api.nvim_win_get_cursor(0)[1]
+  vim.cmd(lnum .. "," .. lnum .. "CodeCompanion /" .. alias)
 end
 
 -- In-process LSP server that provides AI code actions
@@ -38,18 +34,18 @@ local function start_server(dispatchers)
 
       local actions = {
         {
-          title = "AI: Fix code",
+          title = "  Fix code",
           kind = "quickfix",
           command = {
-            title = "AI: Fix code",
+            title = "  Fix code",
             command = "ai.fixCode",
           },
         },
         {
-          title = "AI: Explain code",
+          title = "  Explain code",
           kind = "quickfix",
           command = {
-            title = "AI: Explain code",
+            title = "  Explain code",
             command = "ai.explainCode",
           },
         },
@@ -57,10 +53,10 @@ local function start_server(dispatchers)
 
       if has_diagnostics then
         table.insert(actions, {
-          title = "AI: Explain LSP diagnostics",
+          title = "  Explain LSP diagnostics",
           kind = "quickfix",
           command = {
-            title = "AI: Explain LSP diagnostics",
+            title = "  Explain LSP diagnostics",
             command = "ai.explainLsp",
           },
         })
