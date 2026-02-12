@@ -58,6 +58,9 @@ blink.setup {
   snippets = { preset = "luasnip" },
   sources = {
     default = { "lsp", "snippets", "path", "buffer" },
+    per_filetype = {
+      codecompanion = { "codecompanion" },
+    },
   },
   completion = {
     documentation = {

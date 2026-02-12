@@ -58,18 +58,19 @@ local lsp_clients = {
   icon = " ",
 }
 
-local opencode_status = {
+local codecompanion_status = {
   function()
-    local ok, opencode = pcall(require, "opencode")
-    if ok then
-      return opencode.statusline()
-    end
-    return ""
+    return "AI"
   end,
   cond = function()
-    local ok, opencode = pcall(require, "opencode")
-    return ok and opencode.statusline() ~= ""
+    local ok = pcall(require, "codecompanion.config")
+    if not ok then
+      return false
+    end
+    local clients = vim.lsp.get_clients { name = "codecompanion" }
+    return #clients > 0
   end,
+  icon = " ",
 }
 
 module.setup {
@@ -85,7 +86,7 @@ module.setup {
     lualine_b = { "branch", diagnostics, diff },
     lualine_c = {},
     lualine_x = {
-      opencode_status,
+      codecompanion_status,
       lsp_clients,
       encoding,
     },

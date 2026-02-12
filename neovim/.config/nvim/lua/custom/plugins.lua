@@ -117,16 +117,12 @@ require("lazy").setup({
   }, -- Show package info as virtual text in the package.json
   "axelvc/template-string.nvim",
   "zbirenbaum/copilot.lua",
-  "nickjvandyke/opencode.nvim",
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "main",
+    "olimorris/codecompanion.nvim",
     dependencies = {
-      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
     },
-    build = "make tiktoken", -- Only on MacOS or Linux
-    opts = { debug = false },
   },
 }, {
   defaults = {

@@ -16,20 +16,20 @@ local function format_diagnostics(diagnostics)
   return table.concat(messages, "\n")
 end
 
-local function ask_copilot(prompt, diagnostic_text)
-  local chat_ok, chat = pcall(require, "CopilotChat")
+local function ask_ai(prompt, diagnostic_text)
+  local ok, codecompanion = pcall(require, "codecompanion")
 
-  if not chat_ok then
-    vim.notify("CopilotChat is not available", vim.log.levels.ERROR)
+  if not ok then
+    vim.notify("CodeCompanion is not available", vim.log.levels.ERROR)
     return
   end
 
-  chat.ask(prompt .. "\n" .. diagnostic_text, {
-    resources = "buffer:active",
+  codecompanion.ask(prompt .. "\n" .. diagnostic_text, {
+    interaction = "chat",
   })
 end
 
--- In-process LSP server that provides Copilot code actions
+-- In-process LSP server that provides AI code actions
 local function start_server(dispatchers)
   local closing = false
 
@@ -63,21 +63,21 @@ local function start_server(dispatchers)
         local diagnostic_text = format_diagnostics(diags)
 
         table.insert(actions, {
-          title = "Copilot: Fix diagnostic",
+          title = "AI: Fix diagnostic",
           kind = "quickfix",
           command = {
-            title = "Copilot: Fix diagnostic",
-            command = "copilot.fixDiagnostic",
+            title = "AI: Fix diagnostic",
+            command = "ai.fixDiagnostic",
             arguments = { diagnostic_text },
           },
         })
 
         table.insert(actions, {
-          title = "Copilot: Explain diagnostic",
+          title = "AI: Explain diagnostic",
           kind = "quickfix",
           command = {
-            title = "Copilot: Explain diagnostic",
-            command = "copilot.explainDiagnostic",
+            title = "AI: Explain diagnostic",
+            command = "ai.explainDiagnostic",
             arguments = { diagnostic_text },
           },
         })
@@ -115,25 +115,25 @@ end
 function M.setup()
   local client_id = nil
 
-  vim.lsp.commands["copilot.fixDiagnostic"] = function(command)
+  vim.lsp.commands["ai.fixDiagnostic"] = function(command)
     local diagnostic_text = command.arguments and command.arguments[1] or ""
-    ask_copilot(
+    ask_ai(
       "There is a problem in this code. Identify the issues and rewrite the code with fixes. Explain what was wrong and how your changes address the problems.\n\nDiagnostic issues:",
       diagnostic_text
     )
   end
 
-  vim.lsp.commands["copilot.explainDiagnostic"] = function(command)
+  vim.lsp.commands["ai.explainDiagnostic"] = function(command)
     local diagnostic_text = command.arguments and command.arguments[1] or ""
-    ask_copilot("Explain these diagnostic issues:", diagnostic_text)
+    ask_ai("Explain these diagnostic issues:", diagnostic_text)
   end
 
   vim.api.nvim_create_autocmd("FileType", {
-    group = vim.api.nvim_create_augroup("copilot_actions", {}),
+    group = vim.api.nvim_create_augroup("ai_code_actions", {}),
     callback = function(ev)
       if not client_id then
         client_id = vim.lsp.start {
-          name = "copilot-actions",
+          name = "ai-code-actions",
           cmd = start_server,
           root_dir = vim.fn.getcwd(),
         }
