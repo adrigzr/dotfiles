@@ -16,7 +16,7 @@ local function format_diagnostics(diagnostics)
   return table.concat(messages, "\n")
 end
 
-local function ask_ai(prompt, diagnostic_text)
+local function ask_ai(prompt)
   local ok, codecompanion = pcall(require, "codecompanion")
 
   if not ok then
@@ -24,7 +24,7 @@ local function ask_ai(prompt, diagnostic_text)
     return
   end
 
-  codecompanion.ask(prompt .. "\n" .. diagnostic_text, {
+  codecompanion.ask(prompt, {
     interaction = "chat",
   })
 end
@@ -50,38 +50,31 @@ local function start_server(dispatchers)
         dispatchers.on_exit(0, 0)
       end
     elseif method == "textDocument/codeAction" then
-      local actions = {}
-
-      -- Neovim scopes params.context.diagnostics to the requesting client's
-      -- namespace. Since this server never publishes diagnostics, that list is
-      -- always empty. Query all sources via vim.diagnostic.get() instead.
       local bufnr = params.textDocument and params.textDocument.uri and vim.uri_to_bufnr(params.textDocument.uri)
       local lnum = params.range and params.range.start and params.range.start.line
       local diags = bufnr and lnum and vim.diagnostic.get(bufnr, { lnum = lnum }) or {}
+      local diagnostic_text = #diags > 0 and format_diagnostics(diags) or nil
 
-      if #diags > 0 then
-        local diagnostic_text = format_diagnostics(diags)
-
-        table.insert(actions, {
-          title = "AI: Fix diagnostic",
+      local actions = {
+        {
+          title = "AI: Fix code",
           kind = "quickfix",
           command = {
-            title = "AI: Fix diagnostic",
-            command = "ai.fixDiagnostic",
+            title = "AI: Fix code",
+            command = "ai.fixCode",
             arguments = { diagnostic_text },
           },
-        })
-
-        table.insert(actions, {
-          title = "AI: Explain diagnostic",
+        },
+        {
+          title = "AI: Explain code",
           kind = "quickfix",
           command = {
-            title = "AI: Explain diagnostic",
-            command = "ai.explainDiagnostic",
+            title = "AI: Explain code",
+            command = "ai.explainCode",
             arguments = { diagnostic_text },
           },
-        })
-      end
+        },
+      }
 
       if callback then
         callback(nil, actions)
@@ -115,17 +108,27 @@ end
 function M.setup()
   local client_id = nil
 
-  vim.lsp.commands["ai.fixDiagnostic"] = function(command)
-    local diagnostic_text = command.arguments and command.arguments[1] or ""
-    ask_ai(
-      "There is a problem in this code. Identify the issues and rewrite the code with fixes. Explain what was wrong and how your changes address the problems.\n\nDiagnostic issues:",
-      diagnostic_text
-    )
+  vim.lsp.commands["ai.fixCode"] = function(command)
+    local diagnostic_text = command.arguments and command.arguments[1]
+
+    if diagnostic_text then
+      ask_ai(
+        "There is a problem in this code. Identify the issues and rewrite the code with fixes. Explain what was wrong and how your changes address the problems.\n\nDiagnostic issues:\n"
+          .. diagnostic_text
+      )
+    else
+      ask_ai "There is a problem in this code. Identify the issues and rewrite the code with fixes. Explain what was wrong and how your changes address the problems."
+    end
   end
 
-  vim.lsp.commands["ai.explainDiagnostic"] = function(command)
-    local diagnostic_text = command.arguments and command.arguments[1] or ""
-    ask_ai("Explain these diagnostic issues:", diagnostic_text)
+  vim.lsp.commands["ai.explainCode"] = function(command)
+    local diagnostic_text = command.arguments and command.arguments[1]
+
+    if diagnostic_text then
+      ask_ai("Explain this code and the following diagnostic issues:\n" .. diagnostic_text)
+    else
+      ask_ai "Explain this code. How does it work and what is its purpose?"
+    end
   end
 
   vim.api.nvim_create_autocmd("FileType", {
