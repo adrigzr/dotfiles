@@ -10,13 +10,22 @@ vim.o.autoread = true
 codecompanion.setup {
   interactions = {
     chat = {
-      adapter = "anthropic",
+      adapter = {
+        name = "opencode",
+        model = "claude-opus-4-6",
+      },
     },
     inline = {
-      adapter = "anthropic",
+      adapter = {
+        name = "anthropic",
+        model = "claude-opus-4-6",
+      },
     },
     cmd = {
-      adapter = "anthropic",
+      adapter = {
+        name = "anthropic",
+        model = "claude-opus-4-6",
+      },
     },
   },
   display = {
@@ -77,7 +86,8 @@ map("n", "<leader>ax", function()
     table.insert(messages, entry)
   end
 
-  require("codecompanion").ask("Explain these diagnostic issues:\n" .. table.concat(messages, "\n"), {
-    interaction = "chat",
-  })
+  require("codecompanion").chat {
+    user_prompt = "Explain these diagnostic issues:\n" .. table.concat(messages, "\n"),
+    auto_submit = true,
+  }
 end, { desc = "AI explain diagnostic" })

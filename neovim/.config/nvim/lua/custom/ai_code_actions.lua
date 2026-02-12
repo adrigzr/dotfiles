@@ -24,9 +24,10 @@ local function ask_ai(prompt)
     return
   end
 
-  codecompanion.ask(prompt, {
-    interaction = "chat",
-  })
+  codecompanion.chat {
+    user_prompt = prompt,
+    auto_submit = true,
+  }
 end
 
 -- In-process LSP server that provides AI code actions
