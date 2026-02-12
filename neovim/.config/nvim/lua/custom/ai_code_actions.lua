@@ -1,22 +1,6 @@
 local M = {}
 
-local function format_diagnostics(diagnostics)
-  local messages = {}
-
-  for _, d in ipairs(diagnostics) do
-    local entry = d.message or ""
-
-    if d.source then
-      entry = entry .. " (" .. d.source .. ")"
-    end
-
-    table.insert(messages, entry)
-  end
-
-  return table.concat(messages, "\n")
-end
-
-local function ask_ai(prompt)
+local function run_prompt(alias)
   local ok, codecompanion = pcall(require, "codecompanion")
 
   if not ok then
@@ -24,10 +8,7 @@ local function ask_ai(prompt)
     return
   end
 
-  codecompanion.chat {
-    user_prompt = prompt,
-    auto_submit = true,
-  }
+  codecompanion.prompt(alias)
 end
 
 -- In-process LSP server that provides AI code actions
@@ -53,8 +34,7 @@ local function start_server(dispatchers)
     elseif method == "textDocument/codeAction" then
       local bufnr = params.textDocument and params.textDocument.uri and vim.uri_to_bufnr(params.textDocument.uri)
       local lnum = params.range and params.range.start and params.range.start.line
-      local diags = bufnr and lnum and vim.diagnostic.get(bufnr, { lnum = lnum }) or {}
-      local diagnostic_text = #diags > 0 and format_diagnostics(diags) or nil
+      local has_diagnostics = bufnr and lnum and #vim.diagnostic.get(bufnr, { lnum = lnum }) > 0
 
       local actions = {
         {
@@ -63,7 +43,6 @@ local function start_server(dispatchers)
           command = {
             title = "AI: Fix code",
             command = "ai.fixCode",
-            arguments = { diagnostic_text },
           },
         },
         {
@@ -72,10 +51,20 @@ local function start_server(dispatchers)
           command = {
             title = "AI: Explain code",
             command = "ai.explainCode",
-            arguments = { diagnostic_text },
           },
         },
       }
+
+      if has_diagnostics then
+        table.insert(actions, {
+          title = "AI: Explain LSP diagnostics",
+          kind = "quickfix",
+          command = {
+            title = "AI: Explain LSP diagnostics",
+            command = "ai.explainLsp",
+          },
+        })
+      end
 
       if callback then
         callback(nil, actions)
@@ -109,27 +98,16 @@ end
 function M.setup()
   local client_id = nil
 
-  vim.lsp.commands["ai.fixCode"] = function(command)
-    local diagnostic_text = command.arguments and command.arguments[1]
-
-    if diagnostic_text then
-      ask_ai(
-        "There is a problem in this code. Identify the issues and rewrite the code with fixes. Explain what was wrong and how your changes address the problems.\n\nDiagnostic issues:\n"
-          .. diagnostic_text
-      )
-    else
-      ask_ai "There is a problem in this code. Identify the issues and rewrite the code with fixes. Explain what was wrong and how your changes address the problems."
-    end
+  vim.lsp.commands["ai.fixCode"] = function()
+    run_prompt "fix"
   end
 
-  vim.lsp.commands["ai.explainCode"] = function(command)
-    local diagnostic_text = command.arguments and command.arguments[1]
+  vim.lsp.commands["ai.explainCode"] = function()
+    run_prompt "explain"
+  end
 
-    if diagnostic_text then
-      ask_ai("Explain this code and the following diagnostic issues:\n" .. diagnostic_text)
-    else
-      ask_ai "Explain this code. How does it work and what is its purpose?"
-    end
+  vim.lsp.commands["ai.explainLsp"] = function()
+    run_prompt "lsp"
   end
 
   vim.api.nvim_create_autocmd("FileType", {
