@@ -54,10 +54,13 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
    stow git neovim ssh system tmux zsh ghostty ruby
    ```
 
-1. Copy fonts (restart may be required).
+1. Install fonts (restart may be required).
 
    ```bash
+   # Ligalex Mono (custom ligature patch, bundled in fonts/)
    cp -r fonts/* ~/Library/Fonts
+   # Optional: IBM Plex Mono Nerd Font (available via Homebrew)
+   brew install --cask font-blex-mono-nerd-font
    ```
 
 1. Setup zsh & [zim](https://github.com/zimfw/zimfw).
@@ -108,8 +111,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | Package   | Description                                          |
 |-----------|------------------------------------------------------|
 | `bash`    | Bash shell config                                    |
-| `eslint`  | Global ESLint config                                 |
-| `fonts`   | Nerd Font patched fonts                              |
+| `fonts`   | Ligalex Mono Nerd Font (patched)                     |
 | `ghostty` | Ghostty terminal config                              |
 | `git`     | Git config, custom git subcommands (`git/bin/`)      |
 | `neovim`  | Full Neovim config (Lua, lazy.nvim)                  |

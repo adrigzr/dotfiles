@@ -59,10 +59,14 @@ if command -v fnm >/dev/null 2>&1; then
 	eval "$(fnm env --use-on-cd)"
 fi
 
-# Load rvm.
-if [ -f "$HOME/.rvm/scripts/rvm" ]; then
+# Lazy-load rvm (only when first invoked).
+if [ -d "$HOME/.rvm/bin" ]; then
 	export PATH="$PATH:$HOME/.rvm/bin"
-	source "$HOME/.rvm/scripts/rvm"
+	rvm() {
+		unset -f rvm
+		source "$HOME/.rvm/scripts/rvm"
+		rvm "$@"
+	}
 fi
 
 # Starship prompt.
