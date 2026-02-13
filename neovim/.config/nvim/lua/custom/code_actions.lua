@@ -34,18 +34,18 @@ local function start_server(dispatchers)
 
       local actions = {
         {
-          title = "  Fix code",
+          title = "  Fix code",
           kind = "quickfix",
           command = {
-            title = "  Fix code",
+            title = "  Fix code",
             command = "ai.fixCode",
           },
         },
         {
-          title = "  Explain code",
+          title = "  Explain code",
           kind = "quickfix",
           command = {
-            title = "  Explain code",
+            title = "  Explain code",
             command = "ai.explainCode",
           },
         },
@@ -53,10 +53,10 @@ local function start_server(dispatchers)
 
       if has_diagnostics then
         table.insert(actions, {
-          title = "  Explain LSP diagnostics",
+          title = "  Explain LSP diagnostics",
           kind = "quickfix",
           command = {
-            title = "  Explain LSP diagnostics",
+            title = "  Explain LSP diagnostics",
             command = "ai.explainLsp",
           },
         })
@@ -92,8 +92,6 @@ local function start_server(dispatchers)
 end
 
 function M.setup()
-  local client_id = nil
-
   vim.lsp.commands["ai.fixCode"] = function()
     run_prompt "fix"
   end
@@ -108,16 +106,13 @@ function M.setup()
 
   vim.api.nvim_create_autocmd("FileType", {
     group = vim.api.nvim_create_augroup("code_actions", {}),
-    callback = function(ev)
-      if not client_id then
-        client_id = vim.lsp.start {
-          name = "code-actions",
-          cmd = start_server,
-          root_dir = vim.fn.getcwd(),
-        }
-      else
-        vim.lsp.buf_attach_client(ev.buf, client_id)
-      end
+    callback = function()
+      -- vim.lsp.start reuses existing clients and attaches to new buffers
+      vim.lsp.start {
+        name = "code-actions",
+        cmd = start_server,
+        root_dir = vim.fn.getcwd(),
+      }
     end,
   })
 end

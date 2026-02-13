@@ -209,59 +209,6 @@ function M.format(opts)
   }, opts))
 end
 
-function M.get_client(bufnr, client_name)
-  for _, client in pairs(vim.lsp.get_clients { bufnr = bufnr }) do
-    if client.name == client_name then
-      return client
-    end
-  end
-end
-
-function M.make_command(source_action)
-  return function(opts)
-    opts = opts or {}
-
-    local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
-    local client = M.get_client(bufnr, "ts_ls")
-
-    if not client then
-      return
-    end
-
-    local params = vim.tbl_deep_extend("force", vim.lsp.util.make_range_params(0, client.offset_encoding), {
-      context = {
-        only = { source_action },
-        diagnostics = vim.diagnostic.get(bufnr),
-      },
-    })
-
-    local function apply_edits(err, res)
-      if
-        err
-        or not (
-          res[1]
-          and res[1].edit
-          and res[1].edit.documentChanges
-          and res[1].edit.documentChanges[1]
-          and res[1].edit.documentChanges[1].edits
-        )
-      then
-        return
-      end
-
-      vim.lsp.util.apply_text_edits(res[1].edit.documentChanges[1].edits, bufnr, client.offset_encoding)
-    end
-
-    if opts.sync == true then
-      local res, err = client:request_sync("textDocument/codeAction", params, nil, bufnr)
-
-      apply_edits(res and res.err or err, res and res.result)
-    else
-      client:request("textDocument/codeAction", params, apply_edits, bufnr)
-    end
-  end
-end
-
 local ts_tools_ok, ts_tools_api = pcall(require, "typescript-tools.api")
 
 --- @type fun(opts?: table)

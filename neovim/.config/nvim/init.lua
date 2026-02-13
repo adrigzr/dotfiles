@@ -6,6 +6,3 @@ require "custom.plugins"
 
 -- Load globals
 require "custom.globals"
-
--- Load theme
-require "custom.theme"

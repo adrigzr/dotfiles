@@ -75,10 +75,3 @@ map("n", "g#", function()
   hlslens.start()
   vim.cmd "normal! zzzv"
 end, { desc = "Search word backward (partial)" })
-
--- Setup hlslens for scrollbar
-local scrollbar_exists, scrollbar_search = pcall(require, "scrollbar.handlers.search")
-
-if scrollbar_exists then
-  scrollbar_search.setup()
-end

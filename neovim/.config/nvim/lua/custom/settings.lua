@@ -67,7 +67,6 @@ set.pumheight = 10
 
 -- Misc
 set.spelllang = { "en", "programming" }
-set.lazyredraw = true
 set.timeoutlen = 500
 set.ttimeoutlen = 10
 set.cmdheight = 1
