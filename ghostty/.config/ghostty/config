@@ -2,11 +2,7 @@
 # Font
 # ==============================================================================
 
-font-family = "LigalexMono Nerd Font"
-font-style = Normal
-font-style-bold = Bold
-font-style-italic = Italic
-font-style-bold-italic = Bold Italic
+font-family = "Lilex Nerd Font Mono"
 font-size = 14
 
 # Enable ligatures (contextual alternates).
