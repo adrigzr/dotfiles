@@ -25,17 +25,23 @@ vim.diagnostic.config {
   },
 }
 
--- Format on save
+-- Format on save (prefer conform, fall back to LSP)
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = custom_lsp_group,
-  callback = function()
+  callback = function(ev)
     local ft = vim.bo.filetype
 
     if vim.tbl_contains({ "typescript", "typescriptreact", "javascript", "javascriptreact" }, ft) then
       custom_lsp.add_missing_imports { sync = true }
     end
 
-    custom_lsp.format()
+    local conform_ok, conform = pcall(require, "conform")
+
+    if conform_ok then
+      conform.format { bufnr = ev.buf, lsp_fallback = true, timeout_ms = 3000 }
+    else
+      custom_lsp.format()
+    end
   end,
 })
 
@@ -166,7 +172,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "K", custom_lsp.show_info, { desc = "Show info" })
     map("n", "<C-]>", custom_lsp.goto_definition, { desc = "Go to definition" })
     map({ "n", "v" }, "<leader>rn", vim.lsp.buf.rename, { desc = "Rename" })
-    map("n", "<leader>cf", bind(custom_lsp.format, { { async = true } }), { desc = "Format document" })
+    map("n", "<leader>cf", function()
+      local conform_ok, conform = pcall(require, "conform")
+
+      if conform_ok then
+        conform.format { bufnr = bufnr, lsp_fallback = true, async = true }
+      else
+        custom_lsp.format { async = true }
+      end
+    end, { desc = "Format document" })
     map("n", "<leader>ca", bind(vim.lsp.buf.code_action, { { apply = false } }), { desc = "Apply code action" })
     map("v", "<leader>ca", bind(vim.lsp.buf.code_action, { { apply = false } }), { desc = "Apply range code action" })
     map(

@@ -18,8 +18,16 @@ require("lazy").setup({
   "nvim-lua/plenary.nvim",
   "kevinhwang91/promise-async",
 
-  -- Icons
-  "nvim-tree/nvim-web-devicons",
+  -- Icons (mini.icons with nvim-web-devicons compatibility shim)
+  {
+    "echasnovski/mini.icons",
+    version = false,
+    config = function()
+      local mini_icons = require "mini.icons"
+      mini_icons.setup()
+      mini_icons.mock_nvim_web_devicons()
+    end,
+  },
 
   -- Theme
   {
@@ -35,12 +43,12 @@ require("lazy").setup({
 
   -- Search
   "MagicDuck/grug-far.nvim",
-  "kevinhwang91/nvim-hlslens", -- Search Helper,
-  "hauleth/sad.vim", -- Change and repeat
+  "kevinhwang91/nvim-hlslens", -- Search Helper
 
   -- Syntax
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" }, -- We recommend updating the parsers on update
   "nvim-treesitter/nvim-treesitter-context", -- Add function context while scrolling
+  "nvim-treesitter/nvim-treesitter-textobjects", -- Function/class/argument text objects
   "windwp/nvim-ts-autotag", -- Autocloses html tags
   "HiPhish/rainbow-delimiters.nvim", -- Colorize matching delimiters
   { "wannesm/wmgraphviz.vim", ft = "dot" }, -- Graphviz plugin
@@ -48,7 +56,6 @@ require("lazy").setup({
   "mfussenegger/nvim-ansible",
 
   -- Navigation
-  "nvim-tree/nvim-tree.lua",
   "christoomey/vim-tmux-navigator",
   "rgroli/other.nvim", -- Switch to alternate file
 
@@ -68,21 +75,16 @@ require("lazy").setup({
   -- Formatter
   "tpope/vim-sleuth",
   { "echasnovski/mini.trailspace", version = false },
+  "stevearc/conform.nvim", -- Format runner with fallback chains
 
   -- LSP
   "williamboman/mason.nvim", -- Package client
   "neovim/nvim-lspconfig", -- LSP config
   { "folke/lazydev.nvim", ft = "lua", opts = {} }, -- Lua LSP workspace
   "folke/trouble.nvim", -- Pretty diagnostics
+  "folke/todo-comments.nvim", -- Highlight TODO/FIXME/HACK in comments
   "b0o/schemastore.nvim", -- Schemas for jsonls
   { "pmizio/typescript-tools.nvim", dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" } }, -- Typescript tools
-  {
-    "antosha417/nvim-lsp-file-operations",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-tree.lua" },
-    config = function()
-      require("lsp-file-operations").setup()
-    end,
-  },
 
   -- Completion
   {

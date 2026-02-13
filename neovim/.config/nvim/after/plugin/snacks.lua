@@ -9,6 +9,10 @@ local trouble_ok, trouble_sources = pcall(require, "trouble.sources.snacks")
 snacks.setup {
   input = {},
   terminal = {},
+  explorer = {},
+  quickfile = {},
+  words = {},
+  rename = {},
   indent = {
     animate = { enabled = false },
   },
@@ -22,6 +26,9 @@ snacks.setup {
       grep = {
         hidden = true,
         exclude = { ".git", "node_modules", "yarn.lock" },
+      },
+      explorer = {
+        hidden = true,
       },
     },
     actions = trouble_ok and trouble_sources.actions or {},
@@ -77,7 +84,7 @@ snacks.setup {
   styles = {
     notification = {
       wo = { wrap = true },
-    }
+    },
   },
   notifier = {
     enabled = true,
@@ -93,3 +100,15 @@ end, { desc = "Show notification history" })
 map("n", "<leader>nd", function()
   Snacks.notifier.hide()
 end, { desc = "Dismiss current notification" })
+
+map("n", "<leader>t", function()
+  Snacks.explorer()
+end, { desc = "Open file explorer" })
+
+map("n", "]]", function()
+  Snacks.words.jump(1)
+end, { desc = "Next LSP reference" })
+
+map("n", "[[", function()
+  Snacks.words.jump(-1)
+end, { desc = "Previous LSP reference" })
