@@ -31,10 +31,8 @@ import sys
 import time
 
 
-if sys.version_info[0] == 3 and sys.version_info < (3, 4):
-    sys.exit("Error: Python 3.4 or newer is required.")
-if sys.version_info < (2, 7):
-    sys.exit("Error: Python 2.7 or newer is required.")
+if sys.version_info < (3, 6):
+    sys.exit("Error: Python 3.6 or newer is required.")
 
 
 usage = ('$ git log --encoding=utf-8 --full-history --reverse '

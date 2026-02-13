@@ -8,13 +8,14 @@
 [diff]
   tool = fugitive
   colorMoved = default
+  algorithm = histogram
 
 [difftool]
   prompt = false
 
 [merge]
   tool = fugitive
-  conflictstyle = diff3
+  conflictstyle = zdiff3
 
 [mergetool "vimdiff"]
   cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
@@ -62,10 +63,9 @@
   rh = reset --hard
   rh1 = reset HEAD^ --hard
   rh2 = reset HEAD^^ --hard
-  rh2 = reset HEAD^^ --hard
   sl = stash list
   sa = stash apply
-  ss = stash save
+  ss = stash push
   sp = stash pop
   s = stash
   logtree = log --graph --oneline --decorate --all
@@ -135,10 +135,21 @@
 
 [init]
   templatedir = ~/.gittemplate
-  defaultBranch = master
+  defaultBranch = main
+
+[rebase]
+  autoStash = true
+  autoSquash = true
+
+[transfer]
+  fsckObjects = true
 
 [fetch]
   prune = true
+  fsckObjects = true
+
+[receive]
+  fsckObjects = true
 
 [color "diff"]
   meta = yellow bold
@@ -168,8 +179,9 @@
   autocorrect = prompt
 
 [filter "lfs"]
-  clean = git-lfs clean %f
-  smudge = git-lfs smudge %f
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
   required = true
 
 [url "https://github.com"]

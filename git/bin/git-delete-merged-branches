@@ -1,17 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-branches_to_die=$(git branch --no-color --merged origin/master | grep -v '^[\* ] master')
+# Detect the default branch dynamically.
+default_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+if [ -z "$default_branch" ]; then
+  default_branch="main"
+fi
+
+branches_to_die=$(git branch --no-color --merged "origin/$default_branch" | grep -v "^[\* ] $default_branch$")
+if [ -z "$branches_to_die" ]; then
+  echo "No merged branches to delete."
+  exit 0
+fi
+
 echo "Branches to be deleted:"
-echo $branches_to_die
+echo "$branches_to_die"
 
 echo ""
 echo "Enter Y to confirm"
 read -p "> " confirm
 
-
 kill_branches(){
-	echo $branches_to_die | xargs -n 1 git branch -d
+	echo "$branches_to_die" | xargs -n 1 git branch -d
 }
 
-
-[[ $confirm == "Y"  ]] && kill_branches
+[[ $confirm == "Y" ]] && kill_branches
