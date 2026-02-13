@@ -50,7 +50,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 1. Clone repository and stow packages.
 
    ```bash
-   git clone --recurse-submodules -j8 https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
+   git clone --recurse-submodules https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
    stow git neovim ssh system tmux zsh ghostty ruby
    ```
 
@@ -70,11 +70,12 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 1. Setup tmux & [tpm](https://github.com/tmux-plugins/tpm).
 
+   tpm is included as a git submodule and cloned with `--recurse-submodules` above.
+
    ```bash
    tic -x tmux/screen-256color.terminfo
    # Restart tmux & Ghostty and check infos
    infocmp -x $TERM
-   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
    ~/.tmux/plugins/tpm/bin/install_plugins
    ```
 
@@ -135,13 +136,12 @@ External tools required by Neovim plugins. All installed via `brew install`.
 
 | Package | Required by | Purpose |
 |---------|-------------|---------|
-| `ripgrep` | telescope, grug-far, Snacks.picker | Live grep and search |
-| `fd` | telescope, Snacks.picker | File finder |
-| `git` | diffview, CopilotChat, telescope | VCS integration |
+| `ripgrep` | grug-far, Snacks.picker | Live grep and search |
+| `fd` | Snacks.picker, Snacks.explorer | File finder |
+| `git` | diffview, gitsigns, Snacks.picker | VCS integration |
 | `node` | copilot.lua, nvim-treesitter | Copilot LSP, parser builds |
 | `lazygit` | Snacks.lazygit | Terminal UI for git |
-| `gh` | CopilotChat | GitHub CLI for improved auth |
 | `ast-grep` | grug-far | Structural code search |
 | `imagemagick` | Snacks.image | Image conversion and display |
-| `stylua` | CI, formatting | Lua code formatter |
-| `selene` | linting | Lua linter |
+| `stylua` | CI, conform.nvim | Lua code formatter |
+| `selene` | CI | Lua linter |

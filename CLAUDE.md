@@ -6,8 +6,6 @@ Personal dotfiles repository managed with [GNU Stow](https://www.gnu.org/softwar
 
 ```
 bash/        - Bash shell config
-eslint/      - Global ESLint config
-fonts/       - Nerd Font patched fonts
 ghostty/     - Ghostty terminal config
 git/         - Git config, custom git subcommands (git/bin/)
 neovim/      - Full Neovim config (Lua, lazy.nvim)
@@ -20,7 +18,7 @@ zsh/         - Zsh config with Zim framework
 
 ## Build / Lint / Test Commands
 
-There is no build system (no Makefile, package.json, or justfile). CI runs a single StyLua check.
+There is no build system (no Makefile, package.json, or justfile). CI runs StyLua and Selene checks.
 
 ### Lua Formatting (StyLua)
 
@@ -35,7 +33,7 @@ stylua neovim/.config
 stylua --check neovim/.config/nvim/lua/custom/plugins.lua
 ```
 
-Config: `stylua.toml` -- spaces, 2-width indent, no call parentheses.
+Config: `stylua.toml` -- spaces, 2-width indent, no call parentheses, forced double quotes.
 
 ### Lua Linting (Selene)
 
@@ -171,7 +169,7 @@ Custom keybindings use fzf inside tmux popups (centered, 80%x60%, rounded border
 
 - **No `fzf --tmux` inside widgets**: The `--tmux` flag spawns a subprocess that can't communicate back through the ZLE subshell. Use `_fzf_tmux_popup` instead.
 - **`noclobber`**: Zim's environment module sets `NO_CLOBBER`. Any function that writes to `mktemp`-created files must use `setopt localoptions clobber` or `>|`.
-- **`rm` alias**: `rm` is aliased to `rm -i -v`. The `-v` flag leaks file paths to stdout. Always use `command rm` inside functions whose stdout is captured by `$()`.
+- **`rm` alias**: `rm` is aliased to `rm -i`. Always use `command rm` inside functions whose stdout is captured by `$()`.
 - **Piped vs non-piped input**: When piping data into `_fzf_tmux_popup`, pass `--pipe` as the first argument. Without it, the helper uses `FZF_DEFAULT_COMMAND` to list files.
 - **Autoload caching**: ZLE widgets are cached after first invocation. To reload after editing: `unfunction zle-fvim; autoload -U zle-fvim` (or open a new shell).
 
@@ -198,12 +196,11 @@ Custom keybindings use fzf inside tmux popups (centered, 80%x60%, rounded border
 
 | Tool       | Config File                          | Purpose                                    |
 |------------|--------------------------------------|--------------------------------------------|
-| StyLua     | `stylua.toml`                        | Lua formatter (spaces, 2-width, no parens) |
+| StyLua     | `stylua.toml`                        | Lua formatter (spaces, 2-width, no parens, double quotes) |
 | Selene     | `selene.toml` + `vim.toml`           | Lua linter (vim std, lua51 base)           |
-| ESLint     | `eslint/.eslintrc`                   | JS linter (ES6, single quotes, 2-space)    |
-| EditorConfig| `.editorconfig`                     | Universal: LF, 2-space, trim whitespace    |
+| EditorConfig| `.editorconfig`                     | Universal: UTF-8, LF, 2-space, trim whitespace |
 | Lua LSP    | `neovim/.config/nvim/.luarc.json`    | Disable third-party workspace checking     |
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`): runs `stylua --check neovim/.config` on push and PR. This is the only automated check -- ensure Lua files pass before committing.
+GitHub Actions (`.github/workflows/ci.yml`): runs `stylua --check neovim/.config` and `selene neovim/.config/nvim/lua/` on push and PR. Concurrent runs on the same branch are cancelled automatically. Ensure Lua files pass both checks before committing.
