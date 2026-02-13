@@ -9,7 +9,7 @@ alias -- -='cd -'
 
 # mv, rm, cp
 alias mv='mv -v'
-alias rm='rm -i -v'
+alias rm='rm -i'
 alias cp='cp -v'
 
 # System.
@@ -18,11 +18,11 @@ alias where=which # sometimes i forget
 alias hosts='sudo $EDITOR /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
 alias attach='tmux new-session -A -s'
 
-# `cat` with beautiful colors. requires: sudo easy_install -U Pygments
-alias c='pygmentize -O style=monokai -f console256 -g'
+# `cat` with syntax highlighting via bat.
+alias c='bat --paging=never'
 
 # git root
-alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
+alias gr='[ ! -z "$(git rev-parse --show-cdup)" ] && cd "$(git rev-parse --show-cdup || pwd)"'
 
 # Networking. IP address, dig, DNS
 alias my_ip='dig +short myip.opendns.com @resolver1.opendns.com'

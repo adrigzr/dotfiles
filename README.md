@@ -17,7 +17,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
    ```bash
    brew install git wget ripgrep fzf stow gnu-sed editorconfig bat gpg gawk htop ffmpeg jq fd moreutils git-delta
-   brew install starship fnm zoxide
+   brew install starship fnm zoxide eza
    brew install stylua selene
    brew install lazygit gh ast-grep imagemagick
    brew install --cask ghostty
@@ -127,7 +127,8 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 - **[fzf](https://github.com/junegunn/fzf)** -- Fuzzy finder
 - **[ripgrep](https://github.com/BurntSushi/ripgrep)** -- Fast grep
 - **[fd](https://github.com/sharkdp/fd)** -- Fast find
-- **[bat](https://github.com/sharkdp/bat)** -- cat with syntax highlighting
+- **[bat](https://github.com/sharkdp/bat)** -- cat with syntax highlighting, MANPAGER
+- **[eza](https://github.com/eza-community/eza)** -- Modern ls replacement with icons and git integration
 - **[delta](https://github.com/dandavella/delta)** -- Git diff pager
 
 ## Neovim Dependencies

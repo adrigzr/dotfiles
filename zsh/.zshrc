@@ -22,9 +22,6 @@ WORDCHARS=${WORDCHARS//[\/]}
 # Load default dotfiles
 [ -s "$HOME/.profile"  ] && source "$HOME/.profile"
 
-# Setup fzf (fuzzy-finder).
-[ -s "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
-
 # Fix git aliases
 zstyle ':zim:git' aliases-prefix 'g'
 
@@ -45,6 +42,14 @@ fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
+# Modern ls (eza) — must be after zim utility module to override its ls alias.
+if (( $+commands[eza] )); then
+  alias ls='eza --icons'
+  alias la='eza --icons -la'
+  alias ll='eza --icons -l'
+  alias tree='eza --icons --tree'
+fi
+
 # Cache and source a tool's init output (regenerates when binary changes).
 _cached_eval() {
   local cmd=$1; shift
@@ -63,6 +68,12 @@ _cached_eval() {
 
 # Zoxide (smart cd).
 (( $+commands[zoxide] )) && _cached_eval zoxide init zsh
+
+# fnm (fast node manager).
+(( $+commands[fnm] )) && _cached_eval fnm env --use-on-cd
+
+# Setup fzf (fuzzy-finder).
+(( $+commands[fzf] )) && _cached_eval fzf --zsh
 
 # Vi mode.
 function zle-keymap-select { zle reset-prompt ; zle -R }
@@ -104,7 +115,6 @@ zstyle ':completion:*' special-dirs true
 
 # history mgmt
 # http://www.refining-linux.org/archives/49/ZSH-Gem-15-Shared-history/
-setopt inc_append_history
 setopt share_history
 
 # Remove older command from the history if a duplicate is to be added.

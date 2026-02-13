@@ -16,11 +16,6 @@ if [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
 	done
 fi
 
-# Load fnm (fast node manager).
-if command -v fnm >/dev/null 2>&1; then
-	eval "$(fnm env --use-on-cd)"
-fi
-
 # Lazy-load rvm: add bin to PATH now, defer heavy init until first use.
 if [ -f "$HOME/.rvm/scripts/rvm" ]; then
 	export PATH="$PATH:$HOME/.rvm/bin"

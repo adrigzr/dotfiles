@@ -3,24 +3,6 @@ function md() {
   mkdir -p "$@" && cd "$1"
 }
 
-# find shorthand
-function f() {
-  find . -name "$1" 2>&1 | grep -v 'Permission denied'
-}
-
-# List all files, long format, colorized, permissions in octal
-function la() {
-   ls -l  "$@" | awk '
-    {
-      k=0;
-      for (i=0;i<=8;i++)
-        k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));
-      if (k)
-        printf("%0o ",k);
-      printf(" %9s  %3s %2s %5s  %6s  %s %s %s\n", $3, $6, $7, $8, $5, $9,$10, $11);
-    }'
-}
-
 # git commit browser. needs fzf
 function log() {
   git log --graph --color=always \
@@ -40,7 +22,7 @@ function server() {
 
 # Copy w/ progress
 function cp_p () {
-  rsync -WavP --human-readable --progress $1 $2
+  rsync -WavP --human-readable --progress "$1" "$2"
 }
 
 # get gzipped size
@@ -68,7 +50,7 @@ function whois() {
 # turn that video into webm.
 # brew reinstall ffmpeg --with-libvpx
 function webmify() {
-  ffmpeg -i $1 -vcodec libvpx -acodec libvorbis -isync -copyts -aq 80 -threads 3 -qmax 30 -y $2 $1.webm
+  ffmpeg -i "$1" -vcodec libvpx -acodec libvorbis -isync -copyts -aq 80 -threads 3 -qmax 30 -y "$2" "$1.webm"
 }
 
 # direct it all to /dev/null
@@ -141,26 +123,6 @@ function fvim() {
   fi
 
   ${EDITOR:-vim} "${files[@]}"
-}
-
-# Quick transfers.
-function transfer() {
-  if [ $# -eq 0 ]; then
-    echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
-    return 1
-  fi
-
-  tmpfile=$( mktemp -t transferXXX )
-
-  if tty -s; then
-    basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
-    curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile
-  else
-    curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile
-  fi
-
-  cat $tmpfile
-  rm -f $tmpfile >/dev/null
 }
 
 # Find branch for a given commit.
@@ -238,8 +200,14 @@ function notify() {
 
 function killport() {
   local port="${1}"
+  local pids
+  pids=$(lsof -t -i:"$port")
 
-  kill $(lsof -t -i:$port)
+  if [ -n "$pids" ]; then
+    kill $pids
+  else
+    echo "No process found on port $port"
+  fi
 }
 
 # Helper for running fzf in tmux popup from ZLE widgets.

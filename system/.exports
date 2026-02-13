@@ -18,8 +18,9 @@ if command -v chromium >/dev/null 2>&1; then
   export PUPPETEER_EXECUTABLE_PATH=$(command -v chromium)
 fi
 
-# Don't clear the screen after quitting a manual page
-export MANPAGER="less -X"
+# Syntax-highlighted man pages via bat.
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
 export PAGER="less"
 
 # Lang
@@ -44,10 +45,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 # NPM
 export npm_config_progress=false
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-# Node
-export NODE_OPTIONS="--max-old-space-size=4096 --max-http-header-size=49152"
 
 # Notes
 export NOTE_DIR="$HOME/Dropbox/Texts"
