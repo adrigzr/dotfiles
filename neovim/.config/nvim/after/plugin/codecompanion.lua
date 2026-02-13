@@ -11,20 +11,45 @@ codecompanion.setup {
   interactions = {
     chat = {
       adapter = {
-        name = "opencode",
+        name = "anthropic",
         model = "claude-opus-4-6",
+      },
+      opts = {
+        completion_provider = "blink",
+      },
+      variables = {
+        ["buffer"] = {
+          opts = { default_params = "diff" },
+        },
+      },
+      tools = {
+        opts = {
+          auto_submit_errors = true,
+          auto_submit_success = true,
+          default_tools = { "full_stack_dev" },
+        },
       },
     },
     inline = {
       adapter = {
         name = "anthropic",
-        model = "claude-opus-4-6",
+        model = "claude-sonnet-4-5",
+      },
+      keymaps = {
+        accept_change = { modes = { n = "gda" } },
+        reject_change = { modes = { n = "gdr" } },
       },
     },
     cmd = {
       adapter = {
         name = "anthropic",
-        model = "claude-opus-4-6",
+        model = "claude-sonnet-4-5",
+      },
+    },
+    background = {
+      adapter = {
+        name = "anthropic",
+        model = "claude-sonnet-4-5",
       },
     },
   },
@@ -33,8 +58,19 @@ codecompanion.setup {
       provider = "snacks",
     },
     chat = {
+      show_token_count = true,
+      fold_context = true,
       window = {
         layout = "vertical",
+      },
+    },
+    diff = {
+      enabled = true,
+      provider = "inline",
+      provider_opts = {
+        inline = {
+          layout = "float",
+        },
       },
     },
   },
@@ -45,14 +81,17 @@ require("custom.ai_code_actions").setup()
 local map = vim.keymap.set
 
 -- Action palette
-map({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionActions<cr>", { desc = "AI action palette" })
+map("n", "<leader>aa", "<cmd>CodeCompanionActions<cr>", { desc = "AI action palette" })
+map("v", "<leader>aa", "<cmd>CodeCompanionActions<cr>", { desc = "AI action palette" })
 
 -- Chat
-map({ "n", "v" }, "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Toggle AI chat" })
+map("n", "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Toggle AI chat" })
+map("v", "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Toggle AI chat" })
 map("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add selection to AI chat" })
 
 -- Inline assistant
-map({ "n", "v" }, "<leader>ai", "<cmd>CodeCompanion<cr>", { desc = "AI inline assistant" })
+map("n", "<leader>ai", "<cmd>CodeCompanion<cr>", { desc = "AI inline assistant" })
+map("v", "<leader>ai", "<cmd>CodeCompanion<cr>", { desc = "AI inline assistant" })
 
 -- Prompt library shortcuts (visual mode)
 map("v", "<leader>ae", "<cmd>CodeCompanion /explain<cr>", { desc = "AI explain code" })
