@@ -131,7 +131,7 @@
   side-by-side = true
 
 [credential]
-  helper = cache --timeout=3600
+  helper = osxkeychain
 
 [init]
   templatedir = ~/.gittemplate
@@ -165,7 +165,7 @@
   untracked = cyan
 
 [help]
-  autocorrect = 1
+  autocorrect = prompt
 
 [filter "lfs"]
   clean = git-lfs clean %f
