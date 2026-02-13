@@ -76,7 +76,7 @@ codecompanion.setup {
   },
 }
 
-require("custom.ai_code_actions").setup()
+require("custom.code_actions").setup()
 
 local map = vim.keymap.set
 
@@ -91,7 +91,7 @@ map("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add selection to AI c
 
 -- Inline assistant
 map("n", "<leader>ai", "<cmd>CodeCompanion<cr>", { desc = "AI inline assistant" })
-map("v", "<leader>ai", "<cmd>CodeCompanion<cr>", { desc = "AI inline assistant" })
+map("v", "<leader>ai", ":'<,'>CodeCompanion<cr>", { desc = "AI inline assistant" })
 
 -- Prompt library shortcuts (visual mode)
 map("v", "<leader>ae", "<cmd>CodeCompanion /explain<cr>", { desc = "AI explain code" })

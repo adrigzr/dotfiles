@@ -34,18 +34,18 @@ local function start_server(dispatchers)
 
       local actions = {
         {
-          title = "  Fix code",
+          title = "  Fix code",
           kind = "quickfix",
           command = {
-            title = "  Fix code",
+            title = "  Fix code",
             command = "ai.fixCode",
           },
         },
         {
-          title = "  Explain code",
+          title = "  Explain code",
           kind = "quickfix",
           command = {
-            title = "  Explain code",
+            title = "  Explain code",
             command = "ai.explainCode",
           },
         },
@@ -53,10 +53,10 @@ local function start_server(dispatchers)
 
       if has_diagnostics then
         table.insert(actions, {
-          title = "  Explain LSP diagnostics",
+          title = "  Explain LSP diagnostics",
           kind = "quickfix",
           command = {
-            title = "  Explain LSP diagnostics",
+            title = "  Explain LSP diagnostics",
             command = "ai.explainLsp",
           },
         })
@@ -107,11 +107,11 @@ function M.setup()
   end
 
   vim.api.nvim_create_autocmd("FileType", {
-    group = vim.api.nvim_create_augroup("ai_code_actions", {}),
+    group = vim.api.nvim_create_augroup("code_actions", {}),
     callback = function(ev)
       if not client_id then
         client_id = vim.lsp.start {
-          name = "ai-code-actions",
+          name = "code-actions",
           cmd = start_server,
           root_dir = vim.fn.getcwd(),
         }

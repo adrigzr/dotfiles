@@ -124,6 +124,12 @@ require("lazy").setup({
       "nvim-treesitter/nvim-treesitter",
     },
   },
+  {
+    "nickjvandyke/opencode.nvim",
+    dependencies = {
+      "folke/snacks.nvim",
+    },
+  },
 }, {
   defaults = {
     lazy = false,
