@@ -13,7 +13,7 @@ adjust-cell-width = -8%
 adjust-cell-height = -2%
 
 # Push underline down to add separation from text.
-adjust-underline-position = 5
+adjust-underline-position = 4
 
 # ==============================================================================
 # Cursor
