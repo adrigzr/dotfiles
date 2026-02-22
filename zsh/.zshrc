@@ -58,7 +58,7 @@ _cached_eval() {
   local bin_path="${commands[$cmd]}"
   if [[ ! -f "$cache_file" || "$bin_path" -nt "$cache_file" ]]; then
     mkdir -p "$cache_dir"
-    "$cmd" "$@" > "$cache_file"
+    "$cmd" "$@" >| "$cache_file"
   fi
   source "$cache_file"
 }
@@ -76,10 +76,49 @@ _cached_eval() {
 (( $+commands[fzf] )) && _cached_eval fzf --zsh
 
 # Vi mode.
-function zle-keymap-select { zle reset-prompt ; zle -R }
-zle -N zle-keymap-select
 bindkey -v
-KEYTIMEOUT=1
+KEYTIMEOUT=10
+bindkey -M viins '^?' backward-delete-char
+bindkey -M viins '^H' backward-delete-char
+
+# Cursor shape: beam for insert, block for normal, underline for replace.
+function zle-keymap-select {
+  case "$KEYMAP" in
+    vicmd)      print -n '\e[2 q' ;;
+    viins|main) print -n '\e[6 q' ;;
+  esac
+  zle reset-prompt
+  zle -R
+}
+zle -N zle-keymap-select
+
+function zle-line-init {
+  print -n '\e[6 q'
+}
+zle -N zle-line-init
+
+# Text objects (ci", da(, vi{, etc.).
+autoload -U select-quoted select-bracketed
+zle -N select-quoted
+zle -N select-bracketed
+for m in visual viopp; do
+  for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+    bindkey -M $m $c select-bracketed
+  done
+  for c in {a,i}{\',\",\`}; do
+    bindkey -M $m $c select-quoted
+  done
+done
+
+# Surround operations (cs"', ds", ys", S in visual).
+autoload -Uz surround
+zle -N delete-surround surround
+zle -N change-surround surround
+zle -N add-surround surround
+bindkey -M vicmd cs change-surround
+bindkey -M vicmd ds delete-surround
+bindkey -M vicmd ys add-surround
+bindkey -M visual S add-surround
 
 # Edit command line on vim.
 autoload edit-command-line; zle -N edit-command-line
