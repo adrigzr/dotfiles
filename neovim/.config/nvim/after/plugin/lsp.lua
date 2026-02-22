@@ -223,6 +223,30 @@ require("typescript-tools").setup {
 
 require("mason").setup()
 
+-- ESLint v10 removed the FlatESLint export from eslint/use-at-your-own-risk.
+-- When useFlatConfig is true, the server tries to import FlatESLint from that
+-- path and fails silently (no diagnostics). Setting it to false makes the
+-- server load eslint directly and use the loadESLint() API instead, which
+-- handles flat config automatically in v8.57+, v9, and v10.
+-- The before_init wrapper is needed because nvim-lspconfig's before_init hook
+-- detects flat config files and sets useFlatConfig back to true unconditionally.
+-- NOTE: vim.lsp.config() is used instead of lsp/eslint.lua because the latter
+-- gets overridden by nvim-lspconfig defaults (later in rtp wins for lsp/*.lua).
+local orig_eslint_before_init = vim.lsp.config.eslint.before_init
+vim.lsp.config("eslint", {
+  before_init = function(params, config)
+    if orig_eslint_before_init then
+      orig_eslint_before_init(params, config)
+    end
+    config.settings.experimental.useFlatConfig = false
+  end,
+  settings = {
+    experimental = {
+      useFlatConfig = false,
+    },
+  },
+})
+
 -- Enable LSP servers (configs in lsp/<server>.lua)
 vim.lsp.enable {
   "ansiblels",
