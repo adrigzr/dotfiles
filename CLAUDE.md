@@ -1,4 +1,4 @@
-# AGENTS.md
+# CLAUDE.md
 
 Personal dotfiles repository managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory is a stow package that mirrors `$HOME`. The heaviest component is the Neovim configuration (~70 Lua files under `neovim/.config/nvim/`, 100% Lua -- no VimScript).
 
@@ -6,6 +6,7 @@ Personal dotfiles repository managed with [GNU Stow](https://www.gnu.org/softwar
 
 ```
 bash/        - Bash shell config
+claude/      - Claude Code settings and global instructions
 ghostty/     - Ghostty terminal config
 git/         - Git config, custom git subcommands (git/bin/)
 neovim/      - Full Neovim config (Lua, lazy.nvim)

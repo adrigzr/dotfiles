@@ -51,7 +51,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
    ```bash
    git clone --recurse-submodules https://github.com/adrigzr/dotfiles.git ~/dotfiles && cd $_
-   stow git neovim ssh system tmux zsh ghostty ruby
+    stow git neovim ssh system tmux zsh ghostty ruby claude
    ```
 
 1. Install fonts (restart may be required).
@@ -109,6 +109,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | Package   | Description                                          |
 |-----------|------------------------------------------------------|
 | `bash`    | Bash shell config                                    |
+| `claude`  | Claude Code settings and global instructions         |
 | `ghostty` | Ghostty terminal config                              |
 | `git`     | Git config, custom git subcommands (`git/bin/`)      |
 | `neovim`  | Full Neovim config (Lua, lazy.nvim)                  |
