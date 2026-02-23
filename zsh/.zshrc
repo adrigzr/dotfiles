@@ -16,6 +16,11 @@ fpath=( "$HOME/.zfunctions" $fpath )
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=59"
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
+# Config history substring search.
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND="underline"
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="fg=red,underline"
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=true
+
 # Remove path separator from WORDCHARS.
 WORDCHARS=${WORDCHARS//[\/]}
 
@@ -136,6 +141,11 @@ zmodload zsh/terminfo
 [[ -n "$terminfo[knp]"   ]] && bindkey "$terminfo[knp]"   end-of-buffer-or-history
 [[ -n "$terminfo[kcuu1]" ]] && bindkey "$terminfo[kcuu1]" history-substring-search-up
 [[ -n "$terminfo[kcud1]" ]] && bindkey "$terminfo[kcud1]" history-substring-search-down
+# Hardcoded fallback for terminals that send different escape sequences.
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^[OA' history-substring-search-up
+bindkey '^[OB' history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
