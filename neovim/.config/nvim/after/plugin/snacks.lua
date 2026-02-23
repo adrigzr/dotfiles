@@ -13,6 +13,9 @@ snacks.setup {
   quickfile = {},
   words = {},
   rename = {},
+  scroll = {
+    animate = { duration = { step = 5, total = 100 } },
+  },
   indent = {
     animate = { enabled = false },
   },
