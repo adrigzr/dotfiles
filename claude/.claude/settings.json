@@ -7,7 +7,9 @@
       "Read(./**)",
       "Edit(./**)",
       "Write(./**)",
-      "Bash(*)"
+      "Bash(*)",
+      "WebSearch",
+      "WebFetch"
     ],
     "deny": [
       "Read(~/*.extra)",
