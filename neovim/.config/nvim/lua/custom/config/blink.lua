@@ -1,10 +1,4 @@
-local exists, blink = pcall(require, "blink.cmp")
-
-if not exists then
-  return
-end
-
-local copilot_suggestion = require "copilot.suggestion"
+local blink = require "blink.cmp"
 local luasnip = require "luasnip"
 
 blink.setup {
@@ -15,7 +9,8 @@ blink.setup {
         if cmp.is_visible() then
           return cmp.select_next()
         end
-        if copilot_suggestion.is_visible() then
+        local cs_ok, copilot_suggestion = pcall(require, "copilot.suggestion")
+        if cs_ok and copilot_suggestion.is_visible() then
           copilot_suggestion.accept()
           return true
         end
@@ -44,7 +39,8 @@ blink.setup {
         if cmp.is_visible() then
           return cmp.cancel()
         end
-        if copilot_suggestion.is_visible() then
+        local cs_ok, copilot_suggestion = pcall(require, "copilot.suggestion")
+        if cs_ok and copilot_suggestion.is_visible() then
           copilot_suggestion.dismiss()
           return true
         end

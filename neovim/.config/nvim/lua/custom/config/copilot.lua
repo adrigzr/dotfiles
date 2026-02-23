@@ -1,10 +1,4 @@
-local exists, module = pcall(require, "copilot")
-
-if not exists then
-  return
-end
-
-module.setup {
+require("copilot").setup {
   filetypes = {
     yaml = true,
   },

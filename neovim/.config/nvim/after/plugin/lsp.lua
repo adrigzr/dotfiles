@@ -82,16 +82,17 @@ vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 vim.diagnostic.handlers["lsp_tags"] = require("custom.util.diagnostic").lsp_tags_handler
 
 -- Shared capabilities for all servers
-local capabilities = require("blink.cmp").get_lsp_capabilities()
-
--- Pretty folds (ufo)
-capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true,
-}
-
+-- blink.cmp merges its own capabilities via vim.lsp.config("*") when it loads,
+-- so we only need to set the ufo folding range capability here.
 vim.lsp.config("*", {
-  capabilities = capabilities,
+  capabilities = {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      },
+    },
+  },
 })
 
 -- LSP attach handler for keymaps and per-client overrides
@@ -218,7 +219,6 @@ require("typescript-tools").setup {
   on_attach = function(_, bufnr)
     vim.keymap.set("n", "<leader>rf", "<cmd>TSToolsRenameFile<CR>", { buffer = bufnr, desc = "Rename file (TSTools)" })
   end,
-  capabilities = capabilities,
 }
 
 require("mason").setup()

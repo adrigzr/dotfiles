@@ -90,10 +90,20 @@ require("lazy").setup({
   {
     "saghen/blink.cmp",
     version = "1.*",
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
-      { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
-      "rafamadriz/friendly-snippets",
+      {
+        "L3MON4D3/LuaSnip",
+        build = "make install_jsregexp",
+        dependencies = { "rafamadriz/friendly-snippets" },
+        config = function()
+          require "custom.config.luasnip"
+        end,
+      },
     },
+    config = function()
+      require "custom.config.blink"
+    end,
   },
 
   -- Misc
@@ -118,13 +128,67 @@ require("lazy").setup({
     opts = { hide_up_to_date = true },
   }, -- Show package info as virtual text in the package.json
   "axelvc/template-string.nvim",
-  "zbirenbaum/copilot.lua",
+  {
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    config = function()
+      require "custom.config.copilot"
+    end,
+  },
   {
     "olimorris/codecompanion.nvim",
+    cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionActions" },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
     },
+    keys = {
+      { "<leader>aa", "<cmd>CodeCompanionActions<cr>", mode = { "n", "v" }, desc = "AI action palette" },
+      { "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", mode = { "n", "v" }, desc = "Toggle AI chat" },
+      { "ga", "<cmd>CodeCompanionChat Add<cr>", mode = "v", desc = "Add selection to AI chat" },
+      { "<leader>ai", "<cmd>CodeCompanion<cr>", mode = "n", desc = "AI inline assistant" },
+      { "<leader>ai", ":'<,'>CodeCompanion<cr>", mode = "v", desc = "AI inline assistant" },
+      { "<leader>ae", "<cmd>CodeCompanion /explain<cr>", mode = "v", desc = "AI explain code" },
+      { "<leader>af", "<cmd>CodeCompanion /fix<cr>", mode = "v", desc = "AI fix code" },
+      { "<leader>al", "<cmd>CodeCompanion /lsp<cr>", mode = "v", desc = "AI explain LSP diagnostics" },
+      { "<leader>at", "<cmd>CodeCompanion /tests<cr>", mode = "v", desc = "AI generate tests" },
+      { "<leader>ak", "<cmd>CodeCompanion /commit<cr>", mode = "n", desc = "AI commit message" },
+      {
+        "<leader>ax",
+        function()
+          local bufnr = vim.api.nvim_get_current_buf()
+          local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+          local diagnostics = vim.diagnostic.get(bufnr, { lnum = lnum })
+
+          if #diagnostics == 0 then
+            vim.notify("No diagnostics on current line", vim.log.levels.WARN)
+            return
+          end
+
+          local messages = {}
+
+          for _, d in ipairs(diagnostics) do
+            local entry = d.message
+
+            if d.source then
+              entry = entry .. " (" .. d.source .. ")"
+            end
+
+            table.insert(messages, entry)
+          end
+
+          require("codecompanion").chat {
+            user_prompt = "Explain these diagnostic issues:\n" .. table.concat(messages, "\n"),
+            auto_submit = true,
+          }
+        end,
+        mode = "n",
+        desc = "AI explain diagnostic",
+      },
+    },
+    config = function()
+      require "custom.config.codecompanion"
+    end,
   },
   {
     "nickjvandyke/opencode.nvim",
