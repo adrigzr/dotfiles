@@ -6,9 +6,9 @@ end
 
 ---@type opencode.Opts
 vim.g.opencode_opts = {
-  provider = {
-    enabled = "snacks",
-  },
+  -- provider = {
+  --   enabled = "snacks",
+  -- },
 }
 
 local map = vim.keymap.set
