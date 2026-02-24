@@ -42,7 +42,7 @@ term = xterm-ghostty
 # Command
 # ==============================================================================
 
-command = /opt/homebrew/bin/tmux new-session -A -s editor
+command = ~/.config/ghostty/tmux-session
 
 # ==============================================================================
 # Window

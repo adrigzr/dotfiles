@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+source "$HOME/.profile"
+exec tmux new-session -A -s editor
