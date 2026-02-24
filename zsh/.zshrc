@@ -75,7 +75,7 @@ _cached_eval() {
 (( $+commands[zoxide] )) && _cached_eval zoxide init zsh
 
 # fnm (fast node manager).
-(( $+commands[fnm] )) && _cached_eval fnm env --use-on-cd
+(( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
 
 # Setup fzf (fuzzy-finder).
 (( $+commands[fzf] )) && _cached_eval fzf --zsh
