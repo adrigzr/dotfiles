@@ -12,6 +12,11 @@ vim.keymap.set("n", "<leader>vi", "<cmd>Mason<cr>", { desc = "Open Mason" })
 
 -- Diagnostics
 vim.diagnostic.config {
+  float = {
+    title = "Diagnostics",
+    title_pos = "left",
+    header = "",
+  },
   virtual_text = true,
   virtual_lines = false,
   severity_sort = true,
@@ -190,7 +195,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
       bind(vim.lsp.buf.code_action, { { context = { only = "quickfix" }, apply = true } }),
       { desc = "Apply quickfix code action" }
     )
-    map("n", "<leader>cd", function()
+    map("n", "<leader>cv", function()
       local config = vim.diagnostic.config() or {}
 
       vim.diagnostic.config {
@@ -220,6 +225,17 @@ require("typescript-tools").setup {
     vim.keymap.set("n", "<leader>rf", "<cmd>TSToolsRenameFile<CR>", { buffer = bufnr, desc = "Rename file (TSTools)" })
   end,
 }
+
+-- Prevent typescript-tools from attaching to non-filesystem buffers (e.g. diffview://)
+vim.lsp.config("typescript-tools", {
+  root_dir = function(bufnr, on_dir)
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+    if not bufname:match "^/" and not bufname:match "^[a-zA-Z]:" then
+      return
+    end
+    on_dir(require("typescript-tools.utils").get_root_dir(bufnr))
+  end,
+})
 
 require("mason").setup()
 

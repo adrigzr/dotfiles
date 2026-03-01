@@ -69,8 +69,18 @@ require("lazy").setup({
   -- Git
   "tpope/vim-fugitive", -- Git commands
   "lewis6991/gitsigns.nvim", -- Git gutter signs
-  { "akinsho/git-conflict.nvim", version = "2.*", config = true }, -- Git conflict resolution
-  "sindrets/diffview.nvim", -- Diff view
+  {
+    "sindrets/diffview.nvim",
+    cmd = {
+      "DiffviewOpen",
+      "DiffviewFileHistory",
+      "DiffviewClose",
+      "DiffviewToggleFiles",
+      "DiffviewFocusFiles",
+      "DiffviewRefresh",
+    },
+  },
+  { dir = "~/Repositories/code-reviewer.nvim", cmd = { "CodeReview", "CodeReviewSubmit", "CodeReviewClose" } },
 
   -- Formatter
   "tpope/vim-sleuth",

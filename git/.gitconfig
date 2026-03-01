@@ -6,16 +6,25 @@
   enabled = true
 
 [diff]
-  tool = fugitive
+  tool = diffview
   colorMoved = default
   algorithm = histogram
 
 [difftool]
   prompt = false
 
+[difftool "diffview"]
+  cmd = nvim -c "DiffviewOpen"
+
+[difftool "fugitive"]
+  cmd = nvim -f -c "Gvdiffsplit"
+
 [merge]
-  tool = fugitive
+  tool = diffview
   conflictstyle = zdiff3
+
+[mergetool "diffview"]
+  cmd = nvim -c "DiffviewOpen" "$MERGED"
 
 [mergetool "vimdiff"]
   cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'

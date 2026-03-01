@@ -1,6 +1,8 @@
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("mini_trailspace_blacklist", {}),
   pattern = {
+    "DiffviewFileHistory",
+    "DiffviewFiles",
     "dashboard",
     "diff",
     "fugitive",
