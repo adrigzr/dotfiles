@@ -70,6 +70,16 @@ local opencode_status = {
   end,
 }
 
+local code_reviewer_status = {
+  function()
+    return require("code-reviewer").lualine_status()
+  end,
+  cond = function()
+    local ok, code_review = pcall(require, "code-reviewer")
+    return ok and code_review.lualine_status() ~= ""
+  end,
+}
+
 module.setup {
   options = {
     icons_enabled = true,
@@ -85,6 +95,7 @@ module.setup {
     lualine_x = {
       opencode_status,
       codecompanion_status,
+      code_reviewer_status,
       lsp_clients,
       encoding,
     },
