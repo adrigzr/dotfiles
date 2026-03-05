@@ -76,6 +76,21 @@ blink.setup {
     },
   },
   signature = { enabled = true },
+  cmdline = {
+    keymap = {
+      preset = "cmdline",
+      ["<Tab>"] = { "show", "select_next", "fallback" },
+      ["<S-Tab>"] = { "show", "select_prev", "fallback" },
+    },
+    completion = {
+      list = {
+        selection = {
+          preselect = false,
+          auto_insert = true,
+        },
+      },
+    },
+  },
 }
 
 -- Highlights
