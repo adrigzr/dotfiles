@@ -135,7 +135,7 @@ require("lazy").setup({
   {
     "vuki656/package-info.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
-    opts = { hide_up_to_date = true },
+    opts = { autostart = false, hide_up_to_date = true },
   }, -- Show package info as virtual text in the package.json
   "axelvc/template-string.nvim",
   {
