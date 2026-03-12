@@ -6,5 +6,5 @@ end
 
 code_reviewer.setup {
   display = "diffview",
-  output_backend = "opencode",
+  backend = "opencode",
 }
