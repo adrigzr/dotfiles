@@ -80,6 +80,9 @@ _cached_eval() {
 # Setup fzf (fuzzy-finder).
 (( $+commands[fzf] )) && _cached_eval fzf --zsh
 
+# pyenv (Python version manager).
+(( $+commands[pyenv] )) && _cached_eval pyenv init - --no-rehash
+
 # Vi mode.
 bindkey -v
 KEYTIMEOUT=10

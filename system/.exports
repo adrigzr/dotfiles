@@ -43,6 +43,10 @@ export PATH="${PATH}:$HOME/.local/bin"
 # XDG config home.
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# Pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[ -d "$PYENV_ROOT/bin" ] && export PATH="$PYENV_ROOT/bin:$PATH"
+
 # NPM
 export npm_config_progress=false
 
