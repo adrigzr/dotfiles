@@ -4,6 +4,16 @@ if not exists then
   return
 end
 
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+parser_config.dotenv = {
+  install_info = {
+    url = "https://github.com/pnx/tree-sitter-dotenv",
+    files = { "src/parser.c", "src/scanner.c" },
+    branch = "main",
+  },
+  filetype = "dotenv",
+}
+
 module.setup {
   ensure_installed = {
     "bash",
@@ -13,6 +23,7 @@ module.setup {
     "csv",
     "diff",
     "dockerfile",
+    "dotenv",
     "git_config",
     "git_rebase",
     "gitcommit",
