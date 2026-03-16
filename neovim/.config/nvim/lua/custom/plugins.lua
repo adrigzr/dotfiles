@@ -123,6 +123,12 @@ require("lazy").setup({
   { "kylechui/nvim-surround", config = true }, -- Surround wrappers
   { "echasnovski/mini.pairs", version = false }, -- Auto-pairs
   { "dhruvasagar/vim-table-mode", ft = { "markdown", "cucumber" } }, -- Handle tables in markdown
+  {
+    "obsidian-nvim/obsidian.nvim",
+    version = "*",
+    ft = "markdown",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
   "folke/which-key.nvim", -- Pretty keybind hints
   "andymass/vim-matchup", -- Replaces matchit & matchparen builtins
   "nvim-neotest/neotest",

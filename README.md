@@ -19,7 +19,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
    brew install git wget ripgrep fzf stow gnu-sed editorconfig bat gpg gawk htop ffmpeg jq fd moreutils git-delta
    brew install starship fnm zoxide eza
    brew install stylua selene
-   brew install lazygit gh ast-grep imagemagick
+   brew install lazygit gh ast-grep imagemagick pngpaste
    brew install --cask ghostty
    brew install tmux
    brew install neovim
@@ -144,5 +144,6 @@ External tools required by Neovim plugins. All installed via `brew install`.
 | `lazygit` | Snacks.lazygit | Terminal UI for git |
 | `ast-grep` | grug-far | Structural code search |
 | `imagemagick` | Snacks.image | Image conversion and display |
+| `pngpaste` | obsidian.nvim | Paste images from clipboard into notes |
 | `stylua` | CI, conform.nvim | Lua code formatter |
 | `selene` | CI | Lua linter |

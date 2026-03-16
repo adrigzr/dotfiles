@@ -56,6 +56,7 @@ blink.setup {
     default = { "lsp", "snippets", "path", "buffer" },
     per_filetype = {
       codecompanion = { "codecompanion" },
+      markdown = { "obsidian", "lsp", "snippets", "path", "buffer" },
     },
   },
   completion = {
