@@ -34,6 +34,10 @@ vim.diagnostic.config {
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = custom_lsp_group,
   callback = function(ev)
+    if vim.b[ev.buf].disable_autoformat then
+      return
+    end
+
     local ft = vim.bo.filetype
 
     if vim.tbl_contains({ "typescript", "typescriptreact", "javascript", "javascriptreact" }, ft) then
