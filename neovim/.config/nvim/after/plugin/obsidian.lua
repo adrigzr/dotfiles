@@ -8,11 +8,11 @@ obsidian.setup {
   workspaces = {
     {
       name = "aircall",
-      path = "~/Documents/Aircall Vault",
+      path = "~/Repositories/Aircall Vault",
     },
     {
       name = "homelab",
-      path = "~/Documents/Homelab Vault",
+      path = "~/Repositories/homelab/Homelab Vault",
     },
   },
 

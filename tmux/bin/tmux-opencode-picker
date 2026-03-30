@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# tmux-opencode-picker -- fuzzy picker for running OpenCode instances.
+#
+# Scans all tmux panes for opencode processes, presents them in fzf,
+# and switches to the selected pane on selection.
+
+set -euo pipefail
+
+# Collect all panes running opencode (tmux 3.1+ filter flag).
+# Use unit separator (0x1f) instead of tab because bash read collapses
+# consecutive tabs, which breaks when pane_title is empty.
+sep=$'\x1f'
+format="#{session_name}:#{window_index}.#{pane_index}${sep}#{pane_title}${sep}#{pane_current_path}"
+panes=$(tmux list-panes -a -F "$format" -f '#{==:#{pane_current_command},opencode}') || true
+
+if [ -z "$panes" ]; then
+  tmux display-message "No running OpenCode instances"
+  exit 0
+fi
+
+# Shorten path to last two components (e.g. /a/b/c/d -> c/d).
+# Uses pure parameter expansion to avoid subshell forks.
+short_path() {
+  local p="${1/#$HOME/~}"
+  p="${p%/}"
+  local dir="${p##*/}"
+  local rest="${p%/*}"
+  local parent="${rest##*/}"
+  echo "${parent}/${dir}"
+}
+
+# One Dark ANSI colors.
+blue=$'\033[38;2;97;175;239m'   # #61afef — location
+green=$'\033[38;2;152;195;121m' # #98c379 — directory
+reset=$'\033[0m'
+
+# Build formatted lines for fzf.
+entries=()
+while IFS=$'\x1f' read -r location title path; do
+  # Extract session title (strip "OC | " prefix), fallback to dir basename.
+  if [[ "$title" == "OC | "* ]]; then
+    title="${title#OC | }"
+  elif [ -z "$title" ]; then
+    title="${path##*/}"
+  fi
+
+  dir="$(short_path "$path")"
+
+  entries+=("$(printf "${blue}%-22s  ${green}%-26s  ${reset}%s" "$location" "$dir" "$title")")
+done <<<"$panes"
+
+# Run fzf picker with pane preview.
+selected=$(printf '%s\n' "${entries[@]}" | fzf \
+  --no-sort \
+  --ansi \
+  --prompt="> " \
+  --pointer="▸" \
+  --marker="▸" \
+  --preview 'tmux capture-pane -t {1} -p -e' \
+  --preview-window 'down,70%,border-top,follow' \
+  --preview-label=' Preview ') || exit 0
+
+# Extract target (first field = session:window.pane).
+target=$(awk '{print $1}' <<<"$selected")
+session="${target%%:*}"
+
+# Switch to the target pane.
+tmux switch-client -t "$session" \; \
+  select-window -t "${target%.*}" \; \
+  select-pane -t "$target"

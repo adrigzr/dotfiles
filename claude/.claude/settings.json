@@ -1,6 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 14,
+  "env": {
+    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1"
+  },
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
@@ -8,9 +11,14 @@
       "Edit(./**)",
       "Write(./**)",
       "Read(~/Repositories/**)",
-      "Bash(*)",
+      "Bash",
       "WebSearch",
-      "WebFetch"
+      "WebFetch",
+      "mcp__gitea__pull_request_read",
+      "mcp__gitea__get_file_contents",
+      "mcp__homelab-vault__get_vault_stats",
+      "mcp__homelab-vault__list_directory",
+      "mcp__homelab-vault__read_multiple_notes"
     ],
     "deny": [
       "Read(~/*.extra)",
@@ -21,6 +29,43 @@
       "Read(~/.aws/*)"
     ]
   },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.tf ]]; then terraform fmt -check \"$f\"; fi; }"
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.yaml || \"$f\" == *.yml ]]; then yamllint -d relaxed \"$f\"; fi; }"
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.py ]]; then pyright \"$f\"; fi; }"
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.ts ]]; then eslint \"$f\"; fi; }"
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.md ]]; then npx -y markdownlint-cli \"$f\"; fi; }"
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.sh ]]; then shellcheck \"$f\"; fi; }"
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.json ]]; then jq . \"$f\" > /dev/null; fi; }"
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
@@ -28,11 +73,21 @@
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "context7@claude-plugins-official": true
   },
-  "effortLevel": "high"
+  "extraKnownMarketplaces": {
+    "claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-code"
+      }
+    }
+  },
+  "autoDreamEnabled": true,
+  "model": "sonnet"
 }

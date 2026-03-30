@@ -49,10 +49,10 @@ source ${ZIM_HOME}/init.zsh
 
 # Modern ls (eza) — must be after zim utility module to override its ls alias.
 if (( $+commands[eza] )); then
-  alias ls='eza --icons'
-  alias la='eza --icons -la'
-  alias ll='eza --icons -l'
-  alias tree='eza --icons --tree'
+  alias ls='eza --icons=auto'
+  alias la='eza --icons=auto -la'
+  alias ll='eza --icons=auto -l'
+  alias tree='eza --icons=auto --tree'
 fi
 
 # Cache and source a tool's init output (regenerates when binary changes).
@@ -82,6 +82,11 @@ _cached_eval() {
 
 # pyenv (Python version manager).
 (( $+commands[pyenv] )) && _cached_eval pyenv init - --no-rehash
+
+# Auto-activate Python venv on directory change.
+autoload -U add-zsh-hook
+add-zsh-hook chpwd _auto_venv
+_auto_venv
 
 # Vi mode.
 bindkey -v

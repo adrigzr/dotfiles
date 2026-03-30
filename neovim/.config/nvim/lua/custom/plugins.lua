@@ -95,6 +95,7 @@ require("lazy").setup({
   "folke/todo-comments.nvim", -- Highlight TODO/FIXME/HACK in comments
   "b0o/schemastore.nvim", -- Schemas for jsonls
   { "pmizio/typescript-tools.nvim", dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" } }, -- Typescript tools
+  "dmmulroy/tsc.nvim", -- Project-wide type-checking
 
   -- Completion
   {
@@ -132,7 +133,6 @@ require("lazy").setup({
   "folke/which-key.nvim", -- Pretty keybind hints
   "andymass/vim-matchup", -- Replaces matchit & matchparen builtins
   "nvim-neotest/neotest",
-  "haydenmeade/neotest-jest",
   "adrigzr/neotest-mocha",
   "rouge8/neotest-rust",
   "olimorris/neotest-rspec",

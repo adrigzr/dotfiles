@@ -1,5 +1,8 @@
 local map = vim.keymap.set
 
+-- Change vim-table-mode prefix to avoid conflict with <leader>t (Snacks explorer)
+vim.g.table_mode_map_prefix = "<Leader>m"
+
 -- Disable arrow keys
 map("n", "<Up>", "<NOP>")
 map("n", "<Down>", "<NOP>")

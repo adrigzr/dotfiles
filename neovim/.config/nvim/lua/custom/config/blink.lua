@@ -82,6 +82,7 @@ blink.setup {
       preset = "cmdline",
       ["<Tab>"] = { "show", "select_next", "fallback" },
       ["<S-Tab>"] = { "show", "select_prev", "fallback" },
+      ["<CR>"] = { "accept", "fallback" },
     },
     completion = {
       list = {

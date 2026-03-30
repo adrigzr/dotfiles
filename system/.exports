@@ -43,6 +43,9 @@ export PATH="${PATH}:$HOME/.local/bin"
 # XDG config home.
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# RVM wrappers (non-interactive Ruby access for editors, Mason, etc.)
+[ -d "$HOME/.rvm/wrappers/default" ] && export PATH="$HOME/.rvm/wrappers/default:$PATH"
+
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [ -d "$PYENV_ROOT/bin" ] && export PATH="$PYENV_ROOT/bin:$PATH"

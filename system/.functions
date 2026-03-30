@@ -279,4 +279,32 @@ function select_directory() {
   return 0
 }
 
+# Auto-activate/deactivate Python venv on directory change.
+# Walks up from $PWD looking for .venv/ or venv/ with bin/activate.
+# Stays active in subdirectories, deactivates when leaving the project root.
+function _auto_venv() {
+  local dir="$PWD"
+  local venv_dir=""
+  local venv_names=(".venv" "venv")
+
+  while [[ "$dir" != "/" ]]; do
+    for name in "${venv_names[@]}"; do
+      if [[ -f "$dir/$name/bin/activate" ]]; then
+        venv_dir="$dir/$name"
+        break 2
+      fi
+    done
+    dir="${dir:h}"
+  done
+
+  if [[ -n "$venv_dir" ]]; then
+    if [[ "$VIRTUAL_ENV" != "$venv_dir" ]]; then
+      [[ -n "$VIRTUAL_ENV" ]] && deactivate
+      source "$venv_dir/bin/activate"
+    fi
+  elif [[ -n "$VIRTUAL_ENV" ]]; then
+    deactivate
+  fi
+}
+
 # vim: ft=zsh
