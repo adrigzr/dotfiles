@@ -28,17 +28,17 @@ export LANG="en_US.UTF-8"
 export LC_ALL=${LANG}
 
 # MacOS
-export PATH="/usr/local/bin:${PATH}"
-export PATH="/usr/local/sbin:${PATH}"
+export PATH="${PATH}:/usr/local/bin"
+export PATH="${PATH}:/usr/local/sbin"
 
 # Texlive
 [ -d "/Library/TeX/texbin" ] && export PATH="${PATH}:/Library/TeX/texbin"
 
 # Home bin
-export PATH="${PATH}:$HOME/bin"
+export PATH="$HOME/bin:${PATH}"
 
 # Local bin
-export PATH="${PATH}:$HOME/.local/bin"
+export PATH="$HOME/.local/bin:${PATH}"
 
 # XDG config home.
 export XDG_CONFIG_HOME="$HOME/.config"
