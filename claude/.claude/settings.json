@@ -2,7 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 14,
   "env": {
-    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1"
+    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
+    "CLAUDE_CODE_NO_FLICKER": "1"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -11,14 +12,11 @@
       "Edit(./**)",
       "Write(./**)",
       "Read(~/Repositories/**)",
-      "Bash",
+      "Bash(*)",
       "WebSearch",
       "WebFetch",
-      "mcp__gitea__pull_request_read",
-      "mcp__gitea__get_file_contents",
-      "mcp__homelab-vault__get_vault_stats",
-      "mcp__homelab-vault__list_directory",
-      "mcp__homelab-vault__read_multiple_notes"
+      "mcp__plugin_context7_context7",
+      "mcp__gitea"
     ],
     "deny": [
       "Read(~/*.extra)",
@@ -40,7 +38,7 @@
           },
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.yaml || \"$f\" == *.yml ]]; then yamllint -d relaxed \"$f\"; fi; }"
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.yaml || \"$f\" == *.yml ]]; then yamllint --strict \"$f\"; fi; }"
           },
           {
             "type": "command",
@@ -52,7 +50,8 @@
           },
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.md ]]; then npx -y markdownlint-cli \"$f\"; fi; }"
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.md ]]; then npx -y markdownlint-cli \"$f\"; fi; }",
+            "timeout": 30
           },
           {
             "type": "command",
@@ -61,6 +60,10 @@
           {
             "type": "command",
             "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.json ]]; then jq . \"$f\" > /dev/null; fi; }"
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.toml ]]; then toml-sort --check --no-sort-tables \"$f\"; fi; }"
           }
         ]
       }
