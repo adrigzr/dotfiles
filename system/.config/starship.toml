@@ -27,6 +27,8 @@ $status\
 $time\
 $battery\
 $line_break\
+$username\
+$hostname\
 $jobs\
 $character"""
 
@@ -188,6 +190,19 @@ style = 'fg:red'
 [[battery.display]]
 threshold = 40
 style = 'fg:yellow'
+
+[username]
+style_user = 'fg:orange'
+style_root = 'bold fg:red'
+format = '[$user]($style)'
+show_always = false
+
+[hostname]
+ssh_only = true
+ssh_symbol = '@'
+style = 'fg:orange'
+format = '[$ssh_symbol$hostname]($style) '
+trim_at = '.'
 
 # -- Line 2: Input ---------------------------------------------------------
 

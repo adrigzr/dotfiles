@@ -27,6 +27,7 @@ WORDCHARS=${WORDCHARS//[\/]}
 # Load default dotfiles
 [ -s "$HOME/.profile"  ] && source "$HOME/.profile"
 
+
 # Fix git aliases
 zstyle ':zim:git' aliases-prefix 'g'
 
