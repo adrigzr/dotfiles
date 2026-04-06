@@ -34,6 +34,9 @@ export PATH="${PATH}:/usr/local/sbin"
 # Texlive
 [ -d "/Library/TeX/texbin" ] && export PATH="${PATH}:/Library/TeX/texbin"
 
+# Cargo bin
+export PATH="$HOME/.cargo/bin:${PATH}"
+
 # Home bin
 export PATH="$HOME/bin:${PATH}"
 
