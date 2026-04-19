@@ -307,4 +307,17 @@ function _auto_venv() {
   fi
 }
 
+# SSH wrapper: reset terminal state after exit.
+# When a remote tmux dies (e.g. lost SSH connection), cleanup escape sequences
+# never arrive, leaving the local tmux pane with alternate screen and mouse
+# tracking modes enabled -- breaking scrollback and producing garbage on input.
+function ssh() {
+  command ssh "$@"
+  local ret=$?
+  # Exit alternate screen, disable mouse tracking modes (any, button, standard,
+  # utf8, sgr), focus reporting, bracketed paste, and restore cursor visibility.
+  printf '\e[?1049l\e[?1003l\e[?1002l\e[?1000l\e[?1006l\e[?1005l\e[?1004l\e[?2004l\e[?25h'
+  return $ret
+}
+
 # vim: ft=zsh
