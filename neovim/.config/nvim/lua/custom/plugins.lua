@@ -97,6 +97,23 @@ require("lazy").setup({
 
   -- LSP
   "williamboman/mason.nvim", -- Package client
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "williamboman/mason.nvim" },
+    config = function()
+      require("mason-tool-installer").setup {
+        ensure_installed = {
+          -- Formatters from conform.nvim not managed by a system package
+          -- manager. stylua, shfmt, rubocop, rustfmt are installed via
+          -- Homebrew/rbenv/rustup respectively.
+          "prettierd",
+          "black",
+        },
+        auto_update = false,
+        run_on_start = true,
+      }
+    end,
+  },
   "neovim/nvim-lspconfig", -- LSP config
   { "folke/lazydev.nvim", ft = "lua", opts = {} }, -- Lua LSP workspace
   "folke/trouble.nvim", -- Pretty diagnostics

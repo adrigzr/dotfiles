@@ -43,6 +43,20 @@ local fileformat = {
   end,
 }
 
+local lsp_progress = {
+  vim.ui.progress_status,
+  cond = function()
+    return vim.ui.progress_status() ~= ""
+  end,
+}
+
+local diagnostic_status = {
+  vim.diagnostic.status,
+  cond = function()
+    return vim.diagnostic.status() ~= ""
+  end,
+}
+
 local lsp_clients = {
   function()
     local clients = vim.lsp.get_clients { bufnr = 0 }
@@ -93,6 +107,8 @@ module.setup {
     lualine_b = { "branch", diagnostics, diff },
     lualine_c = {},
     lualine_x = {
+      lsp_progress,
+      diagnostic_status,
       opencode_status,
       codecompanion_status,
       code_reviewer_status,

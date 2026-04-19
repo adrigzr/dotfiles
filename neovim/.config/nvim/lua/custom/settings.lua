@@ -34,11 +34,17 @@ set.colorcolumn = "81,101,121"
 set.splitkeep = "cursor"
 
 -- Diff
+-- `set.diffopt = { ... }` replaces the option entirely, so we re-list the 0.12
+-- defaults (internal, filler, closeoff, indent-heuristic, inline:char,
+-- linematch:40) alongside our customisations (iwhite, algorithm:patience).
 set.diffopt = {
-  "filler", -- Add vertical spaces to keep right and left aligned
+  "internal", -- Use the internal diff library (0.12 default)
+  "filler", -- Add vertical spaces to keep right and left aligned (0.12 default)
+  "closeoff", -- Close diff-mode when only one window is left (0.12 default)
+  "indent-heuristic", -- Use the indent heuristic (0.12 default)
+  "inline:char", -- Character-level inline diff (0.12 default)
+  "linematch:40", -- Second-stage diff to align changed lines up to 40 lines (0.12 default)
   "iwhite", -- Ignore whitespace changes (focus on code changes)
-  "internal", -- Use the internal diff library
-  "indent-heuristic", -- Use the indent heuristic
   "algorithm:patience", -- Use patience diff algorithm
 }
 
