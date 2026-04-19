@@ -173,15 +173,24 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "gM", function()
       Snacks.picker.lsp_implementations()
     end, { desc = "Go to all implementations" })
-    map("n", "gr", function()
+    -- Re-route 0.11/0.12 default LSP keys through Snacks.picker where Snacks
+    -- provides meaningful UX (references, implementations, type definitions).
+    -- Rename (grn) and code-action (gra) stay native — they don't benefit from
+    -- a picker.
+    map("n", "grr", function()
       Snacks.picker.lsp_references { transform = filter_ignored }
-    end, { desc = "Go to productive references" })
-    map("n", "gR", function()
+    end, { desc = "Go to productive references (default override)" })
+    map("n", "grR", function()
       Snacks.picker.lsp_references()
     end, { desc = "Go to all references" })
+    map("n", "gri", function()
+      Snacks.picker.lsp_implementations { transform = filter_ignored }
+    end, { desc = "Go to productive implementations (default override)" })
+    map("n", "grt", function()
+      Snacks.picker.lsp_type_definitions { transform = filter_ignored }
+    end, { desc = "Go to productive type definitions (default override)" })
     map("n", "K", custom_lsp.show_info, { desc = "Show info" })
     map("n", "<C-]>", custom_lsp.goto_definition, { desc = "Go to definition" })
-    map({ "n", "v" }, "<leader>rn", vim.lsp.buf.rename, { desc = "Rename" })
     map("n", "<leader>cf", function()
       local conform_ok, conform = pcall(require, "conform")
 
@@ -191,8 +200,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         custom_lsp.format { async = true }
       end
     end, { desc = "Format document" })
-    map("n", "<leader>ca", bind(vim.lsp.buf.code_action, { { apply = false } }), { desc = "Apply code action" })
-    map("v", "<leader>ca", bind(vim.lsp.buf.code_action, { { apply = false } }), { desc = "Apply range code action" })
     map(
       "n",
       "<leader>qf",
