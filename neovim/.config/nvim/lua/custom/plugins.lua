@@ -46,9 +46,17 @@ require("lazy").setup({
   "kevinhwang91/nvim-hlslens", -- Search Helper
 
   -- Syntax
-  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" }, -- We recommend updating the parsers on update
-  "nvim-treesitter/nvim-treesitter-context", -- Add function context while scrolling
-  "nvim-treesitter/nvim-treesitter-textobjects", -- Function/class/argument text objects
+  {
+    "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    build = ":TSUpdate",
+  },
+  "nvim-treesitter/nvim-treesitter-context", -- Add function context while scrolling (still supports master/main)
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+  },
   "windwp/nvim-ts-autotag", -- Autocloses html tags
   "HiPhish/rainbow-delimiters.nvim", -- Colorize matching delimiters
   { "wannesm/wmgraphviz.vim", ft = "dot" }, -- Graphviz plugin
