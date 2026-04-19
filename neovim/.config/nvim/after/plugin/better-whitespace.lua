@@ -11,7 +11,7 @@ local augroup = vim.api.nvim_create_augroup("mini_trailspace_config", {})
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = augroup,
   callback = function()
-    if not vim.b.minitrailspace_disable then
+    if vim.bo.modifiable and not vim.b.minitrailspace_disable then
       trailspace.trim()
     end
   end,

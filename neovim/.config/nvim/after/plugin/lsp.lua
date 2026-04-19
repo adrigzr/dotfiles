@@ -143,7 +143,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Buffer keymaps
     local function map(mode, l, r, opts)
       opts = opts or {}
-      opts.buffer = bufnr
+      opts.buf = bufnr
       vim.keymap.set(mode, l, r, opts)
     end
 
@@ -226,7 +226,7 @@ require("typescript-tools").setup {
     },
   },
   on_attach = function(_, bufnr)
-    vim.keymap.set("n", "<leader>rf", "<cmd>TSToolsRenameFile<CR>", { buffer = bufnr, desc = "Rename file (TSTools)" })
+    vim.keymap.set("n", "<leader>rf", "<cmd>TSToolsRenameFile<CR>", { buf = bufnr, desc = "Rename file (TSTools)" })
   end,
 }
 
