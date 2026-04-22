@@ -72,6 +72,19 @@ test_exits_silently_when_token_missing() {
   assert_no_curl
 }
 
+test_posts_to_ntfy_when_token_set_no_transcript() {
+  export NTFY_TOKEN="test-token-123"
+  echo '{"message":"Claude needs your permission","transcript_path":"/nonexistent","session_id":"s1","cwd":"/","hook_event_name":"Notification"}' \
+    | "$script" || return 1
+  assert_curl_called
+  assert_log_contains 'https://ntfy.adrigzr.dev/apps'
+  assert_log_contains 'Authorization: Bearer test-token-123'
+  assert_log_contains 'Title: Claude Code'
+  assert_log_contains 'Tags: robot'
+  assert_log_contains 'Priority: 3'
+  assert_log_contains 'Claude needs your permission'
+}
+
 # --- runner ---
 tests=$(declare -F | awk '{print $3}' | grep '^test_' || true)
 if [[ -z "$tests" ]]; then
