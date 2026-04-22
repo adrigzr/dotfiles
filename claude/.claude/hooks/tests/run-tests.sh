@@ -102,6 +102,58 @@ test_recap_from_transcript() {
   assert_log_contains '↳ "commit and open PR"'
 }
 
+test_strips_slash_command_prefix() {
+  export NTFY_TOKEN="test-token-123"
+  local t="$fixtures/transcript-slash-command.jsonl"
+  jq -n --arg t "$t" '{
+    message: "m",
+    transcript_path: $t,
+    session_id: "s4",
+    cwd: "/",
+    hook_event_name: "Notification"
+  }' | "$script" || return 1
+  # First prompt "/superpowers:brainstorming how to build a thing" → "how to build a thing".
+  assert_log_contains 'Title: Claude — how to build a thing (turn 2)'
+  # Latest "/fix-branch" → "" (nothing after the slash-command token).
+  assert_log_contains '↳ ""'
+}
+
+test_truncates_long_prompts() {
+  export NTFY_TOKEN="test-token-123"
+  local t="$fixtures/transcript-long-prompts.jsonl"
+  jq -n --arg t "$t" '{
+    message: "m",
+    transcript_path: $t,
+    session_id: "s3",
+    cwd: "/",
+    hook_event_name: "Notification"
+  }' | "$script" || return 1
+  # First prompt capped at 60 chars + ellipsis.
+  assert_log_contains 'This is a first prompt that is definitely longer than sixty…'
+  # Latest capped at 80 chars + ellipsis.
+  assert_log_contains 'This is the latest prompt and it is definitely longer than eighty characters so…'
+}
+
+test_normalises_whitespace_in_prompts() {
+  export NTFY_TOKEN="test-token-123"
+  local tmp
+  tmp="$(mktemp)"
+  cat > "$tmp" <<'EOF'
+{"type":"last-prompt","lastPrompt":"hello\tworld\nnewline","sessionId":"sN"}
+EOF
+  jq -n --arg t "$tmp" '{
+    message: "m",
+    transcript_path: $t,
+    session_id: "sN",
+    cwd: "/",
+    hook_event_name: "Notification"
+  }' | "$script"
+  local rc=$?
+  rm -f "$tmp"
+  [[ $rc -eq 0 ]] || return 1
+  assert_log_contains 'Title: Claude — hello world newline (turn 1)'
+}
+
 # --- runner ---
 tests=$(declare -F | awk '{print $3}' | grep '^test_' || true)
 if [[ -z "$tests" ]]; then

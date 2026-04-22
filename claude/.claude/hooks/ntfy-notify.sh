@@ -33,11 +33,27 @@ transcript="$(jq -r '.transcript_path // empty' <<<"$payload" 2>/dev/null || tru
 title="Claude Code"
 body="$message"
 
+normalise() {
+  # $1 = raw string, $2 = max length
+  local s="$1" n="$2"
+  s="$(printf '%s' "$s" | sed -E 's#^/[^ ]+ *##')"
+  s="$(printf '%s' "$s" | tr '\n\t' '  ')"
+  if (( ${#s} > n )); then
+    s="${s:0:n}"
+    # strip trailing spaces before appending ellipsis
+    while [[ "$s" == *' ' ]]; do s="${s% }"; done
+    s="${s}…"
+  fi
+  printf '%s' "$s"
+}
+
 if [[ -n "$transcript" && -r "$transcript" ]]; then
   turns="$(jq -s 'map(select(.type=="last-prompt")) | length' "$transcript" 2>/dev/null || echo 0)"
   if [[ "$turns" =~ ^[0-9]+$ && "$turns" -gt 0 ]]; then
-    first="$(jq -r 'select(.type=="last-prompt") | .lastPrompt' "$transcript" 2>/dev/null | head -1)"
-    latest="$(jq -r 'select(.type=="last-prompt") | .lastPrompt' "$transcript" 2>/dev/null | tail -1)"
+    first_raw="$(jq -rs 'map(select(.type=="last-prompt"))[0].lastPrompt // ""' "$transcript" 2>/dev/null)"
+    latest_raw="$(jq -rs 'map(select(.type=="last-prompt"))[-1].lastPrompt // ""' "$transcript" 2>/dev/null)"
+    first="$(normalise "$first_raw" 60)"
+    latest="$(normalise "$latest_raw" 80)"
     title="Claude — ${first} (turn ${turns})"
     body="${message}"$'\n'"↳ \"${latest}\""
   fi
