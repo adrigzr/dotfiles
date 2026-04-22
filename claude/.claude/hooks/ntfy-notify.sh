@@ -4,13 +4,17 @@
 
 set -uo pipefail
 
-NTFY_URL="https://ntfy.adrigzr.dev/apps"
 CURL_BIN="${CURL_BIN:-curl}"
 
 log() { echo "[ntfy-notify] $*" >&2; }
 
 : "${NTFY_TOKEN:=}"
 if [[ -z "$NTFY_TOKEN" ]]; then
+  exit 0
+fi
+
+: "${NTFY_URL:=}"
+if [[ -z "$NTFY_URL" ]]; then
   exit 0
 fi
 

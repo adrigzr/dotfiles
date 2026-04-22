@@ -24,6 +24,7 @@ run_test() {
   export MOCK_CURL_LOG="$tmp/curl.log"
   export MOCK_CURL_EXIT="${MOCK_CURL_EXIT:-0}"
   export CURL_BIN="$mock_curl"
+  export NTFY_URL="https://ntfy.test/apps"
   : > "$MOCK_CURL_LOG"
 
   if ( set -u; "$name" ); then
@@ -35,7 +36,7 @@ run_test() {
     failed+=("$name")
   fi
 
-  unset MOCK_CURL_LOG MOCK_CURL_EXIT CURL_BIN
+  unset MOCK_CURL_LOG MOCK_CURL_EXIT CURL_BIN NTFY_URL
 }
 
 assert_no_curl() {
@@ -72,12 +73,20 @@ test_exits_silently_when_token_missing() {
   assert_no_curl
 }
 
+test_exits_silently_when_url_missing() {
+  export NTFY_TOKEN="test-token-123"
+  unset NTFY_URL
+  echo '{"message":"x","transcript_path":"","session_id":"s","cwd":"/","hook_event_name":"Notification"}' \
+    | "$script" || return 1
+  assert_no_curl
+}
+
 test_posts_to_ntfy_when_token_set_no_transcript() {
   export NTFY_TOKEN="test-token-123"
   echo '{"message":"Claude needs your permission","transcript_path":"/nonexistent","session_id":"s1","cwd":"/","hook_event_name":"Notification"}' \
     | "$script" || return 1
   assert_curl_called
-  assert_log_contains 'https://ntfy.adrigzr.dev/apps'
+  assert_log_contains 'https://ntfy.test/apps'
   assert_log_contains 'Authorization: Bearer test-token-123'
   assert_log_contains 'Title: Claude Code'
   assert_log_contains 'Tags: robot'
