@@ -85,6 +85,23 @@ test_posts_to_ntfy_when_token_set_no_transcript() {
   assert_log_contains 'Claude needs your permission'
 }
 
+test_recap_from_transcript() {
+  export NTFY_TOKEN="test-token-123"
+  local t="$fixtures/transcript-normal.jsonl"
+  jq -n --arg t "$t" '{
+    message: "Claude needs permission",
+    transcript_path: $t,
+    session_id: "s1",
+    cwd: "/",
+    hook_event_name: "Notification"
+  }' | "$script" || return 1
+  assert_curl_called
+  # Title should contain the first prompt and turn count.
+  assert_log_contains 'Title: Claude — Fix the Lidarr migration (turn 3)'
+  # Body should contain the latest prompt on its own line.
+  assert_log_contains '↳ "commit and open PR"'
+}
+
 # --- runner ---
 tests=$(declare -F | awk '{print $3}' | grep '^test_' || true)
 if [[ -z "$tests" ]]; then

@@ -28,9 +28,20 @@ if ! message="$(jq -r '.message // empty' <<<"$payload" 2>/dev/null)"; then
   log "malformed stdin json; skipping"
   exit 0
 fi
+transcript="$(jq -r '.transcript_path // empty' <<<"$payload" 2>/dev/null || true)"
 
 title="Claude Code"
 body="$message"
+
+if [[ -n "$transcript" && -r "$transcript" ]]; then
+  turns="$(jq -s 'map(select(.type=="last-prompt")) | length' "$transcript" 2>/dev/null || echo 0)"
+  if [[ "$turns" =~ ^[0-9]+$ && "$turns" -gt 0 ]]; then
+    first="$(jq -r 'select(.type=="last-prompt") | .lastPrompt' "$transcript" 2>/dev/null | head -1)"
+    latest="$(jq -r 'select(.type=="last-prompt") | .lastPrompt' "$transcript" 2>/dev/null | tail -1)"
+    title="Claude — ${first} (turn ${turns})"
+    body="${message}"$'\n'"↳ \"${latest}\""
+  fi
+fi
 
 "$CURL_BIN" -sS --max-time 10 --connect-timeout 5 \
   -H "Authorization: Bearer $NTFY_TOKEN" \
