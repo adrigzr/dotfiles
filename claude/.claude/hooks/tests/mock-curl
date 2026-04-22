@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Test stub for curl. Records argv + stdin to $MOCK_CURL_LOG, then exits with
+# $MOCK_CURL_EXIT (default 0). Used by run-tests.sh to intercept HTTP calls.
+set -u
+log="${MOCK_CURL_LOG:?MOCK_CURL_LOG not set}"
+{
+  echo "=== invocation ==="
+  echo "argv:"
+  for a in "$@"; do echo "  $a"; done
+  echo "stdin:"
+  cat
+  echo "=== end ==="
+} >> "$log"
+exit "${MOCK_CURL_EXIT:-0}"
