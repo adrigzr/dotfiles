@@ -65,6 +65,13 @@ assert_log_contains() {
 
 # --- tests go here (added in later tasks) ---
 
+test_exits_silently_when_token_missing() {
+  unset NTFY_TOKEN
+  echo '{"message":"x","transcript_path":"","session_id":"s","cwd":"/","hook_event_name":"Notification"}' \
+    | "$script" || return 1
+  assert_no_curl
+}
+
 # --- runner ---
 tests=$(declare -F | awk '{print $3}' | grep '^test_' || true)
 if [[ -z "$tests" ]]; then
