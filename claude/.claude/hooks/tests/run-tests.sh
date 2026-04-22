@@ -154,6 +154,57 @@ EOF
   assert_log_contains 'Title: Claude — hello world newline (turn 1)'
 }
 
+test_malformed_json_stdin_exits_0_without_curl() {
+  export NTFY_TOKEN="test-token-123"
+  # 'not json' is not valid JSON; jq will fail parsing.
+  echo 'not json' | "$script"
+  local rc=$?
+  [[ $rc -eq 0 ]] || { echo "  expected exit 0, got $rc" >&2; return 1; }
+  assert_no_curl
+}
+
+test_transcript_missing_sends_message_only() {
+  export NTFY_TOKEN="test-token-123"
+  echo '{"message":"m","transcript_path":"/nope/does-not-exist.jsonl","session_id":"s","cwd":"/","hook_event_name":"Notification"}' \
+    | "$script" || return 1
+  assert_curl_called
+  assert_log_contains 'Title: Claude Code'
+  # Body should NOT contain the recap arrow.
+  if grep -qF '↳' "$MOCK_CURL_LOG"; then
+    echo "  expected no recap arrow in body" >&2
+    cat "$MOCK_CURL_LOG" >&2
+    return 1
+  fi
+}
+
+test_transcript_with_zero_last_prompts_sends_message_only() {
+  export NTFY_TOKEN="test-token-123"
+  local t="$fixtures/transcript-empty.jsonl"
+  jq -n --arg t "$t" '{
+    message: "m",
+    transcript_path: $t,
+    session_id: "s2",
+    cwd: "/",
+    hook_event_name: "Notification"
+  }' | "$script" || return 1
+  assert_curl_called
+  assert_log_contains 'Title: Claude Code'
+  if grep -qF '↳' "$MOCK_CURL_LOG"; then
+    echo "  expected no recap arrow in body" >&2
+    return 1
+  fi
+}
+
+test_curl_failure_still_exits_0() {
+  export NTFY_TOKEN="test-token-123"
+  export MOCK_CURL_EXIT=22  # simulate HTTP error from curl
+  echo '{"message":"m","transcript_path":"/nope","session_id":"s","cwd":"/","hook_event_name":"Notification"}' \
+    | "$script"
+  local rc=$?
+  unset MOCK_CURL_EXIT
+  [[ $rc -eq 0 ]] || { echo "  expected exit 0 despite curl failure, got $rc" >&2; return 1; }
+}
+
 # --- runner ---
 tests=$(declare -F | awk '{print $3}' | grep '^test_' || true)
 if [[ -z "$tests" ]]; then
