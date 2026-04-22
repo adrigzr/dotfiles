@@ -1,0 +1,2 @@
+{"type":"system","subtype":"turn_duration","durationMs":100,"sessionId":"s2"}
+{"type":"assistant","message":{"content":[{"type":"text","text":"hello"}]},"sessionId":"s2"}
