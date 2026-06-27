@@ -48,6 +48,9 @@ fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
+# Reclaim `gh` for the GitHub CLI — Zim's git module aliases it to `git help`.
+unalias gh 2>/dev/null
+
 # Modern ls (eza) — must be after zim utility module to override its ls alias.
 if (( $+commands[eza] )); then
   alias ls='eza --icons=auto'
@@ -183,3 +186,6 @@ setopt HIST_IGNORE_ALL_DUPS
 
 # uncomment to finish profiling
 # zprof
+
+# Rootless Docker
+export DOCKER_HOST=unix:///run/user/1000/docker.sock
