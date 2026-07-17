@@ -187,6 +187,24 @@ seven_d=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage /
 five_h_reset=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty' 2>/dev/null)
 seven_d_reset=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty' 2>/dev/null)
 
+# Precompute rate-limit segment variants (index = tight*2 + cd). Countdown is
+# time-based but fixed for this render; the ladder only selects which variant to
+# show. Precomputing keeps assemble() fork-free — the reduce+fill loops call it
+# many times. Only the two full-line variants (spaced label + countdown) are
+# needed unless the line must be reduced, so the other six are computed lazily.
+declare -a seg5 seg7
+seg5[1]=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm 0 1)
+seg7[1]=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh 0 1)
+
+precompute_seg_variants() {
+  seg5[0]=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm 0 0)
+  seg5[3]=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm 1 1)
+  seg5[2]=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm 1 0)
+  seg7[0]=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh 0 0)
+  seg7[3]=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh 1 1)
+  seg7[2]=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh 1 0)
+}
+
 # ---- adaptive assembly: build richest line, reduce until it fits COLUMNS-1 ----
 # Ladder state (richest first).
 label_tight=0; ctx_level=0; show_branch=1; show_cost=1
@@ -204,14 +222,14 @@ assemble() {
   out+="  ${ctx}"
   [ "$show_cost" = 1 ] && [ -n "$cost_str" ] && out+="  ${PURPLE}${cost_str}${RESET}"
   if [ "$show_5h" = 1 ]; then
-    seg=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm "$label_tight" "$cd_5h")
+    seg="${seg5[label_tight * 2 + cd_5h]}"
     [ -n "$seg" ] && out+="  ${seg}"
   fi
   if [ "$show_7d" = 1 ]; then
-    seg=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh "$label_tight" "$cd_7d")
+    seg="${seg7[label_tight * 2 + cd_7d]}"
     [ -n "$seg" ] && out+="  ${seg}"
   fi
-  printf '%s' "$out"
+  LINE="$out"
 }
 
 # apply_step(): mutate ladder state for the given 0-based step index.
@@ -229,22 +247,52 @@ apply_step() {
   esac
 }
 
+# unapply_step(): inverse of apply_step — restore the detail/segment for the
+# given 0-based step index (phase-2 fill).
+unapply_step() {
+  case "$1" in
+  0) label_tight=0 ;;
+  1) ctx_level=0 ;;
+  2) ctx_level=1 ;;
+  3) show_branch=1 ;;
+  4) show_cost=1 ;;
+  5) cd_7d=1 ;;
+  6) cd_5h=1 ;;
+  7) show_7d=1 ;;
+  8) show_5h=1 ;;
+  esac
+}
+
 # Usable width. Empty/0/non-numeric COLUMNS -> full line (no reduction).
 cols="${COLUMNS:-}"
 case "$cols" in '' | *[!0-9]*) cols=0 ;; esac
+target=$((cols - 1))
 
-line=$(assemble)
-if [ "$cols" -gt 0 ]; then
-  target=$((cols - 1))
-  if [ "$(disp_width "$line")" -gt "$target" ]; then
-    for step in 0 1 2 3 4 5 6 7 8; do
-      apply_step "$step"
-      line=$(assemble)
-      [ "$(disp_width "$line")" -le "$target" ] && break
-    done
-  fi
+assemble
+if [ "$cols" -gt 0 ] && [ "$(disp_width "$LINE")" -gt "$target" ]; then
+  precompute_seg_variants
+  # phase 1 — reduce: apply the ladder until it fits; record the last step used
+  last=-1
+  for step in 0 1 2 3 4 5 6 7 8; do
+    apply_step "$step"; last=$step; assemble
+    [ "$(disp_width "$LINE")" -le "$target" ] && break
+  done
+  # phase 2 — fill: restore highest-value applied steps first (mirror order),
+  # keep each only if it still fits (skip-and-continue).
+  s=$last
+  while [ "$s" -ge 0 ]; do
+    sl=$label_tight sc=$ctx_level sb=$show_branch so=$show_cost
+    s7=$cd_7d s5=$cd_5h t7=$show_7d t5=$show_5h
+    unapply_step "$s"; assemble
+    if [ "$(disp_width "$LINE")" -gt "$target" ]; then
+      label_tight=$sl ctx_level=$sc show_branch=$sb show_cost=$so
+      cd_7d=$s7 cd_5h=$s5 show_7d=$t7 show_5h=$t5
+      assemble
+    fi
+    s=$((s - 1))
+  done
 fi
 
-printf '%b\n' "$line"
+printf '%b\n' "$LINE"
 
 # vim: ft=sh

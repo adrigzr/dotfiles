@@ -200,13 +200,13 @@ WC_FIX=$(printf '{
   }
 }' $((now + 17460)) $((now + 450000)))   # 5h≈4h51m (5 cols), 7d≈5d5h (4 cols)
 
-# tier widths per spec: 120->102, 100->95, 80->53, 45->39, 30->24, 20->16
-assert_width "tier full at 120"      120 "$WC_FIX" 102
-assert_width "tier ctx-mid at 100"   100 "$WC_FIX" 95
-assert_width "tier drop-branch at 80" 80 "$WC_FIX" 53
-assert_width "tier drop-7dcd at 45"   45 "$WC_FIX" 39
-assert_width "tier drop-7d at 30"     30 "$WC_FIX" 24
-assert_width "tier floor at 20"       20 "$WC_FIX" 16
+# tier widths per spec (v2, phase-2 fill): 120->102, 100->97, 80->66, 45->41, 30->25, 20->16
+assert_width "tier full at 120"       120 "$WC_FIX" 102
+assert_width "tier fill-labels at 100" 100 "$WC_FIX" 97
+assert_width "tier drop-branch at 80"  80 "$WC_FIX" 66
+assert_width "tier fill at 45"         45 "$WC_FIX" 41
+assert_width "tier at 30"              30 "$WC_FIX" 25
+assert_width "tier floor at 20"        20 "$WC_FIX" 16
 
 # every width fits within its terminal (<= COLUMNS-1)
 for c in 120 103 100 90 80 70 55 46 40 33 25 20; do
@@ -234,22 +234,34 @@ assert_width "COLUMNS=garbage -> full line"  "8x"  "$WC_FIX" 102
 o120=$(render_w 120 "$WC_FIX")
 assert_contains "120 keeps branch"    "$o120" "feat/investments-twr-valuation-fix"
 assert_contains "120 keeps full ctx"  "$o120" "144k/200k (72%)"
+
 o100=$(render_w 100 "$WC_FIX")
-assert_contains "100 tightens labels" "$o100" "5h:88%"
+assert_contains     "100 keeps branch"     "$o100" "feat/investments-twr-valuation-fix"
+assert_contains     "100 spaced 5h label"  "$o100" "5h: 88%"
 assert_contains "100 ctx mid"         "$o100" "↑144k (72%)"
 assert_not_contains "100 drops denominator" "$o100" "/200k"
+
 o80=$(render_w 80 "$WC_FIX")
-assert_not_contains "80 drops branch" "$o80" "feat/investments"
-assert_contains "80 ctx min"          "$o80" "↑144k"
-assert_not_contains "80 ctx no percent" "$o80" "(72%)"
+assert_not_contains "80 drops branch"      "$o80" "feat/investments"
+assert_contains     "80 restores full ctx" "$o80" "144k/200k (72%)"
+assert_contains     "80 restores 5h cd"    "$o80" "5h: 88%"
+assert_contains     "80 keeps 7d cd"       "$o80" "7d: 64%"
 assert_contains "80 keeps cost"       "$o80" "\$12.47"
 assert_contains "80 keeps 5h countdown" "$o80" "↻"
+
+# monotonic-≥ with the one documented exception (80→90 swaps branch for ctx detail):
+w80=$(render_w 80 "$WC_FIX" | awidth); w90=$(render_w 90 "$WC_FIX" | awidth)
+assert_width "90 keeps branch sparse-ctx"  90 "$WC_FIX" 89
+o90=$(render_w 90 "$WC_FIX")
+assert_contains     "90 keeps branch"      "$o90" "feat/investments-twr-valuation-fix"
+assert_not_contains "90 drops ctx denom"   "$o90" "144k/200k"
+
 o45=$(render_w 45 "$WC_FIX")
 assert_not_contains "45 drops cost"   "$o45" "\$12.47"
 assert_contains "45 keeps 5h countdown" "$o45" "↻4h"
 assert_not_contains "45 drops 7d countdown" "$o45" "↻5d"
 o30=$(render_w 30 "$WC_FIX")
-assert_contains "30 keeps 5h pct"     "$o30" "5h:88%"
+assert_contains "30 spaced 5h pct"    "$o30" "5h: 88%"
 assert_not_contains "30 drops 7d"     "$o30" "7d:"
 assert_not_contains "30 no countdown" "$o30" "↻"
 o20=$(render_w 20 "$WC_FIX")
@@ -258,10 +270,10 @@ assert_not_contains "20 floor no limits" "$o20" "5h:"
 
 # locale independence: fit decision identical under C locale
 wC=$(LC_ALL=C bash -c 'printf "%s" "$1" | env COLUMNS=80 "$2" | sed "s/\x1b\[[0-9;]*m//g"' _ "$WC_FIX" "$statusline" | awidth)
-if [ "$wC" = 53 ]; then
-  printf 'ok   C-locale tier at 80 (w=53)\n'; pass=$((pass + 1))
+if [ "$wC" = 66 ]; then
+  printf 'ok   C-locale tier at 80 (w=66)\n'; pass=$((pass + 1))
 else
-  printf 'FAIL C-locale width %s != 53\n' "$wC"; fail=$((fail + 1))
+  printf 'FAIL C-locale width %s != 66\n' "$wC"; fail=$((fail + 1))
 fi
 
 # --- disp_width parity: same tier width under C and UTF-8 locales ---
