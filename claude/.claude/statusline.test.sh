@@ -13,9 +13,37 @@ strip_ansi() {
   sed 's/\x1b\[[0-9;]*m//g'
 }
 
-# render(): pipe session JSON to the statusline, return plain-text output
+# render(): pipe session JSON to the statusline, return plain-text output.
+# COLUMNS is neutralized so the adaptive ladder yields the full (fallback) line;
+# width-specific behavior is exercised via render_w below.
 render() {
-  printf '%s' "${1:-}" | "$statusline" | strip_ansi
+  printf '%s' "${1:-}" | env -u COLUMNS "$statusline" | strip_ansi
+}
+
+# render_w(): render at a specific terminal width.
+render_w() {
+  printf '%s' "${2:-}" | env COLUMNS="${1:-0}" "$statusline" | strip_ansi
+}
+
+# awidth(): stdin -> display columns (codepoints = bytes - UTF-8 continuation bytes).
+awidth() {
+  local s t c
+  s=$(cat)
+  t=$(printf '%s' "$s" | LC_ALL=C wc -c)
+  c=$(printf '%s' "$s" | LC_ALL=C tr -dc '\200-\277' | LC_ALL=C wc -c)
+  printf '%s' "$((t - c))"
+}
+
+# assert_width(): name, cols, json, expected-width
+assert_width() {
+  local name="${1:-}" cols="${2:-}" json="${3:-}" want="${4:-}" got
+  got=$(render_w "$cols" "$json" | awidth)
+  if [ "$got" = "$want" ]; then
+    printf 'ok   %s\n' "$name"; pass=$((pass + 1))
+  else
+    printf 'FAIL %s\n       want width: [%s]\n       got width:  [%s]\n' "$name" "$want" "$got"
+    fail=$((fail + 1))
+  fi
 }
 
 # fixture(): build session JSON, embedding the given rate_limits object.
@@ -146,6 +174,85 @@ assert_contains "rounds up at .5 and above" "$out" "5h: 75%"
 # context segment rounds by the same rule (fixture used_percentage is 22.6)
 out=$(render "$(fixture null)")
 assert_contains "context percent rounds up" "$out" "(23%)"
+
+# --- adaptive width (measure-and-reduce ladder) ---
+
+now=$(date +%s)
+WC_FIX=$(printf '{
+  "model": { "display_name": "Opus 4.8" },
+  "cwd": "/tmp",
+  "worktree": { "original_branch": "feat/investments-twr-valuation-fix" },
+  "context_window": { "used_percentage": 72, "context_window_size": 200000, "current_usage": { "input_tokens": 144000 } },
+  "cost": { "total_cost_usd": 12.47 },
+  "rate_limits": {
+    "five_hour": { "used_percentage": 88, "resets_at": %d },
+    "seven_day": { "used_percentage": 64, "resets_at": %d }
+  }
+}' $((now + 17460)) $((now + 450000)))   # 5h≈4h51m (5 cols), 7d≈5d5h (4 cols)
+
+# tier widths per spec: 120->102, 100->95, 80->53, 45->39, 30->24, 20->16
+assert_width "tier full at 120"      120 "$WC_FIX" 102
+assert_width "tier ctx-mid at 100"   100 "$WC_FIX" 95
+assert_width "tier drop-branch at 80" 80 "$WC_FIX" 53
+assert_width "tier drop-7dcd at 45"   45 "$WC_FIX" 39
+assert_width "tier drop-7d at 30"     30 "$WC_FIX" 24
+assert_width "tier floor at 20"       20 "$WC_FIX" 16
+
+# every width fits within its terminal (<= COLUMNS-1)
+for c in 120 103 100 90 80 70 55 46 40 33 25 20; do
+  w=$(render_w "$c" "$WC_FIX" | awidth)
+  if [ "$w" -le $((c - 1)) ]; then
+    printf 'ok   fits at COLUMNS=%s (w=%s)\n' "$c" "$w"; pass=$((pass + 1))
+  else
+    printf 'FAIL width %s > %s at COLUMNS=%s\n' "$w" "$((c - 1))" "$c"; fail=$((fail + 1))
+  fi
+done
+
+# fallback: unset / 0 / garbage COLUMNS -> full line (width 102)
+out=$(printf '%s' "$WC_FIX" | env -u COLUMNS "$statusline" | strip_ansi)
+assert_contains "unset COLUMNS -> full line" "$out" "feat/investments-twr-valuation-fix"
+w=$(printf '%s' "$out" | awidth)
+if [ "$w" = 102 ]; then
+  printf 'ok   unset COLUMNS width 102\n'; pass=$((pass + 1))
+else
+  printf 'FAIL unset width %s != 102\n' "$w"; fail=$((fail + 1))
+fi
+assert_width "COLUMNS=0 -> full line"        0     "$WC_FIX" 102
+assert_width "COLUMNS=garbage -> full line"  "8x"  "$WC_FIX" 102
+
+# ladder content assertions
+o120=$(render_w 120 "$WC_FIX")
+assert_contains "120 keeps branch"    "$o120" "feat/investments-twr-valuation-fix"
+assert_contains "120 keeps full ctx"  "$o120" "144k/200k (72%)"
+o100=$(render_w 100 "$WC_FIX")
+assert_contains "100 tightens labels" "$o100" "5h:88%"
+assert_contains "100 ctx mid"         "$o100" "↑144k (72%)"
+assert_not_contains "100 drops denominator" "$o100" "/200k"
+o80=$(render_w 80 "$WC_FIX")
+assert_not_contains "80 drops branch" "$o80" "feat/investments"
+assert_contains "80 ctx min"          "$o80" "↑144k"
+assert_not_contains "80 ctx no percent" "$o80" "(72%)"
+assert_contains "80 keeps cost"       "$o80" "\$12.47"
+assert_contains "80 keeps 5h countdown" "$o80" "↻"
+o45=$(render_w 45 "$WC_FIX")
+assert_not_contains "45 drops cost"   "$o45" "\$12.47"
+assert_contains "45 keeps 5h countdown" "$o45" "↻4h"
+assert_not_contains "45 drops 7d countdown" "$o45" "↻5d"
+o30=$(render_w 30 "$WC_FIX")
+assert_contains "30 keeps 5h pct"     "$o30" "5h:88%"
+assert_not_contains "30 drops 7d"     "$o30" "7d:"
+assert_not_contains "30 no countdown" "$o30" "↻"
+o20=$(render_w 20 "$WC_FIX")
+assert_contains "20 floor keeps ctx"  "$o20" "↑144k"
+assert_not_contains "20 floor no limits" "$o20" "5h:"
+
+# locale independence: fit decision identical under C locale
+wC=$(LC_ALL=C bash -c 'printf "%s" "$1" | env COLUMNS=80 "$2" | sed "s/\x1b\[[0-9;]*m//g"' _ "$WC_FIX" "$statusline" | awidth)
+if [ "$wC" = 53 ]; then
+  printf 'ok   C-locale tier at 80 (w=53)\n'; pass=$((pass + 1))
+else
+  printf 'FAIL C-locale width %s != 53\n' "$wC"; fail=$((fail + 1))
+fi
 
 # --- summary ---
 

@@ -78,24 +78,25 @@ fmt_delta() {
   fi
 }
 
-# rate_limit_segment(): label, percent, resets_at, fmt_delta mode -> rendered segment
-# Empty percent yields an empty segment. A missing, malformed, or already-elapsed
-# resets_at yields the percent alone rather than a wrong or negative countdown.
+# rate_limit_segment(): label, percent, resets_at, fmt_delta mode, [tight], [show_cd]
+# Empty percent -> empty segment. tight=1 removes the space after "label:".
+# show_cd=0 suppresses the countdown. Missing/elapsed/malformed reset yields percent alone.
 rate_limit_segment() {
-  local label="${1:-}" pct="${2:-}" reset="${3:-}" mode="${4:-hm}"
+  local label="${1:-}" pct="${2:-}" reset="${3:-}" mode="${4:-hm}" tight="${5:-0}" show_cd="${6:-1}"
   [ -n "$pct" ] || return 0
 
-  local pct_int color out now delta
+  local pct_int color out sep now delta
   pct_int=$(round_pct "$pct")
   color=$(color_pct "$pct_int")
-  out="${DIM}${label}:${RESET} ${color}${pct_int}%${RESET}"
+  if [ "$tight" = "1" ]; then sep=""; else sep=" "; fi
+  out="${DIM}${label}:${RESET}${sep}${color}${pct_int}%${RESET}"
 
   reset=${reset%.*}
   case "$reset" in
   '' | *[!0-9]*) reset='' ;;
   esac
 
-  if [ -n "$reset" ]; then
+  if [ "$show_cd" = "1" ] && [ -n "$reset" ]; then
     now=$(date +%s)
     delta=$((reset - now))
     if [ "$delta" -gt 0 ]; then
@@ -104,6 +105,18 @@ rate_limit_segment() {
   fi
 
   printf '%s' "$out"
+}
+
+# disp_width(): display columns of a string that may contain LITERAL \033[..m
+# escapes (measurement happens before the final `printf %b`). Strips those
+# escapes, then counts Unicode codepoints as (total bytes − UTF-8 continuation
+# bytes) — correct regardless of the ambient locale.
+disp_width() {
+  local stripped total cont
+  stripped=$(printf '%s' "$1" | sed -E 's/\\033\[[0-9;]*m//g')
+  total=$(printf '%s' "$stripped" | LC_ALL=C wc -c)
+  cont=$(printf '%s' "$stripped" | LC_ALL=C tr -dc '\200-\277' | LC_ALL=C wc -c)
+  printf '%s' "$((total - cont))"
 }
 
 # Extract model name
@@ -146,7 +159,9 @@ input_tokens=$(printf '%s' "$input" | jq -r '(.context_window.current_usage.inpu
 ctx_color=$(color_pct "$ctx_pct")
 ctx_used_fmt=$(fmt_k "$input_tokens")
 ctx_size_fmt=$(fmt_k "$ctx_size")
-ctx_str="${ctx_color}↑${ctx_used_fmt}/${ctx_size_fmt} (${ctx_pct}%)${RESET}"
+ctx_full="${ctx_color}↑${ctx_used_fmt}/${ctx_size_fmt} (${ctx_pct}%)${RESET}"
+ctx_mid="${ctx_color}↑${ctx_used_fmt} (${ctx_pct}%)${RESET}"
+ctx_min="${ctx_color}↑${ctx_used_fmt}${RESET}"
 
 # Cost
 cost_raw=$(printf '%s' "$input" | jq -r '.cost.total_cost_usd // empty' 2>/dev/null)
@@ -163,17 +178,64 @@ seven_d=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage /
 five_h_reset=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty' 2>/dev/null)
 seven_d_reset=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty' 2>/dev/null)
 
-five_h_str=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm)
-seven_d_str=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh)
+# ---- adaptive assembly: build richest line, reduce until it fits COLUMNS-1 ----
+# Ladder state (richest first).
+label_tight=0; ctx_level=0; show_branch=1; show_cost=1
+cd_7d=1; cd_5h=1; show_7d=1; show_5h=1
 
-# Assemble output
-out=" ${BLUE}${model_display}${RESET}"
-out+="  ${CYAN}${branch}${RESET}"
-out+="  ${ctx_str}"
-[ -n "$cost_str" ] && out+="  ${PURPLE}${cost_str}${RESET}"
-[ -n "$five_h_str" ] && out+="  ${five_h_str}"
-[ -n "$seven_d_str" ] && out+="  ${seven_d_str}"
+assemble() {
+  local out ctx seg
+  out=" ${BLUE}${model_display}${RESET}"
+  [ "$show_branch" = 1 ] && out+="  ${CYAN}${branch}${RESET}"
+  case "$ctx_level" in
+  0) ctx="$ctx_full" ;;
+  1) ctx="$ctx_mid" ;;
+  *) ctx="$ctx_min" ;;
+  esac
+  out+="  ${ctx}"
+  [ "$show_cost" = 1 ] && [ -n "$cost_str" ] && out+="  ${PURPLE}${cost_str}${RESET}"
+  if [ "$show_5h" = 1 ]; then
+    seg=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm "$label_tight" "$cd_5h")
+    [ -n "$seg" ] && out+="  ${seg}"
+  fi
+  if [ "$show_7d" = 1 ]; then
+    seg=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh "$label_tight" "$cd_7d")
+    [ -n "$seg" ] && out+="  ${seg}"
+  fi
+  printf '%s' "$out"
+}
 
-printf '%b\n' "$out"
+# apply_step(): mutate ladder state for the given 0-based step index.
+apply_step() {
+  case "$1" in
+  0) label_tight=1 ;;
+  1) ctx_level=1 ;;
+  2) ctx_level=2 ;;
+  3) show_branch=0 ;;
+  4) show_cost=0 ;;
+  5) cd_7d=0 ;;
+  6) cd_5h=0 ;;
+  7) show_7d=0 ;;
+  8) show_5h=0 ;;
+  esac
+}
+
+# Usable width. Empty/0/non-numeric COLUMNS -> full line (no reduction).
+cols="${COLUMNS:-}"
+case "$cols" in '' | *[!0-9]*) cols=0 ;; esac
+
+line=$(assemble)
+if [ "$cols" -gt 0 ]; then
+  target=$((cols - 1))
+  if [ "$(disp_width "$line")" -gt "$target" ]; then
+    for step in 0 1 2 3 4 5 6 7 8; do
+      apply_step "$step"
+      line=$(assemble)
+      [ "$(disp_width "$line")" -le "$target" ] && break
+    done
+  fi
+fi
+
+printf '%b\n' "$line"
 
 # vim: ft=sh
