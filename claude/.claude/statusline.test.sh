@@ -126,6 +126,22 @@ out=$(render "$(fixture '{"five_hour":{"used_percentage":42}}')")
 assert_contains "missing resets_at keeps percent" "$out" "5h: 42%"
 assert_not_contains "missing resets_at hides countdown" "$out" "↻"
 
+# --- percentage rounding ---
+
+out=$(render "$(fixture '{"seven_day":{"used_percentage":28.999999999999996,"resets_at":0}}')")
+assert_contains "float noise rounds up" "$out" "7d: 29%"
+assert_not_contains "float noise does not truncate down" "$out" "7d: 28%"
+
+out=$(render "$(fixture '{"five_hour":{"used_percentage":74.4,"resets_at":0}}')")
+assert_contains "rounds down below .5" "$out" "5h: 74%"
+
+out=$(render "$(fixture '{"five_hour":{"used_percentage":74.6,"resets_at":0}}')")
+assert_contains "rounds up at .5 and above" "$out" "5h: 75%"
+
+# context segment rounds by the same rule (fixture used_percentage is 22.6)
+out=$(render "$(fixture null)")
+assert_contains "context percent rounds up" "$out" "(23%)"
+
 # --- summary ---
 
 printf '\n%d passed, %d failed\n' "$pass" "$fail"

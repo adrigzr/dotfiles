@@ -21,6 +21,13 @@ PURPLE='\033[38;5;176m'
 # Read stdin JSON
 input=$(cat)
 
+# round_pct(): float percentage -> nearest integer
+# stdin delivers floats with representation noise (28.999999999999996 is 29);
+# truncating would floor these one point low.
+round_pct() {
+  awk -v x="${1:-0}" 'BEGIN { printf "%d", x + 0.5 }'
+}
+
 # color_pct(): returns color escape based on percentage value
 color_pct() {
   local pct="${1:-0}"
@@ -79,7 +86,7 @@ rate_limit_segment() {
   [ -n "$pct" ] || return 0
 
   local pct_int color out now delta
-  pct_int=${pct%.*}
+  pct_int=$(round_pct "$pct")
   color=$(color_pct "$pct_int")
   out="${DIM}${label}:${RESET} ${color}${pct_int}%${RESET}"
 
@@ -132,7 +139,7 @@ fi
 
 # Context window
 ctx_pct=$(printf '%s' "$input" | jq -r '.context_window.used_percentage // 0' 2>/dev/null)
-ctx_pct=${ctx_pct%.*} # truncate decimals
+ctx_pct=$(round_pct "$ctx_pct")
 ctx_size=$(printf '%s' "$input" | jq -r '.context_window.context_window_size // 0' 2>/dev/null)
 input_tokens=$(printf '%s' "$input" | jq -r '(.context_window.current_usage.input_tokens // 0) + (.context_window.current_usage.cache_creation_input_tokens // 0) + (.context_window.current_usage.cache_read_input_tokens // 0)' 2>/dev/null)
 
