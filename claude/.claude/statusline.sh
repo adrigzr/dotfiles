@@ -108,15 +108,24 @@ rate_limit_segment() {
 }
 
 # disp_width(): display columns of a string that may contain LITERAL \033[..m
-# escapes (measurement happens before the final `printf %b`). Strips those
-# escapes, then counts Unicode codepoints as (total bytes − UTF-8 continuation
-# bytes) — correct regardless of the ambient locale.
+# escapes (measurement happens before the final `printf %b`). Subprocess-free:
+# strips SGR escapes with parameter expansion, then counts codepoints. Under a
+# UTF-8 locale ${#s} already counts characters; under C it counts bytes, so we
+# subtract 2 per 3-byte glyph (↑, ↻ — the only multibyte glyphs used). Result
+# is identical regardless of the ambient locale.
 disp_width() {
-  local stripped total cont
-  stripped=$(printf '%s' "$1" | sed -E 's/\\033\[[0-9;]*m//g')
-  total=$(printf '%s' "$stripped" | LC_ALL=C wc -c)
-  cont=$(printf '%s' "$stripped" | LC_ALL=C tr -dc '\200-\277' | LC_ALL=C wc -c)
-  printf '%s' "$((total - cont))"
+  local s="$1" pre rest nou nor m gb up ref
+  up='↑'; ref='↻'; gb=${#up}
+  while [[ "$s" == *'\033['* ]]; do
+    pre="${s%%'\033['*}"; rest="${s#*'\033['}"; s="$pre${rest#*m}"
+  done
+  nou="${s//$up/}"; nor="${s//$ref/}"
+  m=$(( (${#s} - ${#nou}) / gb + (${#s} - ${#nor}) / gb ))
+  if [ "$gb" -eq 3 ]; then
+    printf '%s' "$(( ${#s} - 2 * m ))"
+  else
+    printf '%s' "${#s}"
+  fi
 }
 
 # Extract model name

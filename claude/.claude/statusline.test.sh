@@ -88,6 +88,16 @@ assert_not_contains() {
   fi
 }
 
+# assert_eq(): name, got, want
+assert_eq() {
+  local name="${1:-}" got="${2:-}" want="${3:-}"
+  if [ "$got" = "$want" ]; then
+    printf 'ok   %s\n' "$name"; pass=$((pass + 1))
+  else
+    printf 'FAIL %s\n       want: [%s]\n       got:  [%s]\n' "$name" "$want" "$got"; fail=$((fail + 1))
+  fi
+}
+
 # --- characterization: segments that already read from stdin ---
 
 out=$(render "$(fixture null)")
@@ -253,6 +263,11 @@ if [ "$wC" = 53 ]; then
 else
   printf 'FAIL C-locale width %s != 53\n' "$wC"; fail=$((fail + 1))
 fi
+
+# --- disp_width parity: same tier width under C and UTF-8 locales ---
+wC=$(LC_ALL=C       bash -c 'printf "%s" "$1" | env COLUMNS=80 "$2" | sed -E "s/\x1b\[[0-9;]*m//g"' _ "$WC_FIX" "$statusline" | awidth)
+wU=$(LC_ALL=en_US.UTF-8 bash -c 'printf "%s" "$1" | env COLUMNS=80 "$2" | sed -E "s/\x1b\[[0-9;]*m//g"' _ "$WC_FIX" "$statusline" | awidth)
+assert_eq "disp_width locale parity @80" "$wC" "$wU"
 
 # --- summary ---
 
