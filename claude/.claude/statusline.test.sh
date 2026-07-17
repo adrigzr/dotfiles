@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# Tests for statusline.sh — plain bash, no framework.
+# Run: ./claude/.claude/statusline.test.sh
+
+script_dir=$(cd "$(dirname "$0")" && pwd)
+statusline="$script_dir/statusline.sh"
+
+pass=0
+fail=0
+
+# strip_ansi(): remove SGR escape sequences so assertions match plain text
+strip_ansi() {
+  sed 's/\x1b\[[0-9;]*m//g'
+}
+
+# render(): pipe session JSON to the statusline, return plain-text output
+render() {
+  printf '%s' "${1:-}" | "$statusline" | strip_ansi
+}
+
+# fixture(): build session JSON, embedding the given rate_limits object.
+# Pass '{}' for an empty rate_limits, or 'null' to omit the key entirely.
+fixture() {
+  local rate_limits="${1:-null}"
+  printf '{
+    "model": { "display_name": "Opus 4.8" },
+    "cwd": "/tmp",
+    "context_window": {
+      "used_percentage": 22.6,
+      "context_window_size": 200000,
+      "current_usage": { "input_tokens": 45000 }
+    },
+    "rate_limits": %s
+  }' "$rate_limits"
+}
+
+# assert_contains(): name, haystack, needle
+assert_contains() {
+  local name="${1:-}" haystack="${2:-}" needle="${3:-}"
+  if printf '%s' "$haystack" | grep -qF -- "$needle"; then
+    printf 'ok   %s\n' "$name"
+    pass=$((pass + 1))
+  else
+    printf 'FAIL %s\n       want substring: [%s]\n       got:            [%s]\n' \
+      "$name" "$needle" "$haystack"
+    fail=$((fail + 1))
+  fi
+}
+
+# assert_not_contains(): name, haystack, needle
+assert_not_contains() {
+  local name="${1:-}" haystack="${2:-}" needle="${3:-}"
+  if printf '%s' "$haystack" | grep -qF -- "$needle"; then
+    printf 'FAIL %s\n       unwanted substring: [%s]\n       got:                [%s]\n' \
+      "$name" "$needle" "$haystack"
+    fail=$((fail + 1))
+  else
+    printf 'ok   %s\n' "$name"
+    pass=$((pass + 1))
+  fi
+}
+
+# --- characterization: segments that already read from stdin ---
+
+out=$(render "$(fixture null)")
+assert_contains "model name renders" "$out" "Opus 4.8"
+assert_contains "context tokens render" "$out" "45k/200k"
+
+# --- summary ---
+
+printf '\n%d passed, %d failed\n' "$pass" "$fail"
+[ "$fail" -eq 0 ]
+
+# vim: ft=sh
