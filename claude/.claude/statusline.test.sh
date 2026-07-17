@@ -251,6 +251,7 @@ assert_contains "80 keeps 5h countdown" "$o80" "↻"
 
 # monotonic-≥ with the one documented exception (80→90 swaps branch for ctx detail):
 w80=$(render_w 80 "$WC_FIX" | awidth); w90=$(render_w 90 "$WC_FIX" | awidth)
+assert_eq "80→90 width non-decreasing (branch/ctx swap)" "$([ "$w90" -ge "$w80" ] && echo ok)" "ok"
 assert_width "90 keeps branch sparse-ctx"  90 "$WC_FIX" 89
 o90=$(render_w 90 "$WC_FIX")
 assert_contains     "90 keeps branch"      "$o90" "feat/investments-twr-valuation-fix"
