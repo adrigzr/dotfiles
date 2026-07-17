@@ -121,6 +121,11 @@ out=$(render "$(fixture '{"five_hour":{"used_percentage":42,"resets_at":"not-a-n
 assert_contains "garbage resets_at keeps percent" "$out" "5h: 42%"
 assert_not_contains "garbage resets_at hides countdown" "$out" "↻"
 
+# arithmetic-hostile resets_at (would cause bash syntax error without guard)
+out=$(render "$(fixture '{"five_hour":{"used_percentage":42,"resets_at":"3;"}}')")
+assert_contains "arithmetic-hostile resets_at keeps percent" "$out" "5h: 42%"
+assert_not_contains "arithmetic-hostile resets_at hides countdown" "$out" "↻"
+
 # resets_at key absent entirely: percent survives, countdown hidden
 out=$(render "$(fixture '{"five_hour":{"used_percentage":42}}')")
 assert_contains "missing resets_at keeps percent" "$out" "5h: 42%"

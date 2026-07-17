@@ -167,7 +167,6 @@ five_h_str=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm)
 seven_d_str=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh)
 
 # Assemble output
-
 out=" ${BLUE}${model_display}${RESET}"
 out+="  ${CYAN}${branch}${RESET}"
 out+="  ${ctx_str}"
