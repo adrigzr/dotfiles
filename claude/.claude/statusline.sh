@@ -8,9 +8,6 @@ if ! command -v jq &>/dev/null; then
   exit 0
 fi
 
-# Platform detection
-PLATFORM=$(uname -s)
-
 # ANSI colors (One Dark palette)
 RESET='\033[0m'
 DIM='\033[2m'
@@ -96,72 +93,24 @@ else
   cost_str=""
 fi
 
-# Subscription usage (cached, 5-minute TTL)
-CACHE_FILE="/tmp/claude-usage-cache.json"
-
-_load_cached_usage() {
-  if [ ! -f "$CACHE_FILE" ]; then return 1; fi
-  local now mtime age
-  now=$(date +%s)
-  case "$PLATFORM" in
-  Darwin) mtime=$(stat -f "%m" "$CACHE_FILE" 2>/dev/null) || return 1 ;;
-  *) mtime=$(stat -c "%Y" "$CACHE_FILE" 2>/dev/null) || return 1 ;;
-  esac
-  age=$((now - mtime))
-  [ "$age" -lt 300 ] || return 1
-  cat "$CACHE_FILE"
-}
-
-_fetch_usage() {
-  local token
-  case "$PLATFORM" in
-  Darwin)
-    token=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null |
-      jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
-    ;;
-  *)
-    local creds_file="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.credentials.json"
-    token=$(jq -r '.claudeAiOauth.accessToken // empty' "$creds_file" 2>/dev/null)
-    ;;
-  esac
-  [ -z "$token" ] && return 1
-
-  local response
-  response=$(curl -sf \
-    -H "Authorization: Bearer $token" \
-    -H "anthropic-beta: oauth-2025-04-20" \
-    "https://api.anthropic.com/api/oauth/usage" 2>/dev/null)
-  [ -z "$response" ] && return 1
-
-  # Validate response has expected fields
-  printf '%s' "$response" | jq -e '.five_hour' &>/dev/null || return 1
-
-  printf '%s' "$response" >"$CACHE_FILE"
-  printf '%s' "$response"
-}
-
-usage_json=$(_load_cached_usage 2>/dev/null || _fetch_usage 2>/dev/null)
+# Subscription usage (from stdin — Claude Code supplies rate_limits directly)
+five_h=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty' 2>/dev/null)
+seven_d=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty' 2>/dev/null)
 
 five_h_str=""
 seven_d_str=""
-if [ -n "$usage_json" ]; then
-  five_h=$(printf '%s' "$usage_json" | jq -r '.five_hour.utilization // empty' 2>/dev/null)
-  seven_d=$(printf '%s' "$usage_json" | jq -r '.seven_day.utilization // empty' 2>/dev/null)
-
-  if [ -n "$five_h" ]; then
-    five_h_int=${five_h%.*}
-    five_h_color=$(color_pct "$five_h_int")
-    five_h_str="${DIM}5h:${RESET} ${five_h_color}${five_h_int}%${RESET}"
-  fi
-  if [ -n "$seven_d" ]; then
-    seven_d_int=${seven_d%.*}
-    seven_d_color=$(color_pct "$seven_d_int")
-    seven_d_str="${DIM}7d:${RESET} ${seven_d_color}${seven_d_int}%${RESET}"
-  fi
+if [ -n "$five_h" ]; then
+  five_h_int=${five_h%.*}
+  five_h_color=$(color_pct "$five_h_int")
+  five_h_str="${DIM}5h:${RESET} ${five_h_color}${five_h_int}%${RESET}"
+fi
+if [ -n "$seven_d" ]; then
+  seven_d_int=${seven_d%.*}
+  seven_d_color=$(color_pct "$seven_d_int")
+  seven_d_str="${DIM}7d:${RESET} ${seven_d_color}${seven_d_int}%${RESET}"
 fi
 
 # Assemble output
-sep="${DIM}·${RESET}"
 
 out=" ${BLUE}${model_display}${RESET}"
 out+="  ${CYAN}${branch}${RESET}"

@@ -66,6 +66,21 @@ out=$(render "$(fixture null)")
 assert_contains "model name renders" "$out" "Opus 4.8"
 assert_contains "context tokens render" "$out" "45k/200k"
 
+# --- rate limits sourced from stdin ---
+
+out=$(render "$(fixture '{"five_hour":{"used_percentage":42,"resets_at":0},"seven_day":{"used_percentage":17,"resets_at":0}}')")
+assert_contains "5h percent from stdin" "$out" "5h: 42%"
+assert_contains "7d percent from stdin" "$out" "7d: 17%"
+
+out=$(render "$(fixture null)")
+assert_not_contains "no rate_limits -> no 5h segment" "$out" "5h:"
+assert_not_contains "no rate_limits -> no 7d segment" "$out" "7d:"
+assert_contains "no rate_limits -> rest of line intact" "$out" "Opus 4.8"
+
+out=$(render "$(fixture '{"five_hour":{"used_percentage":42,"resets_at":0}}')")
+assert_contains "5h alone renders" "$out" "5h: 42%"
+assert_not_contains "7d absent when window missing" "$out" "7d:"
+
 # --- summary ---
 
 printf '\n%d passed, %d failed\n' "$pass" "$fail"
