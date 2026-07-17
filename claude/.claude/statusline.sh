@@ -43,6 +43,62 @@ fmt_k() {
   fi
 }
 
+# fmt_delta(): seconds until reset -> compact duration
+#   mode "hm": 4h51m / 2h4m / 12m / 0m
+#   mode "dh": 3d5h / 5h / 12m / 0m
+# Leading zero units are dropped; nothing is zero-padded.
+fmt_delta() {
+  local secs="${1:-0}" mode="${2:-hm}" days hours mins
+  hours=$((secs / 3600))
+  mins=$(((secs % 3600) / 60))
+  if [ "$mode" = "dh" ]; then
+    days=$((secs / 86400))
+    if [ "$days" -gt 0 ]; then
+      printf '%dd%dh' "$days" "$(((secs % 86400) / 3600))"
+      return
+    fi
+    if [ "$hours" -gt 0 ]; then
+      printf '%dh' "$hours"
+      return
+    fi
+    printf '%dm' "$mins"
+    return
+  fi
+  if [ "$hours" -gt 0 ]; then
+    printf '%dh%dm' "$hours" "$mins"
+  else
+    printf '%dm' "$mins"
+  fi
+}
+
+# rate_limit_segment(): label, percent, resets_at, fmt_delta mode -> rendered segment
+# Empty percent yields an empty segment. A missing, malformed, or already-elapsed
+# resets_at yields the percent alone rather than a wrong or negative countdown.
+rate_limit_segment() {
+  local label="${1:-}" pct="${2:-}" reset="${3:-}" mode="${4:-hm}"
+  [ -n "$pct" ] || return 0
+
+  local pct_int color out now delta
+  pct_int=${pct%.*}
+  color=$(color_pct "$pct_int")
+  out="${DIM}${label}:${RESET} ${color}${pct_int}%${RESET}"
+
+  reset=${reset%.*}
+  case "$reset" in
+  '' | *[!0-9]*) reset='' ;;
+  esac
+
+  if [ -n "$reset" ]; then
+    now=$(date +%s)
+    delta=$((reset - now))
+    if [ "$delta" -gt 0 ]; then
+      out="${out} ${DIM}↻$(fmt_delta "$delta" "$mode")${RESET}"
+    fi
+  fi
+
+  printf '%s' "$out"
+}
+
 # Extract model name
 model_display=$(printf '%s' "$input" | jq -r '.model.display_name // empty' 2>/dev/null)
 if [ -z "$model_display" ]; then
@@ -97,18 +153,11 @@ fi
 five_h=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty' 2>/dev/null)
 seven_d=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty' 2>/dev/null)
 
-five_h_str=""
-seven_d_str=""
-if [ -n "$five_h" ]; then
-  five_h_int=${five_h%.*}
-  five_h_color=$(color_pct "$five_h_int")
-  five_h_str="${DIM}5h:${RESET} ${five_h_color}${five_h_int}%${RESET}"
-fi
-if [ -n "$seven_d" ]; then
-  seven_d_int=${seven_d%.*}
-  seven_d_color=$(color_pct "$seven_d_int")
-  seven_d_str="${DIM}7d:${RESET} ${seven_d_color}${seven_d_int}%${RESET}"
-fi
+five_h_reset=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty' 2>/dev/null)
+seven_d_reset=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty' 2>/dev/null)
+
+five_h_str=$(rate_limit_segment "5h" "$five_h" "$five_h_reset" hm)
+seven_d_str=$(rate_limit_segment "7d" "$seven_d" "$seven_d_reset" dh)
 
 # Assemble output
 

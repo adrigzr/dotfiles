@@ -81,6 +81,51 @@ out=$(render "$(fixture '{"five_hour":{"used_percentage":42,"resets_at":0}}')")
 assert_contains "5h alone renders" "$out" "5h: 42%"
 assert_not_contains "7d absent when window missing" "$out" "7d:"
 
+# --- reset countdown ---
+
+now=$(date +%s)
+
+# hm mode: hours and minutes, unpadded
+out=$(render "$(fixture "$(printf '{"five_hour":{"used_percentage":42,"resets_at":%d}}' $((now + 8070)))")")
+assert_contains "5h countdown h+m" "$out" "5h: 42% ↻2h14m"
+
+# hm mode: unpadded single-digit minutes
+out=$(render "$(fixture "$(printf '{"five_hour":{"used_percentage":42,"resets_at":%d}}' $((now + 7470)))")")
+assert_contains "5h countdown unpadded minutes" "$out" "↻2h4m"
+
+# hm mode: under an hour drops the zero hour
+out=$(render "$(fixture "$(printf '{"five_hour":{"used_percentage":42,"resets_at":%d}}' $((now + 750)))")")
+assert_contains "5h countdown sub-hour drops 0h" "$out" "↻12m"
+assert_not_contains "5h countdown has no 0h prefix" "$out" "0h12m"
+
+# hm mode: under a minute
+out=$(render "$(fixture "$(printf '{"five_hour":{"used_percentage":42,"resets_at":%d}}' $((now + 45)))")")
+assert_contains "5h countdown sub-minute" "$out" "↻0m"
+
+# dh mode: days and hours
+out=$(render "$(fixture "$(printf '{"seven_day":{"used_percentage":17,"resets_at":%d}}' $((now + 279000)))")")
+assert_contains "7d countdown d+h" "$out" "7d: 17% ↻3d5h"
+
+# dh mode: under a day drops the zero day
+out=$(render "$(fixture "$(printf '{"seven_day":{"used_percentage":17,"resets_at":%d}}' $((now + 19800)))")")
+assert_contains "7d countdown sub-day drops 0d" "$out" "↻5h"
+assert_not_contains "7d countdown has no 0d prefix" "$out" "0d5h"
+
+# expired window: percent survives, countdown hidden
+out=$(render "$(fixture "$(printf '{"five_hour":{"used_percentage":42,"resets_at":%d}}' $((now - 60)))")")
+assert_contains "expired window keeps percent" "$out" "5h: 42%"
+assert_not_contains "expired window hides countdown" "$out" "↻"
+
+# malformed resets_at degrades to bare percent
+out=$(render "$(fixture '{"five_hour":{"used_percentage":42,"resets_at":"not-a-number"}}')")
+assert_contains "garbage resets_at keeps percent" "$out" "5h: 42%"
+assert_not_contains "garbage resets_at hides countdown" "$out" "↻"
+
+# resets_at key absent entirely: percent survives, countdown hidden
+out=$(render "$(fixture '{"five_hour":{"used_percentage":42}}')")
+assert_contains "missing resets_at keeps percent" "$out" "5h: 42%"
+assert_not_contains "missing resets_at hides countdown" "$out" "↻"
+
 # --- summary ---
 
 printf '\n%d passed, %d failed\n' "$pass" "$fail"
