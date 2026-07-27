@@ -186,6 +186,3 @@ setopt HIST_IGNORE_ALL_DUPS
 
 # uncomment to finish profiling
 # zprof
-
-# Rootless Docker
-export DOCKER_HOST=unix:///run/user/1000/docker.sock
