@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 14,
   "env": {
-    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1"
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -29,6 +29,7 @@
       "Read(~/.aws/*)"
     ]
   },
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
@@ -95,17 +96,22 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/statusline.sh"
+    "command": "~/.claude/statusline.sh",
+    "refreshInterval": 60
   },
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
+    "code-review@claude-plugins-official": false,
     "typescript-lsp@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "claude-code-setup@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": false,
+    "claude-code-setup@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "context7@claude-plugins-official": true
+    "pyright-lsp@claude-plugins-official": false,
+    "context7@claude-plugins-official": true,
+    "homelab@claude-plugin": true,
+    "code-simplifier@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": true,
+    "caveman@caveman": true
   },
   "extraKnownMarketplaces": {
     "claude-code-plugins": {
@@ -113,7 +119,26 @@
         "source": "github",
         "repo": "anthropics/claude-code"
       }
+    },
+    "claude-plugin": {
+      "source": {
+        "source": "directory",
+        "path": "/home/claude/repositories/claude-plugin"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
     }
   },
-  "autoDreamEnabled": true
+  "effortLevel": "high",
+  "autoCompactWindow": 250000,
+  "tui": "fullscreen",
+  "autoDreamEnabled": true,
+  "theme": "dark-ansi",
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true
 }
