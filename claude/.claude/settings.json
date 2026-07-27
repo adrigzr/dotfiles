@@ -92,6 +92,16 @@
             "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if [[ \"$f\" == *.toml ]]; then toml-sort --check --no-sort-tables \"$f\"; fi; }"
           }
         ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/spec-review-reminder.sh",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PreToolUse": [
