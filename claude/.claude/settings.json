@@ -11,14 +11,25 @@
       "Edit(./**)",
       "Write(./**)",
       "Read(~/Repositories/**)",
+      "Read(~/repositories/**)",
+      "Read(/mnt/repositories/**)",
       "Read(/tmp/**)",
       "Write(/tmp/**)",
+      "Edit(/tmp/**)",
       "Read(~/.claude/plugins/**)",
-      "Bash(*)",
       "WebSearch",
       "WebFetch",
-      "mcp__plugin_context7_context7",
-      "mcp__gitea"
+      "mcp__gitea__pull_request_write",
+      "Bash(make lint *)",
+      "Bash(yarn install *)"
+    ],
+    "deny": [
+      "Read(~/.claude/.credentials.json)",
+      "Read(~/.ssh/id_*)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.aws/credentials)",
+      "Read(~/.config/sops/**)",
+      "Read(**/*.age)"
     ],
     "ask": [
       "Read(~/*.extra)",
@@ -27,7 +38,8 @@
       "Read(~/.ssh/*)",
       "Read(~/.gnupg/*)",
       "Read(~/.aws/*)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "model": "opus",
   "hooks": {
