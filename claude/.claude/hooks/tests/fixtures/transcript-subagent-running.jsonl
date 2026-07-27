@@ -1,0 +1,2 @@
+{"type":"last-prompt","lastPrompt":"audit the dotfiles repo","sessionId":"sA"}
+{"type":"assistant","message":{"content":[{"type":"text","text":"dispatching"},{"type":"tool_use","name":"Agent","id":"toolu_running_01"}]}}

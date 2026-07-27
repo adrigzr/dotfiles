@@ -8,6 +8,17 @@ CURL_BIN="${CURL_BIN:-curl}"
 
 log() { echo "[ntfy-notify] $*" >&2; }
 
+# Skip if user is actively viewing our tmux pane (active pane in active window of an attached session).
+if [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] && command -v tmux >/dev/null 2>&1; then
+  read -r pane_active window_active session_attached < <(
+    tmux display-message -p -t "$TMUX_PANE" -F '#{pane_active} #{window_active} #{session_attached}' 2>/dev/null
+  )
+  if [[ "$pane_active" == "1" && "$window_active" == "1" \
+        && "$session_attached" =~ ^[0-9]+$ && "$session_attached" -gt 0 ]]; then
+    exit 0
+  fi
+fi
+
 : "${NTFY_TOKEN:=}"
 if [[ -z "$NTFY_TOKEN" ]]; then
   exit 0
@@ -33,6 +44,22 @@ if ! message="$(jq -r '.message // empty' <<<"$payload" 2>/dev/null)"; then
   exit 0
 fi
 transcript="$(jq -r '.transcript_path // empty' <<<"$payload" 2>/dev/null || true)"
+
+# Suppress while this session's own background subagents are still running: notify
+# only once the main agent is truly idle. An Agent (or legacy Task) tool_use whose id
+# has no matching tool_result yet means that subagent has not reported back.
+if [[ -n "$transcript" && -r "$transcript" ]]; then
+  running="$(jq -rs '
+    [ .[] | select(.message.content|type=="array") | .message.content[]? ] as $c
+    | ([ $c[] | select(.type=="tool_use" and (.name=="Agent" or .name=="Task")) | .id ]) as $used
+    | ([ $c[] | select(.type=="tool_result") | .tool_use_id ]) as $done
+    | [ $used[] | select(. as $id | ($done | index($id)) | not) ] | length
+  ' "$transcript" 2>/dev/null || echo 0)"
+  if [[ "$running" =~ ^[0-9]+$ && "$running" -gt 0 ]]; then
+    log "suppressing: $running subagent(s) still running"
+    exit 0
+  fi
+fi
 
 title="Claude Code"
 body="$message"

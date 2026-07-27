@@ -8,6 +8,7 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC2034  # referenced by tests added in later tasks
 script="$here/../ntfy-notify.sh"
 mock_curl="$here/mock-curl"
+mock_tmux="$here/mock-tmux"
 # shellcheck disable=SC2034  # referenced by tests added in later tasks
 fixtures="$here/fixtures"
 
@@ -26,6 +27,12 @@ run_test() {
   export CURL_BIN="$mock_curl"
   export NTFY_URL="https://ntfy.test/apps"
   : > "$MOCK_CURL_LOG"
+
+  # The hook skips notifying when the user is watching its tmux pane. Tests are
+  # usually run from inside tmux, which would trip that guard and mask every
+  # assertion below, so neutralise it by default. Tests that exercise the guard
+  # opt back in via with_tmux().
+  unset TMUX TMUX_PANE
 
   if ( set -u; "$name" ); then
     echo "PASS  $name"
@@ -62,6 +69,20 @@ assert_log_contains() {
     cat "$MOCK_CURL_LOG" >&2
     return 1
   fi
+}
+
+# with_tmux(): run a command with the tmux-focus guard active, using mock-tmux.
+# $1 = "<pane_active> <window_active> <session_attached>" triple; rest = command.
+with_tmux() {
+  local state="$1"; shift
+  local bin rc
+  bin="$(mktemp -d)"
+  ln -s "$mock_tmux" "$bin/tmux"
+  TMUX="/tmp/tmux-test/default,1,0" TMUX_PANE="%0" \
+    MOCK_TMUX_STATE="$state" PATH="$bin:$PATH" "$@"
+  rc=$?
+  rm -rf "$bin"
+  return $rc
 }
 
 # --- tests go here (added in later tasks) ---
@@ -202,6 +223,65 @@ test_transcript_with_zero_last_prompts_sends_message_only() {
     echo "  expected no recap arrow in body" >&2
     return 1
   fi
+}
+
+# --- tmux focus guard ---
+
+test_skips_when_user_viewing_pane() {
+  export NTFY_TOKEN="test-token-123"
+  echo '{"message":"m","transcript_path":"/nope","session_id":"s","cwd":"/","hook_event_name":"Notification"}' \
+    | with_tmux "1 1 1" "$script" || return 1
+  assert_no_curl
+}
+
+test_notifies_when_pane_not_active() {
+  export NTFY_TOKEN="test-token-123"
+  echo '{"message":"m","transcript_path":"/nope","session_id":"s","cwd":"/","hook_event_name":"Notification"}' \
+    | with_tmux "0 1 1" "$script" || return 1
+  assert_curl_called
+}
+
+test_notifies_when_window_not_active() {
+  export NTFY_TOKEN="test-token-123"
+  echo '{"message":"m","transcript_path":"/nope","session_id":"s","cwd":"/","hook_event_name":"Notification"}' \
+    | with_tmux "1 0 1" "$script" || return 1
+  assert_curl_called
+}
+
+test_notifies_when_session_detached() {
+  export NTFY_TOKEN="test-token-123"
+  echo '{"message":"m","transcript_path":"/nope","session_id":"s","cwd":"/","hook_event_name":"Notification"}' \
+    | with_tmux "1 1 0" "$script" || return 1
+  assert_curl_called
+}
+
+# --- running-subagent suppression ---
+
+test_suppresses_while_subagent_running() {
+  export NTFY_TOKEN="test-token-123"
+  local t="$fixtures/transcript-subagent-running.jsonl"
+  jq -n --arg t "$t" '{
+    message: "m",
+    transcript_path: $t,
+    session_id: "sA",
+    cwd: "/",
+    hook_event_name: "Notification"
+  }' | "$script" || return 1
+  assert_no_curl
+}
+
+test_notifies_once_subagent_completed() {
+  export NTFY_TOKEN="test-token-123"
+  local t="$fixtures/transcript-subagent-done.jsonl"
+  jq -n --arg t "$t" '{
+    message: "m",
+    transcript_path: $t,
+    session_id: "sB",
+    cwd: "/",
+    hook_event_name: "Notification"
+  }' | "$script" || return 1
+  assert_curl_called
+  assert_log_contains 'Title: Claude — audit the dotfiles repo (turn 1)'
 }
 
 test_curl_failure_still_exits_0() {
