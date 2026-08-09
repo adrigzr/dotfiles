@@ -39,13 +39,28 @@ Transform tasks into verifiable goals — e.g. "fix the bug" → "write a test t
 - Do not refactor, rename, or "clean up" unrelated code without asking.
 - If something must change outside scope to make the solution correct, explain why and get approval first.
 
-### 4. Write production-ready code
+### 4. Fix the class, not the instance
+
+**I prefer a good solution over a quick one, even when the good one means refactoring large parts of the app. Never bias a recommendation toward the smallest diff.**
+
+When you find a defect, first decide whether it is an *instance* or a *class*:
+
+- **Survey every site that encodes the same rule** before proposing anything. Grep for the concept, not just the symptom. Produce a table: site, guard/approach used, correct | wrong | latent. If more than one site is wrong, it is a class and a local fix is the wrong answer.
+- **Verify each site's live status** rather than assuming. Distinguish "broken in production" from "latent" from "correct", with evidence for each.
+- **Prefer solutions that make the defect unrepresentable** over solutions that correct its current occurrences: types over conventions, a single source of truth over duplicated logic, compiler/CI enforcement over reviewer vigilance. A prose comment asserting that two files agree is not enforcement — prefer a mechanism that fails the build.
+- **Ask: could a future contributor write site N+1 wrong?** If yes, the design is not done.
+
+Present the structural option as the recommendation with its real cost stated (files touched, new patterns introduced, diff size, migration risk). Present the minimal fix as the alternative, not the default. Let me choose — but do not self-censor the ambitious option because it looks expensive.
+
+This does **not** override Rule 3. Scope forced open by the correct design (sites that will not compile, callers that must migrate) is in scope once approved; unrelated cleanup you noticed along the way is not. Keep the two visibly separate in the plan and the diff.
+
+### 5. Write production-ready code
 
 - Readable, maintainable, consistent with existing style and patterns.
 - Prefer simple, reliable solutions over clever ones.
 - Avoid quick patches unless explicitly requested.
 
-### 5. Verify everything
+### 6. Verify everything
 
 - Run tests before and after changes to catch regressions.
 - Reproduce bugs with a failing test before fixing.
