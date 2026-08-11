@@ -1,3 +1,0 @@
-{"type":"last-prompt","lastPrompt":"audit the dotfiles repo","sessionId":"sB"}
-{"type":"assistant","message":{"content":[{"type":"text","text":"dispatching"},{"type":"tool_use","name":"Agent","id":"toolu_done_01"}]}}
-{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"toolu_done_01"}]}}

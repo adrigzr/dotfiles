@@ -1,2 +1,0 @@
-{"type":"last-prompt","lastPrompt":"This is a first prompt that is definitely longer than sixty characters and should be truncated","sessionId":"s3"}
-{"type":"last-prompt","lastPrompt":"This is the latest prompt and it is definitely longer than eighty characters so it should be truncated with an ellipsis at the end right here","sessionId":"s3"}

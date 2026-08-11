@@ -1,6 +1,0 @@
-{"type":"user","message":{"role":"user","content":"Fix the Lidarr migration"},"sessionId":"s1","timestamp":"2026-04-22T10:00:00Z"}
-{"type":"last-prompt","lastPrompt":"Fix the Lidarr migration","sessionId":"s1"}
-{"type":"assistant","message":{"content":[{"type":"text","text":"Looking at the code..."}]},"sessionId":"s1"}
-{"type":"last-prompt","lastPrompt":"Use the new API endpoint","sessionId":"s1"}
-{"type":"assistant","message":{"content":[{"type":"text","text":"Making the change..."}]},"sessionId":"s1"}
-{"type":"last-prompt","lastPrompt":"commit and open PR","sessionId":"s1"}
