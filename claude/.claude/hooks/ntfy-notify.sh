@@ -45,15 +45,49 @@ if ! message="$(jq -r '.message // empty' <<<"$payload" 2>/dev/null)"; then
 fi
 transcript="$(jq -r '.transcript_path // empty' <<<"$payload" 2>/dev/null || true)"
 
-# Suppress while this session's own background subagents are still running: notify
-# only once the main agent is truly idle. An Agent (or legacy Task) tool_use whose id
-# has no matching tool_result yet means that subagent has not reported back.
+# Suppress while this session's own subagents are still working: notify only once
+# the main agent is truly idle. Two kinds of subagent have to be counted, because
+# they signal completion differently:
+#
+#   Foreground — the Agent (or legacy Task) tool_use has no matching tool_result
+#     until the subagent reports back, so an unmatched id means it is still out.
+#
+#   Background — the tool_use is answered within seconds by a launch receipt, so
+#     the pairing above always reads as finished. Track these by agent id instead:
+#     a launch (toolUseResult.status == "async_launched") or a wake-up
+#     (toolUseResult.resumedAgentId) starts a run, and the task-notification queued
+#     when the agent stops ends it. An agent is out whenever its newest start is
+#     newer than its newest stop.
+#
+# All four signals are read from structured fields rather than by grepping the
+# transcript: tool output that quotes a launch receipt or a task-notification —
+# which happens whenever a session inspects its own transcript — would otherwise
+# be counted as a live subagent and silence the session for good.
 if [[ -n "$transcript" && -r "$transcript" ]]; then
-  running="$(jq -rs '
-    [ .[] | select(.message.content|type=="array") | .message.content[]? ] as $c
-    | ([ $c[] | select(.type=="tool_use" and (.name=="Agent" or .name=="Task")) | .id ]) as $used
-    | ([ $c[] | select(.type=="tool_result") | .tool_use_id ]) as $done
-    | [ $used[] | select(. as $id | ($done | index($id)) | not) ] | length
+  running="$(jq -n '
+    reduce inputs as $l ({ started: {}, stopped: {}, used: {}, done: {} };
+      ($l.timestamp // "") as $ts
+      | (if ($l.toolUseResult | type) == "object" then $l.toolUseResult else {} end) as $r
+      | (if $r.status == "async_launched" and ($r.agentId | type) == "string" then $r.agentId
+         elif ($r.resumedAgentId | type) == "string" then $r.resumedAgentId
+         else null end) as $start
+      | (if $l.type == "queue-operation" and $l.operation == "enqueue"
+            and (($l.content // "") | test("<task-notification>"))
+         then ([$l.content | capture("<task-id>(?<id>[^<]+)</task-id>")] | first | .id? // null)
+         else null end) as $stop
+      | (if $start then .started[$start] = ([.started[$start] // "", $ts] | max) else . end)
+      | (if $stop then .stopped[$stop] = ([.stopped[$stop] // "", $ts] | max) else . end)
+      | (if ($l.message | type) == "object" and ($l.message.content | type) == "array"
+         then reduce $l.message.content[] as $b (.;
+                if $b.type == "tool_use" and ($b.name == "Agent" or $b.name == "Task")
+                then .used[$b.id] = true
+                elif $b.type == "tool_result" and ($b.tool_use_id | type) == "string"
+                then .done[$b.tool_use_id] = true
+                else . end)
+         else . end))
+    | . as $s
+    | ([$s.started | to_entries[] | select(.value > ($s.stopped[.key] // ""))] | length)
+      + ([$s.used | keys_unsorted[] | select($s.done[.] | not)] | length)
   ' "$transcript" 2>/dev/null || echo 0)"
   if [[ "$running" =~ ^[0-9]+$ && "$running" -gt 0 ]]; then
     log "suppressing: $running subagent(s) still running"
