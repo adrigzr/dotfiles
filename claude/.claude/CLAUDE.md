@@ -62,6 +62,24 @@ Never call something fixed, passing, or done without showing the output that pro
 If the environment blocks validation, say so plainly rather than presenting it as confirmed.
 If an approach keeps failing, stop and report the blocker instead of working around it.
 
+### 6. Every dispatch names its model
+
+Never dispatch a subagent without an explicit `model:`. An omitted model inherits the
+session model — the most capable and most expensive one available.
+
+Pick from the task, not from habit:
+
+| Task shape                                      | Model  |
+| ----------------------------------------------- | ------ |
+| 1-2 files, complete spec, no judgment call      | haiku  |
+| Multiple files, integration concerns            | sonnet |
+| Design judgment or broad codebase understanding | opus   |
+
+Cheap is not free: a model that takes three times the turns costs more than the one that
+got it right once. When the tier is genuinely unclear, take the higher one.
+
+A `PreToolUse` hook denies a dispatch that omits `model:`.
+
 ## Delegation
 
 Delegate only for large, genuinely independent work such as a wide multi-file
